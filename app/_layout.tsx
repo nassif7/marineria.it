@@ -1,5 +1,30 @@
-import { Stack } from "expo-router";
+import React, { useEffect } from 'react'
+import * as SecureStore from 'expo-secure-store'
+import { Slot } from 'expo-router'
+import { useTranslation } from 'react-i18next'
+import { ThemeUIProvider } from '@/components/ui/gluestack-ui-provider'
+import SessionProvider from '@/Providers/SessionProvider'
+import '@/localization'
+import '@/global.css'
 
 export default function RootLayout() {
-  return <Stack />;
+  const { i18n } = useTranslation()
+
+  useEffect(() => {
+    const loadLanguage = async () => {
+      const savedLanguage = await SecureStore.getItemAsync('language')
+      if (savedLanguage) {
+        i18n.changeLanguage(savedLanguage)
+      }
+    }
+    loadLanguage()
+  }, [i18n])
+
+  return (
+    <ThemeUIProvider mode="light">
+      <SessionProvider>
+        <Slot screenOptions={{ headerShown: false }} />
+      </SessionProvider>
+    </ThemeUIProvider>
+  )
 }
