@@ -61,15 +61,18 @@
     "@legendapp/motion": "^2.4.0",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
+    "@tanstack/react-form": "^0.41.2",
     "babel-plugin-module-resolver": "^5.0.2",
     "expo": "~52.0.25",
     "expo-blur": "~14.0.2",
     "expo-constants": "~17.0.4",
+    "expo-device": "~7.0.2",
     "expo-font": "~13.0.3",
     "expo-haptics": "~14.0.1",
     "expo-linking": "~7.0.4",
     "expo-local-authentication": "~15.0.2",
     "expo-localization": "~16.0.1",
+    "expo-notifications": "~0.29.12",
     "expo-router": "~4.0.16",
     "expo-secure-store": "~14.0.1",
     "expo-splash-screen": "~0.29.20",
@@ -92,9 +95,7 @@
     "react-native-svg": "^15.2.0",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
-    "tailwindcss": "^3.4.17",
-    "expo-device": "~7.0.2",
-    "expo-notifications": "~0.29.12"
+    "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -102,6 +103,7 @@
     "@types/react": "~18.3.12",
     "@types/react-test-renderer": "^18.3.0",
     "eslint": "^8.57.0",
+    "eslint-config-expo": "~8.0.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
     "husky": "^8.0.0",
@@ -111,8 +113,7 @@
     "lint-staged": "^15.4.1",
     "prettier": "^3.4.2",
     "react-test-renderer": "18.3.1",
-    "typescript": "^5.3.3",
-    "eslint-config-expo": "~8.0.1"
+    "typescript": "^5.3.3"
   },
   "private": true
 }
