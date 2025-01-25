@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "marineria",
-    "slug": "marineria-mobile-application",
+    "name": "marineria.it",
+    "slug": "marineria",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -81,7 +81,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "670cc6a7-31b9-42ae-ae6e-e1eaa0e127b4"
+        "projectId": "0ec628dc-8238-4920-a4cf-f57c57e2f8c5"
       }
     },
     "owner": "nassif.one"
