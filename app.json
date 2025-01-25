@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "marineria.it",
+    "name": "marineria",
     "slug": "marineria",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -81,8 +81,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "4e6e6c31-6858-43d0-b9f8-1470e66b8f5b"
+        "projectId": "690ec11c-b99d-42a8-8ac6-5d895f9bc3c5"
       }
-    }
+    },
+    "owner": "nassif.one"
   }
 }
