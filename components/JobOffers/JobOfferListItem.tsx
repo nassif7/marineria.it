@@ -23,7 +23,7 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
   }
 
   return (
-    <Pressable className="bg-white py-3 rounded" onPress={onPress}>
+    <Pressable className="bg-white py-2 rounded" onPress={onPress}>
       <HStack className="mb-2 justify-between align-center">
         <Heading className="text-primary-600 text-left text-xl font-bold px-3 basis-5/6 flex-wrap">
           {offer.offer.trim()}
@@ -61,7 +61,12 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
       {(!offer.offerApplicable || !offer.alredayApplied) && (
         <HStack className="bg-secondary-200 justify-between mt-2 p-2 flex-wrap">
           {!offer.alredayApplied && (
-            <Badge size="lg" variant="solid" action="success" className="px-2">
+            <Badge
+              size="lg"
+              variant="solid"
+              action="success"
+              className={`px-2 ${!offer.offerApplicable ? 'mb-2' : ''}`}
+            >
               <BadgeText bold>{t('alreadyApplied')}</BadgeText>
               <BadgeIcon as={CircleCheck} className="ml-1" />
             </Badge>

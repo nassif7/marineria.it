@@ -65,7 +65,7 @@ const JobOfferScreen = () => {
   }
 
   return (
-    <ScrollView className="h-full bg-secondary-800 px-2">
+    <ScrollView className="h-full bg-secondary-800 px-2 pt-4">
       <VStack>
         <Box className="p4 mb-4">
           <Heading className="text-white text-4xl p4">{offer?.offer.trim()}</Heading>

@@ -9,6 +9,7 @@ import { useAppState, useFetch } from '@/hooks'
 import { useUser } from '@/Providers/UserProvider'
 import { AuthTypes } from '@/api/types'
 import JobOffersListHeader from './JobOffersListHeader'
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const JobOfferList: FC = () => {
   const {
@@ -33,16 +34,13 @@ const JobOfferList: FC = () => {
   const { isLoading, data } = useFetch(fetchOffers)
 
   const onChange = (v: string) => setOwnOffers(v)
+  const insets = useSafeAreaInsets()
 
   return (
-    <SafeAreaView
-      style={{
-        backgroundColor: 'rgb(30 41 59)',
-      }}
-    >
+    <>
       {isLoading && <Loading />}
       {!isLoading && data && (
-        <View className="h-full px-3">
+        <View className="h-full">
           <VirtualizedList
             data={data}
             getItemCount={(data: JobOfferTypes.JobOfferType[]) => data?.length}
@@ -62,7 +60,7 @@ const JobOfferList: FC = () => {
           />
         </View>
       )}
-    </SafeAreaView>
+    </>
   )
 }
 

@@ -1,10 +1,10 @@
 import React from 'react'
 import { ImageBackground, Image, KeyboardAvoidingView } from 'react-native'
-import { View } from '@/components/ui/view'
+import { View } from '@/components/ui'
 import AuthenticationForm, { FormDate } from '@/components/AuthenticationForm'
 import { useSession } from '@/Providers/SessionProvider'
 import { useShowToast } from '@/hooks'
-// import { horizontalScale, verticalScale } from '@/util/metrics'
+import { horizontalScale, verticalScale } from '@/util/metrics'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 
@@ -23,7 +23,7 @@ const SignIn = () => {
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground
-        source={require('../../assets/images/bg-splash.png')}
+        source={require('../../assets/images/bg-2.png')}
         style={{
           width: '100%',
           height: '100%',
@@ -32,7 +32,16 @@ const SignIn = () => {
           backgroundSize: 'contain',
         }}
       >
-        <KeyboardAvoidingView style={{ width: '80%' }} behavior={'height'}>
+        <Image
+          source={require('../../assets/images/marineria_Logo.png')}
+          style={{
+            width: horizontalScale(225),
+            height: verticalScale(90),
+            marginBottom: verticalScale(50),
+            resizeMode: 'contain',
+          }}
+        />
+        <KeyboardAvoidingView style={{ width: '80%' }} behavior={'padding'}>
           <AuthenticationForm authenticate={handleSignIn} />
         </KeyboardAvoidingView>
       </ImageBackground>

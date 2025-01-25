@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react'
-import * as SecureStore from 'expo-secure-store'
 import { Slot } from 'expo-router'
-import { useTranslation } from 'react-i18next'
-import SessionProvider from '@/Providers/SessionProvider'
-import { ThemeUIProvider } from '@/components/ui/gluestack-ui-provider'
-import '@/localization'
 import '@/global.css'
+import { ThemeUIProvider } from '@/components/ui/gluestack-ui-provider'
+import SessionProvider from '@/Providers/SessionProvider'
+import '@/localization'
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import * as SecureStore from 'expo-secure-store'
+import { View } from '@/components/ui'
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
+import { Scroll } from 'lucide-react-native'
+import { ScrollView } from 'react-native'
 
 export default function RootLayout() {
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
 
   useEffect(() => {
     const loadLanguage = async () => {
@@ -20,11 +24,18 @@ export default function RootLayout() {
     loadLanguage()
   }, [i18n])
 
+  const changeLanguage = async (lang: string) => {
+    await SecureStore.setItemAsync('language', lang)
+    i18n.changeLanguage(lang)
+  }
+
   return (
     <ThemeUIProvider mode="light">
-      <SessionProvider>
-        <Slot screenOptions={{ headerShown: false }} />
-      </SessionProvider>
+      <SafeAreaProvider>
+        <SessionProvider>
+          <Slot screenOptions={{ headerShown: false }}></Slot>
+        </SessionProvider>
+      </SafeAreaProvider>
     </ThemeUIProvider>
   )
 }

@@ -29,14 +29,7 @@ export function ThemeUIProvider({
   colorSchemeNW.set(mode)
 
   return (
-    <View
-      style={[
-        config[colorSchemeName],
-        // eslint-disable-next-line react-native/no-inline-styles
-        { flex: 1, height: '100%', width: '100%' },
-        props.style,
-      ]}
-    >
+    <View style={[config['light'], { flex: 1, height: '100%', width: '100%' }, props.style]}>
       <OverlayProvider>
         <ToastProvider>{props.children}</ToastProvider>
       </OverlayProvider>

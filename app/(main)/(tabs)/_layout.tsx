@@ -1,19 +1,19 @@
+import { Image } from 'react-native'
 import { Redirect, Tabs } from 'expo-router'
-import { useSession } from '@/Providers/SessionProvider'
-import '@/localization'
-import { AuthTypes } from '@/api/types'
-import { Text, View, NavBackButton } from '@/components/ui'
-import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Feather from '@expo/vector-icons/Feather'
-
 import UserProvider from '@/Providers/UserProvider'
+import { Text, View, NavBackButton } from '@/components/ui'
+import { useSession } from '@/Providers/SessionProvider'
+import '@/localization'
 
 // const
 
 export default function ProfileLayout() {
   const { auth, isLoading } = useSession()
   const { token } = auth
+  const insets = useSafeAreaInsets()
 
   if (isLoading) {
     return <Text>Loading...</Text>
@@ -23,10 +23,23 @@ export default function ProfileLayout() {
     return <Redirect href="/sign-in" />
   }
 
+  function headerTitle() {
+    return (
+      <View>
+        <Image style={{ width: 200, height: 50 }} source={require('../../../assets/images/marineria_Logo.png')} />
+      </View>
+    )
+  }
+
   const headerStyle = {
     backgroundColor: 'rgb(30 41 59)',
-    shadowColor: 'transparent',
-    elevation: 0,
+  }
+
+  const sceneStyle = {
+    backgroundColor: 'rgb(30 41 59)',
+    paddingStart: 8,
+    paddingEnd: 8,
+    paddingTop: insets.top,
   }
 
   return (
@@ -35,12 +48,9 @@ export default function ProfileLayout() {
         screenOptions={{
           tabBarActiveTintColor: 'rgb(234 88 12)',
           tabBarStyle: {
-            display: 'flex',
-            alignContent: 'center',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
             backgroundColor: 'rgb(30 41 59)',
             borderTopColor: 'rgb(30 41 59)',
+            boxShadow: '0px 0px 20px 0px rgba(234,88,12,0.25)',
           },
           tabBarLabelStyle: {
             display: 'none',
@@ -50,7 +60,8 @@ export default function ProfileLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            headerShown: true,
+            sceneStyle,
+            headerShown: false,
             headerStyle,
             title: '',
             tabBarIcon: ({ color }) => <Feather name="home" size={32} color={color} />,
@@ -59,7 +70,8 @@ export default function ProfileLayout() {
         <Tabs.Screen
           name="jobOffers/index"
           options={{
-            headerShown: true,
+            sceneStyle,
+            headerShown: false,
             headerStyle,
             title: '',
             tabBarIcon: ({ color }) => <FontAwesome6 name="anchor" size={24} color={color} />,
@@ -68,6 +80,7 @@ export default function ProfileLayout() {
         <Tabs.Screen
           name="jobOffers/jobOffer"
           options={{
+            sceneStyle: { ...sceneStyle, paddingTop: 0 },
             href: null,
             headerShown: true,
             headerStyle,
@@ -78,6 +91,7 @@ export default function ProfileLayout() {
         <Tabs.Screen
           name="jobOffers/[offerId]"
           options={{
+            sceneStyle,
             href: null,
             headerShown: true,
             headerStyle,
@@ -88,6 +102,7 @@ export default function ProfileLayout() {
         <Tabs.Screen
           name="settings/index"
           options={{
+            sceneStyle,
             headerShown: true,
             headerStyle,
             title: '',
@@ -97,6 +112,7 @@ export default function ProfileLayout() {
         <Tabs.Screen
           name="settings/switchUser"
           options={{
+            sceneStyle: { ...sceneStyle, paddingTop: 0 },
             href: null,
             headerShown: true,
             headerStyle,

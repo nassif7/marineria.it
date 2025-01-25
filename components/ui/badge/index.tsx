@@ -31,7 +31,7 @@ const badgeStyle = tva({
 })
 
 const badgeTextStyle = tva({
-  base: 'text-typography-700 font-body font-normal tracking-normal uppercase',
+  base: 'text-typography-700 font-body font-normal tracking-normal',
 
   parentVariants: {
     action: {
@@ -68,6 +68,9 @@ const badgeTextStyle = tva({
     },
     highlight: {
       true: 'bg-yellow-500',
+    },
+    uppercase: {
+      true: 'uppercase',
     },
   },
 })
@@ -106,6 +109,7 @@ cssInterop(PrimitiveIcon, {
 })
 
 type IBadgeProps = React.ComponentPropsWithoutRef<typeof ContextView> & VariantProps<typeof badgeStyle>
+
 const Badge = ({
   children,
   action = 'muted',
@@ -144,6 +148,7 @@ const BadgeText = React.forwardRef<React.ElementRef<typeof Text>, IBadgeTextProp
           },
           size,
           class: className,
+          ...props,
         })}
         {...props}
       >
