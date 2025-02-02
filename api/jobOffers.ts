@@ -5,7 +5,7 @@ import { ErrorResponse } from './types/errors'
 // Get All offers without token
 export const getOwnerOffers = async (
   language: string,
-  ownerToken?: string,
+  ownerToken?: string
 ): Promise<JobOfferType[] | ErrorResponse> => {
   const url = `${API.OWNER_OFFERS}${ownerToken ? `/${ownerToken}` : ''}?language=${language}`
 
@@ -27,7 +27,7 @@ export const getOwnerOffers = async (
 export const getOwnerOfferById = async (
   offerId: string,
   ownerToken: string,
-  language: string,
+  language: string
 ): Promise<JobOfferType[] | ErrorResponse> => {
   const url = API.OWNER_OFFERS + `/${offerId}/${ownerToken}?language=${language}`
   try {
@@ -48,7 +48,7 @@ export const getOwnerOfferById = async (
 export const getProUserOffers = async (
   proToken: string,
   language: string,
-  allOffers?: boolean,
+  allOffers?: boolean
 ): Promise<JobOfferType[] | ErrorResponse> => {
   try {
     const url = API.PRO_OFFERS + `${allOffers ? '/AllOffers' : ''}/${proToken}?language=${language}`
@@ -70,7 +70,7 @@ export const getProUserOffers = async (
 export const getProOfferById = async (
   offerId: string,
   proToken: string,
-  language: string,
+  language: string
 ): Promise<JobOfferType[] | ErrorResponse> => {
   const url = API.PRO_OFFERS + `/${offerId}/${proToken}?language=${language}`
   try {
@@ -89,14 +89,13 @@ export const getProOfferById = async (
 
 export const applyToOffer = async (
   proToken: string,
-  offerId: string,
-  language: string,
+  offerId: number,
+  language: string
 ): Promise<ErrorResponse | any> => {
-  const url = API.PRO_OFFERS + `apply/${offerId}/${proToken}`
+  const url = API.PRO_OFFERS + `/Apply/${offerId}/${proToken}?language=${language}`
   try {
     const response = await fetch(url)
     const data = await response.json()
-
     if (response.ok) {
       return data as any
     } else {

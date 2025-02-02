@@ -20,7 +20,7 @@ import { Share, Alert } from 'react-native'
 import { useUser } from '@/Providers/UserProvider'
 import { useCallback } from 'react'
 import { AuthTypes } from '@/api/types'
-import { useAppState, useFetch } from '@/hooks'
+import { useFetch } from '@/hooks'
 
 const JobOfferScreen = () => {
   const { offerId } = useLocalSearchParams()
@@ -86,8 +86,7 @@ const JobOfferScreen = () => {
   }
 
   const onApply = async () => {
-    console.log('apply to offer')
-    const response = await applyToOffer(token, offerId as string, language)
+    const response = await applyToOffer(token, parseInt(offerId as string), language)
     if (response?.ok) {
       Alert.alert('You have successfully applied to this offer')
     } else {
@@ -127,7 +126,7 @@ const JobOfferScreen = () => {
                   <ButtonText>Share</ButtonText>
                   <ButtonIcon as={Share2Icon} />
                 </Button>
-                <Button disabled={offer?.alredayApplied} onPress={onApply}>
+                <Button isDisabled={!offer?.alreadyApplied} onPress={onApply}>
                   <ButtonText>Apply</ButtonText>
                   <ButtonIcon as={Plus} />
                 </Button>

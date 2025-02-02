@@ -1,6 +1,6 @@
 export type JobOfferType = {
   offerApplicable: boolean
-  alredayApplied: boolean
+  alreadyApplied: boolean
   idoffer: number
   activity: string
   activityCode: string

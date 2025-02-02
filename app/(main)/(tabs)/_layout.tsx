@@ -103,7 +103,7 @@ export default function ProfileLayout() {
           name="settings/index"
           options={{
             sceneStyle,
-            headerShown: true,
+            headerShown: false,
             headerStyle,
             title: '',
             tabBarIcon: ({ color }) => <Feather name="user" size={32} color={color} />,

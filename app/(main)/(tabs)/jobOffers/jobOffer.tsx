@@ -7,6 +7,8 @@ import { Share, Alert } from 'react-native'
 import { useEffect } from 'react'
 import { useShowToast } from '@/hooks'
 import { JobOfferTypes } from '@/api/types'
+import { applyToOffer } from '@/api'
+import { useUser } from '@/Providers/UserProvider'
 
 const JobOfferScreen = () => {
   const { offerStr } = useLocalSearchParams()
@@ -18,6 +20,8 @@ const JobOfferScreen = () => {
   // const showWarningToast = useShowToast('warning', 'warning', 'warning')
   const showErrorToast = useShowToast(t('error'), t('error'), 'error')
   const showInfoToast = useShowToast('info', 'info', 'info')
+  const { activeProfile } = useUser()
+  const { role, token } = activeProfile as any
 
   // useEffect(() => {
   //   !offer.offerApplicable && showWarningToast()
@@ -56,12 +60,8 @@ const JobOfferScreen = () => {
   }
 
   const onApply = async () => {
-    if (offer.alredayApplied) {
-      showInfoToast()
-    }
-    if (!offer.offerApplicable) {
-      showErrorToast()
-    }
+    console.log('apply to offer')
+    await applyToOffer(token, offer.idoffer, language)
   }
 
   return (
@@ -89,7 +89,12 @@ const JobOfferScreen = () => {
           </Box>
           <Divider className="my-4" />
           {offer.offerApplicable && (
-            <Button disabled={!offer.offerApplicable} onPress={onApply} action="primary" className="mb-2">
+            <Button
+              disabled={!offer.offerApplicable}
+              onPress={() => console.log('mm')}
+              action="primary"
+              className="mb-2"
+            >
               <ButtonText>Apply</ButtonText>
               <ButtonIcon as={Plus} />
             </Button>

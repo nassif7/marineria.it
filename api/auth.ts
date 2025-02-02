@@ -2,10 +2,7 @@ import { API } from './const'
 import { AuthResponse } from '@/api/types/auth'
 import { ErrorResponse } from '@/api/types/errors'
 
-export const signIn = async (
-  username: string,
-  password: string,
-): Promise<AuthResponse | ErrorResponse> => {
+export const signIn = async (username: string, password: string): Promise<AuthResponse | ErrorResponse> => {
   const formData = JSON.stringify({
     username,
     password,

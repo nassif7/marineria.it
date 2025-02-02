@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "marineria.it",
+    "name": "marineria",
     "slug": "marineria",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +15,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "marineria.it"
+      "bundleIdentifier": "marineria",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -81,7 +84,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "0ec628dc-8238-4920-a4cf-f57c57e2f8c5"
+        "projectId": "362b6b4b-a483-460f-abc3-cad660eca5a5"
       }
     },
     "owner": "nassif.one"
