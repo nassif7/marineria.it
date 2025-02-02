@@ -6,7 +6,7 @@ import { ErrorResponse } from '@/api/types/errors'
 export const getUserProfile = async (
   token: string,
   role: UserRole,
-  language: string,
+  language: string
 ): Promise<User | ErrorResponse> => {
   const userRole = role == UserRole.OWNER ? 'Owneruser' : 'Prouser'
 

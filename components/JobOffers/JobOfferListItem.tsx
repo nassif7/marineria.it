@@ -58,9 +58,9 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
           {offer.offerTo.substring(offer.offerTo.indexOf(',') + 1)}
         </Text>
       </HStack>
-      {(!offer.offerApplicable || !offer.alredayApplied) && (
+      {(!offer.offerApplicable || offer.alreadyApplied) && (
         <HStack className="bg-secondary-200 justify-between mt-2 p-2 flex-wrap">
-          {!offer.alredayApplied && (
+          {offer.alreadyApplied && (
             <Badge
               size="lg"
               variant="solid"

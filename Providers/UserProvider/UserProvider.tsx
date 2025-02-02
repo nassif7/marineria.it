@@ -54,6 +54,7 @@ const UserProvider = (props: React.PropsWithChildren) => {
 
   const toggleNotifications = async () => {
     setIsLoading(true)
+
     if (user?.pushNotificationToken) {
       await setNotificationToken(token as string, '')
       await fetchUser(token as string, role as AuthTypes.UserRole)
