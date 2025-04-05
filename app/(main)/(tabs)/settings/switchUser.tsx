@@ -47,7 +47,7 @@ const switchUser = () => {
         }}
       >
         <Image
-          source={require('../../../../assets/images/marineria_Logo.png')}
+          source={require('../../../../assets/images/marineria_logo.png')}
           style={{
             width: horizontalScale(225),
             height: verticalScale(90),

@@ -25,7 +25,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["android.permission.USE_BIOMETRIC", "android.permission.USE_FINGERPRINT"]
+      "permissions": ["android.permission.USE_BIOMETRIC", "android.permission.USE_FINGERPRINT"],
+      "package": "marineria.it"
     },
     "web": {
       "bundler": "metro",
@@ -59,7 +60,7 @@
       [
         "expo-asset",
         {
-          "assets": ["assets/images/marineria_Logo.png"]
+          "assets": ["assets/images/marineria_logo.png"]
         }
       ],
       [

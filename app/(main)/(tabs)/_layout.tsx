@@ -26,7 +26,7 @@ export default function ProfileLayout() {
   function headerTitle() {
     return (
       <View>
-        <Image style={{ width: 200, height: 50 }} source={require('../../../assets/images/marineria_Logo.png')} />
+        <Image style={{ width: 200, height: 50 }} source={require('../../../assets/images/marineria_logo.png')} />
       </View>
     )
   }
