@@ -25,11 +25,11 @@ const NotificationsToggle: FC = () => {
     <>
       <Text className="text-secondary-50 text-lg font-bold">{t('notifications')}: </Text>
       <Select
-        key={pushNotificationToken}
-        selectedValue={!!pushNotificationToken ? 'ON' : 'OFF'}
-        className=""
+        key={pushNotificationToken ? 'ON' : 'OFF'}
+        selectedValue={pushNotificationToken ? 'ON' : 'OFF'}
         isDisabled={isLoading}
         onValueChange={setPushNotificationToken}
+        initialLabel={pushNotificationToken ? 'ON' : 'OFF'}
       >
         <SelectTrigger variant="outline" size="lg">
           <SelectInput className="text-primary-600 text-lg font-bold " />
