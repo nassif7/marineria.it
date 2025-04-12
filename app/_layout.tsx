@@ -10,6 +10,7 @@ import { View } from '@/components/ui'
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Scroll } from 'lucide-react-native'
 import { ScrollView } from 'react-native'
+import { StatusBar } from 'expo-status-bar'
 
 export default function RootLayout() {
   const { i18n, t } = useTranslation()
@@ -33,6 +34,8 @@ export default function RootLayout() {
     <ThemeUIProvider mode="light">
       <SafeAreaProvider>
         <SessionProvider>
+          <StatusBar translucent={true} style="light" />
+
           <Slot screenOptions={{ headerShown: false }}></Slot>
         </SessionProvider>
       </SafeAreaProvider>
