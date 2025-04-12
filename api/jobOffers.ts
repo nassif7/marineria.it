@@ -3,11 +3,8 @@ import { JobOfferType } from './types/jobOffer'
 import { ErrorResponse } from './types/errors'
 
 // Get All offers without token
-export const getOwnerOffers = async (
-  language: string,
-  ownerToken?: string
-): Promise<JobOfferType[] | ErrorResponse> => {
-  const url = `${API.OWNER_OFFERS}${ownerToken ? `/${ownerToken}` : ''}?language=${language}`
+export const getOwnerOffers = async (ownerToken: string, language: string): Promise<JobOfferType[] | ErrorResponse> => {
+  const url = `${API.OWNER_OFFERS}/${ownerToken}?language=${language}`
 
   try {
     const response = await fetch(url)
@@ -47,8 +44,8 @@ export const getOwnerOfferById = async (
 // Get Pro user All Offers
 export const getProUserOffers = async (
   proToken: string,
-  language: string,
-  allOffers?: boolean
+  allOffers: boolean,
+  language: string
 ): Promise<JobOfferType[] | ErrorResponse> => {
   try {
     const url = API.PRO_OFFERS + `${allOffers ? '/AllOffers' : ''}/${proToken}?language=${language}`

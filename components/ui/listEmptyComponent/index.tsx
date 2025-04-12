@@ -1,10 +1,9 @@
 import { FC } from 'react'
-import { Text } from '../text'
-import { View } from '../view'
+import { View, Text } from '@/components/ui'
 
 const ListEmptyComponent: FC<{ message: string }> = ({ message }) => {
   return (
-    <View className="h-full w-full flex justify-center items-center bg-info-100 rounded p-4">
+    <View className="flex items-center justify-center bg-info-100 rounded p-4 m-4 my-40 ">
       <Text className="text-xl ">{message}</Text>
     </View>
   )
