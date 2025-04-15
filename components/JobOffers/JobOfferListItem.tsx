@@ -1,10 +1,12 @@
 import React, { FC } from 'react'
 import { JobOfferTypes } from '@/api/types'
-import { Box, Heading, Text, Divider, HStack, Pressable, Icon } from '@/components/ui'
+import { Box, Heading, Text, Divider, HStack, Pressable } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import { router } from 'expo-router'
 import { CircleCheck } from 'lucide-react-native'
 import { Badge, BadgeIcon, BadgeText } from '@/components/ui/badge'
+import { ActiveProfile, useUser } from '@/Providers/UserProvider'
+import { AuthTypes } from '@/api/types'
 
 interface JobOfferProps {
   offer: JobOfferTypes.JobOfferType
@@ -12,9 +14,12 @@ interface JobOfferProps {
 
 const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
   const { t } = useTranslation()
+  const { activeProfile } = useUser()
+  const { role } = activeProfile as ActiveProfile
+  const isOwner = role === AuthTypes.UserRole.OWNER
 
   const onPress = () => {
-    offer.offerApplicable
+    offer.offerApplicable || isOwner
       ? router.navigate(`/(main)/(tabs)/jobOffers/${offer.idoffer}`)
       : router.push({
           pathname: '/(main)/(tabs)/jobOffers/jobOffer',

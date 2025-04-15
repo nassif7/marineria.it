@@ -8,7 +8,7 @@ import { useShowToast } from '@/hooks'
 import { View } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import { ImageBackground, Image, KeyboardAvoidingView } from 'react-native'
-import { horizontalScale, verticalScale } from '@/util/metrics'
+import { horizontalScale, verticalScale } from '@/utils/metrics'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const switchUser = () => {

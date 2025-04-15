@@ -1,6 +1,7 @@
 export { Avatar, AvatarFallbackText, AvatarImage } from './avatar'
 export { Box } from './box'
 export { Button, ButtonText, ButtonSpinner, ButtonIcon, ButtonGroup } from './button'
+export { Card } from './card'
 export { Center } from './center'
 export { Divider } from './divider'
 export { Fab, FabLabel, FabIcon } from './fab'
@@ -17,8 +18,8 @@ export {
 } from './form-control'
 export { Heading } from './heading'
 export { HStack } from './hstack'
-
 export { Icon } from './icon'
+export { Image } from './image'
 export { Input, InputField, InputIcon, InputSlot } from './input'
 export { Link, LinkText } from './link'
 export { ListEmptyComponent } from './listEmptyComponent'

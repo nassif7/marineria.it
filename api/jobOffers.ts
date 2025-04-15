@@ -26,13 +26,32 @@ export const getOwnerOfferById = async (
   ownerToken: string,
   language: string
 ): Promise<JobOfferType[] | ErrorResponse> => {
-  const url = API.OWNER_OFFERS + `/${offerId}/${ownerToken}?language=${language}`
+  const url = API.CREW_LIST + `/${ownerToken}/${offerId}/${language}`
+
   try {
     const response = await fetch(url)
     const data = await response.json()
 
     if (response.ok) {
-      return data as JobOfferType[]
+      return data
+    } else {
+      return data as ErrorResponse
+    }
+  } catch (e) {
+    throw e
+  }
+}
+
+// Get Crew List
+export const getCrewList = async (offerId: string, ownerToken: string, language: string): Promise<any> => {
+  const url = API.CREW_LIST + `/${ownerToken}/${offerId}/${language}`
+
+  try {
+    const response = await fetch(url)
+    const data = await response.json()
+
+    if (response.ok) {
+      return data as any
     } else {
       return data as ErrorResponse
     }
@@ -89,9 +108,10 @@ export const applyToOffer = async (
   offerId: number,
   language: string
 ): Promise<ErrorResponse | any> => {
-  const url = API.PRO_OFFERS + `/Apply/${offerId}/${proToken}?language=${language}`
+  const url = API.PRO_OFFERS + `/Apply/${offerId}/${proToken}}`
   try {
     const response = await fetch(url)
+
     const data = await response.json()
     if (response.ok) {
       return data as any

@@ -8,8 +8,6 @@ import { useTranslation } from 'react-i18next'
 import * as SecureStore from 'expo-secure-store'
 import { View } from '@/components/ui'
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Scroll } from 'lucide-react-native'
-import { ScrollView } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 
 export default function RootLayout() {
@@ -25,17 +23,11 @@ export default function RootLayout() {
     loadLanguage()
   }, [i18n])
 
-  const changeLanguage = async (lang: string) => {
-    await SecureStore.setItemAsync('language', lang)
-    i18n.changeLanguage(lang)
-  }
-
   return (
     <ThemeUIProvider mode="light">
       <SafeAreaProvider>
         <SessionProvider>
           <StatusBar translucent={true} style="light" />
-
           <Slot screenOptions={{ headerShown: false }}></Slot>
         </SessionProvider>
       </SafeAreaProvider>
