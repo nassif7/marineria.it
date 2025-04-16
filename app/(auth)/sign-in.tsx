@@ -4,7 +4,7 @@ import { View } from '@/components/ui'
 import AuthenticationForm, { FormDate } from '@/components/AuthenticationForm'
 import { useSession } from '@/Providers/SessionProvider'
 import { useShowToast } from '@/hooks'
-import { horizontalScale, verticalScale } from '@/util/metrics'
+import { horizontalScale, verticalScale } from '@/utils/metrics'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 

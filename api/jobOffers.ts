@@ -3,11 +3,8 @@ import { JobOfferType } from './types/jobOffer'
 import { ErrorResponse } from './types/errors'
 
 // Get All offers without token
-export const getOwnerOffers = async (
-  language: string,
-  ownerToken?: string
-): Promise<JobOfferType[] | ErrorResponse> => {
-  const url = `${API.OWNER_OFFERS}${ownerToken ? `/${ownerToken}` : ''}?language=${language}`
+export const getOwnerOffers = async (ownerToken: string, language: string): Promise<JobOfferType[] | ErrorResponse> => {
+  const url = `${API.OWNER_OFFERS}/${ownerToken}?language=${language}`
 
   try {
     const response = await fetch(url)
@@ -29,13 +26,32 @@ export const getOwnerOfferById = async (
   ownerToken: string,
   language: string
 ): Promise<JobOfferType[] | ErrorResponse> => {
-  const url = API.OWNER_OFFERS + `/${offerId}/${ownerToken}?language=${language}`
+  const url = API.CREW_LIST + `/${ownerToken}/${offerId}/${language}`
+
   try {
     const response = await fetch(url)
     const data = await response.json()
 
     if (response.ok) {
-      return data as JobOfferType[]
+      return data
+    } else {
+      return data as ErrorResponse
+    }
+  } catch (e) {
+    throw e
+  }
+}
+
+// Get Crew List
+export const getCrewList = async (offerId: string, ownerToken: string, language: string): Promise<any> => {
+  const url = API.CREW_LIST + `/${ownerToken}/${offerId}/${language}`
+
+  try {
+    const response = await fetch(url)
+    const data = await response.json()
+
+    if (response.ok) {
+      return data as any
     } else {
       return data as ErrorResponse
     }
@@ -47,8 +63,8 @@ export const getOwnerOfferById = async (
 // Get Pro user All Offers
 export const getProUserOffers = async (
   proToken: string,
-  language: string,
-  allOffers?: boolean
+  allOffers: boolean,
+  language: string
 ): Promise<JobOfferType[] | ErrorResponse> => {
   try {
     const url = API.PRO_OFFERS + `${allOffers ? '/AllOffers' : ''}/${proToken}?language=${language}`
@@ -92,9 +108,10 @@ export const applyToOffer = async (
   offerId: number,
   language: string
 ): Promise<ErrorResponse | any> => {
-  const url = API.PRO_OFFERS + `/Apply/${offerId}/${proToken}?language=${language}`
+  const url = API.PRO_OFFERS + `/Apply/${offerId}/${proToken}}`
   try {
     const response = await fetch(url)
+
     const data = await response.json()
     if (response.ok) {
       return data as any

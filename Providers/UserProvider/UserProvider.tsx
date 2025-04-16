@@ -7,7 +7,7 @@ import { useSession } from '@/Providers/SessionProvider'
 import { useNotification } from '@/hooks'
 import { registerForPushNotificationsAsync } from '@/hooks/useNotification'
 
-type ActiveProfile = {
+export type ActiveProfile = {
   role: AuthTypes.UserRole
   token: string
 }
