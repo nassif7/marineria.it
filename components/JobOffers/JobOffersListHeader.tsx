@@ -11,7 +11,7 @@ import {
   SelectDragIndicatorWrapper,
   SelectItem,
 } from '@/components/ui/select'
-import { HStack, Loading, ListEmptyComponent, Divider } from '@/components/ui'
+import { HStack, Loading, ListEmptyComponent, Divider, Box } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import { ChevronDownIcon } from 'lucide-react-native'
 
@@ -28,11 +28,11 @@ const selectOptions = [
 const JobOffersListHeader: React.FC<JobOffersListHeaderProps> = ({ filterValue, setOwnOffersFilter }) => {
   const { t } = useTranslation()
   return (
-    <HStack>
+    <Box className=" bg-outline-200 rounded">
       <Select
         defaultValue={filterValue}
         initialLabel={t(selectOptions.find((o) => o.value === filterValue)?.label as string)}
-        className="w-full"
+        className="m-3 bg-white rounded"
         onValueChange={(v) => setOwnOffersFilter(v)}
       >
         <SelectTrigger variant="outline" size="xl" className="flex justify-between">
@@ -62,7 +62,7 @@ const JobOffersListHeader: React.FC<JobOffersListHeaderProps> = ({ filterValue, 
           </SelectContent>
         </SelectPortal>
       </Select>
-    </HStack>
+    </Box>
   )
 }
 

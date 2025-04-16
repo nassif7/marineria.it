@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react'
-import { View, SafeAreaView, VirtualizedList } from 'react-native'
+import { View, SafeAreaView, VirtualizedList, FlatList } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { getOwnerOffers, getProUserOffers } from '@/api'
 import { JobOfferTypes, AuthTypes } from '@/api/types'
@@ -35,27 +35,17 @@ const JobOfferList: FC = () => {
     <>
       {isLoading && <Loading />}
       {!isLoading && data && (
-        <VirtualizedList
+        <FlatList
           data={data}
-          getItemCount={(data: JobOfferTypes.JobOfferType[]) => data?.length}
-          getItem={(data: JobOfferTypes.JobOfferType[], index) => data[index]}
-          keyExtractor={(item) => item.reference}
           renderItem={({ item }) => <JobOfferListItem offer={item} key={item.reference} />}
-          initialNumToRender={4}
           ListEmptyComponent={
             <ListEmptyComponent
               message={t(role === AuthTypes.UserRole.PRO ? 'noProUserJobOffers' : 'noOwnerJobOffers')}
             />
           }
-          refreshing={!!data?.length}
-          ItemSeparatorComponent={() => <Divider className=" bg-secondary-800 h-4" />}
           ListHeaderComponent={
             role === AuthTypes.UserRole.PRO
-              ? () => (
-                  <HStack className="mb-2  p-3 items-center bg-white rounded">
-                    <JobOffersListHeader setOwnOffersFilter={onChange} filterValue={ownOffers} />
-                  </HStack>
-                )
+              ? () => <JobOffersListHeader setOwnOffersFilter={onChange} filterValue={ownOffers} />
               : null
           }
           stickyHeaderIndices={[0]}

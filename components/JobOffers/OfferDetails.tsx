@@ -12,6 +12,8 @@ import {
   VStack,
   Divider,
   Loading,
+  Card,
+  HStack,
 } from '@/components/ui'
 import { Lamp, Plus, Share2Icon, Subscript, MapPin, Calendar, Loader } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
@@ -93,29 +95,35 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
     <>
       {offerData?.isLoading && <Loading />}
       {!offerData?.isLoading && (
-        <ScrollView className="h-full bg-secondary-800 px-2">
-          <VStack>
-            <Box className="p4 mb-4">
-              <Heading className="text-white text-4xl p4">{offer?.offer.trim()}</Heading>
+        <ScrollView className="">
+          <Card>
+            <Box className="mt-4 flex-col">
+              <Heading size="xl" className="text-primary-600">
+                {offer?.offer.trim()}
+              </Heading>
             </Box>
-            <VStack className="rounded border-secondary-500 border-2 bg-secondary-100 p-2">
-              <Box className="flex-row">
-                <Text className=" font-bold">From: </Text>
-                <Text className="">{new Date(offer?.offerfrom as string).toLocaleDateString()}</Text>
-                <Text className=" font-bold"> - To: </Text>
-                <Text>{new Date(offer?.offerTo as string).toLocaleDateString()}</Text>
-              </Box>
-              <Box>
-                <Text>
-                  {offer?.compenso_From} - {offer?.compenso_To}
-                </Text>
-              </Box>
-              <Box className="mt-2">
-                <Text> {offer?.descriptionOffer.replace(/<[^>]*>?/gm, '').trim()}</Text>
-                {!!offer?.unit && <Text>unit: {offer?.unit}</Text>}
-                {!!offer?.requirements && <Text>requirements: {offer?.requirements}</Text>}
-              </Box>
-              <Divider className="my-4" />
+            <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
+              <VStack>
+                <Heading className="text-primary-600" size="md">
+                  {offer?.positionArm}
+                </Heading>
+                <HStack className="justify-between">
+                  <Heading size="sm">
+                    {`${t('offerSalary')}:  ${!offer?.compenso_From ? 'NA' : offer.compenso_From + '-' + offer.compenso_To}`}
+                  </Heading>
+                </HStack>
+                <HStack className="justify-between">
+                  <Heading size="sm">
+                    {t('offerFrom')}:{offer?.offerfrom.substring(offer.offerfrom.indexOf(',') + 1)} - {t('offerTo')}:{' '}
+                    {offer?.offerTo.substring(offer.offerTo.indexOf(',') + 1)}{' '}
+                  </Heading>
+                </HStack>
+              </VStack>
+            </Box>
+            <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
+              <Heading size="sm"> {offer?.descriptionOffer.replace(/<[^>]*>?/gm, '').trim()}</Heading>
+            </Box>
+            <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
               <ButtonGroup className="justify-between p-3">
                 <Button className="rounded" onPress={onShare} action="secondary">
                   <ButtonText>Share</ButtonText>
@@ -126,8 +134,8 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
                   <ButtonIcon as={Plus} />
                 </Button>
               </ButtonGroup>
-            </VStack>
-          </VStack>
+            </Box>
+          </Card>
         </ScrollView>
       )}
     </>
