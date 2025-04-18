@@ -7,7 +7,7 @@ import { CircleCheck, CircleX } from 'lucide-react-native'
 import { Badge, BadgeIcon, BadgeText } from '@/components/ui/badge'
 import { ActiveProfile, useUser } from '@/Providers/UserProvider'
 import { AuthTypes } from '@/api/types'
-
+import { formatSalary } from '@/utils/formatters'
 interface JobOfferProps {
   offer: JobOfferTypes.JobOfferType
 }
@@ -20,9 +20,9 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
 
   const onPress = () => {
     offer.offerApplicable || isOwner
-      ? router.navigate(`/(main)/(tabs)/jobOffers/${offer.idoffer}`)
+      ? router.navigate(`/(tabs)/jobOffers/${offer.idoffer}`)
       : router.push({
-          pathname: '/(main)/(tabs)/jobOffers/jobOffer',
+          pathname: '/(tabs)/jobOffers/jobOffer',
           params: { offerStr: JSON.stringify(offer) },
         })
   }
@@ -44,20 +44,29 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
 
         <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
           <VStack>
-            <Heading className="text-primary-600" size="md">
-              {offer.positionArm}
-            </Heading>
-            <HStack className="justify-between">
-              <Heading size="sm">
-                {`${t('offerSalary')}:  ${!offer.compenso_From ? 'NA' : offer.compenso_From + '-' + offer.compenso_To}`}
+            {offer?.positionArm && (
+              <Heading className="text-primary-600" size="md">
+                {offer.positionArm}
               </Heading>
-            </HStack>
-            <HStack className="justify-between">
-              <Heading size="sm">
-                {t('offerFrom')}:{offer.offerfrom.substring(offer.offerfrom.indexOf(',') + 1)} - {t('offerTo')}:{' '}
-                {offer.offerTo.substring(offer.offerTo.indexOf(',') + 1)}{' '}
-              </Heading>
-            </HStack>
+            )}
+            {(offer.compenso_From || offer.compenso_To) && (
+              <>
+                <HStack className="justify-between">
+                  <Heading size="sm">
+                    {t('offerSalary')}: {formatSalary(offer.compenso_From, offer.compenso_To)}
+                  </Heading>
+                </HStack>
+              </>
+            )}
+            {(offer.offerfrom || offer.offerTo) && (
+              <HStack className="justify-between">
+                <Heading size="sm">
+                  {offer.offerfrom &&
+                    t('offerFrom') + ':' + offer.offerfrom.substring(offer.offerfrom.indexOf(',') + 1)}
+                  - {offer.offerTo && t('offerTo') + ':' + offer.offerTo.substring(offer.offerTo.indexOf(',') + 1)}
+                </Heading>
+              </HStack>
+            )}
           </VStack>
         </Box>
 

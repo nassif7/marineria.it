@@ -16,6 +16,7 @@ import {
   Loading,
   Text,
   View,
+  Link,
 } from '@/components/ui'
 import { router } from 'expo-router'
 
@@ -70,7 +71,8 @@ const UserProfile = () => {
                   {role == AuthTypes.UserRole.OWNER && t('welcomeOwner')}
                   {role == AuthTypes.UserRole.PRO && t('welcomeCrew')}
                 </Text>
-                <Button variant="outline" onPress={() => router.navigate(`/(main)/(tabs)/jobOffers`)}>
+
+                <Button variant="outline" onPress={() => router.navigate(`/(tabs)/jobOffers`)}>
                   <ButtonText className="text-white">{t('jobOffers')}</ButtonText>
                 </Button>
               </Box>

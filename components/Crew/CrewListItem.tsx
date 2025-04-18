@@ -20,7 +20,7 @@ import {
 } from '@/components/ui'
 import { Icon, ArrowRightIcon, EyeIcon } from '@/components/ui/icon'
 import { faker } from '@faker-js/faker'
-import { formatDate } from '@/utils/dateUtils'
+import { formatDate, getAge } from '@/utils/dateUtils'
 import { BASE_URL } from '@/api/const'
 import { useTranslation } from 'react-i18next'
 
@@ -72,7 +72,7 @@ const CrewListItem: React.FC<{ crew: CrewType }> = ({ crew }) => {
         </VStack>
         <VStack className="w-full p-2">
           <Text>
-            {crewDetailsInfo.martialStatus},{crewDetailsInfo.smoker}
+            {crewDetailsInfo.martialStatus}, {crewDetailsInfo.smoker}, {getAge(crew.birthYear)} years old
           </Text>
           <Text>From: {crewDetailsInfo.city}</Text>
           <Text>Citizenship: {crewDetailsInfo.citizenship}</Text>
