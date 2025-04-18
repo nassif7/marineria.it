@@ -5,7 +5,7 @@ import { getOwnerOffers, getProUserOffers } from '@/api'
 import { JobOfferTypes, AuthTypes } from '@/api/types'
 import { useAppState, useFetch } from '@/hooks'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-import { HStack, Loading, ListEmptyComponent, Divider, VStack, Text } from '@/components/ui'
+import { HStack, Loading, ListEmptyComponent, Divider, VStack, Text, Box, Heading } from '@/components/ui'
 import JobOfferListItem from './JobOfferListItem'
 import JobOffersListHeader from './JobOffersListHeader'
 
@@ -35,21 +35,30 @@ const JobOfferList: FC = () => {
     <>
       {isLoading && <Loading />}
       {!isLoading && data && (
-        <FlatList
-          data={data}
-          renderItem={({ item }) => <JobOfferListItem offer={item} key={item.reference} />}
-          ListEmptyComponent={
-            <ListEmptyComponent
-              message={t(role === AuthTypes.UserRole.PRO ? 'noProUserJobOffers' : 'noOwnerJobOffers')}
-            />
-          }
-          ListHeaderComponent={
-            role === AuthTypes.UserRole.PRO
-              ? () => <JobOffersListHeader setOwnOffersFilter={onChange} filterValue={ownOffers} />
-              : null
-          }
-          stickyHeaderIndices={[0]}
-        />
+        <>
+          {role === AuthTypes.UserRole.OWNER && (
+            <Box className=" p-4">
+              <Heading className="text-white text-4xl ">Your offers:</Heading>
+            </Box>
+          )}
+
+          <FlatList
+            className="mt-10"
+            data={data}
+            renderItem={({ item }) => <JobOfferListItem offer={item} key={item.reference} />}
+            ListEmptyComponent={
+              <ListEmptyComponent
+                message={t(role === AuthTypes.UserRole.PRO ? 'noProUserJobOffers' : 'noOwnerJobOffers')}
+              />
+            }
+            ListHeaderComponent={
+              role === AuthTypes.UserRole.PRO
+                ? () => <JobOffersListHeader setOwnOffersFilter={onChange} filterValue={ownOffers} />
+                : null
+            }
+            stickyHeaderIndices={[0]}
+          />
+        </>
       )}
     </>
   )

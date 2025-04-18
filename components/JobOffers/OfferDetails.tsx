@@ -104,9 +104,11 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
             </Box>
             <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
               <VStack>
-                <Heading className="text-primary-600" size="md">
-                  {offer?.positionArm}
-                </Heading>
+                {offer?.positionArm && (
+                  <Heading className="text-primary-600" size="md">
+                    {offer?.positionArm}
+                  </Heading>
+                )}
                 <HStack className="justify-between">
                   <Heading size="sm">
                     {`${t('offerSalary')}:  ${!offer?.compenso_From ? 'NA' : offer.compenso_From + '-' + offer.compenso_To}`}
