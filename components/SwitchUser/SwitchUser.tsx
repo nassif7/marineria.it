@@ -26,7 +26,7 @@ const SwitchUser = () => {
       await switchAuth(targetRole)
       router.replace('/')
     } else {
-      router.navigate(`/(main)/(tabs)/settings/switchUser`)
+      router.navigate(`/(tabs)/settings/switchUser`)
     }
   }
 

@@ -76,7 +76,7 @@ const UserProfile: React.FC = () => {
                   {role == AuthTypes.UserRole.PRO && t('welcomeCrew')}
                 </Text>
                 <Button variant="outline">
-                  <ButtonText className="text-white" onPress={() => router.navigate(`/(main)/(tabs)/jobOffers`)}>
+                  <ButtonText className="text-white" onPress={() => router.navigate(`/(tabs)/jobOffers`)}>
                     {t('jobOffers')}
                   </ButtonText>
                 </Button>

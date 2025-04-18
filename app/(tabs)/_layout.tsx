@@ -23,14 +23,6 @@ export default function ProfileLayout() {
     return <Redirect href="/sign-in" />
   }
 
-  function headerTitle() {
-    return (
-      <View>
-        <Image style={{ width: 200, height: 50 }} source={require('../../../assets/images/marineria_logo.png')} />
-      </View>
-    )
-  }
-
   const headerStyle = {
     backgroundColor: 'rgb(30 41 59)',
   }
@@ -68,7 +60,7 @@ export default function ProfileLayout() {
           }}
         />
         <Tabs.Screen
-          name="jobOffers/index"
+          name="jobOffers"
           options={{
             sceneStyle,
             headerShown: false,
@@ -78,46 +70,13 @@ export default function ProfileLayout() {
           }}
         />
         <Tabs.Screen
-          name="jobOffers/jobOffer"
-          options={{
-            sceneStyle: { ...sceneStyle, paddingTop: 0 },
-            href: null,
-            headerShown: true,
-            headerStyle,
-            title: '',
-            headerLeft: () => <NavBackButton href="/jobOffers" />,
-          }}
-        />
-        <Tabs.Screen
-          name="jobOffers/[offerId]"
-          options={{
-            sceneStyle,
-            href: null,
-            headerShown: true,
-            headerStyle,
-            title: '',
-            headerLeft: () => <NavBackButton href="/jobOffers" />,
-          }}
-        />
-        <Tabs.Screen
-          name="settings/index"
+          name="settings"
           options={{
             sceneStyle,
             headerShown: false,
             headerStyle,
             title: '',
             tabBarIcon: ({ color }) => <Feather name="user" size={32} color={color} />,
-          }}
-        />
-        <Tabs.Screen
-          name="settings/switchUser"
-          options={{
-            sceneStyle: { ...sceneStyle, paddingTop: 0 },
-            href: null,
-            headerShown: true,
-            headerStyle,
-            title: '',
-            headerLeft: (props) => <NavBackButton href="/settings" />,
           }}
         />
       </Tabs>

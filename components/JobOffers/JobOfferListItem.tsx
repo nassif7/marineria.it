@@ -20,9 +20,9 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
 
   const onPress = () => {
     offer.offerApplicable || isOwner
-      ? router.navigate(`/(main)/(tabs)/jobOffers/${offer.idoffer}`)
+      ? router.navigate(`/(tabs)/jobOffers/${offer.idoffer}`)
       : router.push({
-          pathname: '/(main)/(tabs)/jobOffers/jobOffer',
+          pathname: '/(tabs)/jobOffers/jobOffer',
           params: { offerStr: JSON.stringify(offer) },
         })
   }
