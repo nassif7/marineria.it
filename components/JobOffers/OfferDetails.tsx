@@ -131,7 +131,7 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
                   <ButtonText>Share</ButtonText>
                   <ButtonIcon as={Share2Icon} />
                 </Button>
-                <Button isDisabled={!offer?.alreadyApplied} onPress={onApply}>
+                <Button isDisabled={offer?.alreadyApplied} onPress={onApply}>
                   <ButtonText>Apply</ButtonText>
                   <ButtonIcon as={Plus} />
                 </Button>

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "marineria",
+    "name": "Marineria",
     "slug": "marineria",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "marineria",
+      "bundleIdentifier": "marineriait",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }

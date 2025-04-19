@@ -1,6 +1,18 @@
 import React, { FC } from 'react'
 import { JobOfferTypes } from '@/api/types'
-import { Box, Heading, Text, Divider, HStack, Pressable, Card, VStack } from '@/components/ui'
+import {
+  Box,
+  Heading,
+  Text,
+  Divider,
+  HStack,
+  Pressable,
+  Card,
+  VStack,
+  Button,
+  ButtonIcon,
+  ButtonText,
+} from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import { router } from 'expo-router'
 import { CircleCheck, CircleX } from 'lucide-react-native'
@@ -75,13 +87,13 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
             {(!offer.offerApplicable || offer.alreadyApplied) && (
               <Box className="mt-4 flex-col border-2 border-outline-200 bg-outline-50 rounded p-2 ">
                 <HStack className=" justify-between  flex-wrap">
-                  {true && (
+                  {offer.alreadyApplied && (
                     <Badge size="md" variant="outline" action="success" className={`px-2`}>
                       <BadgeText bold>{t('alreadyApplied')}</BadgeText>
                       <BadgeIcon as={CircleCheck} className="ml-1" />
                     </Badge>
                   )}
-                  {true && (
+                  {!offer.offerApplicable && (
                     <Badge size="md" variant="outline" action="warning" className="">
                       <BadgeText bold> {t('offerNotApplicable')}</BadgeText>
                       <BadgeIcon as={CircleX} className="ml-1" />
@@ -91,6 +103,12 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
               </Box>
             )}
           </>
+        )}
+        {role === AuthTypes.UserRole.OWNER && (
+          <Button className="py-2 px-4" variant="outline" action="positive" onPress={onPress}>
+            {/* <ButtonIcon as={EyeIcon} className="text-success-400 mr-2" /> */}
+            <ButtonText className="text-success-400">View crew list</ButtonText>
+          </Button>
         )}
       </Card>
     </Pressable>
