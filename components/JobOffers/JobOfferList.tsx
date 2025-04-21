@@ -25,7 +25,7 @@ const JobOfferList: FC = () => {
     } else {
       return await getProUserOffers(token, ownOffers == 'all', language)
     }
-  }, [language, ownOffers, state])
+  }, [language, ownOffers, state, role])
 
   const { isLoading, data } = useFetch(fetchOffers)
 
