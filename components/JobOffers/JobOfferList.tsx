@@ -36,14 +36,7 @@ const JobOfferList: FC = () => {
       {isLoading && <Loading />}
       {!isLoading && data && (
         <>
-          {role === AuthTypes.UserRole.OWNER && (
-            <Box className=" p-4">
-              <Heading className="text-white text-4xl ">Your offers:</Heading>
-            </Box>
-          )}
-
           <FlatList
-            className="mt-10"
             data={data}
             renderItem={({ item }) => <JobOfferListItem offer={item} key={item.reference} />}
             ListEmptyComponent={

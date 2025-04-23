@@ -1,17 +1,14 @@
-import { Image } from 'react-native'
 import { Redirect, Tabs } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Feather from '@expo/vector-icons/Feather'
 import UserProvider from '@/Providers/UserProvider'
-import { Text, View, NavBackButton } from '@/components/ui'
+import { Text } from '@/components/ui'
 import { useSession } from '@/Providers/SessionProvider'
 import '@/localization'
 import { TabBar } from '@/components/ui'
 
-// const
-
-export default function ProfileLayout() {
+const AppLayout = () => {
   const { auth, isLoading } = useSession()
   const { token } = auth
   const insets = useSafeAreaInsets()
@@ -58,10 +55,8 @@ export default function ProfileLayout() {
         <Tabs.Screen
           name="jobOffers"
           options={{
-            sceneStyle,
             headerShown: false,
-            headerStyle,
-            title: 'Jobs',
+            sceneStyle,
             tabBarIcon: ({ color }) => <FontAwesome6 name="anchor" size={28} color={color} />,
           }}
         />
@@ -79,3 +74,5 @@ export default function ProfileLayout() {
     </UserProvider>
   )
 }
+
+export default AppLayout
