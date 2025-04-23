@@ -1,16 +1,14 @@
-import { Image } from 'react-native'
 import { Redirect, Tabs } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Feather from '@expo/vector-icons/Feather'
 import UserProvider from '@/Providers/UserProvider'
-import { Text, View, NavBackButton } from '@/components/ui'
+import { Text } from '@/components/ui'
 import { useSession } from '@/Providers/SessionProvider'
 import '@/localization'
+import { TabBar } from '@/components/ui'
 
-// const
-
-export default function ProfileLayout() {
+const AppLayout = () => {
   const { auth, isLoading } = useSession()
   const { token } = auth
   const insets = useSafeAreaInsets()
@@ -38,16 +36,11 @@ export default function ProfileLayout() {
     <UserProvider>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: 'rgb(234 88 12)',
           tabBarStyle: {
-            backgroundColor: 'rgb(30 41 59)',
-            borderTopColor: 'rgb(30 41 59)',
-            boxShadow: '0px 0px 20px 0px rgba(234,88,12,0.25)',
-          },
-          tabBarLabelStyle: {
-            display: 'none',
+            display: 'none', // Hide the default tab bar
           },
         }}
+        tabBar={(props) => <TabBar {...props} />} // Use the custom tab bar
       >
         <Tabs.Screen
           name="index"
@@ -55,18 +48,16 @@ export default function ProfileLayout() {
             sceneStyle,
             headerShown: false,
             headerStyle,
-            title: '',
+            title: 'Home',
             tabBarIcon: ({ color }) => <Feather name="home" size={32} color={color} />,
           }}
         />
         <Tabs.Screen
           name="jobOffers"
           options={{
-            sceneStyle,
             headerShown: false,
-            headerStyle,
-            title: '',
-            tabBarIcon: ({ color }) => <FontAwesome6 name="anchor" size={24} color={color} />,
+            sceneStyle,
+            tabBarIcon: ({ color }) => <FontAwesome6 name="anchor" size={28} color={color} />,
           }}
         />
         <Tabs.Screen
@@ -75,7 +66,7 @@ export default function ProfileLayout() {
             sceneStyle,
             headerShown: false,
             headerStyle,
-            title: '',
+            title: 'Settings',
             tabBarIcon: ({ color }) => <Feather name="user" size={32} color={color} />,
           }}
         />
@@ -83,3 +74,5 @@ export default function ProfileLayout() {
     </UserProvider>
   )
 }
+
+export default AppLayout

@@ -9,7 +9,7 @@
   "recruiterRegister": "Registrati come datore di lavoro",
   "confirm": "conferma",
   "changeLanguage": "Cambia lingua",
-  "jobList": "Le ultime offerte di lavoro",
+  "jobList": "Le offerte di lavoro",
   "switchToPro": "Accedi come Equipaggio",
   "switchToOwner": "Accedi come Datore di Lavoro",
   "morningGreeting": "Buongiorno",
@@ -32,5 +32,6 @@
   "it": "Italiano",
   "en": "Inglese",
   "offerNotApplicable": "Non applicabile",
-  "alreadyApplied": "Hai già inviato la tua candidatura per questa offerta"
+  "alreadyApplied": "Hai già inviato la tua candidatura per questa offerta",
+  "back": "Indietro"
 }

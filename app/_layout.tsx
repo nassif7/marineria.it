@@ -3,15 +3,14 @@ import '@/global.css'
 import { ThemeUIProvider } from '@/components/ui/gluestack-ui-provider'
 import SessionProvider from '@/Providers/SessionProvider'
 import '@/localization'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import * as SecureStore from 'expo-secure-store'
-import { View } from '@/components/ui'
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { StatusBar } from 'expo-status-bar'
 
 export default function RootLayout() {
-  const { i18n, t } = useTranslation()
+  const { i18n } = useTranslation()
 
   useEffect(() => {
     const loadLanguage = async () => {

@@ -98,7 +98,7 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
         <ScrollView className="">
           <Card>
             <Box className="mt-4 flex-col">
-              <Heading size="xl" className="text-primary-600">
+              <Heading size="2xl" className="text-primary-600">
                 {offer?.offer.trim()}
               </Heading>
             </Box>
