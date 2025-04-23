@@ -15,7 +15,7 @@ export const NavBar: React.FC<NavBarProps> = ({ title, showBackButton }) => {
   const { t } = useTranslation()
 
   return (
-    <View className="flex-row items-center justify-start bg-secondary-800  pl-2 h-20">
+    <View className="flex-row items-center justify-start bg-secondary-800 pb-2">
       {showBackButton && (
         <TouchableOpacity onPress={() => router.back()} className="flex flex-row items-center mr-2">
           <Feather name="chevron-left" size={32} color="white" />

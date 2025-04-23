@@ -1,19 +1,21 @@
 import React from 'react'
 import { Stack } from 'expo-router'
+import { NavBar } from '@/components/ui'
 
 function _layout() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" />
-
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="switchUser"
         options={{
-          headerShown: true,
-          title: '',
-          headerBackTitle: 'Back',
-          headerStyle: {
-            backgroundColor: 'rgb(30 41 59)',
+          header: (props) => {
+            return <NavBar showBackButton={true} />
           },
         }}
       />

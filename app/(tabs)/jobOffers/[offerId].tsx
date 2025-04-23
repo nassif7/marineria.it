@@ -11,10 +11,10 @@ const JobOfferScreen = () => {
   const { role } = activeProfile as ActiveProfile
 
   return (
-    <View className="mt-10">
+    <>
       {role === AuthTypes.UserRole.PRO && <OfferDetails offerId={offerId as string} />}
       {role === AuthTypes.UserRole.OWNER && <CrewList offerId={offerId as string} />}
-    </View>
+    </>
   )
 }
 

@@ -36,6 +36,11 @@ const JobOfferList: FC = () => {
       {isLoading && <Loading />}
       {!isLoading && data && (
         <>
+          <Box className=" p-4">
+            <Heading size="2xl" className="text-white">
+              {t('jobList')} ({data.length}):
+            </Heading>
+          </Box>
           <FlatList
             data={data}
             renderItem={({ item }) => <JobOfferListItem offer={item} key={item.reference} />}

@@ -7,9 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export const TabBar = ({ state, descriptors, navigation }: any) => {
   const insets = useSafeAreaInsets()
-  const platform = Platform.OS
 
-  console.log(platform, insets)
   return (
     <View
       style={{
