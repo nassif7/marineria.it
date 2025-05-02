@@ -1,8 +1,8 @@
 import { useLocalSearchParams } from 'expo-router'
 import { ActiveProfile, useUser } from '@/Providers/UserProvider'
 import { AuthTypes } from '@/api/types'
-import { OfferDetails } from '@/components/JobOffers'
-import { CrewList } from '@/components/Crew'
+import { OfferDetails } from '@/components/pro/JobOffers'
+import { CrewList } from '@/components/recruiter/Crew'
 import { View } from '@/components/ui'
 
 const JobOfferScreen = () => {

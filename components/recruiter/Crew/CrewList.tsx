@@ -13,7 +13,6 @@ import {
   Divider,
   Loading,
 } from '@/components/ui'
-import { Lamp, Plus, Share2Icon, Subscript, MapPin, Calendar, Loader } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { getOwnerOfferById, getProOfferById, applyToOffer, getCrewList } from '@/api'
 import { Share, Alert } from 'react-native'
@@ -21,7 +20,7 @@ import { useUser } from '@/Providers/UserProvider'
 import { useCallback } from 'react'
 import { AuthTypes, CrewType } from '@/api/types'
 import { useFetch } from '@/hooks'
-import CrewListItem from '@/components/Crew/CrewListItem'
+import CrewListItem from './CrewListItem'
 
 interface CrewListProps {
   offerId: string

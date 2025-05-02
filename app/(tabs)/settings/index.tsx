@@ -1,10 +1,10 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Box, View, VStack, Heading } from '@/components/ui'
-import SwitchLanguage from '@/components/SwitchLanguage'
-import NotificationsToggle from '@/components/NotificationsToggle'
-import SignOut from '@/components/SignOut'
-import SwitchUser from '@/components/SwitchUser'
+import SwitchLanguage from '@/components/common/SwitchLanguage'
+import NotificationsToggle from '@/components/common/NotificationsToggle'
+import SignOut from '@/components/common/SignOut'
+import SwitchUser from '@/components/common/SwitchUser'
 
 const Settings = () => {
   const { t } = useTranslation()

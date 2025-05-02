@@ -1,7 +1,7 @@
 import React from 'react'
 import { ImageBackground, Image, KeyboardAvoidingView } from 'react-native'
 import { View } from '@/components/ui'
-import AuthenticationForm, { FormDate } from '@/components/AuthenticationForm'
+import AuthenticationForm, { FormDate } from '@/components/common/AuthenticationForm'
 import { useSession } from '@/Providers/SessionProvider'
 import { useShowToast } from '@/hooks'
 import { horizontalScale, verticalScale } from '@/utils/metrics'

@@ -1,8 +1,9 @@
+import { View, Text } from '@/components/ui'
 import React from 'react'
 import { JobOfferList } from '@/components/pro/JobOffers'
 
-const JobOffersScreen = () => {
+function index() {
   return <JobOfferList />
 }
 
-export default JobOffersScreen
+export default index
