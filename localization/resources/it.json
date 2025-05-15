@@ -33,5 +33,17 @@
   "en": "Inglese",
   "offerNotApplicable": "Non applicabile",
   "alreadyApplied": "Hai già inviato la tua candidatura per questa offerta",
-  "back": "Indietro"
+  "back": "Indietro",
+  "offer": {
+    "search-id": "Search ID",
+    "edit-offer-short": "Mod.",
+    "offer-crew-count": "{{candidates}} Candidati (Contattati: {{contacted}} Rimanenti: {{residual}})"
+  },
+  "crew": {
+    "find-by-skill": "Cerca Equipaggio per caratteristiche",
+    "find-by-location": "Cerca Equipaggio per località",
+    "candidates": "Candidati",
+    "contacted": "Contattati",
+    "residual": "Rimanenti"
+  }
 }

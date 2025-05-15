@@ -1,5 +1,5 @@
 export const formatDate = (dateString: string): string => {
-  const date = new Date()
+  const date = new Date(dateString)
   const yyyy = date.getFullYear()
   const mm = date.getMonth() + 1
   const dd = date.getDate()

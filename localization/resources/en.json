@@ -1,4 +1,7 @@
 {
+  "authentication": {},
+  "recruiter": {},
+  "common": {},
   "login": "Login",
   "logout": "Logout",
   "welcomeCrew": "You are logged in as Crew",
@@ -33,5 +36,17 @@
   "en": "English",
   "offerNotApplicable": "Not applicable",
   "alreadyApplied": "Already applied",
-  "back": "Back"
+  "back": "Back",
+  "offer": {
+    "search-id": "Search ID",
+    "edit-offer-short": "Mod.",
+    "offer-crew-count": "{{candidates}} Candidates (Contacted: {{contacted}} Residual: {{residual}})"
+  },
+  "crew": {
+    "find-by-skill": "Find your Crew by Skills",
+    "find-by-location": "Find your Crew by Location",
+    "candidates": "Candidates",
+    "contacted": "Contacted",
+    "residual": "Residual"
+  }
 }

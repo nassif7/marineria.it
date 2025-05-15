@@ -3,7 +3,6 @@ import { ActiveProfile, useUser } from '@/Providers/UserProvider'
 import { AuthTypes } from '@/api/types'
 import { OfferDetails } from '@/components/pro/JobOffers'
 import { CrewList } from '@/components/recruiter/Crew'
-import { View } from '@/components/ui'
 
 const JobOfferScreen = () => {
   const { offerId } = useLocalSearchParams()

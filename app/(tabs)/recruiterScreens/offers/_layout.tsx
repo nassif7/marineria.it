@@ -6,9 +6,17 @@ const _layout = () => {
   return (
     <Stack screenOptions={{ contentStyle: { backgroundColor: 'rgb(30 41 59)' } }}>
       <Stack.Screen
-        name="jobOffers"
+        name="index"
         options={{
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="offer"
+        options={{
+          header: (props) => {
+            return <NavBar showBackButton={true} />
+          },
         }}
       />
     </Stack>
