@@ -102,7 +102,7 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
                 {offer?.offer.trim()}
               </Heading>
             </Box>
-            <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
+            {/* <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
               <VStack>
                 {offer?.positionArm && (
                   <Heading className="text-primary-600" size="md">
@@ -136,7 +136,7 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
                   <ButtonIcon as={Plus} />
                 </Button>
               </ButtonGroup>
-            </Box>
+            </Box> */}
           </Card>
         </ScrollView>
       )}

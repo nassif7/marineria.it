@@ -23,7 +23,7 @@ import * as Linking from 'expo-linking'
 import { Link } from 'expo-router'
 
 interface JobOfferProps {
-  offer: JobOfferTypes.JobOfferType
+  offer: JobOfferTypes.OwnerJobOfferType
 }
 
 const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
@@ -49,12 +49,10 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
     })
 
   const onSearchByLocation = () => {
-    Linking.openURL(
-      `https://www.marineria.it/${language}/MapList.aspx?pos=${offer.activity}&Lat=${offer.latArm}&Lng=${offer.lngArm}&ava=1`
-    )
+    Linking.openURL(`https://www.marineria.it/${language}/${offer.listgeourl}`)
   }
   const onSearchBySkill = () => {
-    Linking.openURL(`https://www.marineria.it/${language}/List.aspx?pos=${offer.activity}&ava=1`)
+    Linking.openURL(`https://www.marineria.it/${language}/${offer.listurl}`)
   }
 
   return (
@@ -88,7 +86,11 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
           <Button className="flex justify-start" variant="outline" action="positive" onPress={onViewCrewList}>
             <ButtonIcon as={Users} className="mr-2" />
             <ButtonText className="text-success-600">
-              {t('offer.offer-crew-count', { candidates: 3, contacted: 1, residual: 29 })}
+              {t('offer.offer-crew-count', {
+                candidates: offer.countCandidates,
+                contacted: offer.countContacted,
+                residual: offer.countResidual,
+              })}
             </ButtonText>
           </Button>
           <Button className="flex justify-start" variant="solid" action="positive" onPress={onSearchBySkill}>

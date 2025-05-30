@@ -24,7 +24,7 @@ import { useUser } from '@/Providers/UserProvider'
 
 const OfferScreen = () => {
   const { offerStr } = useLocalSearchParams()
-  const offer = JSON.parse(offerStr as string) as JobOfferTypes.JobOfferType
+  const offer = JSON.parse(offerStr as string) as JobOfferTypes.ProJobOfferType
   const {
     i18n: { language },
     t,

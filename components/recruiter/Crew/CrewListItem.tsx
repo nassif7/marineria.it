@@ -42,6 +42,7 @@ const CrewListItem: React.FC<{ crew: CrewType }> = ({ crew }) => {
     [crew]
   )
 
+  console.log(crew.lastAccessDate)
   return (
     <Card className="p-4 rounded-lg m-3">
       <Box className="flex-row  items-center">
@@ -80,7 +81,7 @@ const CrewListItem: React.FC<{ crew: CrewType }> = ({ crew }) => {
       </Box>
       <Box className="my-4 flex-col border-2 border-outline-200 rounded">
         <VStack className="w-full border-b-2 border-outline-200 p-2 bg-outline-50 ">
-          <Heading size="md">Last seen: {formatDate(crew.lastAccessDate)}</Heading>
+          <Heading size="md">{crew.lastAccessDate}</Heading>
         </VStack>
         <VStack className="w-full p-2">
           {/* missing information */}

@@ -1,88 +1,96 @@
-export type JobOfferType = {
-  //owner spc props
-  latArm?: number
-  lngArm?: number
-  salary_From?: number
-  salary_To?: number
-
-  offerApplicable: boolean
-  alreadyApplied: boolean
+export type ProJobOfferType = {
   idoffer: number
-  activity: string
-  activityCode: string
-  admConsent: boolean
-  amountpaid: number
-  assignment: string
-  boarding: string
-  boardingperiod: string
-  boat: string
-  boatCode: string
-  cardsent: number
-  cartsearchesoffer: string
-  compenso_From: string
-  compenso_To: string
-  contract: number
-  coursesCode: string
-  descriptionOffer: string
-  discount: number
-  duration: string
-  espCharter: number
-  filterassignment: boolean | null
-  flag: string | null
-  gdm: number
-  gender: number
-  idOwnerOffer: number
-  idOwnerpaymentsSearch: number
   iduser: number
-  immediateboarding: number
-  indefinitetime: number
-  invoice: string
-  itaYachtsDeck: string
-  itaYachtsEngine: string
-  jobOffer: string
-  jolly: string
-  lengthBoat: number
-  listsentoffers: string
-  mcaDeckRya: string
-  mcaYachtsDeck: string
-  merchantCode: string | null
-  nameBoat: string
-  nauticalicense: string
+  pushNotificationToken: string | null
+  contractDescription: string
+  unit: number
+  gender: string
+  seamensBook: string
+  nauticaLicense: string
+  espCharter: string
+  requirements: string
+  title: string
   offer: string
-  offerEng: string
-  offerExpirationDate: number
-  offerInsertionDate: string
-  offerTo: string
-  offerfrom: string
-  offeractive: boolean
-  offeramount: number
   offerdate: string
-  otherrequirements: string
-  payment: number | null
-  paymentDate: number | null
-  paymentmethod: string
+  offertExpirationdate: string
+  descriptionOffer: string
+  reference: string
+  ownerDescription: string
+  mainPosition: string
+  jobOffer: string
+  specseling: string
   posDeck: string
   posEngine: string
-  posHarbour: string
   posHotel: string
-  positionArm: string
+  posHarbour: string
   positionSpecial: string
-  profilo_code: string
-  projectinvoice: string
-  reference: string
-  requirements: string
-  salary: string | null
-  salarycode: string
-  searchcards: number | null
-  searchtype: string | null
-  selfnomination: string | null
-  skill: string | null
-  skillcode: string
-  specseling: boolean
+  courses: string
+  boarding: string
+  duration: string
+  positionArm: string
+  itaYachtsDeck: string
+  itaYachtsEngine: string
+  mcaYachtsDeck: string
+  mcaDeckRya: string
   stcwNavyDeck: string
   stcwNavyEngine: string
-  titleOffer: string
+  salary_From: string
+  salary_To: string
+  latArm: number
+  lngArm: number
+  offerApplicable: boolean
+  alreadyApplied: boolean
+}
+
+export type OwnerJobOfferType = {
+  idoffer: number
+  name: string
+  surname: string
+  username: string
+  email: string
+  iduser: number
+  pushNotificationToken: string
+  contractDescription: string
   unit: number
-  unlimitedcredit: boolean | null
-  used: string
+  gender: string
+  seamensBook: string
+  nauticaLicense: string
+  espCharter: string
+  requirements: string
+  title: string
+  offer: string
+  offerdate: string
+  offertExpirationdate: string
+  descriptionOffer: string
+  reference: string
+  countCandidates: number
+  countContacted: number
+  countResidual: number
+  ownerDescription: string
+  mainPosition: string
+  jobOffer: string
+  specseling: string
+  posDeck: string
+  posEngine: string
+  posHotel: string
+  posHarbour: string
+  positionSpecial: string
+  courses: string
+  boarding: string
+  duration: string
+  positionArm: string
+  itaYachtsDeck: string
+  itaYachtsEngine: string
+  mcaYachtsDeck: string
+  mcaDeckRya: string
+  stcwNavyDeck: string
+  stcwNavyEngine: string
+  salary_From: string
+  salary_To: string
+  latArm: number
+  lngArm: number
+  listurl: string
+  listgeourl: string
+  offerApplicable: boolean
+  alreadyApplied: boolean
 }

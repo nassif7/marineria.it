@@ -111,13 +111,13 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
                 )}
                 <HStack className="justify-between">
                   <Heading size="sm">
-                    {`${t('offerSalary')}:  ${!offer?.compenso_From ? 'NA' : offer.compenso_From + '-' + offer.compenso_To}`}
+                    {`${t('offerSalary')}:  ${!offer?.salary_From ? 'NA' : offer.salary_From + '-' + offer.salary_To}`}
                   </Heading>
                 </HStack>
                 <HStack className="justify-between">
                   <Heading size="sm">
-                    {t('offerFrom')}:{offer?.offerfrom.substring(offer.offerfrom.indexOf(',') + 1)} - {t('offerTo')}:{' '}
-                    {offer?.offerTo.substring(offer.offerTo.indexOf(',') + 1)}{' '}
+                    {t('offerFrom')}:{offer?.offerdate.substring(offer.offerdate.indexOf(',') + 1)} - {t('offerTo')}:{' '}
+                    {offer?.offertExpirationdate.substring(offer.offertExpirationdate.indexOf(',') + 1)}{' '}
                   </Heading>
                 </HStack>
               </VStack>

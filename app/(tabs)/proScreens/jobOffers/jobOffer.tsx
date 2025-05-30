@@ -24,7 +24,7 @@ import { useUser } from '@/Providers/UserProvider'
 
 const JobOfferScreen = () => {
   const { offerStr } = useLocalSearchParams()
-  const offer = JSON.parse(offerStr as string) as JobOfferTypes.JobOfferType
+  const offer = JSON.parse(offerStr as string) as JobOfferTypes.ProJobOfferType
   const {
     i18n: { language },
     t,
@@ -85,7 +85,7 @@ const JobOfferScreen = () => {
               {offer?.offer.trim()}
             </Heading>
           </Box>
-          <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
+          {/* <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
             <VStack>
               <Heading className="text-primary-600" size="md">
                 {offer?.positionArm}
@@ -117,7 +117,7 @@ const JobOfferScreen = () => {
                 <ButtonIcon as={Plus} />
               </Button>
             </ButtonGroup>
-          </Box>
+          </Box> */}
         </Card>
       </ScrollView>
     </>

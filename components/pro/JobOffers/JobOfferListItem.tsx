@@ -7,19 +7,14 @@ import { CircleCheck, CircleX, EyeIcon } from 'lucide-react-native'
 import { Badge, BadgeIcon, BadgeText } from '@/components/ui/badge'
 import { formatSalary } from '@/utils/formatters'
 interface JobOfferProps {
-  offer: JobOfferTypes.JobOfferType
+  offer: JobOfferTypes.ProJobOfferType
 }
 
 const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
   const { t } = useTranslation()
 
   const onPress = () => {
-    offer.offerApplicable
-      ? router.navigate(`/(tabs)/proScreens/jobOffers/${offer.idoffer}`)
-      : router.push({
-          pathname: '/(tabs)/proScreens/jobOffers/jobOffer',
-          params: { offerStr: JSON.stringify(offer) },
-        })
+    router.navigate(`/(tabs)/proScreens/jobOffers/${offer.idoffer}`)
   }
 
   return (
@@ -42,21 +37,24 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
               {offer.positionArm}
             </Heading>
           )}
-          {(offer.compenso_From || offer.compenso_To) && (
+          {(offer.salary_From || offer.salary_To) && (
             <>
               <HStack className="justify-between">
                 <Heading size="sm">
-                  {t('offerSalary')}: {formatSalary(offer.compenso_From, offer.compenso_To)}
+                  {t('offerSalary')}: {formatSalary(offer.salary_From, offer.salary_To)}
                 </Heading>
               </HStack>
             </>
           )}
-          {(offer.offerfrom || offer.offerTo) && (
+          {(offer.offerdate || offer.offertExpirationdate) && (
             <HStack className="justify-between">
               <Heading size="sm">
-                {offer.offerfrom && t('offerFrom') + ':' + offer.offerfrom.substring(offer.offerfrom.indexOf(',') + 1)}
-                {offer.offerTo && offer.offerfrom && ' - '}
-                {offer.offerTo && t('offerTo') + ':' + offer.offerTo.substring(offer.offerTo.indexOf(',') + 1)}
+                {offer.offerdate && t('offerFrom') + ':' + offer.offerdate.substring(offer.offerdate.indexOf(',') + 1)}
+                {offer.offertExpirationdate && offer.offerdate && ' - '}
+                {offer.offertExpirationdate &&
+                  t('offerTo') +
+                    ':' +
+                    offer.offertExpirationdate.substring(offer.offertExpirationdate.indexOf(',') + 1)}
               </Heading>
             </HStack>
           )}
