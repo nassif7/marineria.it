@@ -1,4 +1,10 @@
 export type JobOfferType = {
+  //owner spc props
+  latArm?: number
+  lngArm?: number
+  salary_From?: number
+  salary_To?: number
+
   offerApplicable: boolean
   alreadyApplied: boolean
   idoffer: number
