@@ -65,14 +65,14 @@ const UserProfile = () => {
                 </Avatar>
               </Box>
               <Box>
-                <Heading className="text-white text-4xl">{t(message)}</Heading>
+                <Heading className="text-white text-center text-4xl">{t(message)}</Heading>
                 <Heading className="text-white text-4xl text-center">{user.name}</Heading>
                 <Text className="text-white text-xl p4 text-center my-6">
                   {role == AuthTypes.UserRole.OWNER && t('welcomeOwner')}
                   {role == AuthTypes.UserRole.PRO && t('welcomeCrew')}
                 </Text>
 
-                <Button variant="outline" onPress={() => router.navigate(`/(tabs)/jobOffers`)}>
+                <Button variant="outline" onPress={() => router.navigate(`/(tabs)/proScreens/jobOffers`)}>
                   <ButtonText className="text-white">{t('jobOffers')}</ButtonText>
                 </Button>
               </Box>

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { router } from 'expo-router'
 import { AuthTypes } from '@/api/types'
-import AuthenticationForm, { FormDate } from '@/components/AuthenticationForm'
+import AuthenticationForm, { FormDate } from '@/components/common/AuthenticationForm'
 import { useUser } from '@/Providers/UserProvider'
 import { useSession } from '@/Providers/SessionProvider'
 import { useShowToast } from '@/hooks'

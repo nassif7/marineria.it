@@ -1,9 +1,12 @@
 import { API } from './const'
-import { JobOfferType } from './types/jobOffer'
+import { ProJobOfferType } from './types/jobOffer'
 import { ErrorResponse } from './types/errors'
 
 // Get All offers without token
-export const getOwnerOffers = async (ownerToken: string, language: string): Promise<JobOfferType[] | ErrorResponse> => {
+export const getOwnerOffers = async (
+  ownerToken: string,
+  language: string
+): Promise<ProJobOfferType[] | ErrorResponse> => {
   const url = `${API.OWNER_OFFERS}/${ownerToken}?language=${language}`
 
   try {
@@ -11,7 +14,7 @@ export const getOwnerOffers = async (ownerToken: string, language: string): Prom
     const data = await response.json()
 
     if (response.ok) {
-      return data as JobOfferType[]
+      return data as ProJobOfferType[]
     } else {
       return data as ErrorResponse
     }
@@ -25,7 +28,7 @@ export const getOwnerOfferById = async (
   offerId: string,
   ownerToken: string,
   language: string
-): Promise<JobOfferType[] | ErrorResponse> => {
+): Promise<ProJobOfferType[] | ErrorResponse> => {
   const url = API.CREW_LIST + `/${ownerToken}/${offerId}/${language}`
 
   try {
@@ -65,7 +68,7 @@ export const getProUserOffers = async (
   proToken: string,
   allOffers: boolean,
   language: string
-): Promise<JobOfferType[] | ErrorResponse> => {
+): Promise<ProJobOfferType[] | ErrorResponse> => {
   try {
     const url = API.PRO_OFFERS + `${allOffers ? '/AllOffers' : ''}/${proToken}?language=${language}`
 
@@ -73,7 +76,7 @@ export const getProUserOffers = async (
     const data = await response.json()
 
     if (response.ok) {
-      return data as JobOfferType[]
+      return data as ProJobOfferType[]
     } else {
       return data as ErrorResponse
     }
@@ -87,14 +90,14 @@ export const getProOfferById = async (
   offerId: string,
   proToken: string,
   language: string
-): Promise<JobOfferType[] | ErrorResponse> => {
+): Promise<ProJobOfferType[] | ErrorResponse> => {
   const url = API.PRO_OFFERS + `/${offerId}/${proToken}?language=${language}`
   try {
     const response = await fetch(url)
     const data = await response.json()
 
     if (response.ok) {
-      return data as JobOfferType[]
+      return data as ProJobOfferType[]
     } else {
       return data as ErrorResponse
     }

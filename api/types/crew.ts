@@ -1,41 +1,40 @@
 export type CrewType = {
-  userId: number
+  userId: 0
   autoCandidate: boolean
-  selected: number
-  rejected: number
+  selected: boolean
+  rejected: boolean
   insertDate: string
   firstName: string
   lastName: string
   company: string
   address: string
-  city: string //From
+  city: string
   provincia: string
   postalCode: string
   email: string
   url: string
   country: string
-  passport: string // Citizenship
+  passport: string
   phone: string
-  phone1: string
   mobile: string
-  cellulare: string
-  fax: string
-  phoneprefix: string
-  landprefix: string
-  whatsAppprefix: string
+  callWhatsapp: string
   talkApp: string
-  whatsApp: string
   userPhoto: string
-  photoApproved: number
+  photoApproved: boolean
   birthYear: string
-  maritalStatus: boolean
-  smoker: number // 1 is not smoker
-  gender: boolean //
+  maritalStatus: string
+  smoker: string
+  gender: string
   qualificationCode: string
   licenseCode: string
-  gdmCode: boolean
-  coursesCode: string // should be the right text
-  position: string
+  seamansBook: string
+  registration_Number: string
+  registration_City: string
+  registration_Category: string
+  registration_Year: string
+  courses: string
+  mainPosition: string
+  specseling: string
   pos_deck: string
   pos_engine: string
   pos_hotel: string
@@ -48,23 +47,21 @@ export type CrewType = {
   mca_deck_rya: string
   stcw_navy_deck: string
   stcw_navy_engine: string
-  esP_NON: true
-  esp_Armatoriali: true
-  esp_Charter: true
-  navigationBook: number
-  navigationPerformed: number
-  availability: boolean
-  lastUpdateDate: string
-  lastAccessDate: string // Last Seen
+  navigationBook: string
+  navigationPerformed: string
+  availability: string
+  dateAvailability: string
+  lastAccessDate: string
   coupleWith: string
   coupleProfile: string
   salary: string
-  documentStatus: true
-  calculatedExperience: string // Experience:
-  crewlistId: number
-  offerId: number
-  preference: number
-  sent: number
+  documentStatus: string
+  calculatedExperience: string
+  stars: 0
+  notes: string
+  crewlistId: 0
+  offerId: 0
+  sent: boolean
   comment: string
 }
 

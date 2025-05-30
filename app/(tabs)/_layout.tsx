@@ -7,10 +7,11 @@ import { Text } from '@/components/ui'
 import { useSession } from '@/Providers/SessionProvider'
 import '@/localization'
 import { TabBar } from '@/components/ui'
+import { AuthTypes } from '@/api/types'
 
 const AppLayout = () => {
   const { auth, isLoading } = useSession()
-  const { token } = auth
+  const { token, role } = auth
   const insets = useSafeAreaInsets()
 
   if (isLoading) {
@@ -54,6 +55,25 @@ const AppLayout = () => {
         />
         <Tabs.Screen
           name="jobOffers"
+          redirect={true}
+          options={{
+            headerShown: false,
+            sceneStyle,
+            tabBarIcon: ({ color }) => <FontAwesome6 name="anchor" size={28} color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="proScreens"
+          redirect={role !== AuthTypes.UserRole.PRO}
+          options={{
+            headerShown: false,
+            sceneStyle,
+            tabBarIcon: ({ color }) => <FontAwesome6 name="anchor" size={28} color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="recruiterScreens"
+          redirect={role !== AuthTypes.UserRole.OWNER}
           options={{
             headerShown: false,
             sceneStyle,
