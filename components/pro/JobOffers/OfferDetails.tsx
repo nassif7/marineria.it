@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { getOwnerOfferById, getProOfferById, applyToOffer, getCrewList } from '@/api'
 import { Share, Alert } from 'react-native'
 import { useUser } from '@/Providers/UserProvider'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { AuthTypes } from '@/api/types'
 import { useFetch } from '@/hooks'
 
@@ -35,6 +35,8 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
   } = useTranslation()
   const { activeProfile } = useUser()
   const { role, token } = activeProfile as any
+
+  const [loading, setLoading] = useState(false)
 
   const fetchOffer = useCallback(
     async () =>
@@ -82,13 +84,18 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
     }
   }
 
+  console.log(loading, 'loading')
   const onApply = async () => {
+    console.log('clicked')
+    setLoading(true)
     const response = await applyToOffer(token, parseInt(offerId as string), language)
+    console.log('apply response', response)
     if (response?.ok) {
       Alert.alert('You have successfully applied to this offer')
     } else {
       Alert.alert('Something went wrong, please try again later')
     }
+    setLoading(false)
   }
 
   return (
@@ -131,7 +138,7 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
                   <ButtonText>Share</ButtonText>
                   <ButtonIcon as={Share2Icon} />
                 </Button>
-                <Button isDisabled={offer?.alreadyApplied} onPress={onApply}>
+                <Button isDisabled={offer?.alreadyApplied || loading} onPress={onApply}>
                   <ButtonText>Apply</ButtonText>
                   <ButtonIcon as={Plus} />
                 </Button>

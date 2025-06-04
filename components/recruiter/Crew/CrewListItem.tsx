@@ -42,7 +42,6 @@ const CrewListItem: React.FC<{ crew: CrewType }> = ({ crew }) => {
     [crew]
   )
 
-  console.log(crew.lastAccessDate)
   return (
     <Card className="p-4 rounded-lg m-3">
       <Box className="flex-row  items-center">

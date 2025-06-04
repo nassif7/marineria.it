@@ -14,7 +14,12 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
   const { t } = useTranslation()
 
   const onPress = () => {
-    router.navigate(`/(tabs)/proScreens/jobOffers/${offer.idoffer}`)
+    offer.offerApplicable
+      ? router.navigate(`/(tabs)/proScreens/jobOffers/${offer.idoffer}`)
+      : router.push({
+          pathname: '/(tabs)/proScreens/jobOffers/jobOffer',
+          params: { offerStr: JSON.stringify(offer) },
+        })
   }
 
   return (
