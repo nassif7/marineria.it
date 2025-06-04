@@ -21,7 +21,6 @@ const OffersList: FC = () => {
   }, [language, state])
   const { isLoading, data } = useFetch(fetchOffers)
 
-  console.log('Recruiter offers layout...')
   return (
     <>
       {isLoading && <Loading />}
