@@ -16,14 +16,19 @@ export const signIn = async (username: string, password: string): Promise<AuthRe
       body: formData,
     })
 
-    const data = await response.json()
-
     if (response.ok) {
+      const data = await response.json()
       return data as AuthResponse
     } else {
-      return data as ErrorResponse
+      return {
+        code: response.status,
+        messageKey: 'login_error',
+      }
     }
-  } catch (error: any) {
-    throw new Error(`HTTP error! Status: ${error.status}`)
+  } catch (error) {
+    return {
+      code: 0,
+      messageKey: 'login_error',
+    }
   }
 }

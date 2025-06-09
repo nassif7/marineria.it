@@ -23,6 +23,7 @@ import { useUser } from '@/Providers/UserProvider'
 import { useCallback, useState } from 'react'
 import { AuthTypes } from '@/api/types'
 import { useFetch } from '@/hooks'
+import { isErrorResponse } from '@/api/types'
 
 interface OfferDetailsProps {
   offerId: string
@@ -84,18 +85,13 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
     }
   }
 
-  console.log(loading, 'loading')
   const onApply = async () => {
-    console.log('clicked')
-    setLoading(true)
     const response = await applyToOffer(token, parseInt(offerId as string), language)
-    console.log('apply response', response)
-    if (response?.ok) {
-      Alert.alert('You have successfully applied to this offer')
+    if (isErrorResponse(response)) {
+      Alert.alert(t(response.messageKey || 'apply_offer_error'))
     } else {
-      Alert.alert('Something went wrong, please try again later')
+      Alert.alert(t(response.messageKey || 'offer_applied_successfully'))
     }
-    setLoading(false)
   }
 
   return (

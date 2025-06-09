@@ -1,6 +1,8 @@
 import { API } from './const'
 import { ProJobOfferType, OwnerJobOfferType } from './types/jobOffer'
+import { CrewType } from './types/crew'
 import { ErrorResponse } from './types/errors'
+import { SuccessResponse } from '@/api/types/network'
 
 // Get All offers without token
 export const getOwnerOffers = async (
@@ -8,18 +10,22 @@ export const getOwnerOffers = async (
   language: string
 ): Promise<OwnerJobOfferType[] | ErrorResponse> => {
   const url = `${API.OWNER_OFFERS}/${ownerToken}?language=${language}`
-
   try {
     const response = await fetch(url)
-    const data = await response.json()
-
     if (response.ok) {
+      const data = await response.json()
       return data as OwnerJobOfferType[]
     } else {
-      return data as ErrorResponse
+      return {
+        code: response.status,
+        messageKey: 'fetching_offers_error',
+      }
     }
   } catch (e) {
-    throw e
+    return {
+      code: 0,
+      messageKey: 'fetching_offers_error',
+    }
   }
 }
 
@@ -33,33 +39,49 @@ export const getOwnerOfferById = async (
 
   try {
     const response = await fetch(url)
-    const data = await response.json()
 
     if (response.ok) {
-      return data
+      const data = await response.json()
+      return data as ProJobOfferType[]
     } else {
-      return data as ErrorResponse
+      return {
+        code: response.status,
+        messageKey: 'fetching_offers_error',
+      }
     }
   } catch (e) {
-    throw e
+    return {
+      code: 0,
+      messageKey: 'fetching_offers_error',
+    }
   }
 }
 
 // Get Crew List
-export const getCrewList = async (offerId: string, ownerToken: string, language: string): Promise<any> => {
+export const getCrewList = async (
+  offerId: string,
+  ownerToken: string,
+  language: string
+): Promise<CrewType[] | ErrorResponse> => {
   const url = API.CREW_LIST + `/${ownerToken}/${offerId}/${language}`
 
   try {
     const response = await fetch(url)
-    const data = await response.json()
 
     if (response.ok) {
-      return data as any
+      const data = await response.json()
+      return data as CrewType[]
     } else {
-      return data as ErrorResponse
+      return {
+        code: response.status,
+        messageKey: 'fetching_crew_list_error',
+      }
     }
   } catch (e) {
-    throw e
+    return {
+      code: 0,
+      messageKey: 'fetching_crew_list_error',
+    }
   }
 }
 
@@ -73,15 +95,21 @@ export const getProUserOffers = async (
     const url = API.PRO_OFFERS + `${allOffers ? '/AllOffers' : ''}/${proToken}?language=${language}`
 
     const response = await fetch(url)
-    const data = await response.json()
 
     if (response.ok) {
+      const data = await response.json()
       return data as ProJobOfferType[]
     } else {
-      return data as ErrorResponse
+      return {
+        code: response.status,
+        messageKey: 'fetching_offers_error',
+      }
     }
   } catch (e) {
-    throw e
+    return {
+      code: 0,
+      messageKey: 'fetching_offers_error',
+    }
   }
 }
 
@@ -94,15 +122,21 @@ export const getProOfferById = async (
   const url = API.PRO_OFFERS + `/${offerId}/${proToken}?language=${language}`
   try {
     const response = await fetch(url)
-    const data = await response.json()
 
     if (response.ok) {
+      const data = await response.json()
       return data as ProJobOfferType[]
     } else {
-      return data as ErrorResponse
+      return {
+        code: response.status,
+        messageKey: 'fetching_offer_error',
+      }
     }
   } catch (e) {
-    throw e
+    return {
+      code: 0,
+      messageKey: 'fetching_offer_error',
+    }
   }
 }
 
@@ -110,14 +144,25 @@ export const applyToOffer = async (
   proToken: string,
   offerId: number,
   language: string
-): Promise<ErrorResponse | any> => {
-  const url = API.PRO_OFFERS + `/Apply/${offerId}/${proToken}?language=${language}`
+): Promise<ErrorResponse | SuccessResponse> => {
+  const url = API.PRO_OFFERS + `/Apply/${offerId}/${proToken}`
 
-  const response = await fetch(url)
-  if (response.ok) {
-    const data = await response.json()
-    return data as any
-  } else {
-    return 'something went wrong, please try again later'
+  try {
+    const response = await fetch(url)
+    if (response.ok) {
+      return {
+        messageKey: 'offer_applied_successfully',
+      }
+    } else {
+      return {
+        code: response.status,
+        messageKey: 'offer_apply_error',
+      }
+    }
+  } catch (e) {
+    return {
+      code: 0,
+      messageKey: 'offer_apply_error',
+    }
   }
 }

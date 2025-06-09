@@ -1,4 +1,6 @@
 export type ErrorResponse = {
-  status: number
-  title: string
+  code?: number
+  messageKey?: string
+  details?: any
+  [key: string]: any // Allow additional properties
 }
