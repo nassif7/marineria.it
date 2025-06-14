@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { ErrorTypes, isErrorResponse } from '@/api/types'
 
-function useFetch<T>(callBack: () => Promise<T | ErrorTypes.ErrorResponse>): {
+function useFetch<T>(
+  fetchCallBack: () => Promise<T | ErrorTypes.ErrorResponse>,
+  onError?: () => void
+): {
   isLoading: boolean
-  error?: any
+  error?: ErrorTypes.ErrorResponse | null
   data?: T
 } {
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -12,8 +15,12 @@ function useFetch<T>(callBack: () => Promise<T | ErrorTypes.ErrorResponse>): {
 
   const fetch = async () => {
     setIsLoading(true)
-    const data = await callBack()
+    const data = await fetchCallBack()
+
     if (isErrorResponse(data)) {
+      if (onError) {
+        onError()
+      }
       setError(data)
     } else {
       setData(data)
@@ -23,7 +30,7 @@ function useFetch<T>(callBack: () => Promise<T | ErrorTypes.ErrorResponse>): {
 
   useEffect(() => {
     fetch()
-  }, [callBack])
+  }, [fetchCallBack])
 
   return {
     isLoading,

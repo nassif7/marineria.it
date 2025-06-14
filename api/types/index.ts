@@ -7,6 +7,11 @@ export { CrewType } from './crew'
 
 import { ErrorResponse } from './errors'
 
+export const LanguageCode: Record<string, string> = {
+  en: 'ENG',
+  it: 'ITA',
+}
+
 export function isErrorResponse(data: ErrorResponse | any): data is ErrorResponse {
   return (data as ErrorResponse).code !== undefined
 }

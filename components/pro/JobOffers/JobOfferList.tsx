@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { getProUserOffers } from '@/api'
 import { useAppState, useFetch } from '@/hooks'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-import { Loading, ListEmptyComponent, Box, Heading } from '@/components/ui'
+import { Loading, ListEmptyComponent, Box, Heading, View } from '@/components/ui'
 import JobOfferListItem from './JobOfferListItem'
 import JobOffersListHeader from './JobOffersListHeader'
+import { useShowToast } from '@/hooks'
 
 const JobOfferList: FC = () => {
   const {
@@ -20,10 +21,9 @@ const JobOfferList: FC = () => {
   const fetchOffers = useCallback(async () => {
     return await getProUserOffers(token, ownOffers == 'all', language)
   }, [language, ownOffers, state])
-  const { isLoading, data } = useFetch(fetchOffers)
-
+  const showToast = useShowToast(t('error'), t('loginError'), 'error')
+  const { isLoading, data, error } = useFetch(fetchOffers)
   const onChange = (v: string) => setOwnOffers(v)
-
   return (
     <>
       {isLoading && <Loading />}
@@ -42,6 +42,18 @@ const JobOfferList: FC = () => {
             stickyHeaderIndices={[0]}
           />
         </>
+      )}
+      {error && (
+        <View className=" items-center justify-center h-full">
+          <Box className="p-4">
+            <Heading size="2xl" className="text-red-500">
+              Something went wrong:
+            </Heading>
+            <Heading size="md" className="text-red-500">
+              Please contact support if this issue persists.
+            </Heading>
+          </Box>
+        </View>
       )}
     </>
   )

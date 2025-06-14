@@ -3,13 +3,14 @@ import { ProJobOfferType, OwnerJobOfferType } from './types/jobOffer'
 import { CrewType } from './types/crew'
 import { ErrorResponse } from './types/errors'
 import { SuccessResponse } from '@/api/types/network'
+import { LanguageCode } from './types'
 
 // Get All offers without token
 export const getOwnerOffers = async (
   ownerToken: string,
   language: string
 ): Promise<OwnerJobOfferType[] | ErrorResponse> => {
-  const url = `${API.OWNER_OFFERS}/${ownerToken}?language=${language}`
+  const url = `${API.OWNER_OFFERS}/${ownerToken}?language=${LanguageCode[language] || LanguageCode.en}`
   try {
     const response = await fetch(url)
     if (response.ok) {
@@ -35,7 +36,7 @@ export const getOwnerOfferById = async (
   ownerToken: string,
   language: string
 ): Promise<ProJobOfferType[] | ErrorResponse> => {
-  const url = API.CREW_LIST + `/${ownerToken}/${offerId}/${language}`
+  const url = API.CREW_LIST + `/${ownerToken}/${offerId}/${LanguageCode[language] || LanguageCode.en}`
 
   try {
     const response = await fetch(url)
@@ -63,7 +64,7 @@ export const getCrewList = async (
   ownerToken: string,
   language: string
 ): Promise<CrewType[] | ErrorResponse> => {
-  const url = API.CREW_LIST + `/${ownerToken}/${offerId}/${language}`
+  const url = API.CREW_LIST + `/${ownerToken}/${offerId}/${LanguageCode[language] || LanguageCode.en}`
 
   try {
     const response = await fetch(url)
@@ -92,7 +93,9 @@ export const getProUserOffers = async (
   language: string
 ): Promise<ProJobOfferType[] | ErrorResponse> => {
   try {
-    const url = API.PRO_OFFERS + `${allOffers ? '/AllOffers' : ''}/${proToken}?language=${language}`
+    const url =
+      API.PRO_OFFERS +
+      `${allOffers ? '/AllOffers' : ''}/${proToken}?language=${LanguageCode[language] || LanguageCode.en}`
 
     const response = await fetch(url)
 
@@ -119,7 +122,7 @@ export const getProOfferById = async (
   proToken: string,
   language: string
 ): Promise<ProJobOfferType[] | ErrorResponse> => {
-  const url = API.PRO_OFFERS + `/${offerId}/${proToken}?language=${language}`
+  const url = API.PRO_OFFERS + `/${offerId}/${proToken}?language=${LanguageCode[language] || LanguageCode.en}`
   try {
     const response = await fetch(url)
 
