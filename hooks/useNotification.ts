@@ -89,6 +89,7 @@ const useNotification = () => {
       Notifications.getNotificationChannelsAsync().then((value) => setChannels(value ?? []))
     }
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+      console.log('Notification received:', notification)
       setNotification(notification)
     })
 

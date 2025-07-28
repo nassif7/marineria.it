@@ -8,12 +8,14 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "jsEngine": "hermes",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "ios": {
+      "jsEngine": "hermes",
       "supportsTablet": true,
       "bundleIdentifier": "marineriait",
       "infoPlist": {

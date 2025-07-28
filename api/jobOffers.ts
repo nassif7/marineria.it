@@ -92,11 +92,13 @@ export const getProUserOffers = async (
   allOffers: boolean,
   language: string
 ): Promise<ProJobOfferType[] | ErrorResponse> => {
-  try {
-    const url =
-      API.PRO_OFFERS +
-      `${allOffers ? '/AllOffers' : ''}/${proToken}?language=${LanguageCode[language] || LanguageCode.en}`
+  console.log(proToken, language)
+  const url =
+    API.PRO_OFFERS +
+    `${allOffers ? '/AllOffers' : ''}/${proToken}?language=${LanguageCode[language] || LanguageCode.en}`
 
+  console.log(url)
+  try {
     const response = await fetch(url)
 
     if (response.ok) {

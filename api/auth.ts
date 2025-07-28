@@ -7,6 +7,7 @@ export const signIn = async (username: string, password: string): Promise<AuthRe
     username,
     password,
   })
+  console.log('here', username, password)
   try {
     const response = await fetch(API.LOGIN, {
       method: 'POST',
@@ -16,6 +17,7 @@ export const signIn = async (username: string, password: string): Promise<AuthRe
       body: formData,
     })
 
+    console.log('response', response)
     if (response.ok) {
       const data = await response.json()
       return data as AuthResponse

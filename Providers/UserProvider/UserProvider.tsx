@@ -39,6 +39,8 @@ const UserProvider = (props: React.PropsWithChildren) => {
     token,
   })
 
+  console.log(role, user?.pushNotificationToken, 'user push token.  ')
+
   const fetchUser = async (token: string, role: AuthTypes.UserRole) => {
     setIsLoading(true)
     try {
@@ -53,6 +55,7 @@ const UserProvider = (props: React.PropsWithChildren) => {
   }
 
   const toggleNotifications = async () => {
+    console.log('toggleNotifications', user?.pushNotificationToken, expoPushToken)
     setIsLoading(true)
 
     if (user?.pushNotificationToken) {
