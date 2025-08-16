@@ -3,10 +3,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Feather from '@expo/vector-icons/Feather'
 import UserProvider from '@/Providers/UserProvider'
-import { Text } from '@/components/ui'
+import { Text } from '@/components/ui-lib'
 import { useSession } from '@/Providers/SessionProvider'
 import '@/localization'
-import { TabBar } from '@/components/ui'
+import { TabBar } from '@/components/ui-lib'
 import { AuthTypes } from '@/api/types'
 
 const AppLayout = () => {

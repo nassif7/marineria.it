@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 import { JobOfferTypes } from '@/api/types'
-import { Box, Heading, HStack, Pressable, Card, VStack, Button, ButtonText, ButtonIcon } from '@/components/ui'
+import { Box, Heading, HStack, Pressable, Card, VStack, Button, ButtonText, ButtonIcon } from '@/components/ui-lib'
 import { useTranslation } from 'react-i18next'
 import { router } from 'expo-router'
 import { CircleCheck, CircleX, EyeIcon } from 'lucide-react-native'
-import { Badge, BadgeIcon, BadgeText } from '@/components/ui/badge'
+import { Badge, BadgeIcon, BadgeText } from '@/components/ui-lib'
 import { formatSalary } from '@/utils/formatters'
 interface JobOfferProps {
   offer: JobOfferTypes.ProJobOfferType

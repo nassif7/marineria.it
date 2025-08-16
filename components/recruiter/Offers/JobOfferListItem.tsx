@@ -13,11 +13,11 @@ import {
   Text,
   Icon,
   ButtonGroup,
-} from '@/components/ui'
+} from '@/components/ui-lib'
 import { useTranslation } from 'react-i18next'
 import { router } from 'expo-router'
 import { CircleCheck, CircleX, EyeIcon, Edit, Users, UserSearch, Locate, Map } from 'lucide-react-native'
-import { Badge, BadgeIcon, BadgeText } from '@/components/ui/badge'
+import { Badge, BadgeIcon, BadgeText } from '@/components/ui-lib/badge'
 import { formatSalary, formatDate } from '@/utils'
 import * as Linking from 'expo-linking'
 import { Link } from 'expo-router'

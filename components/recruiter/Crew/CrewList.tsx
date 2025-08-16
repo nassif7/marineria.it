@@ -12,7 +12,7 @@ import {
   VStack,
   Divider,
   Loading,
-} from '@/components/ui'
+} from '@/components/ui-lib'
 import { useTranslation } from 'react-i18next'
 import { getOwnerOfferById, getProOfferById, applyToOffer, getCrewList } from '@/api'
 import { Share, Alert } from 'react-native'

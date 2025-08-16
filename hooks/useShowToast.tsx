@@ -1,5 +1,15 @@
 import React, { useState } from 'react'
-import { Icon, VStack, View, Toast, ToastTitle, ToastDescription, useToast, HStack, Pressable } from '@/components/ui'
+import {
+  Icon,
+  VStack,
+  View,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  useToast,
+  HStack,
+  Pressable,
+} from '@/components/ui-lib'
 import { X, HelpCircleIcon } from 'lucide-react-native'
 
 // #TODO: Extend the hook to support variants, dynamic texts and so on!

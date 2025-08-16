@@ -1,30 +1,28 @@
-import { SafeAreaView, ImageBackground, ScrollView } from 'react-native'
-import { useLocalSearchParams } from 'expo-router'
+import { useCallback, useState } from 'react'
+import { ScrollView, Share } from 'react-native'
+import { useLocalSearchParams, router } from 'expo-router'
+import { useTranslation } from 'react-i18next'
+import { Plus, Share2Icon } from 'lucide-react-native'
+import { getOwnerOfferById, getProOfferById, applyToOffer } from '@/api'
+import { AuthTypes, isErrorResponse } from '@/api/types'
+import { useUser } from '@/Providers/UserProvider'
+import { useFetch } from '@/hooks'
 import {
   View,
   Box,
   Heading,
-  Text,
   Button,
   ButtonText,
   ButtonIcon,
-  ButtonGroup,
   VStack,
-  Divider,
   Loading,
   Card,
   HStack,
-} from '@/components/ui'
-import { Lamp, Plus, Share2Icon, Subscript, MapPin, Calendar, Loader } from 'lucide-react-native'
-import { useTranslation } from 'react-i18next'
-import { getOwnerOfferById, getProOfferById, applyToOffer, getCrewList } from '@/api'
-import { Share, Alert } from 'react-native'
-import { useUser } from '@/Providers/UserProvider'
-import { useCallback, useState } from 'react'
-import { AuthTypes } from '@/api/types'
-import { useFetch } from '@/hooks'
-import { isErrorResponse } from '@/api/types'
-
+  Alert,
+  AlertText,
+  AlertIcon,
+} from '@/components/ui-lib'
+import { Icon, CloseIcon } from '@/components/ui-lib/icon'
 interface OfferDetailsProps {
   offerId: string
 }
@@ -36,26 +34,42 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
   } = useTranslation()
   const { activeProfile } = useUser()
   const { role, token } = activeProfile as any
-
   const [loading, setLoading] = useState(false)
+  const [errorObj, setErrorObj] = useState<any>(null)
 
+  console.log('OfferDetails')
   const fetchOffer = useCallback(
-    async () =>
-      await (role == AuthTypes.UserRole.OWNER
-        ? getOwnerOfferById(offerId as string, token, language)
-        : getProOfferById(offerId as string, token, language)),
+    async () => await getProOfferById('nassif' as string, token, language),
     [token, language, offerId]
   )
   const offerData = useFetch(fetchOffer)
+
+  if (offerData?.error) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <Alert action="success" className="gap-4 max-w-[585px] w-full self-center items-start min-[400px]:items-center">
+          <VStack className="gap-4 min-[400px]:flex-row justify-between flex-1 min-[400px]:items-center">
+            <AlertText className="font-semibold text-typography-900" size="sm">
+              Verify your phone number to create an API key
+            </AlertText>
+            <Button size="sm" className="hidden sm:flex">
+              <ButtonText>Start verification</ButtonText>
+            </Button>
+          </VStack>
+          <Icon as={CloseIcon} />
+        </Alert>
+      </View>
+    )
+  }
   const offer = offerData?.data?.[0]
 
-  if (!offerData?.isLoading && !offerData?.data?.length) {
-    console.log('no items matching')
-  }
+  // if (!offerData?.isLoading && !offerData?.data?.length) {
+  //   Alert.alert(t('offer_not_loading'))
+  //   router.navigate(`/(tabs)/proScreens/jobOffers`)
+  // }
 
   const onShare = async () => {
     const title = offer?.offer.trimStart()
-
     try {
       const result = await Share.share(
         {
@@ -81,18 +95,19 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
       //   // dismissed
       // }
     } catch (error: any) {
-      Alert.alert(error.message)
+      // Alert.alert(error.message)
     }
   }
 
-  const onApply = async () => {
-    const response = await applyToOffer(token, parseInt(offerId as string), language)
-    if (isErrorResponse(response)) {
-      Alert.alert(t(response.messageKey || 'apply_offer_error'))
-    } else {
-      Alert.alert(t(response.messageKey || 'offer_applied_successfully'))
-    }
-  }
+  // const onApply = async () => {
+  //   const response = await applyToOffer(token, parseInt(offerId as string), language)
+  //   if (isErrorResponse(response)) {
+  //     Alert.alert(t(response.messageKey || 'apply_offer_error'))
+  //   } else {
+  //     Alert.alert(t(response.messageKey || 'offer_applied_successfully'))
+  //     router.navigate(`/(tabs)/proScreens/jobOffers`)
+  //   }
+  // }
 
   return (
     <>
@@ -129,16 +144,18 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
               <Heading size="sm"> {offer?.descriptionOffer.replace(/<[^>]*>?/gm, '').trim()}</Heading>
             </Box>
             <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
-              <ButtonGroup className="justify-between p-3">
-                <Button className="rounded" onPress={onShare} action="secondary">
+              <VStack className="justify-between p-3">
+                <Button className="rounded mb-2" onPress={onShare} action="secondary">
                   <ButtonText>Share</ButtonText>
                   <ButtonIcon as={Share2Icon} />
                 </Button>
-                <Button isDisabled={offer?.alreadyApplied || loading} onPress={onApply}>
-                  <ButtonText>Apply</ButtonText>
-                  <ButtonIcon as={Plus} />
-                </Button>
-              </ButtonGroup>
+                {/* {!offer?.alreadyApplied && (
+                  <Button isDisabled={loading} onPress={onApply}>
+                    <ButtonText>Apply</ButtonText>
+                    <ButtonIcon as={Plus} />
+                  </Button>
+                )} */}
+              </VStack>
             </Box>
           </Card>
         </ScrollView>

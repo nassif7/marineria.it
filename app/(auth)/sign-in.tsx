@@ -1,6 +1,6 @@
 import React from 'react'
 import { ImageBackground, Image, KeyboardAvoidingView } from 'react-native'
-import { View } from '@/components/ui'
+import { View } from '@/components/ui-lib'
 import AuthenticationForm, { FormDate } from '@/components/common/AuthenticationForm'
 import { useSession } from '@/Providers/SessionProvider'
 import { useShowToast } from '@/hooks'

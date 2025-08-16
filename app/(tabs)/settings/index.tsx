@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Box, View, VStack, Heading } from '@/components/ui'
+import { Box, View, VStack, Heading } from '@/components/ui-lib'
 import SwitchLanguage from '@/components/common/SwitchLanguage'
 import NotificationsToggle from '@/components/common/NotificationsToggle'
 import SignOut from '@/components/common/SignOut'

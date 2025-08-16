@@ -12,9 +12,9 @@ import {
   SelectDragIndicator,
   SelectDragIndicatorWrapper,
   SelectItem,
-} from '@/components/ui/select'
+} from '@/components/ui-lib/select'
 import { ChevronDownIcon } from 'lucide-react-native'
-import { Text } from '@/components/ui'
+import { Text } from '@/components/ui-lib'
 
 enum Locales {
   EN = 'en',

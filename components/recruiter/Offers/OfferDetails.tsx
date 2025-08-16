@@ -14,7 +14,7 @@ import {
   Loading,
   Card,
   HStack,
-} from '@/components/ui'
+} from '@/components/ui-lib'
 import { Lamp, Plus, Share2Icon, Subscript, MapPin, Calendar, Loader } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { getOwnerOfferById, getProOfferById, applyToOffer, getCrewList } from '@/api'

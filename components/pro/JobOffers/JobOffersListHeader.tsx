@@ -10,8 +10,8 @@ import {
   SelectDragIndicator,
   SelectDragIndicatorWrapper,
   SelectItem,
-} from '@/components/ui/select'
-import { HStack, Loading, ListEmptyComponent, Divider, Box } from '@/components/ui'
+} from '@/components/ui-lib/select'
+import { HStack, Loading, ListEmptyComponent, Divider, Box } from '@/components/ui-lib'
 import { useTranslation } from 'react-i18next'
 import { ChevronDownIcon } from 'lucide-react-native'
 

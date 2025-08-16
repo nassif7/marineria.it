@@ -15,7 +15,7 @@ import {
   Text,
   View,
   VStack,
-} from '@/components/ui'
+} from '@/components/ui-lib'
 import { router } from 'expo-router'
 
 const UserProfile: React.FC = () => {

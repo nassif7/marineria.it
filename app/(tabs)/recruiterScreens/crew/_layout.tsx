@@ -1,6 +1,5 @@
 import React from 'react'
 import { Stack } from 'expo-router'
-import { NavBar } from '@/components/ui'
 
 const _layout = () => {
   return (
@@ -9,6 +8,19 @@ const _layout = () => {
         name="index"
         options={{
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="cv"
+        options={{
+          headerShown: true,
+          headerTitle: 'CV',
+          headerTitleAlign: 'center',
+          headerShadowVisible: false,
+          headerStyle: {
+            backgroundColor: 'rgb(30 41 59)',
+          },
+          headerTintColor: '#fff',
         }}
       />
     </Stack>

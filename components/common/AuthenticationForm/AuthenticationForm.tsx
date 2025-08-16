@@ -16,7 +16,7 @@ import {
   VStack,
   View,
   Divider,
-} from '@/components/ui'
+} from '@/components/ui-lib'
 import { EyeIcon, EyeOffIcon } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { AuthTypes } from '@/api/types'

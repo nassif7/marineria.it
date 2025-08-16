@@ -5,7 +5,7 @@ import AuthenticationForm, { FormDate } from '@/components/common/Authentication
 import { useUser } from '@/Providers/UserProvider'
 import { useSession } from '@/Providers/SessionProvider'
 import { useShowToast } from '@/hooks'
-import { View } from '@/components/ui'
+import { View } from '@/components/ui-lib'
 import { useTranslation } from 'react-i18next'
 import { ImageBackground, Image, KeyboardAvoidingView } from 'react-native'
 import { horizontalScale, verticalScale } from '@/utils/metrics'

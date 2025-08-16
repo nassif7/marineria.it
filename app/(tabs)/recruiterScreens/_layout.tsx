@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stack } from 'expo-router'
-import { NavBar } from '@/components/ui'
+import { NavBar } from '@/components/ui-lib'
 
 const _layout = () => {
   return (

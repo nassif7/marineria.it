@@ -17,8 +17,8 @@ import {
   LinkText,
   HStack,
   ButtonIcon,
-} from '@/components/ui'
-import { Icon, ArrowRightIcon, EyeIcon } from '@/components/ui/icon'
+} from '@/components/ui-lib'
+import { Icon, ArrowRightIcon, EyeIcon } from '@/components/ui-lib/icon'
 import { faker } from '@faker-js/faker'
 import { formatDate, getAge } from '@/utils/dateUtils'
 import { BASE_URL } from '@/api/const'

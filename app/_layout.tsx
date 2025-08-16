@@ -1,6 +1,6 @@
 import { Slot } from 'expo-router'
 import '@/global.css'
-import { ThemeUIProvider } from '@/components/ui/gluestack-ui-provider'
+import { ThemeUIProvider } from '@/components/ui-lib/gluestack-ui-provider'
 import SessionProvider from '@/Providers/SessionProvider'
 import '@/localization'
 import React, { useEffect } from 'react'

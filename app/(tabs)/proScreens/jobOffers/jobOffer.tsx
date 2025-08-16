@@ -12,7 +12,7 @@ import {
   ButtonGroup,
   VStack,
   Divider,
-} from '@/components/ui'
+} from '@/components/ui-lib'
 import { Plus, Share2Icon } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { Share, Alert } from 'react-native'
@@ -106,16 +106,18 @@ const JobOfferScreen = () => {
             <Heading size="sm"> {offer?.descriptionOffer.replace(/<[^>]*>?/gm, '').trim()}</Heading>
           </Box>
           <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
-            <ButtonGroup className="justify-between p-3">
+            <VStack className="justify-between p-3">
               <Button className="rounded" onPress={onShare} action="secondary">
                 <ButtonText>Share</ButtonText>
                 <ButtonIcon as={Share2Icon} />
               </Button>
-              <Button isDisabled={!offer?.alreadyApplied} onPress={onApply}>
-                <ButtonText>Apply</ButtonText>
-                <ButtonIcon as={Plus} />
-              </Button>
-            </ButtonGroup>
+              {offer?.alreadyApplied && (
+                <Button isDisabled={!offer?.alreadyApplied} onPress={onApply}>
+                  <ButtonText>Apply</ButtonText>
+                  <ButtonIcon as={Plus} />
+                </Button>
+              )}
+            </VStack>
           </Box>
         </Card>
       </ScrollView>

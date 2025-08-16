@@ -1,6 +1,6 @@
 import { router } from 'expo-router'
 
-import { ButtonText, Button, View } from '@/components/ui'
+import { ButtonText, Button, View } from '@/components/ui-lib'
 import { AuthTypes } from '@/api/types'
 import { useTranslation } from 'react-i18next'
 import { useUser } from '@/Providers/UserProvider'

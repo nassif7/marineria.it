@@ -17,7 +17,7 @@ import {
   Text,
   View,
   Link,
-} from '@/components/ui'
+} from '@/components/ui-lib'
 import { router } from 'expo-router'
 
 const UserProfile = () => {

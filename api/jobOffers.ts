@@ -125,6 +125,7 @@ export const getProOfferById = async (
   language: string
 ): Promise<ProJobOfferType[] | ErrorResponse> => {
   const url = API.PRO_OFFERS + `/${offerId}/${proToken}?language=${LanguageCode[language] || LanguageCode.en}`
+  console.log(offerId)
   try {
     const response = await fetch(url)
 

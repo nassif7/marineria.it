@@ -10,10 +10,10 @@ import {
   SelectDragIndicator,
   SelectDragIndicatorWrapper,
   SelectItem,
-} from '@/components/ui/select'
+} from '@/components/ui-lib/select'
 import { useTranslation } from 'react-i18next'
 import { ChevronDownIcon, Loader } from 'lucide-react-native'
-import { Text } from '@/components/ui'
+import { Text } from '@/components/ui-lib'
 import { useUser } from '@/Providers/UserProvider'
 
 const NotificationsToggle: FC = () => {

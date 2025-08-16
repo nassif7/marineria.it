@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { getOwnerOffers } from '@/api'
 import { useAppState, useFetch } from '@/hooks'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-import { Loading, ListEmptyComponent, Box, Heading } from '@/components/ui'
+import { Loading, ListEmptyComponent, Box, Heading } from '@/components/ui-lib'
 import JobOfferListItem from './JobOfferListItem'
 
 const OffersList: FC = () => {

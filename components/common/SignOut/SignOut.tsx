@@ -1,4 +1,4 @@
-import { Button, ButtonText, ButtonIcon } from '@/components/ui'
+import { Button, ButtonText, ButtonIcon } from '@/components/ui-lib'
 import { useSession } from '@/Providers/SessionProvider'
 import { useUser } from '@/Providers/UserProvider'
 import { AuthTypes } from '@/api/types'
