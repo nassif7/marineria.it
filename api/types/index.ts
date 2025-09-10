@@ -9,3 +9,7 @@ import { ErrorResponse } from './errors'
 export function isErrorResponse(data: ErrorResponse | any): data is ErrorResponse {
   return (data as ErrorResponse).status !== undefined
 }
+
+export function getLAnguageCode(lang: string): string {
+  return { en: 'ENG', it: 'ITA' }[lang] || 'ENG'
+}
