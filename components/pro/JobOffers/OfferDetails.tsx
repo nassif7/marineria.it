@@ -1,23 +1,19 @@
-import { SafeAreaView, ImageBackground, ScrollView } from 'react-native'
-import { useLocalSearchParams } from 'expo-router'
+import { ScrollView } from 'react-native'
 import {
-  View,
   Box,
   Heading,
-  Text,
   Button,
   ButtonText,
   ButtonIcon,
   ButtonGroup,
   VStack,
-  Divider,
   Loading,
   Card,
   HStack,
 } from '@/components/ui'
-import { Lamp, Plus, Share2Icon, Subscript, MapPin, Calendar, Loader } from 'lucide-react-native'
+import { Plus, Share2Icon } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { getOwnerOfferById, getProOfferById, applyToOffer, getCrewList } from '@/api'
+import { getOwnerOfferById, getProOfferById, applyToOffer } from '@/api'
 import { Share, Alert } from 'react-native'
 import { useUser } from '@/Providers/UserProvider'
 import { useCallback, useState } from 'react'
@@ -89,7 +85,6 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ offerId }) => {
     console.log('clicked')
     setLoading(true)
     const response = await applyToOffer(token, parseInt(offerId as string), language)
-    console.log('apply response', response)
     if (response?.ok) {
       Alert.alert('You have successfully applied to this offer')
     } else {

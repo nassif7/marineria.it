@@ -21,6 +21,7 @@ import { Badge, BadgeIcon, BadgeText } from '@/components/ui/badge'
 import { formatSalary, formatDate } from '@/utils'
 import * as Linking from 'expo-linking'
 import { Link } from 'expo-router'
+import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 
 interface JobOfferProps {
   offer: JobOfferTypes.OwnerJobOfferType
@@ -32,6 +33,9 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
     i18n: { language },
   } = useTranslation()
 
+  const { activeProfile } = useUser()
+  const { token } = activeProfile as ActiveProfile
+
   const onViewOffer = () =>
     router.push({
       pathname: '/(tabs)/recruiterScreens/offers/offer',
@@ -39,7 +43,8 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
     })
 
   const onEditOffer = () => {
-    Linking.openURL(`https://www.marineria.it/${language}/Rec/Post.aspx?idofferta=${offer.idoffer}`)
+    console.log('click')
+    Linking.openURL(`https://www.marineria.it/${'ENG'}/Rec/Post.aspx?idofferta=${offer.idoffer}?token=${token}`)
   }
 
   const onViewCrewList = () =>
@@ -49,10 +54,10 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
     })
 
   const onSearchByLocation = () => {
-    Linking.openURL(`https://www.marineria.it/${language}/${offer.listgeourl}`)
+    Linking.openURL(`https://www.marineria.it/${language}/${offer.listgeourl}?token=${token}`)
   }
   const onSearchBySkill = () => {
-    Linking.openURL(`https://www.marineria.it/${language}/${offer.listurl}`)
+    Linking.openURL(`https://www.marineria.it/${language}/${offer.listurl}?token=${token}`)
   }
 
   return (

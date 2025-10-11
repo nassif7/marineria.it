@@ -51,7 +51,7 @@ export const getOwnerOfferById = async (
 // Get Crew List
 export const getCrewList = async (offerId: string, ownerToken: string, language: string): Promise<any> => {
   const languageCode = getLAnguageCode(language)
-  const url = API.CREW_LIST + `/${ownerToken}/${offerId}/${languageCode}`
+  const url = API.CREW_LIST + `/${ownerToken}/${offerId}?language=${languageCode}`
 
   try {
     const response = await fetch(url)
@@ -121,8 +121,8 @@ export const applyToOffer = async (
   const languageCode = getLAnguageCode(language)
 
   const url = API.PRO_OFFERS + `/Apply/${offerId}/${proToken}?language=${languageCode}`
-
   const response = await fetch(url)
+
   if (response.ok) {
     const data = await response.json()
     return data as any

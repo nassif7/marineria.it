@@ -35,7 +35,6 @@ const OffersList: FC = () => {
             data={data}
             renderItem={({ item }) => <JobOfferListItem offer={item} key={item.reference} />}
             ListEmptyComponent={<ListEmptyComponent message={t('noOwnerJobOffers')} />}
-            stickyHeaderIndices={[0]}
           />
         </>
       )}

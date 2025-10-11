@@ -11,6 +11,14 @@ const _layout = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="crewProfile" // pro/jobOffers/0009
+        options={{
+          header: (props) => {
+            return <NavBar showBackButton={true} />
+          },
+        }}
+      />
     </Stack>
   )
 }
