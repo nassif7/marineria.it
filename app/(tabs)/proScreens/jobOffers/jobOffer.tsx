@@ -35,10 +35,6 @@ const JobOfferScreen = () => {
   const { activeProfile } = useUser()
   const { role, token } = activeProfile as any
 
-  // useEffect(() => {
-  //   !offer.offerApplicable && showWarningToast()
-  // }, [offerStr])
-
   const onShare = async () => {
     const title = offer?.offer.trimStart()
 

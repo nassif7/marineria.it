@@ -1,11 +1,7 @@
-import React from 'react'
-import { View, Text } from 'react-native'
-import { CrewList } from '@/components/recruiter/Crew'
-import { useLocalSearchParams } from 'expo-router'
+import { CrewProfile } from '@/components/recruiter/Crew'
 
-const Crew = () => {
-  const { offerId } = useLocalSearchParams()
-  return <CrewList offerId={offerId as string} />
+const CV = () => {
+  return <CrewProfile />
 }
 
-export default Crew
+export default CV

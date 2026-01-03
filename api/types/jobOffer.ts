@@ -93,4 +93,7 @@ export type OwnerJobOfferType = {
   listgeourl: string
   offerApplicable: boolean
   alreadyApplied: boolean
+  paid: boolean
+  credit: boolean
+  offerPublished: 0 | 1
 }
