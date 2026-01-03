@@ -19,7 +19,7 @@ import {
   ButtonIcon,
   Pressable,
 } from '@/components/ui'
-import { Icon, ArrowRightIcon, EyeIcon } from '@/components/ui/icon'
+import { CircleCheck, CircleX, EyeIcon, Edit, Users, UserSearch, Locate, Map } from 'lucide-react-native'
 import { faker } from '@faker-js/faker'
 import { formatDate, getAge } from '@/utils/dateUtils'
 import { BASE_URL } from '@/api/const'
@@ -115,7 +115,7 @@ const CrewListItem: React.FC<{ crew: CrewType; offerId: number | string }> = ({ 
           })
         }
       >
-        <ButtonIcon as={EyeIcon} />
+        <ButtonIcon as={EyeIcon} className="text-success-400 mr-2" />
         <ButtonText className="text-success-400">Visit Resume</ButtonText>
       </Button>
     </Card>
