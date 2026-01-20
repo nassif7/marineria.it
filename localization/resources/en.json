@@ -37,12 +37,20 @@
   "offerNotApplicable": "Not applicable",
   "alreadyApplied": "Already applied",
   "back": "Back",
+  "not-declared": "Not declared",
   "offer": {
     "search-id": "Search ID",
     "edit-offer-short": "Mod.",
     "offer-crew-count": "{{candidates}} Candidates (Contacted: {{contacted}} Residual: {{residual}})"
   },
   "crew": {
+    "profile": "Profile",
+    "registered": "Registered",
+    "Last-seen": "Last seen",
+    "job-offers-received": "Job offers received",
+    "citizenship": "Citizenship",
+    "current-location": "Current location",
+    "salary": "Salary",
     "find-by-skill": "Find your Crew by Skills",
     "find-by-location": "Find your Crew by Location",
     "candidates": "Candidates",

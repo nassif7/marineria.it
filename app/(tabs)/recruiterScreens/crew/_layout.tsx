@@ -1,6 +1,7 @@
 import React from 'react'
 import { Stack } from 'expo-router'
 import { NavBar } from '@/components/ui'
+import { router, usePathname, useSegments, useSitemap } from 'expo-router'
 
 const _layout = () => {
   return (

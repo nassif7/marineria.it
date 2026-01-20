@@ -21,8 +21,10 @@ import {
 } from '@/components/ui'
 import { Plus, Check } from 'lucide-react-native'
 import { faker } from '@faker-js/faker'
+import { useTranslation } from 'react-i18next'
 
 const CrewProfile = () => {
+  const { t } = useTranslation()
   const { crewId, offerId } = useLocalSearchParams()
   const { activeProfile } = useUser()
   const { token } = activeProfile as ActiveProfile
@@ -53,62 +55,67 @@ const CrewProfile = () => {
   }
 
   return (
-    <ScrollView className="bg-white">
+    <>
       {isLoading && <Loading />}
       {!isLoading && data && (
-        <VStack className="p-2">
-          <Box className="bg-slate-200 p-2">
-            <Heading size="2xl" className="text-primary-600">
-              Profile: {cv?.iduser}
-            </Heading>
-            <HStack className="w-full flex-row justify-between">
-              <Text size="sm">Registered: {cv?.registraton_date}</Text>
-              <Text size="sm">Last seen: {cv?.lastAccessDate}</Text>
-            </HStack>
-
-            <Image
-              size="none"
-              className="aspect-[328/328] w-full "
-              source={{
-                uri: fakerImage,
-              }}
-              alt="image"
-            />
-          </Box>
-          <Box>
-            <Heading size="lg" className="mb-2">
-              {cv?.mainPosition}
-            </Heading>
-            <Text>{OtherPositions()}</Text>
-          </Box>
-
-          <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
-            <VStack>
-              <Heading className="text-primary-600" size="md"></Heading>
-              <HStack className="justify-between">
-                <Heading size="sm"></Heading>
+        <ScrollView>
+          <VStack className="p-2 rounded-lg bg-white">
+            <Box className="mb-2">
+              <Heading size="2xl" className="text-primary-600 font-bold">
+                {t('crew.profile')}: {cv?.iduser}
+              </Heading>
+              <HStack className="w-full flex-row justify-between">
+                <Text size="sm">Registered: {cv?.registraton_date}</Text>
+                <Text size="sm">Last seen: {cv?.lastAccessDate}</Text>
               </HStack>
-              <HStack className="justify-between">
-                <Heading size="sm">jj{cv?.iduser}</Heading>
-              </HStack>
-            </VStack>
-          </Box>
-          <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
-            <Heading size="sm"></Heading>
-          </Box>
-          <ButtonGroup className="justify-between p-3">
-            <Button className="rounded" onPress={onAccept} action="positive">
-              <ButtonText>Accept</ButtonText>
-              <ButtonIcon as={Check} />
-            </Button>
-            <Button onPress={onReject} action="negative">
-              <ButtonText>Reject</ButtonText>
-              <ButtonIcon as={Plus} />
-            </Button>
-          </ButtonGroup>
-        </VStack>
+            </Box>
+            <Box className="mb-2">
+              <Image
+                size="none"
+                className="aspect-[328/328] w-full rounded-lg"
+                source={{
+                  uri: fakerImage,
+                }}
+                alt="image"
+              />
+            </Box>
+            <Box>
+              <Heading size="xl" className="mb-2">
+                {cv?.mainPosition}
+              </Heading>
+              <Text>{OtherPositions()}</Text>
+              <Heading>Job Offers Received: {cv?.numberClicked}</Heading>
+              <Heading>Nationality: </Heading> {cv?.passport}
+              <Heading>Current Location:</Heading> {cv?.province}
+            </Box>
+            <Box className="border-2 border-outline-200 rounded p-2 ">
+              <VStack>
+                <Heading className="text-primary-600" size="md"></Heading>
+                <HStack className="justify-between">
+                  <Heading size="sm"></Heading>
+                </HStack>
+                <HStack className="justify-between">
+                  <Heading size="sm">jj{cv?.iduser}</Heading>
+                </HStack>
+              </VStack>
+            </Box>
+            <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
+              <Heading size="sm"></Heading>
+            </Box>
+            <ButtonGroup className="justify-between p-3">
+              <Button className="rounded" onPress={onAccept} action="positive">
+                <ButtonText>Accept</ButtonText>
+                <ButtonIcon as={Check} />
+              </Button>
+              <Button onPress={onReject} action="negative">
+                <ButtonText>Reject</ButtonText>
+                <ButtonIcon as={Plus} />
+              </Button>
+            </ButtonGroup>
+          </VStack>
+        </ScrollView>
       )}
-    </ScrollView>
+    </>
   )
 }
 

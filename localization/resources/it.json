@@ -33,6 +33,7 @@
   "en": "Inglese",
   "offerNotApplicable": "Non applicabile",
   "alreadyApplied": "Hai già inviato la tua candidatura per questa offerta",
+  "not-declared": " Non dichiarato",
   "back": "Indietro",
   "offer": {
     "search-id": "Search ID",
@@ -40,6 +41,13 @@
     "offer-crew-count": "{{candidates}} Candidati (Contattati: {{contacted}} Rimanenti: {{residual}})"
   },
   "crew": {
+    "profile": "Profilo",
+    "registered": "Registrazione",
+    "Last-seen": "Ultima visita",
+    "job-offers-received": "Offerte di lavoro ricevute",
+    "citizenship": "Cittadinanza",
+    "current-location": "Posizione attuale",
+    "salary": "Compenso",
     "find-by-skill": "Cerca Equipaggio per caratteristiche",
     "find-by-location": "Cerca Equipaggio per località",
     "candidates": "Candidati",

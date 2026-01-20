@@ -45,7 +45,7 @@ const CrewListItem: React.FC<{ crew: CrewType; offerId: number | string }> = ({ 
   )
 
   return (
-    <Card className="p-4 rounded-lg m-3">
+    <Card className="p-4 rounded-lg my-2">
       <Box className="flex-row  items-center">
         <Avatar className="mr-4">
           <AvatarFallbackText>{`${crew.firstName} ${crew.lastName} `}</AvatarFallbackText>

@@ -73,50 +73,48 @@ const JobOfferScreen = () => {
   }
 
   return (
-    <>
-      <ScrollView className="">
-        <Card>
-          <Box className="mt-4 flex-col">
-            <Heading size="2xl" className="text-primary-600">
-              {offer?.offer.trim()}
+    <ScrollView>
+      <Card>
+        <Box className="mt-4 flex-col">
+          <Heading size="2xl" className="text-primary-600">
+            {offer?.offer.trim()}
+          </Heading>
+        </Box>
+        <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
+          <VStack>
+            <Heading className="text-primary-600" size="md">
+              {offer?.positionArm}
             </Heading>
-          </Box>
-          <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
-            <VStack>
-              <Heading className="text-primary-600" size="md">
-                {offer?.positionArm}
+            <HStack className="justify-between">
+              <Heading size="sm">
+                {`${t('offerSalary')}:  ${!offer?.salary_From ? 'NA' : offer.salary_From + '-' + offer.salary_To}`}
               </Heading>
-              <HStack className="justify-between">
-                <Heading size="sm">
-                  {`${t('offerSalary')}:  ${!offer?.salary_From ? 'NA' : offer.salary_From + '-' + offer.salary_To}`}
-                </Heading>
-              </HStack>
-              <HStack className="justify-between">
-                <Heading size="sm">
-                  {t('offerFrom')}:{offer?.offerdate.substring(offer.offerdate.indexOf(',') + 1)} - {t('offerTo')}:{' '}
-                  {offer?.offertExpirationdate.substring(offer.offertExpirationdate.indexOf(',') + 1)}{' '}
-                </Heading>
-              </HStack>
-            </VStack>
-          </Box>
-          <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
-            <Heading size="sm"> {offer?.descriptionOffer.replace(/<[^>]*>?/gm, '').trim()}</Heading>
-          </Box>
-          <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
-            <ButtonGroup className="justify-between p-3">
-              <Button className="rounded" onPress={onShare} action="secondary">
-                <ButtonText>Share</ButtonText>
-                <ButtonIcon as={Share2Icon} />
-              </Button>
-              <Button isDisabled={!offer?.alreadyApplied} onPress={onApply}>
-                <ButtonText>Apply</ButtonText>
-                <ButtonIcon as={Plus} />
-              </Button>
-            </ButtonGroup>
-          </Box>
-        </Card>
-      </ScrollView>
-    </>
+            </HStack>
+            <HStack className="justify-between">
+              <Heading size="sm">
+                {t('offerFrom')}:{offer?.offerdate.substring(offer.offerdate.indexOf(',') + 1)} - {t('offerTo')}:{' '}
+                {offer?.offertExpirationdate.substring(offer.offertExpirationdate.indexOf(',') + 1)}{' '}
+              </Heading>
+            </HStack>
+          </VStack>
+        </Box>
+        <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
+          <Heading size="sm"> {offer?.descriptionOffer.replace(/<[^>]*>?/gm, '').trim()}</Heading>
+        </Box>
+        <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
+          <ButtonGroup className="justify-between p-3">
+            <Button className="rounded" onPress={onShare} action="secondary">
+              <ButtonText>Share</ButtonText>
+              <ButtonIcon as={Share2Icon} />
+            </Button>
+            <Button isDisabled={!offer?.alreadyApplied} onPress={onApply}>
+              <ButtonText>Apply</ButtonText>
+              <ButtonIcon as={Plus} />
+            </Button>
+          </ButtonGroup>
+        </Box>
+      </Card>
+    </ScrollView>
   )
 }
 

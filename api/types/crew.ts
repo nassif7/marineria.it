@@ -1,4 +1,6 @@
 export type CrewType = {
+  province: string
+  numberClicked: string
   registraton_date: string
   namephotoA: string
   iduser: number
