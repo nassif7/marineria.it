@@ -1,12 +1,12 @@
 'use client'
 
 import { H4 } from '@expo/html-elements'
-import { createActionsheet } from '@gluestack-ui/actionsheet'
+import { createActionsheet } from '@gluestack-ui/core/actionsheet/creator'
 import { Pressable, View, Text, ScrollView, VirtualizedList, FlatList, SectionList } from 'react-native'
-import { PrimitiveIcon, UIIcon } from '@gluestack-ui/icon'
-import { tva } from '@gluestack-ui/nativewind-utils/tva'
-import type { VariantProps } from '@gluestack-ui/nativewind-utils'
-import { withStyleContext } from '@gluestack-ui/nativewind-utils/withStyleContext'
+import { PrimitiveIcon, UIIcon } from '@gluestack-ui/core/icon/creator'
+import { tva } from '@gluestack-ui/utils/nativewind-utils'
+import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils'
+import { withStyleContext } from '@gluestack-ui/utils/nativewind-utils'
 import { cssInterop } from 'nativewind'
 import { Motion, AnimatePresence, createMotionAnimatedComponent } from '@legendapp/motion'
 
@@ -14,21 +14,27 @@ import React from 'react'
 
 const AnimatedPressable = createMotionAnimatedComponent(Pressable)
 
+const SimpleAnimatePresence: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return <>{children}</>
+}
 export const UIActionsheet = createActionsheet({
   Root: View,
-  Content: withStyleContext(Motion.View),
+  // Content: withStyleContext(Motion.View),
+  Content: withStyleContext(View),
   Item: withStyleContext(Pressable),
   ItemText: Text,
   DragIndicator: View,
   IndicatorWrapper: View,
-  Backdrop: AnimatedPressable,
+  // Backdrop: AnimatedPressable,
+  Backdrop: Pressable,
   ScrollView: ScrollView,
   VirtualizedList: VirtualizedList,
   FlatList: FlatList,
   SectionList: SectionList,
   SectionHeaderText: H4,
   Icon: UIIcon,
-  AnimatePresence: AnimatePresence,
+  // AnimatePresence: AnimatePresence,
+  AnimatePresence: SimpleAnimatePresence,
 })
 
 cssInterop(UIActionsheet, { className: 'style' })
@@ -73,10 +79,14 @@ cssInterop(PrimitiveIcon, {
   },
 })
 
-const actionsheetStyle = tva({ base: 'w-full h-full web:pointer-events-none' })
+// const actionsheetStyle = tva({ base: 'w-full h-full web:pointer-events-none' })
+const actionsheetStyle = tva({ base: 'w-full h-full web:pointer-events-none justify-end' })
 
+// const actionsheetContentStyle = tva({
+//   base: 'items-center rounded-tl-3xl rounded-tr-3xl p-2 bg-background-0 web:pointer-events-auto web:select-none shadow-lg',
+// })
 const actionsheetContentStyle = tva({
-  base: 'items-center rounded-tl-3xl rounded-tr-3xl p-2 bg-background-0 web:pointer-events-auto web:select-none shadow-lg',
+  base: 'absolute bottom-0 left-0 right-0 items-center rounded-tl-3xl rounded-tr-3xl p-2 bg-background-0 web:pointer-events-auto web:select-none shadow-lg pb-safe',
 })
 
 const actionsheetItemStyle = tva({
@@ -126,7 +136,9 @@ const actionsheetDragIndicatorWrapperStyle = tva({
 })
 
 const actionsheetBackdropStyle = tva({
-  base: 'absolute left-0 top-0 right-0 bottom-0 bg-background-dark web:cursor-default web:pointer-events-auto',
+  base: 'absolute left-0 top-0 right-0 bottom-0 bg-background-dark opacity-50 web:cursor-default web:pointer-events-auto',
+
+  // base: 'absolute left-0 top-0 right-0 bottom-0 bg-background-dark web:cursor-default web:pointer-events-auto',
 })
 
 const actionsheetScrollViewStyle = tva({

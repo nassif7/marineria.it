@@ -1,4 +1,6 @@
 {
+  "accept": "Accetta",
+  "decline": "Rifiuta",
   "login": "Accedi",
   "logout": "Esci",
   "welcomeCrew": "Hai effettuato l'accesso come Equipaggio",
@@ -33,6 +35,7 @@
   "en": "Inglese",
   "offerNotApplicable": "Non applicabile",
   "alreadyApplied": "Hai già inviato la tua candidatura per questa offerta",
+  "not-declared": " Non dichiarato",
   "back": "Indietro",
   "offer": {
     "search-id": "Search ID",
@@ -40,10 +43,25 @@
     "offer-crew-count": "{{candidates}} Candidati (Contattati: {{contacted}} Rimanenti: {{residual}})"
   },
   "crew": {
-    "find-by-skill": "Cerca Equipaggio per caratteristiche",
-    "find-by-location": "Cerca Equipaggio per località",
+    "boat-license": "Patente nautica",
     "candidates": "Candidati",
+    "citizenship": "Cittadinanza",
     "contacted": "Contattati",
-    "residual": "Rimanenti"
+    "current-location": "Posizione attuale",
+    "education": "Studi",
+    "find-by-location": "Cerca Equipaggio per località",
+    "find-by-skill": "Cerca Equipaggio per caratteristiche",
+    "IMO-courses": "Corsi IMO",
+    "job-offers-received": "Offerte di lavoro ricevute",
+    "languages": "Lingue",
+    "last-seen": "Ultima visita",
+    "personal-data": "Dati Personali",
+    "profile": "Profilo",
+    "registration-date": "Registrazione",
+    "resident-location": "Residente a",
+    "residual": "Rimanenti",
+    "salary": "Compenso",
+    "sea-experience": "Esperienze di navigazione",
+    "seamans-book": "Libretto di navigazione"
   }
 }

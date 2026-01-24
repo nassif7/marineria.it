@@ -21,6 +21,16 @@ const OffersList: FC = () => {
   }, [language, state])
   const { isLoading, data } = useFetch(fetchOffers)
 
+  // console.log(
+  //   data?.map((i) => {
+  //     return {
+  //       published: i.offerPublished,
+  //       credit: i.credit,
+  //       paid: i.paid,
+  //     }
+  //   })
+  // )
+  // we show offers that are paid, published and have credit
   return (
     <>
       {isLoading && <Loading />}
@@ -32,10 +42,9 @@ const OffersList: FC = () => {
             </Heading>
           </Box>
           <FlatList
-            data={data}
+            data={data.filter((i) => i.paid && !i.offerPublished && i.credit)}
             renderItem={({ item }) => <JobOfferListItem offer={item} key={item.reference} />}
             ListEmptyComponent={<ListEmptyComponent message={t('noOwnerJobOffers')} />}
-            stickyHeaderIndices={[0]}
           />
         </>
       )}

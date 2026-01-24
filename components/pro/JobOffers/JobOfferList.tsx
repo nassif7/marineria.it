@@ -39,7 +39,6 @@ const JobOfferList: FC = () => {
             renderItem={({ item }) => <JobOfferListItem offer={item} key={item.reference} />}
             ListEmptyComponent={<ListEmptyComponent message={t('noProUserJobOffers')} />}
             ListHeaderComponent={() => <JobOffersListHeader setOwnOffersFilter={onChange} filterValue={ownOffers} />}
-            stickyHeaderIndices={[0]}
           />
         </>
       )}

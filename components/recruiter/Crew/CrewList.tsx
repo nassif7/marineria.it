@@ -48,7 +48,9 @@ const CrewList: React.FC<CrewListProps> = ({ offerId }) => {
   return (
     <>
       {crewListData?.isLoading && <Loading />}
-      {!crewListData?.isLoading && <FlatList data={crewList} renderItem={({ item }) => <CrewListItem crew={item} />} />}
+      {!crewListData?.isLoading && (
+        <FlatList data={crewList} renderItem={({ item }) => <CrewListItem crew={item} offerId={offerId} />} />
+      )}
     </>
   )
 }

@@ -1,5 +1,9 @@
 export type CrewType = {
-  userId: 0
+  province: string
+  numberClicked: string
+  registraton_date: string
+  namephotoA: string
+  iduser: number
   autoCandidate: boolean
   selected: boolean
   rejected: boolean
@@ -63,14 +67,8 @@ export type CrewType = {
   offerId: 0
   sent: boolean
   comment: string
+  language1: string
+  language2: string
+  language3: string
+  language4: string
 }
-
-// seaman's book is missing
-// seaman's book experience years is missing
-// matricola_GDM
-// matricola_Citta
-// Also skilled as is missing
-// secondary rules are missing
-//
-// notes
-// stars

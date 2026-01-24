@@ -17,14 +17,16 @@ import {
   LinkText,
   HStack,
   ButtonIcon,
+  Pressable,
 } from '@/components/ui'
-import { Icon, ArrowRightIcon, EyeIcon } from '@/components/ui/icon'
+import { CircleCheck, CircleX, EyeIcon, Edit, Users, UserSearch, Locate, Map } from 'lucide-react-native'
 import { faker } from '@faker-js/faker'
 import { formatDate, getAge } from '@/utils/dateUtils'
 import { BASE_URL } from '@/api/const'
 import { useTranslation } from 'react-i18next'
+import { router } from 'expo-router'
 
-const CrewListItem: React.FC<{ crew: CrewType }> = ({ crew }) => {
+const CrewListItem: React.FC<{ crew: CrewType; offerId: number | string }> = ({ crew, offerId }) => {
   const photoUrl = useMemo(() => `https://www.comunicazione.it/PROFoto/${crew?.userPhoto}`, [crew])
   const fakerImage = useMemo(() => faker.image.personPortrait({ size: 256 }), [crew])
 
@@ -43,7 +45,7 @@ const CrewListItem: React.FC<{ crew: CrewType }> = ({ crew }) => {
   )
 
   return (
-    <Card className="p-4 rounded-lg m-3">
+    <Card className="p-4 rounded-lg my-2">
       <Box className="flex-row  items-center">
         <Avatar className="mr-4">
           <AvatarFallbackText>{`${crew.firstName} ${crew.lastName} `}</AvatarFallbackText>
@@ -102,15 +104,19 @@ const CrewListItem: React.FC<{ crew: CrewType }> = ({ crew }) => {
         </VStack>
       </Box>
 
-      <Button className="py-2 px-4" variant="outline" action="positive">
-        <Link
-          href={`https://www.marineria.it/${language}/CV.aspx/${crew.userId}`}
-          isExternal
-          className="flex-row items-center w-full justify-center"
-        >
-          <ButtonIcon as={EyeIcon} className="text-success-400 mr-2" />
-          <ButtonText className="text-success-400">Visit Resume</ButtonText>
-        </Link>
+      <Button
+        className="py-2 px-4"
+        variant="outline"
+        action="positive"
+        onPress={() =>
+          router.push({
+            pathname: `/(tabs)/recruiterScreens/crew/crewProfile`,
+            params: { crewId: crew.userId, offerId: offerId },
+          })
+        }
+      >
+        <ButtonIcon as={EyeIcon} className="text-success-400 mr-2" />
+        <ButtonText className="text-success-400">Visit Resume</ButtonText>
       </Button>
     </Card>
   )

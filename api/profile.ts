@@ -2,6 +2,7 @@ import { API } from './const'
 import { UserRole } from '@/api/types/auth'
 import { User } from '@/api/types/user'
 import { ErrorResponse } from '@/api/types/errors'
+import { getLAnguageCode } from '@/api/types'
 
 export const getUserProfile = async (
   token: string,
@@ -9,9 +10,10 @@ export const getUserProfile = async (
   language: string
 ): Promise<User | ErrorResponse> => {
   const userRole = role == UserRole.OWNER ? 'Owneruser' : 'Prouser'
+  const languageCode = getLAnguageCode(language)
 
   try {
-    const response = await fetch(`${API.PROFILE}/${userRole}/${token}/${language}?lang=${language}`)
+    const response = await fetch(`${API.PROFILE}/${userRole}/${token}?lang=${language}`)
 
     const data = await response.json()
     if (response.ok) {

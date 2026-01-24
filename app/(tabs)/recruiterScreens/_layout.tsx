@@ -1,5 +1,5 @@
 import React from 'react'
-import { Stack } from 'expo-router'
+import { Stack, usePathname } from 'expo-router'
 import { NavBar } from '@/components/ui'
 
 const _layout = () => {
@@ -15,7 +15,8 @@ const _layout = () => {
         name="crew"
         options={{
           header: (props) => {
-            return <NavBar showBackButton={true} />
+            const showHeader = !usePathname().includes('crewProfile')
+            return showHeader ? <NavBar showBackButton={true} /> : null
           },
         }}
       />
