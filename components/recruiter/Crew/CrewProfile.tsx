@@ -1,16 +1,14 @@
 import React, { useCallback, useMemo } from 'react'
-import { View, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import { getCrewCV, selectProUser, rejectProUser } from '@/api'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-import { useAppState, useFetch } from '@/hooks'
+import { useFetch } from '@/hooks'
 import {
   Loading,
-  ListEmptyComponent,
   ButtonText,
   Box,
   Heading,
-  Card,
   VStack,
   HStack,
   ButtonGroup,
@@ -18,11 +16,12 @@ import {
   Button,
   ButtonIcon,
   Image,
+  Divider,
 } from '@/components/ui'
 import { Plus, Check } from 'lucide-react-native'
 import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'
-
+import { getAge } from '@/utils/dateUtils'
 const CrewProfile = () => {
   const { t } = useTranslation()
   const { crewId, offerId } = useLocalSearchParams()
@@ -49,15 +48,20 @@ const CrewProfile = () => {
   const photoUrl = useMemo(() => `https://www.marineria.it/PROFoto/${cv?.namephotoA}`, [cv])
   const fakerImage = useMemo(() => faker.image.personPortrait({ size: 256 }), [cv])
 
-  const OtherPositions = (): string => {
+  const cvOtherPositions = useMemo((): string => {
     const positions = [cv?.pos_deck, cv?.pos_engine, cv?.pos_hotel, cv?.pos_harbour, cv?.pos_special].filter((p) => !!p)
     return positions.length === 0 ? '' : positions.length === 1 ? (positions[0] as string) : positions.join(', ')
-  }
+  }, [cv])
+
+  const cvLanguages = useMemo((): string => {
+    const languages = [cv?.language1, cv?.language2, cv?.language3, cv?.language4].filter((l) => !!l)
+    return languages.length === 0 ? '' : languages.length === 1 ? (languages[0] as string) : languages.join(', ')
+  }, [cv])
 
   return (
     <>
       {isLoading && <Loading />}
-      {!isLoading && data && (
+      {!isLoading && cv && (
         <ScrollView>
           <VStack className="p-2 rounded-lg bg-white">
             <Box className="mb-2">
@@ -65,8 +69,12 @@ const CrewProfile = () => {
                 {t('crew.profile')}: {cv?.iduser}
               </Heading>
               <HStack className="w-full flex-row justify-between">
-                <Text size="sm">Registered: {cv?.registraton_date}</Text>
-                <Text size="sm">Last seen: {cv?.lastAccessDate}</Text>
+                <Text size="md">
+                  {t('crew.registration-date')}: {cv?.registraton_date}
+                </Text>
+                <Text>
+                  {t('crew.last-seen')}: {cv?.lastAccessDate}
+                </Text>
               </HStack>
             </Box>
             <Box className="mb-2">
@@ -80,35 +88,96 @@ const CrewProfile = () => {
               />
             </Box>
             <Box>
-              <Heading size="xl" className="mb-2">
-                {cv?.mainPosition}
+              <Heading>{cv?.mainPosition}</Heading>
+              <Text italic size="xl">
+                {cvOtherPositions}
+              </Text>
+              <Divider className="my-2" />
+              <Heading>
+                {t('crew.job-offers-received')}: {cv?.numberClicked ?? 0}
               </Heading>
-              <Text>{OtherPositions()}</Text>
-              <Heading>Job Offers Received: {cv?.numberClicked}</Heading>
-              <Heading>Nationality: </Heading> {cv?.passport}
-              <Heading>Current Location:</Heading> {cv?.province}
+              <Heading>
+                {t('crew.citizenship')}: {cv?.passport}
+              </Heading>
+              <Heading>
+                {t('crew.current-location')}: {cv?.city}
+                {/* this will be current location */}
+              </Heading>
+              <Heading>
+                {t('crew.salary')}: {cv?.salary}
+              </Heading>
             </Box>
-            <Box className="border-2 border-outline-200 rounded p-2 ">
+            <Divider className="my-2" />
+            <Box className="mb-2">
               <VStack>
-                <Heading className="text-primary-600" size="md"></Heading>
-                <HStack className="justify-between">
-                  <Heading size="sm"></Heading>
-                </HStack>
-                <HStack className="justify-between">
-                  <Heading size="sm">jj{cv?.iduser}</Heading>
-                </HStack>
+                <Heading className="text-primary-600" size="md">
+                  {t('crew.personal-data')}
+                </Heading>
+                <Text size="xl">
+                  {cv?.maritalStatus}, {cv?.smoker}, {getAge(cv?.birthYear as string)}
+                </Text>
+                <Text size="xl">
+                  {t('crew.resident-location')}: {cv?.address}
+                  {/* This will be city province country */}
+                </Text>
               </VStack>
             </Box>
-            <Box className="mt-4 flex-col border-2 border-outline-200 rounded p-2 ">
-              <Heading size="sm"></Heading>
+            <Box className="mb-2">
+              <VStack>
+                <Heading className="text-primary-600" size="md">
+                  {t('crew.sea-experience')}
+                </Heading>
+                <Text size="xl">{cv?.navigationPerformed}</Text>
+                <Text size="xl">{cv?.navigationBook}</Text>
+              </VStack>
+            </Box>
+            <Box className="mb-2">
+              <VStack>
+                <Heading className="text-primary-600" size="md">
+                  {t('crew.seamans-book')}
+                </Heading>
+                <Text size="xl">{cv?.registration_Category}</Text>
+                <Text size="xl">{cv?.registration_City}</Text>
+                <Text size="xl">{cv?.qualificationCode}</Text>
+              </VStack>
+            </Box>
+            <Box className="mb-2">
+              <VStack>
+                <Heading className="text-primary-600" size="md">
+                  {t('crew.education')}, {t('crew.languages')}
+                </Heading>
+                {/* this will be education or study */}
+                <Text size="xl">{cv?.courses}</Text>
+                <Text size="xl">{cvLanguages}</Text>
+
+                {/* Refrences */}
+                {/* Certificates of Competency */}
+              </VStack>
+            </Box>
+            <Box className="mb-2">
+              <VStack>
+                <Heading className="text-primary-600" size="md">
+                  {t('crew.IMO-courses')}
+                </Heading>
+                <Text size="xl">{cv?.courses}</Text>
+              </VStack>
+            </Box>
+            <Box className="mb-2">
+              <VStack>
+                <Heading className="text-primary-600" size="md">
+                  {t('crew.boat-license')}
+                </Heading>
+                <Text size="xl">{cv?.licenseCode}</Text>
+                {/* Sailboat experience */}
+              </VStack>
             </Box>
             <ButtonGroup className="justify-between p-3">
               <Button className="rounded" onPress={onAccept} action="positive">
-                <ButtonText>Accept</ButtonText>
+                <ButtonText>{t('accept')}</ButtonText>
                 <ButtonIcon as={Check} />
               </Button>
               <Button onPress={onReject} action="negative">
-                <ButtonText>Reject</ButtonText>
+                <ButtonText>{t('decline')}</ButtonText>
                 <ButtonIcon as={Plus} />
               </Button>
             </ButtonGroup>

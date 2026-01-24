@@ -1,4 +1,6 @@
 {
+  "accept": "Accept",
+  "decline": "Decline",
   "authentication": {},
   "recruiter": {},
   "common": {},
@@ -44,17 +46,25 @@
     "offer-crew-count": "{{candidates}} Candidates (Contacted: {{contacted}} Residual: {{residual}})"
   },
   "crew": {
-    "profile": "Profile",
-    "registered": "Registered",
-    "Last-seen": "Last seen",
-    "job-offers-received": "Job offers received",
-    "citizenship": "Citizenship",
-    "current-location": "Current location",
-    "salary": "Salary",
-    "find-by-skill": "Find your Crew by Skills",
-    "find-by-location": "Find your Crew by Location",
+    "boat-license": "Boat License",
     "candidates": "Candidates",
+    "citizenship": "Citizenship",
     "contacted": "Contacted",
-    "residual": "Residual"
+    "current-location": "Current location",
+    "education": "Education",
+    "find-by-location": "Find your Crew by Location",
+    "find-by-skill": "Find your Crew by Skills",
+    "IMO-courses": "IMO Courses",
+    "job-offers-received": "Job offers received",
+    "languages": "Languages",
+    "last-seen": "Last seen",
+    "personal-data": "Personal Data",
+    "profile": "Profile",
+    "registration-date": "Registered",
+    "resident-location": "Resident in",
+    "residual": "Residual",
+    "salary": "Salary",
+    "sea-experience": "Sea Experience",
+    "seamans-book": "Seaman's Book"
   }
 }

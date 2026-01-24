@@ -67,4 +67,8 @@ export type CrewType = {
   offerId: 0
   sent: boolean
   comment: string
+  language1: string
+  language2: string
+  language3: string
+  language4: string
 }

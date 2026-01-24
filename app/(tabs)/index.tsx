@@ -16,7 +16,6 @@ import {
   Loading,
   Text,
   View,
-  Link,
 } from '@/components/ui'
 import { router } from 'expo-router'
 
