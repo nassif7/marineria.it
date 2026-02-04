@@ -11,17 +11,21 @@ import {
   Heading,
   VStack,
   HStack,
-  ButtonGroup,
   Text,
   Button,
   ButtonIcon,
   Image,
-  Divider,
+  Icon,
 } from '@/components/ui'
-import { Plus, Check } from 'lucide-react-native'
+import { Award, Check, X, FileText, Anchor, GraduationCap } from 'lucide-react-native'
 import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'
-import { getAge } from '@/utils/dateUtils'
+import { getAgeByYear } from '@/utils/dateUtils'
+import CrewExperienceList from '@/components/recruiter/Crew/CrewExperienceList'
+import CrewReferences from '@/components/recruiter/Crew/CrewReferences'
+import CrewInfoCard from '@/components/recruiter/Crew/CrewInfoCard'
+import CrewKeyInfoGrid from '@/components/recruiter/Crew/CrewKeyInfoGrid'
+
 const CrewProfile = () => {
   const { t } = useTranslation()
   const { crewId, offerId } = useLocalSearchParams()
@@ -29,25 +33,20 @@ const CrewProfile = () => {
   const { token } = activeProfile as ActiveProfile
 
   const fetchCV = useCallback(async () => {
-    const res = await getCrewCV(token, crewId as string)
+    const res = await getCrewCV(token, '50000' as string)
     return res
   }, [crewId])
 
   const { isLoading, data } = useFetch(fetchCV)
-
   const cv = data?.[0]
-
   const onAccept = async () => {
     const res = await selectProUser(token, crewId as string, offerId as string)
   }
-
   const onReject = async () => {
     const res = await rejectProUser(token, crewId as string, offerId as string)
   }
-
   const photoUrl = useMemo(() => `https://www.marineria.it/PROFoto/${cv?.namephotoA}`, [cv])
   const fakerImage = useMemo(() => faker.image.personPortrait({ size: 256 }), [cv])
-
   const cvOtherPositions = useMemo((): string => {
     const positions = [cv?.pos_deck, cv?.pos_engine, cv?.pos_hotel, cv?.pos_harbour, cv?.pos_special].filter((p) => !!p)
     return positions.length === 0 ? '' : positions.length === 1 ? (positions[0] as string) : positions.join(', ')
@@ -62,127 +61,166 @@ const CrewProfile = () => {
     <>
       {isLoading && <Loading />}
       {!isLoading && cv && (
-        <ScrollView>
-          <VStack className="p-2 rounded-lg bg-white">
-            <Box className="mb-2">
-              <Heading size="2xl" className="text-primary-600 font-bold">
-                {t('crew.profile')}: {cv?.iduser}
-              </Heading>
-              <HStack className="w-full flex-row justify-between">
-                <Text size="md">
-                  {t('crew.registration-date')}: {cv?.registraton_date}
-                </Text>
-                <Text>
-                  {t('crew.last-seen')}: {cv?.lastAccessDate}
-                </Text>
-              </HStack>
-            </Box>
-            <Box className="mb-2">
-              <Image
-                size="none"
-                className="aspect-[328/328] w-full rounded-lg"
-                source={{
-                  uri: fakerImage,
-                }}
-                alt="image"
+        <Box className="flex-1 relative ">
+          <ScrollView className="bg-background-50 rounded-lg">
+            <VStack className="gap-4 p-3 pb-24">
+              {/* Header Card */}
+              <Box className="bg-white rounded-lg p-3 shadow-sm">
+                <VStack className="gap-3">
+                  <HStack className="justify-between items-start">
+                    <VStack className="gap-1 flex-1">
+                      <Text className="text-typography-500 text-sm  tracking-wide">{t('crew.profile')}</Text>
+                      <Heading size="xl" className="text-primary-600">
+                        ID: {cv?.iduser}
+                      </Heading>
+                    </VStack>
+                  </HStack>
+
+                  <HStack className="gap-3 flex-wrap">
+                    <Box className="bg-background-100 rounded-lg px-3 py-2 flex-1 min-w-[45%]">
+                      <Text className="text-typography-500 text-sm  mb-0.5">{t('crew.registration-date')}</Text>
+                      <Text className="text-typography-900 font-semibold text-sm">{cv?.registraton_date}</Text>
+                    </Box>
+                    <Box className="bg-background-100 rounded-lg px-3 py-2 flex-1 min-w-[45%]">
+                      <Text className="text-typography-500 text-sm  mb-0.5">{t('crew.last-seen')}</Text>
+                      <Text className="text-typography-900 font-semibold text-sm">{cv?.lastAccessDate}</Text>
+                    </Box>
+                  </HStack>
+                </VStack>
+              </Box>
+              {/* Profile Image */}
+              <Box className="bg-white rounded-lg overflow-hidden shadow-sm">
+                <Image
+                  size="none"
+                  className="aspect-square w-full"
+                  source={{ uri: fakerImage }}
+                  alt="profile picture"
+                />
+              </Box>
+              {/* Position Card */}
+              <Box className="bg-white rounded-lg p-3 shadow-sm">
+                <VStack className="gap-3">
+                  <VStack className="gap-1">
+                    <Text className="text-typography-500 text-sm  font-medium  tracking-wide">
+                      {t('crew.main-position')}
+                    </Text>
+                    <Heading size="lg" className="text-typography-900">
+                      {cv?.mainPosition}
+                    </Heading>
+                  </VStack>
+
+                  {cvOtherPositions && <Text className="text-typography-600 italic text-base">{cvOtherPositions}</Text>}
+                </VStack>
+              </Box>
+
+              <CrewKeyInfoGrid
+                numberClicked={cv?.numberClicked ?? null}
+                salary={cv?.salary}
+                passport={cv?.passport ?? ''}
+                currentPosition={cv?.currentPosition ?? ''}
               />
-            </Box>
-            <Box>
-              <Heading>{cv?.mainPosition}</Heading>
-              <Text italic size="xl">
-                {cvOtherPositions}
-              </Text>
-              <Divider className="my-2" />
-              <Heading>
-                {t('crew.job-offers-received')}: {cv?.numberClicked ?? 0}
-              </Heading>
-              <Heading>
-                {t('crew.citizenship')}: {cv?.passport}
-              </Heading>
-              <Heading>
-                {t('crew.current-location')}: {cv?.city}
-                {/* this will be current location */}
-              </Heading>
-              <Heading>
-                {t('crew.salary')}: {cv?.salary}
-              </Heading>
-            </Box>
-            <Divider className="my-2" />
-            <Box className="mb-2">
-              <VStack>
-                <Heading className="text-primary-600" size="md">
+              {/* Personal Data */}
+              <Box className="bg-white rounded-2xl p-3 shadow-sm">
+                <Heading size="md" className="text-primary-600 mb-3">
                   {t('crew.personal-data')}
                 </Heading>
-                <Text size="xl">
-                  {cv?.maritalStatus}, {cv?.smoker}, {getAge(cv?.birthYear as string)}
-                </Text>
-                <Text size="xl">
-                  {t('crew.resident-location')}: {cv?.address}
-                  {/* This will be city province country */}
-                </Text>
-              </VStack>
-            </Box>
-            <Box className="mb-2">
-              <VStack>
-                <Heading className="text-primary-600" size="md">
-                  {t('crew.sea-experience')}
-                </Heading>
-                <Text size="xl">{cv?.navigationPerformed}</Text>
-                <Text size="xl">{cv?.navigationBook}</Text>
-              </VStack>
-            </Box>
-            <Box className="mb-2">
-              <VStack>
-                <Heading className="text-primary-600" size="md">
+                <VStack className="gap-2">
+                  <HStack className="gap-2 flex-wrap">
+                    <Box className="bg-background-50 rounded-lg px-3 py-2">
+                      <Text className="text-typography-700 font-medium">{cv?.maritalStatus}</Text>
+                    </Box>
+                    <Box className="bg-background-50 rounded-lg px-3 py-2">
+                      <Text className="text-typography-700 font-medium">{cv?.smoker}</Text>
+                    </Box>
+                    <Box className="bg-background-50 rounded-lg px-3 py-2">
+                      <Text className="text-typography-700 font-medium">{getAgeByYear(cv?.yearofBirth as string)}</Text>
+                    </Box>
+                  </HStack>
+                  <Box className="mt-2">
+                    <Text className="text-typography-500 text-sm  mb-1">{t('crew.resident-location')}</Text>
+                    <Text className="text-typography-900 text-base">{cv?.address}</Text>
+                  </Box>
+                </VStack>
+              </Box>
+              {/* Sea Experience */}
+              <Box className="bg-white rounded-2xl p-3 shadow-sm">
+                <HStack className="items-center gap-2 mb-3">
+                  <Icon as={Anchor} className="text-primary-600" size="md" />
+                  <Heading size="md" className="text-primary-600">
+                    {t('crew.sea-experience')}
+                  </Heading>
+                </HStack>
+                <VStack className="gap-2">
+                  <Text className="text-typography-700">{cv?.calculatedExperience}</Text>
+
+                  <Box className="bg-success-50 rounded-lg p-3">
+                    <Text className="text-success-900 font-semibold text-base">{cv?.navigationBook}</Text>
+                  </Box>
+                </VStack>
+              </Box>
+              {/* Seaman's Book */}
+              <Box className="bg-white rounded-2xl p-3 shadow-sm">
+                <Heading size="md" className="text-primary-600 mb-3">
                   {t('crew.seamans-book')}
                 </Heading>
-                <Text size="xl">{cv?.registration_Category}</Text>
-                <Text size="xl">{cv?.registration_City}</Text>
-                <Text size="xl">{cv?.qualificationCode}</Text>
-              </VStack>
-            </Box>
-            <Box className="mb-2">
-              <VStack>
-                <Heading className="text-primary-600" size="md">
-                  {t('crew.education')}, {t('crew.languages')}
-                </Heading>
-                {/* this will be education or study */}
-                <Text size="xl">{cv?.courses}</Text>
-                <Text size="xl">{cvLanguages}</Text>
+                <VStack className="gap-2">
+                  <HStack className="items-center gap-2">
+                    <Text className="text-typography-500 text-sm">Category:</Text>
+                    <Text className="text-typography-900 font-semibold">{cv?.registration_Category}</Text>
+                  </HStack>
+                  <HStack className="items-center gap-2">
+                    <Text className="text-typography-500 text-sm">City:</Text>
+                    <Text className="text-typography-900 font-semibold">{cv?.registration_City}</Text>
+                  </HStack>
+                  <HStack className="items-center gap-2">
+                    <Text className="text-typography-500 text-sm">Qualification:</Text>
+                    <Text className="text-typography-900 font-semibold">{cv?.qualificationCode}</Text>
+                  </HStack>
+                </VStack>
+              </Box>
+              {/* Education & Languages */}
+              <Box className="bg-white rounded-2xl p-3 shadow-sm">
+                <HStack className="items-center gap-2 mb-3">
+                  <Icon as={GraduationCap} className="text-primary-600" size="md" />
+                  <Heading size="md" className="text-primary-600">
+                    {t('crew.education')}, {t('crew.languages')}
+                  </Heading>
+                </HStack>
+                <VStack className="gap-3">
+                  <Box>
+                    <Text className="text-typography-500 text-sm  mb-1">{t('crew.education')}</Text>
+                    <Text className="text-typography-900 font-medium">{cv?.educationalLevel}</Text>
+                  </Box>
+                  <Box>
+                    <Text className="text-typography-500 text-sm  mb-1">{t('crew.languages')}</Text>
+                    <Text className="text-typography-900 font-medium">{cvLanguages}</Text>
+                  </Box>
+                </VStack>
+              </Box>
+              {/* References */}
+              <CrewReferences references={cv?.approvedReferences} />
+              {/* IMO Courses */}
+              <CrewInfoCard icon={Award} title={t('crew.IMO-courses')} content={cv?.courses} />
+              {/* Boat License */}
+              <CrewInfoCard icon={FileText} title={t('crew.boat-license')} content={cv?.licenseCode} />
 
-                {/* Refrences */}
-                {/* Certificates of Competency */}
-              </VStack>
-            </Box>
-            <Box className="mb-2">
-              <VStack>
-                <Heading className="text-primary-600" size="md">
-                  {t('crew.IMO-courses')}
-                </Heading>
-                <Text size="xl">{cv?.courses}</Text>
-              </VStack>
-            </Box>
-            <Box className="mb-2">
-              <VStack>
-                <Heading className="text-primary-600" size="md">
-                  {t('crew.boat-license')}
-                </Heading>
-                <Text size="xl">{cv?.licenseCode}</Text>
-                {/* Sailboat experience */}
-              </VStack>
-            </Box>
-            <ButtonGroup className="justify-between p-3">
-              <Button className="rounded" onPress={onAccept} action="positive">
-                <ButtonText>{t('accept')}</ButtonText>
+              <CrewExperienceList experiences={cv?.experiences} calculatedExperience={cv?.calculatedExperience} />
+            </VStack>
+          </ScrollView>
+          {/* Action Buttons - Fixed at bottom */}
+          <Box className="absolute bottom-0 left-0 right-0 bg-white border-t border-outline-100 p-3 shadow-lg rounded-lg">
+            <HStack className="gap-3">
+              <Button className="flex-1 rounded-lg" onPress={onAccept} action="positive" size="lg">
                 <ButtonIcon as={Check} />
+                <ButtonText className="ml-2">{t('get')}</ButtonText>
               </Button>
-              <Button onPress={onReject} action="negative">
-                <ButtonText>{t('decline')}</ButtonText>
-                <ButtonIcon as={Plus} />
+              <Button className="flex-1 rounded-lg" onPress={onReject} action="negative" size="lg">
+                <ButtonIcon as={X} />
+                <ButtonText className="ml-2">{t('decline')}</ButtonText>
               </Button>
-            </ButtonGroup>
-          </VStack>
-        </ScrollView>
+            </HStack>
+          </Box>
+        </Box>
       )}
     </>
   )

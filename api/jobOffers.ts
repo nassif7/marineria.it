@@ -6,25 +6,17 @@ import { getLAnguageCode } from './types'
 import { Languages } from 'lucide-react-native'
 
 // Get All offers without token
-export const getOwnerOffers = async (
-  ownerToken: string,
-  language: string
-): Promise<OwnerJobOfferType[] | ErrorResponse> => {
+export const getOwnerOffers = async (ownerToken: string, language: string): Promise<OwnerJobOfferType[] | Error> => {
   const languageCode = getLAnguageCode(language)
   const url = `${API.OWNER_OFFERS}/${ownerToken}?language=${languageCode}`
 
-  try {
-    const response = await fetch(url)
-    const data = await response.json()
+  const response = await fetch(url)
 
-    if (response.ok) {
-      return data as OwnerJobOfferType[]
-    } else {
-      return data as ErrorResponse
-    }
-  } catch (e) {
-    throw e
+  if (!response.ok) {
+    return new Error(`Failed to fetch owner job offers (${response.status})`)
   }
+
+  return response.json()
 }
 
 // Get owner offer by id

@@ -16,7 +16,7 @@ const _layout = () => {
         name="crewProfile" // pro/jobOffers/0009
         options={{
           header: (props) => {
-            return <NavBar showBackButton={true} />
+            return <NavBar showBackButton={true} title=" Profile 50000" />
           },
         }}
       />

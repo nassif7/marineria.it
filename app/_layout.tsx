@@ -8,8 +8,11 @@ import { useTranslation } from 'react-i18next'
 import * as SecureStore from 'expo-secure-store'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { StatusBar } from 'expo-status-bar'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import { View } from '@/components/ui'
 
 export default function RootLayout() {
+  const queryClient = new QueryClient()
   const { i18n } = useTranslation()
 
   useEffect(() => {
@@ -24,12 +27,16 @@ export default function RootLayout() {
 
   return (
     <ThemeUIProvider mode="light">
-      <SafeAreaProvider>
-        <SessionProvider>
-          <StatusBar translucent={true} style="light" />
-          <Slot screenOptions={{ headerShown: false }}></Slot>
-        </SessionProvider>
-      </SafeAreaProvider>
+      <View className="bg-secondary-800 h-full w-full">
+        <QueryClientProvider client={queryClient}>
+          <SafeAreaProvider>
+            <SessionProvider>
+              <StatusBar translucent={true} style="light" />
+              <Slot screenOptions={{ headerShown: false }}></Slot>
+            </SessionProvider>
+          </SafeAreaProvider>
+        </QueryClientProvider>
+      </View>
     </ThemeUIProvider>
   )
 }

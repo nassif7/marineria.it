@@ -19,3 +19,11 @@ export const getAge = (birthDate: string): number => {
 
   return age
 }
+
+export const getAgeByYear = (birthYear: string): number => {
+  const today = new Date()
+  const birthYearObj = new Date(birthYear)
+  let age = today.getFullYear() - birthYearObj.getFullYear()
+
+  return age
+}

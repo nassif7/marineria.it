@@ -18,6 +18,29 @@ import {
   View,
 } from '@/components/ui'
 import { router } from 'expo-router'
+import { X, HelpCircleIcon } from 'lucide-react-native'
+
+import {
+  ButtonIcon,
+  Icon,
+  VStack,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  useToast,
+  HStack,
+  Pressable,
+} from '@/components/ui'
+import { Portal } from '@/components/ui/portal'
+
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogBody,
+  AlertDialogBackdrop,
+} from '@/components/ui/alert-dialog'
 
 const UserProfile = () => {
   const { t } = useTranslation()
@@ -29,6 +52,8 @@ const UserProfile = () => {
   const date = new Date()
   const hours = date.getHours()
   const [message, setMessage] = useState('')
+  const [showAlertDialog, setShowAlertDialog] = React.useState(false)
+  const handleClose = () => setShowAlertDialog(false)
 
   useEffect(() => {
     if (hours < 12) {
@@ -75,6 +100,17 @@ const UserProfile = () => {
                   <ButtonText className="text-white">{t('jobOffers')}</ButtonText>
                 </Button>
               </Box>
+              {/* <Button onPress={() => setShowAlertDialog(true)}>
+                <Text className="text-white">Click</Text>
+              </Button>
+              <Portal isOpen={showAlertDialog} className="justify-center items-center">
+                <HStack className="border-2 w-1/3 py-10 gap-4 rounded-lg flex-row justify-center items-center bg-background-0">
+                  <Text className="text-typography-950">Portal Content</Text>
+                  <Button size="xs" className="h-6 px-1 absolute top-2 right-2" variant="outline" onPress={handleClose}>
+                    <ButtonIcon as={X} />
+                  </Button>
+                </HStack>
+              </Portal> */}
             </>
           )}
         </>

@@ -3,6 +3,7 @@ import { signIn } from '@/api/auth'
 import { router } from 'expo-router'
 import { AuthTypes, isErrorResponse, ErrorTypes } from '@/api/types'
 import * as SecureStore from 'expo-secure-store'
+import { useQuery } from '@tanstack/react-query'
 
 type SessionContextType = {
   signIn: (userName: string, password: string, onSuccess?: () => Promise<any> | void, onError?: () => void) => void
@@ -22,7 +23,6 @@ const SessionContext = createContext<SessionContextType>({
   isLoading: false,
 })
 
-// This hook can be used to access the user info.
 export const useSession = () => {
   const value = useContext(SessionContext)
   if (process.env.NODE_ENV !== 'production') {
@@ -42,8 +42,26 @@ const SessionProvider = (props: React.PropsWithChildren) => {
     role: null,
     token: null,
   })
-
   const [isLoading, setIsLoading] = useState(false)
+
+  const authenticate = async (
+    userName: string,
+    password: string,
+    onSuccess?: () => Promise<any> | void,
+    onError?: (message: string) => void
+  ) => {
+    const authData = await signIn(userName, password)
+    if (authData instanceof Error) {
+      onError && onError(authData.message)
+      return
+    }
+    const { category, token } = authData
+    await SecureStore.setItemAsync(category, token)
+    await SecureStore.setItemAsync('role', category)
+    setStoredAuthTokens({ ...storedAuthTokens, [category]: token })
+    setAuth({ role: category, token })
+    onSuccess && onSuccess()
+  }
 
   useEffect(() => {
     //#TODO this need to be improved
@@ -65,25 +83,6 @@ const SessionProvider = (props: React.PropsWithChildren) => {
 
     fetchStoredTokens()
   }, [])
-
-  const authenticate = async (
-    userName: string,
-    password: string,
-    onSuccess?: () => Promise<any> | void,
-    onError?: (error: ErrorTypes.ErrorResponse) => void
-  ) => {
-    const authData = await signIn(userName, password)
-    if (isErrorResponse(authData)) {
-      onError && onError(authData)
-    } else {
-      const { category, token } = authData
-      await SecureStore.setItemAsync(category, token)
-      await SecureStore.setItemAsync('role', category)
-      setStoredAuthTokens({ ...storedAuthTokens, [category]: token })
-      setAuth({ role: category, token })
-      onSuccess && onSuccess()
-    }
-  }
 
   const unAuthenticate = async (role: AuthTypes.UserRole) => {
     const proToken = storedAuthTokens[AuthTypes.UserRole.PRO]
@@ -112,7 +111,7 @@ const SessionProvider = (props: React.PropsWithChildren) => {
       })
     }
 
-    router.replace('/')
+    router.push('/')
   }
 
   const switchAuth = async (role: AuthTypes.UserRole) => {

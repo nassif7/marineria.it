@@ -1,17 +1,9 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import * as Notifications from 'expo-notifications'
 import * as Device from 'expo-device'
 import Constants from 'expo-constants'
 import { Platform } from 'react-native'
 import { router } from 'expo-router'
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-})
 
 export async function schedulePushNotification() {
   await Notifications.scheduleNotificationAsync({
@@ -79,8 +71,6 @@ const useNotification = () => {
   const [expoPushToken, setExpoPushToken] = useState('')
   const [channels, setChannels] = useState<Notifications.NotificationChannel[]>([])
   const [notification, setNotification] = useState<Notifications.Notification | undefined>(undefined)
-  const notificationListener = useRef<Notifications.EventSubscription>()
-  const responseListener = useRef<Notifications.EventSubscription>()
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((pushToken) => pushToken && setExpoPushToken(pushToken))
@@ -88,17 +78,17 @@ const useNotification = () => {
     if (Platform.OS === 'android') {
       Notifications.getNotificationChannelsAsync().then((value) => setChannels(value ?? []))
     }
-    notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+    const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
       setNotification(notification)
     })
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(async () => {
+    const responseListener = Notifications.addNotificationResponseReceivedListener(async () => {
       router.replace('/')
     })
 
     return () => {
-      notificationListener.current && Notifications.removeNotificationSubscription(notificationListener.current)
-      responseListener.current && Notifications.removeNotificationSubscription(responseListener.current)
+      notificationListener.remove()
+      responseListener.remove()
     }
   }, [])
 

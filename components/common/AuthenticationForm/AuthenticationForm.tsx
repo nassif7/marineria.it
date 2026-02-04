@@ -40,11 +40,9 @@ interface AuthenticationFormProps {
 const AuthenticationForm: FC<AuthenticationFormProps> = ({ authenticate, user }) => {
   const { t } = useTranslation()
   const [showPassword, setShowPassword] = useState(false)
-
-  const email = user?.email || ''
-  const { Field, Subscribe, handleSubmit, useStore } = useForm({
+  const { Field, Subscribe, handleSubmit } = useForm({
     defaultValues: {
-      email: email,
+      email: user ? user.email : '',
       password: '',
     },
     onSubmit: ({ value }) => handleAuthentication(value),
@@ -55,8 +53,8 @@ const AuthenticationForm: FC<AuthenticationFormProps> = ({ authenticate, user })
   }
 
   return (
-    <View className="rounded w-full bg-secondary-300 py-6">
-      <VStack className="px-4">
+    <View className="rounded bg-secondary-200 py-4 px-4">
+      <VStack>
         <Field
           name="email"
           validators={{
@@ -133,19 +131,19 @@ const AuthenticationForm: FC<AuthenticationFormProps> = ({ authenticate, user })
           )}
         />
       </VStack>
-      <Divider className="my-4" />
-      <VStack className="px-4">
+      <Divider className="my-4 bg-secondary-800" />
+      <VStack>
         <Link href="https://www.marineria.it/En/Forgot_PSW.aspx" className="mb-1">
-          <LinkText className="text-left">Forgot your password?</LinkText>
+          <LinkText className="text-left">{t('forgot-password')}</LinkText>
         </Link>
         {(!user || user?.role == AuthTypes.UserRole.PRO) && (
           <Link href="https://www.marineria.it/En/Rec/Reg.aspx" className="mb-1">
-            <LinkText>Register as Recruiter</LinkText>
+            <LinkText>{t('register-as-recruiter')}</LinkText>
           </Link>
         )}
         {(!user || user?.role == AuthTypes.UserRole.OWNER) && (
           <Link href="https://www.marineria.it/En/Pro/Reg.aspx">
-            <LinkText>Register as Crew</LinkText>
+            <LinkText>{t('register-as-crew')}</LinkText>
           </Link>
         )}
       </VStack>

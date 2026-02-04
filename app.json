@@ -42,6 +42,7 @@
         }
       ],
       "expo-router",
+      "expo-notifications",
       [
         "expo-font",
         {
