@@ -1,13 +1,12 @@
 import { Redirect, Tabs } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
-import Feather from '@expo/vector-icons/Feather'
 import UserProvider from '@/Providers/UserProvider'
 import { Text } from '@/components/ui'
 import { useSession } from '@/Providers/SessionProvider'
 import '@/localization'
-import { TabBar } from '@/components/ui'
+import { TabBar, Icon } from '@/components/ui'
 import { AuthTypes } from '@/api/types'
+import { Anchor, HomeIcon, UserIcon } from 'lucide-react-native'
 
 const AppLayout = () => {
   const { auth, isLoading } = useSession()
@@ -37,11 +36,13 @@ const AppLayout = () => {
     <UserProvider>
       <Tabs
         screenOptions={{
+          tabBarActiveTintColor: '#10b981', // Your primary color
+          tabBarInactiveTintColor: '#9ca3af', // Gray
           tabBarStyle: {
             display: 'none', // Hide the default tab bar
           },
         }}
-        tabBar={(props) => <TabBar {...props} />} // Use the custom tab bar
+        tabBar={(props) => <TabBar {...props} />}
       >
         <Tabs.Screen
           name="index"
@@ -50,7 +51,9 @@ const AppLayout = () => {
             headerShown: false,
             headerStyle,
             title: 'Home',
-            tabBarIcon: ({ color }) => <Feather name="home" size={32} color={color} />,
+            tabBarIcon: ({ focused }) => (
+              <Icon as={HomeIcon} size="3xl" className={focused ? 'text-primary-500' : 'text-gray-400'} />
+            ),
           }}
         />
         <Tabs.Screen
@@ -59,7 +62,10 @@ const AppLayout = () => {
           options={{
             headerShown: false,
             sceneStyle,
-            tabBarIcon: ({ color }) => <FontAwesome6 name="anchor" size={28} color={color} />,
+            title: 'Job Offers',
+            tabBarIcon: ({ focused }) => (
+              <Icon as={Anchor} size="3xl" className={focused ? 'text-primary-500' : 'text-gray-400'} />
+            ),
           }}
         />
         <Tabs.Screen
@@ -68,7 +74,10 @@ const AppLayout = () => {
           options={{
             headerShown: false,
             sceneStyle,
-            tabBarIcon: ({ color }) => <FontAwesome6 name="anchor" size={28} color={color} />,
+            title: 'Pro',
+            tabBarIcon: ({ focused }) => (
+              <Icon as={Anchor} size="3xl" className={focused ? 'text-primary-500' : 'text-gray-400'} />
+            ),
           }}
         />
         <Tabs.Screen
@@ -77,7 +86,10 @@ const AppLayout = () => {
           options={{
             headerShown: false,
             sceneStyle,
-            tabBarIcon: ({ color }) => <FontAwesome6 name="anchor" size={28} color={color} />,
+            title: 'Recruiter',
+            tabBarIcon: ({ focused }) => (
+              <Icon as={Anchor} size="3xl" className={focused ? 'text-primary-500' : 'text-gray-400'} />
+            ),
           }}
         />
         <Tabs.Screen
@@ -87,7 +99,9 @@ const AppLayout = () => {
             headerShown: false,
             headerStyle,
             title: 'Settings',
-            tabBarIcon: ({ color }) => <Feather name="user" size={32} color={color} />,
+            tabBarIcon: ({ focused }) => (
+              <Icon as={UserIcon} size="3xl" className={focused ? 'text-primary-500' : 'text-gray-400'} />
+            ),
           }}
         />
       </Tabs>

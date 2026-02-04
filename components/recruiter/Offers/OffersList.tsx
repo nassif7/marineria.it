@@ -39,21 +39,21 @@ const OffersList: FC = () => {
     enabled: state === 'active',
   })
 
-  useFocusEffect(
-    React.useCallback(() => {
-      if (firstTimeRef.current) {
-        firstTimeRef.current = false
-        return
-      }
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     if (firstTimeRef.current) {
+  //       firstTimeRef.current = false
+  //       return
+  //     }
 
-      // refetch all stale active queries
-      queryClient.refetchQueries({
-        queryKey: ['recruiter-offers'],
-        stale: true,
-        type: 'active',
-      })
-    }, [queryClient])
-  )
+  //     // refetch all stale active queries
+  //     queryClient.refetchQueries({
+  //       queryKey: ['recruiter-offers'],
+  //       stale: true,
+  //       type: 'active',
+  //     })
+  //   }, [queryClient])
+  // )
 
   // console.log(
   //   data?.map((i) => {

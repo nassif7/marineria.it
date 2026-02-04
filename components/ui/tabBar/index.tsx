@@ -1,54 +1,76 @@
 import React from 'react'
-import { View, TouchableOpacity, Text } from 'react-native'
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
-import Feather from '@expo/vector-icons/Feather'
 import { Platform } from 'react-native'
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
+import { Box, HStack, VStack, Text, Pressable } from '@/components/ui'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-export const TabBar = ({ state, descriptors, navigation }: any) => {
+interface TabBarProps extends BottomTabBarProps {}
+
+export const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
   const insets = useSafeAreaInsets()
 
   return (
-    <View
+    <Box
+      className="bg-secondary-900"
       style={{
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        backgroundColor: 'rgb(30 41 59)',
-        boxShadow: '0px 0px 20px 0px rgba(234,88,12,0.25)',
-        paddingBottom: insets.bottom + 10,
-        paddingTop: 10,
+        paddingBottom: Platform.OS === 'ios' ? insets.bottom : 8,
       }}
-      className="px-3"
     >
-      {state.routes.map((route: any, index: number) => {
-        const { options } = descriptors[route.key]
-        const label = options.tabBarLabel || options.title || route.name
-        const isFocused = state.index === index
+      <HStack className="justify-around items-center">
+        {state.routes.map((route, index) => {
+          const { options } = descriptors[route.key]
+          const isFocused = state.index === index
+          const label = options.title ?? route.name
 
-        const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          })
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            })
 
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name)
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name, route.params)
+            }
           }
-        }
 
-        const Icon = options.tabBarIcon
+          const onLongPress = () => {
+            navigation.emit({
+              type: 'tabLongPress',
+              target: route.key,
+            })
+          }
 
-        return (
-          <TouchableOpacity
-            key={route.key}
-            onPress={onPress}
-            style={{ alignItems: 'center', opacity: isFocused ? 1 : 0.6 }}
-          >
-            {Icon && Icon({ color: isFocused ? 'rgb(234 88 12)' : 'white' })}
-          </TouchableOpacity>
-        )
-      })}
-    </View>
+          return (
+            <Pressable
+              key={route.key}
+              accessibilityRole="button"
+              accessibilityState={isFocused ? { selected: true } : {}}
+              accessibilityLabel={options.tabBarAccessibilityLabel}
+              onPress={onPress}
+              onLongPress={onLongPress}
+              className="flex-1 items-center justify-center py-3"
+            >
+              <VStack className="items-center gap-1">
+                {/* Tab Icon */}
+                {options.tabBarIcon &&
+                  options.tabBarIcon({
+                    focused: isFocused,
+                    color: isFocused ? '#10b981' : '#9ca3af',
+                    size: 24,
+                  })}
+
+                {/* <Text
+                  className={isFocused ? 'text-primary-500 text-xs font-semibold' : 'text-gray-400 text-xs'}
+                  numberOfLines={1}
+                >
+                  {label}
+                </Text> */}
+              </VStack>
+            </Pressable>
+          )
+        })}
+      </HStack>
+    </Box>
   )
 }
