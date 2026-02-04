@@ -4,7 +4,6 @@ import { AuthTypes } from '@/api/types'
 import AuthenticationForm, { FormDate } from '@/components/common/AuthenticationForm'
 import { useUser } from '@/Providers/UserProvider'
 import { useSession } from '@/Providers/SessionProvider'
-import { useShowToast } from '@/hooks'
 import { View } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import { ImageBackground, Image, KeyboardAvoidingView } from 'react-native'
@@ -14,7 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 const switchUser = () => {
   const { t } = useTranslation()
 
-  const showToast = useShowToast(t('error'), t('loginError'), 'error')
+  // const showToast = useShowToast(t('error'), t('loginError'), 'error')
   const { signIn } = useSession()
   const { user, activeProfile, switchProfile } = useUser()
   const activeRole = activeProfile?.role as AuthTypes.UserRole
@@ -26,7 +25,8 @@ const switchUser = () => {
     switchProfile && (await switchProfile(role))
     router.replace('/')
   }
-  const onError = () => showToast()
+  // const onError = () => showToast()
+  const onError = () => console.log('error')
 
   const handleSwitchSignIn = async ({ email, password }: FormDate) => {
     await signIn(email, password, onSuccess, onError)

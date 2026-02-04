@@ -1,4 +1,9 @@
 export type CrewType = {
+  experiences: CrewExperienceType[]
+  approvedReferences: CrewReferenceType[]
+  educationalLevel: string
+  yearofBirth: string
+  currentPosition: string
   province: string
   numberClicked: string
   registraton_date: string
@@ -71,4 +76,25 @@ export type CrewType = {
   language2: string
   language3: string
   language4: string
+}
+
+export type CrewReferenceType = {
+  company_name: string
+  email: string
+  idReference: number
+  notes: string
+  positionreferent: string
+  telephone: string
+  yacht: string
+  yearreference: string
+}
+
+export type CrewExperienceType = {
+  duration?: string
+  boatcompany: string
+  employer: string
+  experiencedate: null
+  idesperienza: number
+  typeofassignment: string
+  typeofemployment: string
 }

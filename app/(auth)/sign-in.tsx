@@ -1,50 +1,111 @@
 import React from 'react'
 import { ImageBackground, Image, KeyboardAvoidingView } from 'react-native'
-import { View } from '@/components/ui'
 import AuthenticationForm, { FormDate } from '@/components/common/AuthenticationForm'
 import { useSession } from '@/Providers/SessionProvider'
-import { useShowToast } from '@/hooks'
 import { horizontalScale, verticalScale } from '@/utils/metrics'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
+import {
+  Icon,
+  VStack,
+  View,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  useToast,
+  HStack,
+  Pressable,
+  Text,
+  Button,
+} from '@/components/ui'
+import { X, HelpCircleIcon } from 'lucide-react-native'
 
 const SignIn = () => {
   const { t } = useTranslation()
-
   const { signIn } = useSession()
-  const showToast = useShowToast(t('error'), t('loginError'), 'error')
+
+  // #TODO  Fix the toast showing management over all
   const onSuccess = () => router.replace('/')
-  const onError = () => showToast()
+  const onError = () => {
+    console.log('Error during sign in', new Date().getSeconds())
+    handleToast()
+    setShowError(true)
+  }
 
   const handleSignIn = async ({ email, password }: FormDate) => {
     await signIn(email, password, onSuccess, onError)
   }
 
+  const toast = useToast()
+  const [toastId, setToastId] = React.useState(0)
+  const handleToast = () => {
+    if (!toast.isActive(toastId.toString())) {
+      showNewToast()
+    }
+  }
+
+  const showNewToast = () => {
+    console.log('showing new toast at:', new Date().getSeconds())
+    const newId = Math.random()
+    setToastId(newId)
+    toast.show({
+      id: newId.toString(),
+      placement: 'top',
+      duration: 3000,
+      render: ({ id }) => {
+        console.log('render new toast at:', new Date().getSeconds())
+
+        const uniqueToastId = 'toast-' + id
+        return (
+          <Toast
+            action={'error'}
+            variant="solid"
+            nativeID={uniqueToastId}
+            className="p-4 gap-6 border-error-500 w-full shadow-hard-5 max-w-[443px] flex-row justify-between"
+          >
+            <HStack space="md">
+              {/* <Icon as={HelpCircleIcon} className="stroke-error-500 mt-0.5" /> */}
+              <VStack space="xs">
+                <ToastTitle className="font-semibold">{'Login Error'}</ToastTitle>
+                <ToastDescription size="md">{'user name or password are wrong '}</ToastDescription>
+              </VStack>
+            </HStack>
+            <HStack className="min-[450px]:gap-3 gap-1">
+              <Pressable onPress={() => toast.close(id)}>
+                <Icon as={X} />
+              </Pressable>
+            </HStack>
+          </Toast>
+        )
+      },
+    })
+  }
+
+  const [showError, setShowError] = React.useState(false)
+
+  const ErrorCom = () => {
+    return (
+      <View className="bg-red-500 p-4 rounded-md mb-4">
+        <Text className="text-white">Error</Text>
+      </View>
+    )
+  }
+
   return (
-    <View style={{ flex: 1 }}>
-      <ImageBackground
-        source={require('../../assets/images/bg-2.png')}
+    <View className="flex-1 justify-center items-center">
+      <Image
+        source={require('../../assets/images/marineria_logo.png')}
         style={{
-          width: '100%',
-          height: '100%',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundSize: 'contain',
+          width: horizontalScale(225),
+          height: verticalScale(90),
+          marginBottom: verticalScale(40),
+          resizeMode: 'contain',
         }}
-      >
-        <Image
-          source={require('../../assets/images/marineria_logo.png')}
-          style={{
-            width: horizontalScale(225),
-            height: verticalScale(90),
-            marginBottom: verticalScale(50),
-            resizeMode: 'contain',
-          }}
-        />
-        <KeyboardAvoidingView style={{ width: '80%' }} behavior={'padding'}>
-          <AuthenticationForm authenticate={handleSignIn} />
-        </KeyboardAvoidingView>
-      </ImageBackground>
+      />
+      <KeyboardAvoidingView className="w-11/12" behavior={'padding'}>
+        <AuthenticationForm authenticate={handleSignIn} />
+      </KeyboardAvoidingView>
+      {showError && <ErrorCom />}
     </View>
   )
 }
