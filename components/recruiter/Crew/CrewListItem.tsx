@@ -109,10 +109,11 @@ const CrewListItem: React.FC<{ crew: CrewType; offerId: number | string }> = ({ 
         variant="outline"
         action="positive"
         onPress={() =>
-          router.push({
-            pathname: `/(tabs)/recruiterScreens/crew/crewProfile`,
-            params: { crewId: crew.userId, offerId: offerId },
-          })
+          // router.push({
+          //   pathname: `/(tabs)/recruiterScreens/crew/crewProfile`,
+          //   params: { crewId: crew.userId, offerId: offerId },
+          // })
+          router.push(`/recruiterScreens/crew/${crew.userId}}`)
         }
       >
         <ButtonIcon as={EyeIcon} className="text-success-400 mr-2" />
@@ -123,3 +124,16 @@ const CrewListItem: React.FC<{ crew: CrewType; offerId: number | string }> = ({ 
 }
 
 export default CrewListItem
+
+// const handleOfferPress = (offerId: string) => {
+//   // Navigate to offer details within offers folder
+//   router.push(`/recruiterScreens/offers/${offerId}`)
+// }
+
+// const handleViewCrew = (offerId: string) => {
+//   // Navigate to crew list
+//   router.push({
+//     pathname: '/recruiterScreens/crew/list',
+//     params: { offerId },
+//   })
+// }

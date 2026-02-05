@@ -6,7 +6,7 @@ export default function RecruiterLayout() {
     <Stack
       screenOptions={{
         contentStyle: { backgroundColor: 'rgb(30 41 59)' },
-        headerShown: false,
+        headerShown: false, // Let nested layouts handle headers
       }}
     >
       <Stack.Screen name="index" />

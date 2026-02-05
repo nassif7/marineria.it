@@ -7,14 +7,13 @@ export default function OffersLayout() {
     <Stack
       screenOptions={{
         contentStyle: { backgroundColor: 'rgb(30 41 59)' },
-        header: (props) => <NavBar {...props} />,
       }}
     >
       {/* Offers list - NO HEADER */}
       <Stack.Screen
         name="index"
         options={{
-          headerShown: false,
+          headerShown: true,
         }}
       />
 

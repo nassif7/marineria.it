@@ -7,23 +7,27 @@ export default function CrewLayout() {
     <Stack
       screenOptions={{
         contentStyle: { backgroundColor: 'rgb(30 41 59)' },
-        header: (props) => <NavBar {...props} />,
+        headerShown: false, // Let nested layouts handle headers
       }}
     >
       <Stack.Screen
-        name="list"
+        name="index"
         options={{
           headerShown: true,
+          header: (props) => <NavBar {...props} />,
           title: 'Candidates',
+          animation: 'slide_from_right',
         }}
       />
 
       <Stack.Screen
         name="[id]"
-        options={({ route }) => ({
+        options={{
           headerShown: true,
+          header: (props) => <NavBar {...props} />,
           title: `ID`,
-        })}
+          animation: 'slide_from_right',
+        }}
       />
     </Stack>
   )

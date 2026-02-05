@@ -32,6 +32,18 @@ const JobOfferListItem: FC<JobOfferProps> = ({ offer }) => {
   const { activeProfile } = useUser()
   const { token } = activeProfile as ActiveProfile
 
+  // const handleOfferPress = (offerId: string) => {
+  //   // Navigate to offer details within offers folder
+  //   router.push(`/recruiterScreens/offers/${offerId}`)
+  // }
+
+  // const handleViewCrew = (offerId: string) => {
+  //   // Navigate to crew list
+  //   router.push({
+  //     pathname: '/recruiterScreens/crew',
+  //     params: { offerId },
+  //   })
+  // }
   const onViewOffer = () =>
     router.push({
       pathname: '/(tabs)/recruiterScreens/offers/offer',

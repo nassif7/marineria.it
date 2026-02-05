@@ -1,4 +1,5 @@
 export type CrewType = {
+  userId: number
   experiences: CrewExperienceType[]
   approvedReferences: CrewReferenceType[]
   educationalLevel: string
