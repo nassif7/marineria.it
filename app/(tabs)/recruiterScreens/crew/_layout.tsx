@@ -1,27 +1,30 @@
 import React from 'react'
 import { Stack } from 'expo-router'
 import { NavBar } from '@/components/ui'
-import { router, usePathname, useSegments, useSitemap } from 'expo-router'
 
-const _layout = () => {
+export default function CrewLayout() {
   return (
-    <Stack screenOptions={{ contentStyle: { backgroundColor: 'rgb(30 41 59)' } }}>
+    <Stack
+      screenOptions={{
+        contentStyle: { backgroundColor: 'rgb(30 41 59)' },
+        header: (props) => <NavBar {...props} />,
+      }}
+    >
       <Stack.Screen
-        name="index"
+        name="list"
         options={{
-          headerShown: false,
+          headerShown: true,
+          title: 'Candidates',
         }}
       />
+
       <Stack.Screen
-        name="crewProfile" // pro/jobOffers/0009
-        options={{
-          header: (props) => {
-            return <NavBar showBackButton={true} title=" Profile 50000" />
-          },
-        }}
+        name="[id]"
+        options={({ route }) => ({
+          headerShown: true,
+          title: `ID`,
+        })}
       />
     </Stack>
   )
 }
-
-export default _layout

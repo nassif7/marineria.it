@@ -2,25 +2,30 @@ import React from 'react'
 import { Stack } from 'expo-router'
 import { NavBar } from '@/components/ui'
 
-const _layout = () => {
+export default function OffersLayout() {
   return (
-    <Stack screenOptions={{ contentStyle: { backgroundColor: 'rgb(30 41 59)' } }}>
+    <Stack
+      screenOptions={{
+        contentStyle: { backgroundColor: 'rgb(30 41 59)' },
+        header: (props) => <NavBar {...props} />,
+      }}
+    >
+      {/* Offers list - NO HEADER */}
       <Stack.Screen
         name="index"
         options={{
           headerShown: false,
         }}
       />
+
+      {/* Single offer - HAS HEADER */}
       <Stack.Screen
-        name="offer"
+        name="[id]"
         options={{
-          header: (props) => {
-            return <NavBar showBackButton={true} />
-          },
+          headerShown: true,
+          title: 'Offer Details',
         }}
       />
     </Stack>
   )
 }
-
-export default _layout
