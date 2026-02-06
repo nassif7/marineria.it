@@ -42,7 +42,7 @@ export type ProJobOfferType = {
   alreadyApplied: boolean
 }
 
-export type OwnerJobOfferType = {
+export type OwnerSearchType = {
   idoffer: number
   name: string
   surname: string

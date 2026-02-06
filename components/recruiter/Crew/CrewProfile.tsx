@@ -24,7 +24,7 @@ const CrewProfile = () => {
   const { token } = activeProfile as ActiveProfile
 
   const fetchCV = useCallback(async () => {
-    const res = await getCrewCV(token, '50000' as string)
+    const res = await getCrewCV(token, crewId as string)
     return res
   }, [crewId])
 

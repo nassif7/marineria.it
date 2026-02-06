@@ -1,5 +1,5 @@
 import { Redirect } from 'expo-router'
 
 export default function RecruiterIndex() {
-  return <Redirect href="/recruiterScreens/offers" />
+  return <Redirect href="/recruiter/search" />
 }

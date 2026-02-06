@@ -5,7 +5,6 @@
   "register-as-crew": "Register as Crew",
   "register-as-recruiter": "Register as Recruiter",
   "authentication": {},
-  "recruiter": {},
   "common": {},
   "login": "Login",
   "logout": "Logout",
@@ -34,7 +33,6 @@
   "offerSalary": "Salary",
   "jobOffers": "Job offers",
   "noProUserJobOffers": "There are currently no job offers that match your profile!",
-  "noOwnerJobOffers": "There are currently no published job offers!",
   "apply": "Apply",
   "share": "Share",
   "it": "Italian",
@@ -99,5 +97,14 @@
     "seamans-book": "Seaman's Book",
     "skills-and-abilities": "Skills and Abilities",
     "other-positions": "Other positions"
+  },
+  "recruiter": {
+    "crew-list": "Candidates",
+    "crew-list-description": "Manage your candidates",
+    "searches": "Searches",
+    "active-searches": "Active searches",
+    "active-searches-description": "Manage your active searches",
+    "no-active-searches": "You have no active searches",
+    "view-search-id": "Search"
   }
 }

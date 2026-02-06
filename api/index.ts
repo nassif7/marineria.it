@@ -7,8 +7,9 @@ export {
   getProUserOffers,
   getProOfferById,
   applyToOffer,
-  getCrewList,
   getCrewCV,
   selectProUser,
   rejectProUser,
 } from '@/api/jobOffers'
+
+export * from './recruiter'
