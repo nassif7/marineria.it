@@ -66,8 +66,18 @@
       "unit": "Unità",
       "use-area": "Utilizzo, zona"
     },
+    "get-contact": "Ottieni contatto",
+    "delete": "Eliminare",
     "find-by-location": "Cerca Equipaggio per località",
     "find-by-skill": "Cerca Equipaggio per caratteristiche",
+    "further-abilities": "Competenze professionali",
+    "soft-skills": "Competenze trasversali",
+    "organizational-skills": "Competenze organizzative",
+    "technical-skills": "Competenze tecniche",
+    "no-further-abilities": "Senza ulteriori competenze",
+    "no-soft-skills": "Senza competenze trasversali",
+    "no-organizational-skills": "Senza competenze organizzative",
+    "no-technical-skills": "Senza competenze tecniche",
     "IMO-courses": "Corsi IMO",
     "job-offers-received": "Offerte di lavoro ricevute",
     "languages": "Lingue",
@@ -83,6 +93,8 @@
     "residual": "Rimanenti",
     "salary": "Compenso",
     "sea-experience": "Esperienze di navigazione",
-    "seamans-book": "Libretto di navigazione"
+    "seamans-book": "Libretto di navigazione",
+    "skills-and-abilities": "Capacità e competenze",
+    "other-positions": "Altre posizioni"
   }
 }

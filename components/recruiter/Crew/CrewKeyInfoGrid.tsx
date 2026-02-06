@@ -36,9 +36,7 @@ const CrewKeyInfoGrid: FC<CrewKeyInfoGridProps> = ({ numberClicked, salary, pass
       <Box className="bg-white rounded-lg p-3 shadow-sm">
         <HStack className="items-center gap-2 mb-2">
           <Icon as={Globe} className="text-primary-600" size="sm" />
-          <Text className="text-typography-500 text-sm  font-medium uppercase tracking-wide">
-            {t('crew.citizenship')}
-          </Text>
+          <Text className="text-typography-500 text-sm  font-medium  tracking-wide">{t('crew.citizenship')}</Text>
         </HStack>
         <Text className="text-typography-900 font-semibold text-base">{passport}</Text>
       </Box>
@@ -46,9 +44,7 @@ const CrewKeyInfoGrid: FC<CrewKeyInfoGridProps> = ({ numberClicked, salary, pass
       <Box className="bg-white rounded-lg p-3 shadow-sm">
         <HStack className="items-center gap-2 mb-2">
           <Icon as={MapPin} className="text-primary-600" size="sm" />
-          <Text className="text-typography-500 text-sm  font-medium uppercase tracking-wide">
-            {t('crew.current-location')}
-          </Text>
+          <Text className="text-typography-500 text-sm  font-medium  tracking-wide">{t('crew.current-location')}</Text>
         </HStack>
         <Text className="text-typography-900 font-semibold text-base">{currentPosition}</Text>
       </Box>
