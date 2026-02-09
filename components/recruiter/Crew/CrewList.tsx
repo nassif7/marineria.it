@@ -1,57 +1,74 @@
-import { SafeAreaView, ImageBackground, ScrollView, FlatList, TouchableHighlight, Platform } from 'react-native'
+import { FlatList } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
-import {
-  View,
-  Box,
-  Heading,
-  Text,
-  Button,
-  ButtonText,
-  ButtonIcon,
-  ButtonGroup,
-  VStack,
-  Divider,
-  Loading,
-} from '@/components/ui'
+import { Loading, Box, HStack, Text, VStack, Icon, View } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
-import { getOwnerOfferById, getProOfferById, applyToOffer, getCrewList } from '@/api'
-import { Share, Alert } from 'react-native'
+import { getCrewList } from '@/api'
 import { useUser } from '@/Providers/UserProvider'
-import { useCallback } from 'react'
-import { AuthTypes, CrewType } from '@/api/types'
-import { useFetch } from '@/hooks'
+import { CrewType } from '@/api/types'
 import CrewListItem from './CrewListItem'
+import { FC } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { Users } from 'lucide-react-native'
 
-interface CrewListProps {
-  offerId: string
-}
-
-const CrewList: React.FC<CrewListProps> = ({ offerId }) => {
+const CrewList: FC = () => {
   const {
     i18n: { language },
     t,
   } = useTranslation()
+  const { searchId } = useLocalSearchParams()
   const { activeProfile } = useUser()
   const { role, token } = activeProfile as any
 
-  const fetchCrewList = useCallback(
-    async () => await getCrewList(offerId as string, token, language),
-    [token, language, offerId]
-  )
-  const crewListData = useFetch(fetchCrewList)
-  const crewList = crewListData?.data as CrewType[]
+  const { data, isFetching, isSuccess } = useQuery({
+    queryKey: ['recruiter-crew-list', searchId],
+    queryFn: () => getCrewList(searchId as string, token, language),
+  })
 
-  if (!crewListData?.isLoading && !crewListData?.data?.length) {
-    console.log('no items matching')
-  }
+  // const fetchCrewList = useCallback(
+  //   async () => await getCrewList(searchId as string, token, language),
+  //   [token, language, searchId]
+  // )
+  // const crewListData = useFetch(fetchCrewList)
+  // const crewList = crewListData?.data as CrewType[]
+
+  // if (!crewListData?.isLoading && !crewListData?.data?.length) {
+  //   console.log('no items matching')
+  // }
 
   return (
-    <>
-      {crewListData?.isLoading && <Loading />}
-      {!crewListData?.isLoading && (
-        <FlatList data={crewList} renderItem={({ item }) => <CrewListItem crew={item} offerId={offerId} />} />
+    <View className="px-2">
+      {isFetching && <Loading />}
+      {isSuccess && (
+        <>
+          <Box className="mb-4">
+            <Box className="bg-white rounded-lg p-4 shadow-sm border border-outline-100">
+              <HStack className="items-center justify-between gap-4">
+                <HStack className="items-center gap-3 flex-1">
+                  <Box className="bg-success-100 rounded-xl p-3">
+                    <Icon as={Users} className="text-success-600" size="lg" />
+                  </Box>
+                  <VStack className="gap-0.5">
+                    {/* <Heading size="xl" className="text-typography-900">
+                      {t('recruiter.crew-list')}
+                    </Heading> */}
+                    <Text className="text-typography-600 text-bold text-lg">
+                      {t('recruiter.crew-list-description')}
+                    </Text>
+                  </VStack>
+                </HStack>
+                <Box className="bg-success-500 rounded-full w-10 h-10 items-center justify-center shrink-0">
+                  <Text className="text-white font-bold text-base">{(data as any)?.length}</Text>
+                </Box>
+              </HStack>
+            </Box>
+          </Box>
+          <FlatList
+            data={data as CrewType[]}
+            renderItem={({ item }) => <CrewListItem crew={item} searchId={searchId as string} />}
+          />
+        </>
       )}
-    </>
+    </View>
   )
 }
 

@@ -31,7 +31,6 @@
   "offerSalary": "Compenso",
   "jobOffers": "Le offerte di lavoro",
   "noProUserJobOffers": "Al momento non ci sono offerte di lavoro compatibili con il tuo profilo!",
-  "noOwnerJobOffers": "There are currently no published job offers!",
   "apply": "Candidati per questa offerta",
   "share": "Condividi",
   "it": "Italiano",
@@ -66,8 +65,18 @@
       "unit": "Unità",
       "use-area": "Utilizzo, zona"
     },
+    "get-contact": "Ottieni contatto",
+    "delete": "Eliminare",
     "find-by-location": "Cerca Equipaggio per località",
     "find-by-skill": "Cerca Equipaggio per caratteristiche",
+    "further-abilities": "Competenze professionali",
+    "soft-skills": "Competenze trasversali",
+    "organizational-skills": "Competenze organizzative",
+    "technical-skills": "Competenze tecniche",
+    "no-further-abilities": "Senza ulteriori competenze",
+    "no-soft-skills": "Senza competenze trasversali",
+    "no-organizational-skills": "Senza competenze organizzative",
+    "no-technical-skills": "Senza competenze tecniche",
     "IMO-courses": "Corsi IMO",
     "job-offers-received": "Offerte di lavoro ricevute",
     "languages": "Lingue",
@@ -83,6 +92,22 @@
     "residual": "Rimanenti",
     "salary": "Compenso",
     "sea-experience": "Esperienze di navigazione",
-    "seamans-book": "Libretto di navigazione"
+    "seamans-book": "Libretto di navigazione",
+    "skills-and-abilities": "Capacità e competenze",
+    "other-positions": "Altre posizioni"
+  },
+  "recruiter": {
+    "crew-list": "Candidati",
+    "crew-list-description": "Gestisci il tuo equipaggio",
+    "searches": "Ricerche",
+    "active-searches": "Ricerche attive",
+    "active-searches-description": "Gestisci le tue ricerche attive",
+    "no-active-searches": "Non hai ricerche attive",
+    "view-search-id": "Ricerca",
+    "search": {
+      "search_details": {
+        "contract-and-compensation": "Contratto e compenso"
+      }
+    }
   }
 }

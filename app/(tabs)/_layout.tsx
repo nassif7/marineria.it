@@ -1,13 +1,12 @@
 import { Redirect, Tabs } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
-import Feather from '@expo/vector-icons/Feather'
 import UserProvider from '@/Providers/UserProvider'
 import { Text } from '@/components/ui'
 import { useSession } from '@/Providers/SessionProvider'
 import '@/localization'
-import { TabBar } from '@/components/ui'
+import { TabBar, Icon } from '@/components/ui'
 import { AuthTypes } from '@/api/types'
+import { Anchor, HomeIcon, UserIcon } from 'lucide-react-native'
 
 const AppLayout = () => {
   const { auth, isLoading } = useSession()
@@ -37,11 +36,13 @@ const AppLayout = () => {
     <UserProvider>
       <Tabs
         screenOptions={{
+          tabBarActiveTintColor: '#10b981', // Your primary color
+          tabBarInactiveTintColor: '#9ca3af', // Gray
           tabBarStyle: {
             display: 'none', // Hide the default tab bar
           },
         }}
-        tabBar={(props) => <TabBar {...props} />} // Use the custom tab bar
+        tabBar={(props) => <TabBar {...props} />}
       >
         <Tabs.Screen
           name="index"
@@ -50,7 +51,7 @@ const AppLayout = () => {
             headerShown: false,
             headerStyle,
             title: 'Home',
-            tabBarIcon: ({ color }) => <Feather name="home" size={32} color={color} />,
+            tabBarIcon: HomeIcon,
           }}
         />
         <Tabs.Screen
@@ -59,7 +60,8 @@ const AppLayout = () => {
           options={{
             headerShown: false,
             sceneStyle,
-            tabBarIcon: ({ color }) => <FontAwesome6 name="anchor" size={28} color={color} />,
+            title: 'Job Offers',
+            tabBarIcon: Anchor,
           }}
         />
         <Tabs.Screen
@@ -68,16 +70,18 @@ const AppLayout = () => {
           options={{
             headerShown: false,
             sceneStyle,
-            tabBarIcon: ({ color }) => <FontAwesome6 name="anchor" size={28} color={color} />,
+            title: 'Pro',
+            tabBarIcon: Anchor,
           }}
         />
         <Tabs.Screen
-          name="recruiterScreens"
+          name="recruiter"
           redirect={role !== AuthTypes.UserRole.OWNER}
           options={{
             headerShown: false,
             sceneStyle,
-            tabBarIcon: ({ color }) => <FontAwesome6 name="anchor" size={28} color={color} />,
+            title: 'Recruiter',
+            tabBarIcon: Anchor,
           }}
         />
         <Tabs.Screen
@@ -87,7 +91,7 @@ const AppLayout = () => {
             headerShown: false,
             headerStyle,
             title: 'Settings',
-            tabBarIcon: ({ color }) => <Feather name="user" size={32} color={color} />,
+            tabBarIcon: UserIcon,
           }}
         />
       </Tabs>

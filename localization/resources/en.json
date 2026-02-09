@@ -5,7 +5,6 @@
   "register-as-crew": "Register as Crew",
   "register-as-recruiter": "Register as Recruiter",
   "authentication": {},
-  "recruiter": {},
   "common": {},
   "login": "Login",
   "logout": "Logout",
@@ -34,7 +33,6 @@
   "offerSalary": "Salary",
   "jobOffers": "Job offers",
   "noProUserJobOffers": "There are currently no job offers that match your profile!",
-  "noOwnerJobOffers": "There are currently no published job offers!",
   "apply": "Apply",
   "share": "Share",
   "it": "Italian",
@@ -69,13 +67,23 @@
       "unit": "Unit",
       "use-area": "Use, area"
     },
+    "get-contact": "Get contact",
+    "delete": "Delete",
     "find-by-location": "Find your Crew by Location",
     "find-by-skill": "Find your Crew by Skills",
+    "further-abilities": "Further abilities",
+    "soft-skills": "Soft skills",
+    "organizational-skills": "Organizational skills",
+    "technical-skills": "Technical skills",
+    "no-further-abilities": "No further abilities",
+    "no-soft-skills": "No soft skills",
+    "no-organizational-skills": "No organizational skills",
+    "no-technical-skills": "No technical skills",
     "IMO-courses": "IMO Courses",
     "job-offers-received": "Job offers received",
     "languages": "Languages",
     "last-seen": "Last seen",
-    "main-position": "Main Position",
+    "main-position": "Main position",
     "no-certificate-of-competency": "No certificate of competency (CoC)",
     "no-references": "No references",
     "personal-data": "Personal Data",
@@ -86,6 +94,22 @@
     "residual": "Residual",
     "salary": "Salary",
     "sea-experience": "Sea Experience",
-    "seamans-book": "Seaman's Book"
+    "seamans-book": "Seaman's Book",
+    "skills-and-abilities": "Skills and Abilities",
+    "other-positions": "Other positions"
+  },
+  "recruiter": {
+    "crew-list": "Candidates",
+    "crew-list-description": "Manage your candidates",
+    "searches": "Searches",
+    "active-searches": "Active searches",
+    "active-searches-description": "Manage your active searches",
+    "no-active-searches": "You have no active searches",
+    "view-search-id": "Search",
+    "search": {
+      "search-details": {
+        "contract-and-compensation": "Contract and compensation"
+      }
+    }
   }
 }

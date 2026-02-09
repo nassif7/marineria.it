@@ -7,9 +7,9 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import * as SecureStore from 'expo-secure-store'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { StatusBar } from 'expo-status-bar'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { View } from '@/components/ui'
+import { StatusBar } from 'expo-status-bar'
 
 export default function RootLayout() {
   const queryClient = new QueryClient()
@@ -31,7 +31,7 @@ export default function RootLayout() {
         <QueryClientProvider client={queryClient}>
           <SafeAreaProvider>
             <SessionProvider>
-              <StatusBar translucent={true} style="light" />
+              <StatusBar style="light" />
               <Slot screenOptions={{ headerShown: false }}></Slot>
             </SessionProvider>
           </SafeAreaProvider>

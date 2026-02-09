@@ -5,28 +5,19 @@ import {
   AvatarFallbackText,
   AvatarImage,
   Box,
-  Button,
-  ButtonText,
-  Card,
-  Divider,
   Heading,
-  Image,
   Text,
   VStack,
-  Link,
-  LinkText,
   HStack,
-  ButtonIcon,
   Pressable,
+  Icon,
 } from '@/components/ui'
-import { CircleCheck, CircleX, EyeIcon, Edit, Users, UserSearch, Locate, Map } from 'lucide-react-native'
+import { CheckCircle, Calendar, Anchor, MapPin } from 'lucide-react-native'
 import { faker } from '@faker-js/faker'
-import { formatDate, getAge } from '@/utils/dateUtils'
-import { BASE_URL } from '@/api/const'
 import { useTranslation } from 'react-i18next'
 import { router } from 'expo-router'
 
-const CrewListItem: React.FC<{ crew: CrewType; offerId: number | string }> = ({ crew, offerId }) => {
+const CrewListItem: React.FC<{ crew: CrewType; searchId: string }> = ({ crew, searchId }) => {
   const photoUrl = useMemo(() => `https://www.comunicazione.it/PROFoto/${crew?.userPhoto}`, [crew])
   const fakerImage = useMemo(() => faker.image.personPortrait({ size: 256 }), [crew])
 
@@ -45,81 +36,107 @@ const CrewListItem: React.FC<{ crew: CrewType; offerId: number | string }> = ({ 
   )
 
   return (
-    <Card className="p-4 rounded-lg my-2">
-      <Box className="flex-row  items-center">
-        <Avatar className="mr-4">
-          <AvatarFallbackText>{`${crew.firstName} ${crew.lastName} `}</AvatarFallbackText>
-          <AvatarImage
-            source={{
-              uri: fakerImage,
-            }}
-          />
-        </Avatar>
-        <Heading size="lg" className="text-primary-600">
-          Profile {crew.userId}
-        </Heading>
-      </Box>
-      <Box className="mt-4 flex-col border-2 border-outline-200 rounded">
-        <VStack className="w-full border-b-2 border-outline-200 p-2 bg-outline-50 ">
-          <Heading size="md">
-            {/* {crew.position} */}
-            Master (CoC)
-          </Heading>
-        </VStack>
-        <VStack className="w-full border-b-2 border-outline-200 p-2">
-          <Heading size="md" className="text-success-400">
-            Available fom: 11/04/2025
-            {/* {crew.availability || AvailableFrom} */}
-          </Heading>
-        </VStack>
-        <VStack className="w-full p-2">
-          <Text>
-            {crewDetailsInfo.martialStatus}, {crewDetailsInfo.smoker}, {getAge(crew.birthYear)} years old
-          </Text>
-          <Text>From: {crewDetailsInfo.city}</Text>
-          <Text>Citizenship: {crewDetailsInfo.citizenship}</Text>
-        </VStack>
-      </Box>
-      <Box className="my-4 flex-col border-2 border-outline-200 rounded">
-        <VStack className="w-full border-b-2 border-outline-200 p-2 bg-outline-50 ">
-          <Heading size="md">{crew.lastAccessDate}</Heading>
-        </VStack>
-        <VStack className="w-full p-2">
-          {/* missing information */}
-          <Text size="md" className="text-success-400">
-            IMO Basic Training
-          </Text>
-          <Text size="md" className="text-success-400">
-            Yes Seaman's Book
-          </Text>
-          <Text size="md" className="">
-            Experience: not declared
-          </Text>
-          <Text size="md" className="">
-            35 years on Seaman's Book
-          </Text>
-          <Text size="md" className="">
-            Also skilled as: Bosun Deck Officer Captain
-          </Text>
-        </VStack>
-      </Box>
+    <Pressable key={crew.userId} onPress={() => router.push(`/recruiter/search/${searchId}/crew/${crew.userId}`)}>
+      <Box className="bg-white rounded-xl p-4 shadow-sm mb-4">
+        <VStack className="gap-3">
+          {/* Header: Photo + Name + Status */}
+          <HStack className="gap-3 items-center">
+            <Avatar className="">
+              <AvatarFallbackText>{`${crew.firstName} ${crew.lastName} `}</AvatarFallbackText>
+              <AvatarImage
+                source={{
+                  uri: fakerImage,
+                }}
+              />
+            </Avatar>
 
-      <Button
-        className="py-2 px-4"
-        variant="outline"
-        action="positive"
-        onPress={() =>
-          router.push({
-            pathname: `/(tabs)/recruiterScreens/crew/crewProfile`,
-            params: { crewId: crew.userId, offerId: offerId },
-          })
-        }
-      >
-        <ButtonIcon as={EyeIcon} className="text-success-400 mr-2" />
-        <ButtonText className="text-success-400">Visit Resume</ButtonText>
-      </Button>
-    </Card>
+            <VStack className="flex-1 gap-0.5 min-w-0">
+              <Heading size="md" className="text-typography-900 break-words">
+                {crew.firstName} {crew.lastName}
+              </Heading>
+              <Text className="text-typography-500 text-xs">ID: {crew.userId}</Text>
+            </VStack>
+
+            {crew.selected && (
+              <Box className="bg-success-500 rounded-full p-2">
+                <Icon as={CheckCircle} className="text-white" size="sm" />
+              </Box>
+            )}
+            {crew.photoApproved && !crew.selected && (
+              <Box className="bg-primary-100 rounded-full px-2 py-1">
+                <Text className="text-primary-700 text-xs font-bold">✓</Text>
+              </Box>
+            )}
+          </HStack>
+
+          {/* Position */}
+          <Box className="bg-primary-500 rounded-lg px-3 py-2">
+            <Text className="text-white font-bold text-base">{crew.mainPosition}</Text>
+          </Box>
+
+          {/* Quick Info - 3 pills */}
+          <HStack className="gap-2 flex-wrap">
+            <Box className="bg-background-50 rounded-lg px-3 py-1.5">
+              <HStack className="items-center gap-1.5">
+                <Icon as={MapPin} className="text-typography-500" size="xs" />
+                <Text className="text-typography-900 text-xs font-medium">
+                  {crew.city}, {crew.country}
+                </Text>
+              </HStack>
+            </Box>
+
+            <Box className="bg-background-50 rounded-lg px-3 py-1.5">
+              <HStack className="items-center gap-1.5">
+                <Icon as={Anchor} className="text-typography-500" size="xs" />
+                <Text className="text-typography-900 text-xs font-medium">{crew.calculatedExperience}</Text>
+              </HStack>
+            </Box>
+
+            <Box className="bg-background-50 rounded-lg px-3 py-1.5">
+              <HStack className="items-center gap-1.5">
+                <Icon as={Calendar} className="text-typography-500" size="xs" />
+                <Text className="text-typography-900 text-xs font-medium">{crew.dateAvailability}</Text>
+              </HStack>
+            </Box>
+          </HStack>
+
+          {/* Qualifications - Compact badges */}
+          <HStack className="gap-2 flex-wrap">
+            {crew.seamansBook && (
+              <Box className="bg-success-50 border border-success-200 rounded-full px-2 py-1">
+                <Text className="text-success-700 text-xs font-semibold">{crew.seamansBook}</Text>
+              </Box>
+            )}
+            {crew.pos_hotel && (
+              <Box className="bg-info-50 border border-info-200 rounded-full px-2 py-1">
+                <Text className="text-info-700 text-xs font-semibold">
+                  {crew.pos_hotel.split(' ')[0]} {/* First word only */}
+                </Text>
+              </Box>
+            )}
+            {crew.courses && (
+              <Box className="bg-warning-50 border border-warning-200 rounded-full px-2 py-1">
+                <Text className="text-warning-700 text-xs font-semibold">STCW</Text>
+              </Box>
+            )}
+          </HStack>
+        </VStack>
+      </Box>
+    </Pressable>
   )
 }
 
 export default CrewListItem
+
+// const handleOfferPress = (offerId: string) => {
+//   // Navigate to offer details within offers folder
+//   router.push(`/recruiterScreens/offers/${offerId}`)
+// }
+
+// const handleViewCrew = (offerId: string) => {
+//   // Navigate to crew list
+//   router.push({
+//     pathname: '/recruiterScreens/crew/list',
+//     params: { offerId },
+//   })
+// }
