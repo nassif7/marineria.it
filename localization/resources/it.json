@@ -103,6 +103,11 @@
     "active-searches": "Ricerche attive",
     "active-searches-description": "Gestisci le tue ricerche attive",
     "no-active-searches": "Non hai ricerche attive",
-    "view-search-id": "Ricerca"
+    "view-search-id": "Ricerca",
+    "search": {
+      "search_details": {
+        "contract-and-compensation": "Contratto e compenso"
+      }
+    }
   }
 }

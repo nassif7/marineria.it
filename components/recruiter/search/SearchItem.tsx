@@ -48,7 +48,7 @@ const SearchListItem: FC<SearchItemsProps> = ({ search }) => {
   }
 
   return (
-    <Box className="w-full p-3 bg-background-100 mb-3 rounded-lg">
+    <Box className="w-full p-3 bg-background-100 mb-4 rounded-lg">
       {/* Main Offer Title */}
       <Box className="mb-2">
         <Heading size="xl" className="text-primary-600 leading-tight break-words">

@@ -10,11 +10,6 @@ export default function OffersLayout() {
         headerShown: false,
         header: (props) => <NavBar {...props} />,
         contentStyle: { backgroundColor: 'rgb(30 41 59)' },
-        animation: 'slide_from_right', // iOS-style slide
-        animationDuration: 300, // Milliseconds (default is 350)
-        animationTypeForReplace: 'push',
-        gestureEnabled: true,
-        gestureDirection: 'horizontal',
       }}
     >
       <Stack.Screen

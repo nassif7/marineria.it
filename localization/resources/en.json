@@ -105,6 +105,11 @@
     "active-searches": "Active searches",
     "active-searches-description": "Manage your active searches",
     "no-active-searches": "You have no active searches",
-    "view-search-id": "Search"
+    "view-search-id": "Search",
+    "search": {
+      "search-details": {
+        "contract-and-compensation": "Contract and compensation"
+      }
+    }
   }
 }

@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next'
 import { getRecruiterActiveSearches } from '@/api'
 import { useAppState } from '@/hooks'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-import { Loading, ListEmptyComponent, Box, Heading, VStack, HStack, Text, Icon } from '@/components/ui'
+import { Loading, ListEmptyComponent, Box, Heading, VStack, HStack, Text, Icon, View } from '@/components/ui'
 import SearchItem from './SearchItem'
 import { useQuery } from '@tanstack/react-query'
 import { Briefcase } from 'lucide-react-native'
 // import { useFocusEffect } from '@react-navigation/native'
 //#TODO: get the offers when the app state change from inactive to active
-
+import { SafeAreaView } from 'react-native'
 const OwnerSearchList: FC = () => {
   const {
     t,
@@ -27,7 +27,7 @@ const OwnerSearchList: FC = () => {
   })
 
   return (
-    <>
+    <View className="px-2 h-full flex-1">
       {isFetching && <Loading />}
       {isSuccess && data && (
         <>
@@ -58,7 +58,7 @@ const OwnerSearchList: FC = () => {
           />
         </>
       )}
-    </>
+    </View>
   )
 }
 

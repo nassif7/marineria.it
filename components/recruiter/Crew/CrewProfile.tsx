@@ -1,11 +1,10 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { ScrollView } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
-import { getCrewCV, selectProUser, rejectProUser } from '@/api'
+import { getCrewCV, selectProUser, declineProUser } from '@/api'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-import { useFetch } from '@/hooks'
-import { Loading, Box, Heading, VStack, HStack, Text, Image, Icon } from '@/components/ui'
-import { Award, Check, X, FileText, Anchor, GraduationCap } from 'lucide-react-native'
+import { Loading, Box, Heading, VStack, HStack, Text, Image, Icon, View } from '@/components/ui'
+import { Award, FileText, Anchor, GraduationCap } from 'lucide-react-native'
 import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'
 import { getAgeByYear } from '@/utils/dateUtils'
@@ -16,32 +15,46 @@ import CrewKeyInfoGrid from '@/components/recruiter/Crew/CrewKeyInfoGrid'
 import CrewPositionCard from '@/components/recruiter/Crew/CrewPositionsCard'
 import CrewSkillsGrid from '@/components/recruiter/Crew/CrewSkillsGrid'
 import CrewActionButtons from '@/components/recruiter/Crew/CrewActionButtons'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { router } from 'expo-router'
 
 const CrewProfile = () => {
   const { t } = useTranslation()
-  const { crewId, offerId } = useLocalSearchParams()
+  const { crewId, searchId } = useLocalSearchParams()
   const { activeProfile } = useUser()
   const { token } = activeProfile as ActiveProfile
+  const queryClient = useQueryClient()
 
-  const fetchCV = useCallback(async () => {
-    const res = await getCrewCV(token, crewId as string)
-    return res
-  }, [crewId])
+  const all = queryClient.getQueryCache()
+  console.log('herer', all)
+  const { isFetching, isSuccess, data } = useQuery({
+    queryKey: ['recruiter-crew-cv', searchId],
+    queryFn: () => getCrewCV(token, crewId as string),
+  })
 
-  const { isLoading, data } = useFetch(fetchCV)
-  const cv = data?.[0]
-  const handleAccept = async () => {
-    const res = await selectProUser(token, crewId as string, offerId as string)
-  }
-  const handleDecline = async () => {
-    const res = await rejectProUser(token, crewId as string, offerId as string)
-  }
+  const handleAccept = useMutation({
+    mutationFn: () => selectProUser(token, crewId as string, searchId as string),
+    onSettled: () => router.push(`/recruiter/search/${searchId}/crew/list`),
+  })
+
+  const handleDecline = useMutation({
+    mutationFn: () => declineProUser(token, crewId as string, searchId as string),
+    onSettled: () => {
+      queryClient.invalidateQueries(
+        {
+          queryKey: ['recruiter-crew-list', searchId],
+          exact: true,
+          refetchType: 'active',
+        },
+        {}
+      )
+      router.push(`/recruiter/search/${searchId}/crew/list`)
+    },
+  })
+
+  const cv = isSuccess ? (data as any)?.[0] : null
   const photoUrl = useMemo(() => `https://www.marineria.it/PROFoto/${cv?.namephotoA}`, [cv])
   const fakerImage = useMemo(() => faker.image.personPortrait({ size: 256 }), [cv])
-  const cvOtherPositions = useMemo((): string => {
-    const positions = [cv?.pos_deck, cv?.pos_engine, cv?.pos_hotel, cv?.pos_harbour, cv?.pos_special].filter((p) => !!p)
-    return positions.length === 0 ? '' : positions.length === 1 ? (positions[0] as string) : positions.join(', ')
-  }, [cv])
 
   const cvLanguages = useMemo((): string => {
     const languages = [cv?.language1, cv?.language2, cv?.language3, cv?.language4].filter((l) => !!l)
@@ -56,15 +69,13 @@ const CrewProfile = () => {
     { label: t('crew.special'), value: cv?.pos_special },
   ].filter((p) => p.value)
 
-  console.log('CV Data', cv)
-
   return (
-    <>
-      {isLoading && <Loading />}
-      {!isLoading && cv && (
+    <View className="px-2">
+      {isFetching && <Loading />}
+      {!isFetching && cv && (
         <Box className="flex-1 relative ">
           <ScrollView className="bg-background-50 rounded-lg">
-            <VStack className="gap-4 p-3 pb-24">
+            <VStack className="gap-4 p-2 pb-24">
               {/* Header Card */}
               <Box className="bg-white rounded-lg p-3 shadow-sm">
                 <VStack className="gap-3">
@@ -200,14 +211,14 @@ const CrewProfile = () => {
           </ScrollView>
           {/* Action Buttons - Fixed at bottom */}
           <CrewActionButtons
-            onAccept={handleAccept}
-            onDecline={handleDecline}
+            onAccept={() => handleAccept.mutate()}
+            onDecline={() => handleDecline.mutate()}
             acceptLabel="crew.get-contact"
             declineLabel="crew.delete"
           />
         </Box>
       )}
-    </>
+    </View>
   )
 }
 

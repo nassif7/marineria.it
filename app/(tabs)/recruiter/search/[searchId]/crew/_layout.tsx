@@ -10,11 +10,6 @@ export default function CrewLayout() {
       screenOptions={{
         header: (props) => <NavBar {...props} />,
         contentStyle: { backgroundColor: 'rgb(30 41 59)' },
-        animation: 'ios_from_right',
-        animationDuration: 300,
-        animationTypeForReplace: 'push',
-        gestureEnabled: true,
-        gestureDirection: 'horizontal',
       }}
     >
       <Stack.Screen

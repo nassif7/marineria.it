@@ -1,29 +1,14 @@
-import { SafeAreaView, ImageBackground, ScrollView, FlatList, TouchableHighlight, Platform } from 'react-native'
-import { useLocalSearchParams, useRouter, usePathname } from 'expo-router'
-import {
-  Loading,
-  Box,
-  Heading,
-  HStack,
-  Text,
-  Button,
-  ButtonText,
-  ButtonIcon,
-  ButtonGroup,
-  VStack,
-  Icon,
-} from '@/components/ui'
+import { FlatList } from 'react-native'
+import { useLocalSearchParams } from 'expo-router'
+import { Loading, Box, HStack, Text, VStack, Icon, View } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
-import { getOwnerOfferById, getProOfferById, applyToOffer, getCrewList } from '@/api'
-import { Share, Alert } from 'react-native'
+import { getCrewList } from '@/api'
 import { useUser } from '@/Providers/UserProvider'
-import { useCallback } from 'react'
-import { AuthTypes, CrewType } from '@/api/types'
-import { useFetch } from '@/hooks'
+import { CrewType } from '@/api/types'
 import CrewListItem from './CrewListItem'
 import { FC } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Briefcase, Users } from 'lucide-react-native'
+import { Users } from 'lucide-react-native'
 
 const CrewList: FC = () => {
   const {
@@ -39,7 +24,6 @@ const CrewList: FC = () => {
     queryFn: () => getCrewList(searchId as string, token, language),
   })
 
-  console.log(data)
   // const fetchCrewList = useCallback(
   //   async () => await getCrewList(searchId as string, token, language),
   //   [token, language, searchId]
@@ -52,7 +36,7 @@ const CrewList: FC = () => {
   // }
 
   return (
-    <>
+    <View className="px-2">
       {isFetching && <Loading />}
       {isSuccess && (
         <>
@@ -64,10 +48,12 @@ const CrewList: FC = () => {
                     <Icon as={Users} className="text-success-600" size="lg" />
                   </Box>
                   <VStack className="gap-0.5">
-                    <Heading size="xl" className="text-typography-900">
+                    {/* <Heading size="xl" className="text-typography-900">
                       {t('recruiter.crew-list')}
-                    </Heading>
-                    <Text className="text-typography-500 text-sm">{t('recruiter.crew-list-description')}</Text>
+                    </Heading> */}
+                    <Text className="text-typography-600 text-bold text-lg">
+                      {t('recruiter.crew-list-description')}
+                    </Text>
                   </VStack>
                 </HStack>
                 <Box className="bg-success-500 rounded-full w-10 h-10 items-center justify-center shrink-0">
@@ -82,7 +68,7 @@ const CrewList: FC = () => {
           />
         </>
       )}
-    </>
+    </View>
   )
 }
 

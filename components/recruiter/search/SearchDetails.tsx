@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, SafeAreaView } from 'react-native'
+import { ScrollView } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import {
   Box,
@@ -31,6 +31,9 @@ import {
   Map as MapIcon,
   Info,
   AlertCircle,
+  User,
+  Edit,
+  Euro,
 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { ActiveProfile, useUser } from '@/Providers/UserProvider'
@@ -54,7 +57,7 @@ export default function SearchDetails() {
   const router = useRouter()
 
   // Fetch offer details
-  const offer = isSuccess ? (data as any)?.[0] : null
+  const search = isSuccess ? (data as any)?.[0] : null
 
   // const handleViewCandidates = () => {
   //   router.push(`/recruiterScreens/offers/${searchId}/crew/list`)
@@ -68,271 +71,300 @@ export default function SearchDetails() {
   //   router.push(`/recruiterScreens/offers/${searchId}/crew/search-location`)
   // }
 
-  console.log('data', offer)
-
   return (
     <>
-      {offer ? (
+      {search ? (
         <>
-          <ScrollView className="flex-1 ">
-            <VStack className="gap-3 p-2  bg-background-100 rounded-lg">
-              {/* Header Card with Title */}
+          <ScrollView className="flex-1">
+            <VStack className="gap-4 p-2">
+              {/* HEADER CARD */}
               <Box className="bg-white rounded-2xl p-5 shadow-sm">
                 <VStack className="gap-3">
-                  {/* Search ID & Date */}
-                  <HStack className="justify-between items-start">
+                  {/* Top Row: ID, Date, Edit */}
+                  <HStack className="justify-between items-start gap-3">
                     <VStack className="gap-1 flex-1">
-                      <Text className="text-typography-500 text-xs font-medium uppercase tracking-wide">Search ID</Text>
-                      <Text className="text-success-600 font-bold text-lg">
-                        {offer.reference.substring(offer.reference.indexOf('_') + 1)}
-                      </Text>
+                      <HStack className="items-center gap-2">
+                        <Text className="text-success-600 font-semibold text-sm">{t('offer.search-id')}:</Text>
+                        <Text className="text-success-700 font-bold text-base">
+                          {search.reference.substring(search.reference.indexOf('_') + 1)}
+                        </Text>
+                      </HStack>
+                      <Text className="text-typography-500 text-xs">{search.offerdate}</Text>
                     </VStack>
-                    <VStack className="items-end gap-1">
-                      <Text className="text-typography-500 text-xs">{offer.offerdate}</Text>
-                      <Pressable>
-                        <Badge className="bg-success-600 rounded-lg">
-                          <BadgeText className="text-white text-xs font-semibold px-2">Mod.</BadgeText>
-                        </Badge>
-                      </Pressable>
-                    </VStack>
+                    <Button variant="solid" action="positive" onPress={console.log} className="rounded-lg">
+                      <ButtonIcon as={Edit} />
+                      <ButtonText>{t('offer.edit-offer-short')}</ButtonText>
+                    </Button>
                   </HStack>
 
                   <Divider />
-
                   {/* Offer Title */}
-                  <Heading size="xl" className="text-primary-600 leading-tight">
-                    {offer.offer.trim()}
+                  <Heading size="2xl" className="text-typography-700 leading-tight">
+                    {search.offer.trim()}
                   </Heading>
+                  {/* Admin Warning */}
+                  {/* {search.offerPublished === 0 && (
+                    <Box className="bg-warning-50 border border-warning-200 rounded-lg p-3">
+                      <HStack className="items-center gap-2">
+                        <Icon as={AlertCircle} className="text-warning-600" size="sm" />
+                        <Text className="text-warning-900 font-semibold text-sm flex-1">
+                          Offer modified by the Administrator
+                        </Text>
+                      </HStack>
+                    </Box>
+                  )} */}
                 </VStack>
               </Box>
 
-              {/* Admin Notification (if modified) */}
-              {offer.offerPublished === 0 && (
-                <Box className="bg-warning-50 border border-warning-200 rounded-xl p-4">
-                  <HStack className="items-start gap-3">
-                    <Icon as={AlertCircle} className="text-warning-600 shrink-0" size="md" />
-                    <VStack className="flex-1">
-                      <Text className="text-warning-900 font-semibold text-sm">
-                        Offer modified by the Administrator
-                      </Text>
-                    </VStack>
-                    <Icon as={Info} className="text-warning-600" size="sm" />
-                  </HStack>
-                </Box>
-              )}
-
-              {/* Candidates Stats */}
-              <Box className="bg-white rounded-xl p-4 shadow-sm">
-                <Pressable onPress={console.log}>
-                  <HStack className="items-center gap-3">
-                    <Box className="bg-success-100 rounded-lg p-3">
-                      <Icon as={Users} className="text-success-600" size="lg" />
-                    </Box>
-                    <VStack className="flex-1 gap-1">
-                      <Text className="text-typography-900 font-bold text-lg">{offer.countCandidates} Candidates</Text>
-                      <HStack className="gap-2 flex-wrap">
-                        <Box className="bg-success-100 rounded-full px-3 py-1">
-                          <Text className="text-success-700 text-xs font-semibold">
-                            Contacted: {offer.countContacted}
-                          </Text>
-                        </Box>
-                        <Box className="bg-warning-100 rounded-full px-3 py-1">
-                          <Text className="text-warning-700 text-xs font-semibold">
-                            Residual: {offer.countResidual}
-                          </Text>
-                        </Box>
-                      </HStack>
-                    </VStack>
-                    <Icon as={Info} className="text-typography-400" size="md" />
-                  </HStack>
-                </Pressable>
-              </Box>
-
-              {/* Position Details */}
+              {/* CONTRACT & COMPENSATION */}
               <Box className="bg-white rounded-2xl p-5 shadow-sm">
+                <HStack className="items-center gap-2 mb-4">
+                  <Icon as={FileText} className="text-primary-600" size="md" />
+                  <Heading size="lg" className="text-primary-600">
+                    {t('recruiter.search.search-details.contract-and-compensation')}
+                  </Heading>
+                </HStack>
                 <VStack className="gap-3">
-                  <HStack className="items-center gap-2 mb-2">
-                    <Icon as={Briefcase} className="text-primary-600" size="md" />
-                    <Heading size="md" className="text-primary-600">
-                      Position Details
-                    </Heading>
-                  </HStack>
+                  {/* Salary & Duration Grid */}
+                  <VStack className="gap-3">
+                    <Box className="bg-success-50 border border-success-200 rounded-lg p-4 flex-1">
+                      <VStack className="gap-2">
+                        <HStack className="items-center gap-2">
+                          <Icon as={Euro} className="text-success-600" size="sm" />
+                          <Text className="text-success-700 text-xs font-medium uppercase tracking-wide">
+                            {t('offerSalary')}
+                          </Text>
+                        </HStack>
+                        <HStack>
+                          <Text className="text-success-900 font-bold text-lg">{search.salary_From}</Text>
+                          <Text className="text-success-900 font-bold text-lg">{' -'}</Text>
 
-                  {/* Main Position */}
-                  <VStack className="gap-1">
-                    <Text className="text-typography-500 text-xs font-medium uppercase tracking-wide">
-                      Main Position
-                    </Text>
-                    <Text className="text-typography-900 font-bold text-lg">{offer.mainPosition}</Text>
+                          <Text className="text-success-900 font-bold text-lg">{search.salary_To}</Text>
+                        </HStack>
+                      </VStack>
+                    </Box>
+                    <Box className="bg-primary-50 border border-primary-200 rounded-lg p-4 flex-1">
+                      <VStack className="gap-2">
+                        <HStack className="items-center gap-2">
+                          <Icon as={Calendar} className="text-primary-600" size="sm" />
+                          <Text className="text-primary-700 text-xs font-medium uppercase tracking-wide">Duration</Text>
+                        </HStack>
+                        <HStack className="items-center gap-2">
+                          <HStack>
+                            <Text className="text-primary-900 font-semibold text-sm">From:</Text>
+                            <Text className="text-primary-900 font-bold text-sm">{search.boarding}</Text>
+                          </HStack>
+                          <HStack>
+                            <Text className="text-primary-900 font-semibold text-sm ">To:</Text>
+                            <Text className="text-primary-900 font-bold text-sm">{search.duration}</Text>
+                          </HStack>
+                        </HStack>
+                      </VStack>
+                    </Box>
                   </VStack>
 
-                  {/* Requirements */}
-                  {offer.requirements && (
+                  <Divider />
+
+                  {/* Contract Details */}
+                  <VStack className="gap-2">
+                    <HStack className="items-start gap-2">
+                      <Text className="text-typography-500 text-sm font-medium w-32 shrink-0">Contract Type:</Text>
+                      <Text className="text-typography-900 text-sm font-semibold flex-1">
+                        {search.contractDescription}
+                      </Text>
+                    </HStack>
+
+                    <HStack className="items-start gap-2">
+                      <Text className="text-typography-500 text-sm font-medium w-32 shrink-0">Boarding:</Text>
+                      <Text className="text-typography-900 text-sm font-semibold flex-1">{search.boarding}</Text>
+                    </HStack>
+                  </VStack>
+                </VStack>
+              </Box>
+
+              {/* POSITION DETAILS */}
+              <Box className="bg-white rounded-2xl p-5 shadow-sm">
+                <HStack className="items-center gap-2 mb-4">
+                  <Icon as={Briefcase} className="text-primary-600" size="md" />
+                  <Heading size="lg" className="text-primary-600">
+                    Position Details
+                  </Heading>
+                </HStack>
+
+                <VStack className="gap-4">
+                  {/* Main Position */}
+                  <Box className="bg-primary-500 rounded-lg px-4 py-3">
                     <VStack className="gap-1">
+                      <Text className="text-white/80 text-xs font-medium uppercase tracking-wide">Main Position</Text>
+                      <Heading size="xl" className="text-white">
+                        {search.mainPosition}
+                      </Heading>
+                    </VStack>
+                  </Box>
+
+                  {/* Requirements */}
+                  {search.requirements && (
+                    <VStack className="gap-2">
                       <Text className="text-typography-500 text-xs font-medium uppercase tracking-wide">
                         Requirements
                       </Text>
-                      <Box className="bg-background-50 rounded-lg p-3">
-                        <Text className="text-typography-900 text-sm leading-relaxed">{offer.requirements}</Text>
+                      <Box className="bg-background-50 border border-outline-200 rounded-lg p-3">
+                        <Text className="text-typography-900 text-sm leading-relaxed">{search.requirements}</Text>
                       </Box>
                     </VStack>
                   )}
 
                   {/* Description */}
-                  {offer.descriptionOffer && (
-                    <VStack className="gap-1">
+                  {search.descriptionOffer && (
+                    <VStack className="gap-2">
                       <Text className="text-typography-500 text-xs font-medium uppercase tracking-wide">
                         Description
                       </Text>
-                      <Box className="bg-background-50 rounded-lg p-3">
-                        <Text className="text-typography-900 text-sm leading-relaxed">{offer.descriptionOffer}</Text>
+                      <Box className="bg-background-50 border border-outline-200 rounded-lg p-3">
+                        <Text className="text-typography-900 text-sm leading-relaxed">
+                          {search.descriptionOffer.replace(/<\/?b>/g, '')}
+                        </Text>
                       </Box>
                     </VStack>
                   )}
-                </VStack>
-              </Box>
 
-              {/* Contract & Compensation */}
-              <Box className="bg-white rounded-2xl p-5 shadow-sm">
-                <VStack className="gap-3">
-                  <HStack className="items-center gap-2 mb-2">
-                    <Icon as={FileText} className="text-primary-600" size="md" />
-                    <Heading size="md" className="text-primary-600">
-                      Contract & Compensation
-                    </Heading>
-                  </HStack>
-
-                  <HStack className="gap-3">
-                    {/* Salary */}
-                    <Box className="bg-success-50 border border-success-200 rounded-xl p-4 flex-1">
-                      <VStack className="gap-2">
-                        <HStack className="items-center gap-2">
-                          <Icon as={DollarSign} className="text-success-600" size="sm" />
-                          <Text className="text-success-700 text-xs font-medium uppercase tracking-wide">
-                            Salary Range
-                          </Text>
-                        </HStack>
-                        <Text className="text-success-900 font-bold text-base">
-                          {offer.salary_From} - {offer.salary_To}
-                        </Text>
-                      </VStack>
-                    </Box>
-
-                    {/* Duration */}
-                    <Box className="bg-primary-50 border border-primary-200 rounded-xl p-4 flex-1">
-                      <VStack className="gap-2">
-                        <HStack className="items-center gap-2">
-                          <Icon as={Clock} className="text-primary-600" size="sm" />
-                          <Text className="text-primary-700 text-xs font-medium uppercase tracking-wide">Duration</Text>
-                        </HStack>
-                        <Text className="text-primary-900 font-bold text-sm break-words">{offer.duration}</Text>
-                      </VStack>
-                    </Box>
-                  </HStack>
-
-                  {/* Contract Type */}
-                  <VStack className="gap-1">
+                  {/* Additional Details as Badges */}
+                  <VStack className="gap-3 mt-2">
                     <Text className="text-typography-500 text-xs font-medium uppercase tracking-wide">
-                      Contract Type
+                      Additional Information
                     </Text>
-                    <Text className="text-typography-900 font-semibold text-base">{offer.contractDescription}</Text>
-                  </VStack>
 
-                  {/* Boarding */}
-                  <VStack className="gap-1">
-                    <Text className="text-typography-500 text-xs font-medium uppercase tracking-wide">Boarding</Text>
-                    <Text className="text-typography-900 font-semibold text-base">{offer.boarding}</Text>
-                  </VStack>
-                  {offer.gender && (
-                    <VStack className="gap-1">
-                      <Text className="text-typography-500 text-xs font-medium uppercase tracking-wide">
-                        Gender Preference:
-                      </Text>
-                      <Text className="text-typography-900 font-semibold text-base">{offer.gender}</Text>
-                    </VStack>
-                  )}
-                </VStack>
-              </Box>
+                    <HStack className="flex-wrap gap-2">
+                      {/* Owner Type */}
+                      <Box className="bg-info-50 border border-info-200 rounded-lg px-3 py-2">
+                        <HStack className="items-center gap-2">
+                          <Icon as={Ship} className="text-info-600" size="xs" />
+                          <VStack className="gap-0.5">
+                            <Text className="text-info-600 text-xs font-medium">Owner</Text>
+                            <Text className="text-info-900 text-sm font-semibold">{search.ownerDescription}</Text>
+                          </VStack>
+                        </HStack>
+                      </Box>
 
-              {/* Vessel Information */}
-              <Box className="bg-white rounded-2xl p-5 shadow-sm">
-                <VStack className="gap-3">
-                  <HStack className="items-center gap-2 mb-2">
-                    <Icon as={Ship} className="text-primary-600" size="md" />
-                    <Heading size="md" className="text-primary-600">
-                      Boat Information
-                    </Heading>
-                  </HStack>
+                      {/* Gender */}
+                      {search.gender && (
+                        <Box className="bg-purple-50 border border-purple-200 rounded-lg px-3 py-2">
+                          <HStack className="items-center gap-2">
+                            <Icon as={User} className="text-purple-600" size="xs" />
+                            <VStack className="gap-0.5">
+                              <Text className="text-purple-600 text-xs font-medium">Gender</Text>
+                              <Text className="text-purple-900 text-sm font-semibold">{search.gender}</Text>
+                            </VStack>
+                          </HStack>
+                        </Box>
+                      )}
 
-                  <HStack className="gap-2 items-start">
-                    <Text className="text-typography-500 text-sm font-medium shrink-0 w-32">Owner Type:</Text>
-                    <Text className="text-typography-900 text-sm flex-1 break-words">{offer.ownerDescription}</Text>
-                  </HStack>
-                </VStack>
-              </Box>
-              {/* Required Qualifications */}
-              {offer.courses && (
-                <Box className="bg-white rounded-2xl p-5 shadow-sm">
-                  <VStack className="gap-3">
-                    <HStack className="items-center gap-2 mb-2">
-                      <Icon as={Award} className="text-primary-600" size="md" />
-                      <Heading size="md" className="text-primary-600">
-                        Required Qualifications
-                      </Heading>
+                      {/* Seaman's Book */}
+                      {search.seamensBook && (
+                        <Box className="bg-success-50 border border-success-200 rounded-lg px-3 py-2">
+                          <HStack className="items-center gap-2">
+                            <Icon as={Award} className="text-success-600" size="xs" />
+                            <Text className="text-success-900 text-sm font-semibold">{search.seamensBook}</Text>
+                          </HStack>
+                        </Box>
+                      )}
+
+                      {/* Courses */}
+                      {search.courses && (
+                        <Box className="bg-warning-50 border border-warning-200 rounded-lg px-3 py-2">
+                          <HStack className="items-center gap-2">
+                            <Icon as={Award} className="text-warning-600" size="xs" />
+                            <Text className="text-warning-900 text-sm font-semibold">{search.courses}</Text>
+                          </HStack>
+                        </Box>
+                      )}
+
+                      {/* Special Position */}
+                      {search.positionSpecial && (
+                        <Box className="bg-secondary-50 border border-secondary-200 rounded-lg px-3 py-2">
+                          <Text className="text-secondary-900 text-sm font-semibold">{search.positionSpecial}</Text>
+                        </Box>
+                      )}
                     </HStack>
-
-                    <Box className="bg-primary-50 rounded-lg p-3">
-                      <Text className="text-primary-900 font-semibold text-sm">{offer.courses}</Text>
-                    </Box>
                   </VStack>
-                </Box>
-              )}
+                </VStack>
+              </Box>
 
-              {/* Expiration */}
-              <Box className="bg-background-100 rounded-xl p-4 border border-outline-200">
+              {/* CANDIDATES SECTION */}
+              <Box className="bg-white rounded-lg shadow-sm">
+                <Pressable
+                  onPress={
+                    () => console.log('clicked')
+                    // handleViewCandidates
+                  }
+                >
+                  <Box className="p-4">
+                    <HStack className="items-center gap-3">
+                      <Box className="bg-success-100 rounded-lg p-3">
+                        <Icon as={Users} className="text-success-600" size="xl" />
+                      </Box>
+                      <VStack className="flex-1 gap-1">
+                        <Heading size="lg" className="text-typography-900">
+                          {search.countCandidates} Candidates
+                        </Heading>
+                        <HStack className="gap-2 flex-wrap">
+                          <Box className="bg-success-100 rounded-full px-3 py-1">
+                            <Text className="text-success-700 text-xs font-semibold">
+                              Contacted: {search.countContacted}
+                            </Text>
+                          </Box>
+                          <Box className="bg-warning-100 rounded-full px-3 py-1">
+                            <Text className="text-warning-700 text-xs font-semibold">
+                              Residual: {search.countResidual}
+                            </Text>
+                          </Box>
+                        </HStack>
+                      </VStack>
+                      <Icon as={Info} className="text-typography-400" size="md" />
+                    </HStack>
+                  </Box>
+                </Pressable>
+              </Box>
+
+              {/* Expiration Notice */}
+              <Box className="bg-background-100 rounded-lg p-4 border border-outline-200">
                 <HStack className="items-center gap-2">
                   <Icon as={Calendar} className="text-typography-500" size="sm" />
                   <Text className="text-typography-600 text-xs">
-                    Offer expires: <Text className="font-semibold">{offer.offertExpirationdate}</Text>
+                    Offer expires:{' '}
+                    <Text className="font-semibold text-typography-900">{search.offertExpirationdate}</Text>
                   </Text>
                 </HStack>
+              </Box>
+              <Box className="bg-white border-t border-outline-100 p-4 shadow-2xl rounded-xl">
+                <VStack className="gap-3">
+                  <Button
+                    size="lg"
+                    variant="solid"
+                    action="positive"
+                    // onPress={handleFindBySkills}
+                    className="rounded-lg"
+                  >
+                    <ButtonIcon as={UserSearch} />
+                    <ButtonText className="ml-2">Find your Crew by Skills</ButtonText>
+                  </Button>
+
+                  <Button
+                    size="lg"
+                    variant="solid"
+                    action="positive"
+                    // onPress={handleFindByLocation}
+                    className="rounded-lg"
+                  >
+                    <ButtonIcon as={MapIcon} />
+                    <ButtonText className="ml-2">Find your Crew by Location</ButtonText>
+                  </Button>
+                </VStack>
               </Box>
             </VStack>
           </ScrollView>
 
-          {/* Fixed Bottom Actions */}
-          {/* <Box className="border-t border-outline-100 p-4 shadow-lg bg-secondary-800">
-            <VStack className="gap-3">
-              <Button size="lg" variant="solid" action="positive" onPress={console.log} className="rounded-xl">
-                <ButtonIcon as={Users} />
-                <ButtonText className="ml-2">View {offer.countCandidates} Candidates</ButtonText>
-              </Button>
-
-              <HStack className="gap-3">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  action="positive"
-                  onPress={console.log}
-                  className="rounded-xl flex-1"
-                >
-                  <ButtonIcon as={UserSearch} size="sm" />
-                  <ButtonText className="ml-2">By Skills</ButtonText>
-                </Button>
-
-                <Button
-                  size="lg"
-                  variant="outline"
-                  action="positive"
-                  onPress={console.log}
-                  className="rounded-xl flex-1"
-                >
-                  <ButtonIcon as={MapIcon} size="sm" />
-                  <ButtonText className="ml-2">By Location</ButtonText>
-                </Button>
-              </HStack>
-            </VStack>
-          </Box> */}
+          {/* FIXED BOTTOM ACTIONS */}
         </>
       ) : (
         <>
