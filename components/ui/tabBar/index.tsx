@@ -1,12 +1,14 @@
 import React from 'react'
 import { Platform } from 'react-native'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
-import { Box, HStack, VStack, Text, Pressable } from '@/components/ui'
+import { Box, HStack, VStack, Text, Pressable, Icon } from '@/components/ui'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-interface TabBarProps extends BottomTabBarProps {}
+interface TabBarProps extends BottomTabBarProps {
+  showLabel?: boolean
+}
 
-export const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
+export const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation, showLabel }) => {
   const insets = useSafeAreaInsets()
 
   return (
@@ -53,19 +55,22 @@ export const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }
             >
               <VStack className="items-center gap-1">
                 {/* Tab Icon */}
-                {options.tabBarIcon &&
-                  options.tabBarIcon({
-                    focused: isFocused,
-                    color: isFocused ? '#10b981' : '#9ca3af',
-                    size: 24,
-                  })}
+                {options.tabBarIcon && (
+                  <Icon
+                    as={options.tabBarIcon}
+                    size={isFocused ? '3xl' : '2xl'}
+                    className={isFocused ? 'text-primary-600' : 'text-secondary-300'}
+                  />
+                )}
 
-                {/* <Text
-                  className={isFocused ? 'text-primary-500 text-xs font-semibold' : 'text-gray-400 text-xs'}
-                  numberOfLines={1}
-                >
-                  {label}
-                </Text> */}
+                {showLabel && (
+                  <Text
+                    className={isFocused ? 'text-primary-600 text-xs font-semibold' : 'text-secondary-300 text-xs'}
+                    numberOfLines={1}
+                  >
+                    {label}
+                  </Text>
+                )}
               </VStack>
             </Pressable>
           )

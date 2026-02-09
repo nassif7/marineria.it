@@ -51,9 +51,7 @@ const AppLayout = () => {
             headerShown: false,
             headerStyle,
             title: 'Home',
-            tabBarIcon: ({ focused }) => (
-              <Icon as={HomeIcon} size="3xl" className={focused ? 'text-primary-500' : 'text-gray-400'} />
-            ),
+            tabBarIcon: HomeIcon,
           }}
         />
         <Tabs.Screen
@@ -63,9 +61,7 @@ const AppLayout = () => {
             headerShown: false,
             sceneStyle,
             title: 'Job Offers',
-            tabBarIcon: ({ focused }) => (
-              <Icon as={Anchor} size="3xl" className={focused ? 'text-primary-500' : 'text-gray-400'} />
-            ),
+            tabBarIcon: Anchor,
           }}
         />
         <Tabs.Screen
@@ -75,9 +71,7 @@ const AppLayout = () => {
             headerShown: false,
             sceneStyle,
             title: 'Pro',
-            tabBarIcon: ({ focused }) => (
-              <Icon as={Anchor} size="3xl" className={focused ? 'text-primary-500' : 'text-gray-400'} />
-            ),
+            tabBarIcon: Anchor,
           }}
         />
         <Tabs.Screen
@@ -87,9 +81,7 @@ const AppLayout = () => {
             headerShown: false,
             sceneStyle,
             title: 'Recruiter',
-            tabBarIcon: ({ focused }) => (
-              <Icon as={Anchor} size="3xl" className={focused ? 'text-primary-500' : 'text-gray-400'} />
-            ),
+            tabBarIcon: Anchor,
           }}
         />
         <Tabs.Screen
@@ -99,9 +91,7 @@ const AppLayout = () => {
             headerShown: false,
             headerStyle,
             title: 'Settings',
-            tabBarIcon: ({ focused }) => (
-              <Icon as={UserIcon} size="3xl" className={focused ? 'text-primary-500' : 'text-gray-400'} />
-            ),
+            tabBarIcon: UserIcon,
           }}
         />
       </Tabs>
