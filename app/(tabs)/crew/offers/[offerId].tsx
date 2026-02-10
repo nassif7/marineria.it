@@ -9,12 +9,7 @@ const JobOfferScreen = () => {
   const { activeProfile } = useUser()
   const { role } = activeProfile as ActiveProfile
 
-  return (
-    <>
-      {role === AuthTypes.UserRole.PRO && <OfferDetails offerId={offerId as string} />}
-      {role === AuthTypes.UserRole.OWNER && <CrewList offerId={offerId as string} />}
-    </>
-  )
+  return <>{role === AuthTypes.UserRole.PRO && <OfferDetails offerId={offerId as string} />}</>
 }
 
 export default JobOfferScreen

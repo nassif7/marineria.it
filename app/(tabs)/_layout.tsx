@@ -4,7 +4,7 @@ import UserProvider from '@/Providers/UserProvider'
 import { Text } from '@/components/ui'
 import { useSession } from '@/Providers/SessionProvider'
 import '@/localization'
-import { TabBar, Icon } from '@/components/ui'
+import { TabBar } from '@/components/ui'
 import { AuthTypes } from '@/api/types'
 import { Anchor, HomeIcon, UserIcon } from 'lucide-react-native'
 
@@ -36,10 +36,8 @@ const AppLayout = () => {
     <UserProvider>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: '#10b981', // Your primary color
-          tabBarInactiveTintColor: '#9ca3af', // Gray
           tabBarStyle: {
-            display: 'none', // Hide the default tab bar
+            display: 'none',
           },
         }}
         tabBar={(props) => <TabBar {...props} />}
@@ -55,22 +53,12 @@ const AppLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="jobOffers"
-          redirect={true}
-          options={{
-            headerShown: false,
-            sceneStyle,
-            title: 'Job Offers',
-            tabBarIcon: Anchor,
-          }}
-        />
-        <Tabs.Screen
-          name="proScreens"
+          name="crew"
           redirect={role !== AuthTypes.UserRole.PRO}
           options={{
             headerShown: false,
             sceneStyle,
-            title: 'Pro',
+            title: 'Crew',
             tabBarIcon: Anchor,
           }}
         />
