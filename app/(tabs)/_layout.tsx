@@ -53,7 +53,7 @@ const AppLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="crew"
+          name="pro"
           redirect={role !== AuthTypes.UserRole.PRO}
           options={{
             headerShown: false,

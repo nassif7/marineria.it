@@ -1,8 +1,8 @@
 import React from 'react'
-import { JobOfferList } from '@/components/pro/JobOffers'
+import { OffersList } from '@/components/pro/JobOffers'
 
 const JobOffersScreen = () => {
-  return <JobOfferList />
+  return <OffersList />
 }
 
 export default JobOffersScreen
