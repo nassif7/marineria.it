@@ -8,13 +8,13 @@ import { Award, FileText, Anchor, GraduationCap } from 'lucide-react-native'
 import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'
 import { getAgeByYear } from '@/utils/dateUtils'
-import CrewExperienceList from '@/components/recruiter/Crew/CrewExperienceList'
-import CrewReferences from '@/components/recruiter/Crew/CrewReferences'
-import CrewInfoCard from '@/components/recruiter/Crew/CrewInfoCard'
-import CrewKeyInfoGrid from '@/components/recruiter/Crew/CrewKeyInfoGrid'
-import CrewPositionCard from '@/components/recruiter/Crew/CrewPositionsCard'
-import CrewSkillsGrid from '@/components/recruiter/Crew/CrewSkillsGrid'
-import CrewActionButtons from '@/components/recruiter/Crew/CrewActionButtons'
+import CrewExperienceList from '@/components/recruiter/crew/CrewExperienceList'
+import CrewReferences from '@/components/recruiter/crew/CrewReferences'
+import CrewInfoCard from '@/components/recruiter/crew/CrewInfoCard'
+import CrewKeyInfoGrid from '@/components/recruiter/crew/CrewKeyInfoGrid'
+import CrewPositionCard from '@/components/recruiter/crew/CrewPositionsCard'
+import CrewSkillsGrid from '@/components/recruiter/crew/CrewSkillsGrid'
+import CrewActionButtons from '@/components/recruiter/crew/CrewActionButtons'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
 
@@ -25,8 +25,6 @@ const CrewProfile = () => {
   const { token } = activeProfile as ActiveProfile
   const queryClient = useQueryClient()
 
-  const all = queryClient.getQueryCache()
-  console.log('herer', all)
   const { isFetching, isSuccess, data } = useQuery({
     queryKey: ['recruiter-crew-cv', searchId],
     queryFn: () => getCrewCV(token, crewId as string),
