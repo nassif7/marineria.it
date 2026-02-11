@@ -111,5 +111,8 @@
         "contract-and-compensation": "Contract and compensation"
       }
     }
+  },
+  "crew-screens": {
+    "offers-list": "Job offers"
   }
 }

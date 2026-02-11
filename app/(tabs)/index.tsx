@@ -96,7 +96,7 @@ const UserProfile = () => {
                   {role == AuthTypes.UserRole.PRO && t('welcomeCrew')}
                 </Text>
 
-                <Button variant="outline" onPress={() => router.navigate(`/(tabs)/proScreens/jobOffers`)}>
+                <Button variant="outline" onPress={() => router.navigate(`/(tabs)/pro/offers`)}>
                   <ButtonText className="text-white">{t('jobOffers')}</ButtonText>
                 </Button>
               </Box>
