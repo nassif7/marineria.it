@@ -1,6 +1,6 @@
 import { FlatList } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
-import { Loading, Box, HStack, Text, VStack, Icon, View } from '@/components/ui'
+import { Loading, Box, HStack, Text, VStack, Icon, View, Divider } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import { getCrewList } from '@/api'
 import { useUser } from '@/Providers/UserProvider'
@@ -40,20 +40,15 @@ const CrewList: FC = () => {
       {isFetching && <Loading />}
       {isSuccess && (
         <>
-          <Box className="mb-4">
-            <Box className="bg-white rounded-lg p-4 shadow-sm border border-outline-100">
+          <Box className="mb-2">
+            <Box className="bg-background-50 rounded-lg p-2 shadow-sm border border-outline-100">
               <HStack className="items-center justify-between gap-4">
                 <HStack className="items-center gap-3 flex-1">
                   <Box className="bg-success-100 rounded-xl p-3">
                     <Icon as={Users} className="text-success-600" size="lg" />
                   </Box>
                   <VStack className="gap-0.5">
-                    {/* <Heading size="xl" className="text-typography-900">
-                      {t('recruiter.crew-list')}
-                    </Heading> */}
-                    <Text className="text-typography-600 text-bold text-lg">
-                      {t('recruiter.crew-list-description')}
-                    </Text>
+                    <Text className="text-typography-700 text-md">{t('recruiter.crew-list-description')}</Text>
                   </VStack>
                 </HStack>
                 <Box className="bg-success-500 rounded-full w-10 h-10 items-center justify-center shrink-0">
@@ -63,6 +58,7 @@ const CrewList: FC = () => {
             </Box>
           </Box>
           <FlatList
+            ItemSeparatorComponent={() => <Divider className="my-1 bg-transparent" />}
             data={data as CrewType[]}
             renderItem={({ item }) => <CrewListItem crew={item} searchId={searchId as string} />}
           />

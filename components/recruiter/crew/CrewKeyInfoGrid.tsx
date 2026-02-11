@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Box, VStack, HStack, Text, Icon } from '@/components/ui'
-import { Briefcase, EuroIcon, Globe, MapPin } from 'lucide-react-native'
+import { Briefcase, Euro, Globe, MapPin } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 
 interface CrewKeyInfoGridProps {
@@ -26,7 +26,7 @@ const CrewKeyInfoGrid: FC<CrewKeyInfoGridProps> = ({ numberClicked, salary, pass
 
         <Box className="bg-white rounded-lg p-3 flex-1 shadow-sm">
           <HStack className="items-center gap-2 mb-1">
-            <Icon as={EuroIcon} className="text-primary-600" size="sm" />
+            <Icon as={Euro} className="text-primary-600" size="sm" />
             <Text className="text-typography-500 text-sm ">{t('crew.salary')}</Text>
           </HStack>
           <Text className="text-typography-900 font-bold ">{salary ? `${salary} €` : 'N/A'}</Text>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ImageBackground, Image, KeyboardAvoidingView } from 'react-native'
+import { Image, KeyboardAvoidingView } from 'react-native'
 import AuthenticationForm, { FormDate } from '@/components/common/AuthenticationForm'
 import { useSession } from '@/Providers/SessionProvider'
 import { horizontalScale, verticalScale } from '@/utils/metrics'
@@ -16,9 +16,8 @@ import {
   HStack,
   Pressable,
   Text,
-  Button,
 } from '@/components/ui'
-import { X, HelpCircleIcon } from 'lucide-react-native'
+import { X } from 'lucide-react-native'
 
 const SignIn = () => {
   const { t } = useTranslation()

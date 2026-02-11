@@ -12,7 +12,7 @@ interface NavBarProps extends NativeStackHeaderProps {
 }
 
 export const NavBar: FC<NavBarProps> = ({ options, back, rightAction }) => {
-  const title = options.title
+  const title = options?.title || ''
   const canGoBack = back !== undefined
   const router = useRouter()
 

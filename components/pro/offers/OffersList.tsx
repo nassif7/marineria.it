@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { getProOffers } from '@/api'
 import { useAppState } from '@/hooks'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-import { Box, VStack, HStack, Heading, Text, Divider, Loading } from '@/components/ui'
-import { ChevronDown } from 'lucide-react-native'
+import { Box, VStack, HStack, Heading, Text, Divider, Loading, View, Icon } from '@/components/ui'
+import { ChevronDown, Briefcase } from 'lucide-react-native'
 import {
   Select,
   SelectTrigger,
@@ -18,6 +18,11 @@ import {
 } from '@/components/ui/select'
 import OfferListItem from './OfferListItem'
 import { useQuery } from '@tanstack/react-query'
+
+const selectOptions = [
+  { label: 'allOffers', value: 'all' },
+  { label: 'ownOffers', value: 'own' },
+]
 
 const JobOfferList: FC = () => {
   const {
@@ -36,60 +41,73 @@ const JobOfferList: FC = () => {
     queryKey: ['offers', ownOffers],
     queryFn: () => getProOffers(token, ownOffers == 'all', language),
   })
-
   const offers = isSuccess ? (data as any) : []
 
-  // const handleViewOffer = (offerId: number) => {
-  //   console.log('clicked')
-  // }
-
   return (
-    <>
+    <View className="px-2">
       {isFetching && <Loading />}
 
       {isSuccess && (
-        <VStack className="gap-4 p-3 flex-1">
-          {/* Header */}
-          <Box className="bg-white rounded-2xl p-5 shadow-sm">
-            <VStack className="gap-3">
-              <HStack className="items-center justify-between">
-                <VStack className="gap-1">
-                  <Text className="text-primary-500 text-sm font-medium uppercase tracking-wide">Job offers</Text>
-                  <Heading size="2xl" className="text-typography-900">
-                    Current Job List ({offers?.length})
-                  </Heading>
-                </VStack>
-              </HStack>
-
-              {/* Filter */}
-              <Box>
-                <Select selectedValue={ownOffers} onValueChange={setOwnOffers}>
-                  <SelectTrigger className="w-full">
-                    <SelectInput placeholder="All job offers" />
-                    <SelectIcon as={ChevronDown} />
-                  </SelectTrigger>
-                  <SelectPortal>
-                    <SelectBackdrop />
-                    <SelectContent>
-                      <SelectItem label="All job offers" value="all" />
-                      <SelectItem label="New offers" value="new" />
-                      <SelectItem label="Applied" value="applied" />
-                    </SelectContent>
-                  </SelectPortal>
-                </Select>
-              </Box>
-            </VStack>
+        <>
+          <Box className="mb-2">
+            <Box className="bg-background-50 rounded-lg p-2 shadow-sm border border-outline-100">
+              <VStack className="gap-2">
+                <HStack className="items-center justify-between gap-4">
+                  <HStack className="items-center gap-3 flex-1">
+                    <Box className="bg-success-100 rounded-xl p-3">
+                      <Icon as={Briefcase} className="text-success-600" size="lg" />
+                    </Box>
+                    <VStack className="gap-0.5">
+                      <Text className="text-typography-700 text-md">{t('jobList')}</Text>
+                    </VStack>
+                  </HStack>
+                  <Box className="bg-success-500 rounded-full w-10 h-10 items-center justify-center shrink-0">
+                    <Text className="text-white font-bold text-base">{(data as any)?.length}</Text>
+                  </Box>
+                </HStack>
+                <Box>
+                  <Select
+                    defaultValue={ownOffers}
+                    onValueChange={setOwnOffers}
+                    initialLabel={t(selectOptions.find((o) => o.value === ownOffers)?.label as string)}
+                    className=" bg-white rounded-lg"
+                  >
+                    <SelectTrigger variant="outline" size="lg" className="w-full flex justify-between pr-2">
+                      <SelectInput className="text-typography-900 text-md font-semibold" />
+                      <SelectIcon as={ChevronDown} />
+                    </SelectTrigger>
+                    <SelectPortal>
+                      <SelectBackdrop />
+                      <SelectContent>
+                        {selectOptions.map((o) => (
+                          <SelectItem
+                            textStyle={{
+                              style: {
+                                padding: 8,
+                                fontSize: 18,
+                                fontWeight: 'bold',
+                              },
+                            }}
+                            label={t(o.label)}
+                            value={o.value}
+                            key={o.value}
+                          />
+                        ))}
+                      </SelectContent>
+                    </SelectPortal>
+                  </Select>
+                </Box>
+              </VStack>
+            </Box>
           </Box>
           <FlatList
-            ItemSeparatorComponent={() => <Divider className="my-2 bg-transparent" />}
+            ItemSeparatorComponent={() => <Divider className="my-1 bg-transparent" />}
             data={offers}
             renderItem={({ item }) => <OfferListItem offer={item} key={item.reference} />}
-            // ListEmptyComponent={<ListEmptyComponent message={t('noProUserJobOffers')} />}
-            // ListHeaderComponent={() => <JobOffersListHeader setOwnOffersFilter={onChange} filterValue={ownOffers} />}
           />
-        </VStack>
+        </>
       )}
-    </>
+    </View>
   )
 }
 

@@ -4,26 +4,26 @@ import { Anchor, Star, Mail, Phone } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { CrewReferenceType } from '@/api/types/crew'
 
-const CrewReferences: FC<{ references: CrewReferenceType[] }> = ({ references }) => {
+const CrewReferences: FC<{ references?: CrewReferenceType[] }> = ({ references }) => {
   const { t } = useTranslation()
 
   return (
     <Box className="bg-white rounded-2xl p-3 shadow-sm">
       <HStack className="items-center justify-between mb-4">
         <HStack className="items-center gap-2">
-          <Icon as={Star} className={!!references.length ? 'text-primary-600' : 'text-error-600'} size="md" />
-          <Heading size="md" className={!!references.length ? 'text-primary-600' : 'text-error-600'}>
-            {t(!!references.length ? 'crew.references' : 'crew.no-references')}
+          <Icon as={Star} className={!!references?.length ? 'text-primary-600' : 'text-error-600'} size="md" />
+          <Heading size="md" className={!!references?.length ? 'text-primary-600' : 'text-error-600'}>
+            {t(!!references?.length ? 'crew.references' : 'crew.no-references')}
           </Heading>
         </HStack>
-        {references.length > 0 && (
+        {references && references.length > 0 && (
           <Box className="bg-success-100 rounded-full px-3 py-1.5">
             <Text className="text-success-700 font-bold text-sm">{references.length}</Text>
           </Box>
         )}
       </HStack>
 
-      {references.length > 0 && (
+      {references && references.length > 0 && (
         <VStack className="gap-3">
           {references.map((ref, index) => (
             <Box key={index} className="border border-outline-200 rounded-lg p-3">

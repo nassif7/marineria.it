@@ -1,30 +1,6 @@
-import React, { FC, useCallback, useState } from 'react'
-import { FlatList } from 'react-native'
-import { useTranslation } from 'react-i18next'
-import { getProUserOffers } from '@/api'
-import { useAppState, useFetch } from '@/hooks'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-
-import JobOfferListItem from './JobOfferListItem'
-import JobOffersListHeader from './JobOffersListHeader'
-
-import { ScrollView } from 'react-native'
-import { useRouter } from 'expo-router'
-import { Box, VStack, HStack, Heading, Text, Button, ButtonText, ButtonIcon, Pressable, Icon } from '@/components/ui'
-import { Eye, Calendar, DollarSign, MapPin, Clock, ChevronDown, AlertCircle, Briefcase } from 'lucide-react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import {
-  Select,
-  SelectTrigger,
-  SelectInput,
-  SelectIcon,
-  SelectPortal,
-  SelectBackdrop,
-  SelectContent,
-  SelectDragIndicator,
-  SelectDragIndicatorWrapper,
-  SelectItem,
-} from '@/components/ui/select'
+import { FC } from 'react'
+import { Box, VStack, HStack, Heading, Text, Button, ButtonText, ButtonIcon, Icon } from '@/components/ui'
+import { Eye, Calendar, Euro, MapPin, Clock, AlertCircle, Briefcase } from 'lucide-react-native'
 import { router } from 'expo-router'
 
 interface IOfferListItemProps {
@@ -70,7 +46,7 @@ const OfferListItem: FC<IOfferListItemProps> = ({ offer }) => {
               <Box className="bg-success-50 border border-success-200 rounded-lg px-3 py-2 flex-1">
                 <VStack className="gap-0.5">
                   <HStack className="items-center gap-1">
-                    <Icon as={DollarSign} className="text-success-600" size="xs" />
+                    <Icon as={Euro} className="text-success-600" size="xs" />
                     <Text className="text-success-600 text-xs font-medium">Salary</Text>
                   </HStack>
                   <Text className="text-success-900 font-bold text-sm">

@@ -37,7 +37,7 @@ const CrewListItem: React.FC<{ crew: CrewType; searchId: string }> = ({ crew, se
 
   return (
     <Pressable key={crew.userId} onPress={() => router.push(`/recruiter/search/${searchId}/crew/${crew.userId}`)}>
-      <Box className="bg-white rounded-xl p-4 shadow-sm mb-4">
+      <Box className="bg-white rounded-xl p-4 shadow-sm">
         <VStack className="gap-3">
           {/* Header: Photo + Name + Status */}
           <HStack className="gap-3 items-center">

@@ -113,6 +113,9 @@
     }
   },
   "crew-screens": {
-    "offers-list": "Job offers"
+    "offers-list": "Job offers",
+    "offer-details": {
+      "contract-and-compensation": "Contract and compensation"
+    }
   }
 }
