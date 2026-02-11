@@ -55,6 +55,7 @@ export const getCrewCV = async (ownerToken: string, crewId: string, language?: s
   const url = `https://www.comunicazione.it/api/Owneruser/CvUser/${ownerToken}/${crewId}?language=${languageCode}`
   const response = await fetch(url)
 
+  console.log(ownerToken, crewId, languageCode)
   if (!response.ok) {
     return new Error(`Failed to fetch owner CV (${response.status})`)
   }
