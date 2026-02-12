@@ -23,12 +23,9 @@ const SignIn = () => {
   const { t } = useTranslation()
   const { signIn } = useSession()
 
-  // #TODO  Fix the toast showing management over all
   const onSuccess = () => router.replace('/')
   const onError = () => {
-    console.log('Error during sign in', new Date().getSeconds())
     handleToast()
-    setShowError(true)
   }
 
   const handleSignIn = async ({ email, password }: FormDate) => {
@@ -44,7 +41,6 @@ const SignIn = () => {
   }
 
   const showNewToast = () => {
-    console.log('showing new toast at:', new Date().getSeconds())
     const newId = Math.random()
     setToastId(newId)
     toast.show({
@@ -52,8 +48,6 @@ const SignIn = () => {
       placement: 'top',
       duration: 3000,
       render: ({ id }) => {
-        console.log('render new toast at:', new Date().getSeconds())
-
         const uniqueToastId = 'toast-' + id
         return (
           <Toast
@@ -80,16 +74,6 @@ const SignIn = () => {
     })
   }
 
-  const [showError, setShowError] = React.useState(false)
-
-  const ErrorCom = () => {
-    return (
-      <View className="bg-red-500 p-4 rounded-md mb-4">
-        <Text className="text-white">Error</Text>
-      </View>
-    )
-  }
-
   return (
     <View className="flex-1 justify-center items-center">
       <Image
@@ -104,7 +88,6 @@ const SignIn = () => {
       <KeyboardAvoidingView className="w-11/12" behavior={'padding'}>
         <AuthenticationForm authenticate={handleSignIn} />
       </KeyboardAvoidingView>
-      {showError && <ErrorCom />}
     </View>
   )
 }

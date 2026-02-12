@@ -117,5 +117,15 @@
     "offer-details": {
       "contract-and-compensation": "Contract and compensation"
     }
+  },
+  "login-screen": {
+    "form": {
+      "email": "Email",
+      "password": "Password",
+      "invalid-email": "Invalid email",
+      "invalid-password": "Enter password",
+      "login": "Login",
+      "invalid-credentials": "Email or password not correct"
+    }
   }
 }
