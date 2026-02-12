@@ -18,7 +18,7 @@ export const NavBar: FC<NavBarProps> = ({ options, back, rightAction }) => {
 
   return (
     <>
-      <Box className="bg-secondary-800 px-0 py-2 shadow-lg">
+      <Box className="px-0 py-2">
         <HStack className="items-center justify-between min-h-[40px] ">
           {canGoBack ? (
             <Pressable onPress={() => router.back()} className="flex-row items-center  -ml-2">

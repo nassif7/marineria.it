@@ -27,7 +27,7 @@ const OwnerSearchList: FC = () => {
   })
 
   return (
-    <View className="px-2 h-full flex-1">
+    <View className="px-2 h-full flex-1 pb-5">
       {isFetching && <Loading />}
       {isSuccess && data && (
         <>

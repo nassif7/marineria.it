@@ -270,7 +270,7 @@ export default function OfferDetailsScreen() {
 
                 <VStack className="gap-4">
                   {/* Main Position - Emphasized */}
-                  <Box className=" bg-white rounded-2xl  shadow-sm">
+                  <Box className=" bg-white ">
                     <VStack className="gap-2">
                       <HStack className="items-center gap-2">
                         <Icon as={Briefcase} className="text-typography-500 " size="sm" />
@@ -278,7 +278,7 @@ export default function OfferDetailsScreen() {
                           Main Position
                         </Text>
                       </HStack>
-                      <Heading size="xl" className="text-primary-900">
+                      <Heading size="xl" className="text-typography-900">
                         {offer.mainPosition}
                       </Heading>
                     </VStack>
