@@ -89,6 +89,7 @@ export const declineProUser = async (
   const languageCode = getLanguageCode(language)
   const url = `https://www.comunicazione.it/api/Owneruser/RejectPRO/${ownerToken}/${offerId}/${crewId}?language=${languageCode}`
   const response = await fetch(url)
+  console.log(response.ok, response.status)
 
   if (!response.ok) {
     return new Error(`Failed to delete CV (${response.status})`)

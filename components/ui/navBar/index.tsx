@@ -22,8 +22,8 @@ export const NavBar: FC<NavBarProps> = ({ options, back, rightAction }) => {
         <HStack className="items-center justify-between min-h-[40px] ">
           {canGoBack ? (
             <Pressable onPress={() => router.back()} className="flex-row items-center  -ml-2">
-              <Icon as={ChevronLeft} size="4xl" className="text-secondary-500" />
-              <Text className="text-secondary-500 text-xl font-semibold">{back.title}</Text>
+              <Icon as={ChevronLeft} size="3xl" className="text-secondary-500" />
+              <Text className="text-secondary-500 text-lg font-medium">{back.title}</Text>
             </Pressable>
           ) : (
             <Box className="w-20" />
@@ -31,18 +31,14 @@ export const NavBar: FC<NavBarProps> = ({ options, back, rightAction }) => {
 
           {title && (
             <Heading
-              size="lg"
-              className="text-primary-400 absolute left-0 right-0 text-center font-bold"
+              size="md"
+              className="text-primary-400 absolute left-0 right-0 text-center font-semibold"
               style={{ zIndex: -1 }}
             >
               {title}
             </Heading>
           )}
-          {rightAction ? (
-            <Box>{rightAction}</Box>
-          ) : (
-            <Box className="w-20" /> // Spacer for alignment
-          )}
+          {rightAction ? <Box>{rightAction}</Box> : <Box className="w-20" />}
         </HStack>
       </Box>
     </>

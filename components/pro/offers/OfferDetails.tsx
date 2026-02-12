@@ -124,7 +124,6 @@ export default function OfferDetailsScreen() {
     }
   }
 
-  console.log(loading, 'loading')
   const onApply = async () => {
     setLoading(true)
     const response = await applyToOffer(token, parseInt(offerId as string), language)

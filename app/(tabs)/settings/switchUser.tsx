@@ -72,7 +72,7 @@ const switchUser = () => {
               {/* <Icon as={HelpCircleIcon} className="stroke-error-500 mt-0.5" /> */}
               <VStack space="xs">
                 <ToastTitle className="font-semibold">{'Login Error'}</ToastTitle>
-                <ToastDescription size="md">{'user name or password are wrong '}</ToastDescription>
+                <ToastDescription size="md">{t('login-screen.form.invalid-credentials')}</ToastDescription>
               </VStack>
             </HStack>
             <HStack className="min-[450px]:gap-3 gap-1">

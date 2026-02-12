@@ -6,7 +6,6 @@ import { CrewExperienceType } from '@/api/types/crew'
 
 const CrewExperienceCard: FC<{ experience: CrewExperienceType }> = ({ experience }) => {
   const { t } = useTranslation()
-  console.log(experience)
 
   return (
     <Box className="bg-white border border-outline-200 rounded-xl p-4 shadow-sm">

@@ -124,7 +124,6 @@ const AuthenticationForm: FC<AuthenticationFormProps> = ({ authenticate, user })
         <Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
           children={([canSubmit, isSubmitting]) => {
-            console.log('isSubmitting', isSubmitting)
             return (
               <Button onPress={handleSubmit} size="xl" isDisabled={!canSubmit || isSubmitting}>
                 {isSubmitting && <ButtonSpinner color={'white'} />}
