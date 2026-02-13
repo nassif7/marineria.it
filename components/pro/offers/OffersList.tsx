@@ -44,12 +44,12 @@ const JobOfferList: FC = () => {
   const offers = isSuccess ? (data as any) : []
 
   return (
-    <View className="px-2">
+    <View className="px-2 h-full flex-1 pb-5">
       {isFetching && <Loading />}
 
       {isSuccess && (
         <>
-          <Box className="mb-2 h-full flex-1 pb-5">
+          <Box className="mb-2">
             <Box className="bg-background-50 rounded-lg p-2 shadow-sm border border-outline-100">
               <VStack className="gap-2">
                 <HStack className="items-center justify-between gap-4">
