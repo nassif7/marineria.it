@@ -3,18 +3,27 @@ import { ScrollView } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import { getCrewCV, selectProUser, declineProUser } from '@/api'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-import { Loading, Box, Heading, VStack, HStack, Text, Image, Icon, View } from '@/components/ui'
-import { Award, FileText, Anchor, GraduationCap } from 'lucide-react-native'
+import {
+  Loading,
+  Box,
+  Heading,
+  VStack,
+  HStack,
+  Text,
+  Image,
+  Icon,
+  View,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  useToast,
+  Pressable,
+} from '@/components/ui'
+import { Award, FileText, Anchor, GraduationCap, X } from 'lucide-react-native'
 import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'
 import { getAgeByYear } from '@/utils/dateUtils'
-import CrewExperienceList from '@/components/recruiter/crew/CrewExperienceList'
-import CrewReferences from '@/components/recruiter/crew/CrewReferences'
-import CrewInfoCard from '@/components/recruiter/crew/CrewInfoCard'
-import CrewKeyInfoGrid from '@/components/recruiter/crew/CrewKeyInfoGrid'
-import CrewPositionCard from '@/components/recruiter/crew/CrewPositionsCard'
-import CrewSkillsGrid from '@/components/recruiter/crew/CrewSkillsGrid'
-import CrewActionButtons from '@/components/recruiter/crew/CrewActionButtons'
+import * as CrewDetails from './crewDetails'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
 
@@ -24,32 +33,10 @@ const CrewProfile = () => {
   const { activeProfile } = useUser()
   const { token } = activeProfile as ActiveProfile
   const queryClient = useQueryClient()
-
   const { isFetching, isSuccess, data } = useQuery({
     queryKey: ['recruiter-crew-cv', searchId],
     queryFn: () => getCrewCV(token, crewid as string),
   })
-
-  const handleAccept = useMutation({
-    mutationFn: () => selectProUser(token, crewid as string, searchId as string),
-    onSettled: () => router.push(`/recruiter/search/${searchId}/crew/list`),
-  })
-
-  const handleDecline = useMutation({
-    mutationFn: () => declineProUser(token, crewid as string, searchId as string),
-    onSettled: () => {
-      queryClient.invalidateQueries(
-        {
-          queryKey: ['recruiter-crew-list', searchId],
-          exact: true,
-          refetchType: 'active',
-        },
-        {}
-      )
-      router.push(`/recruiter/search/${searchId}/crew/list`)
-    },
-  })
-
   const cv = isSuccess ? (data as any)?.[0] : null
   const photoUrl = useMemo(() => `https://www.marineria.it/PROFoto/${cv?.namephotoA}`, [cv])
   const fakerImage = useMemo(() => faker.image.personPortrait({ size: 256 }), [cv])
@@ -66,6 +53,95 @@ const CrewProfile = () => {
     { label: t('crew.hotel'), value: cv?.pos_hotel },
     { label: t('crew.special'), value: cv?.pos_special },
   ].filter((p) => p.value)
+
+  const toast = useToast()
+  const [toastId, setToastId] = React.useState(0)
+  const handleToast = (emphasize: 'success' | 'error', action?: 'decline' | 'accept') => {
+    if (!toast.isActive(toastId.toString())) {
+      showNewToast(emphasize, action)
+    }
+  }
+
+  const showNewToast = (emphasize: 'success' | 'error', action?: 'decline' | 'accept') => {
+    const newId = Math.random()
+    setToastId(newId)
+    toast.show({
+      id: newId.toString(),
+      placement: 'top',
+      duration: 3000,
+      render: ({ id }) => {
+        const uniqueToastId = 'toast-' + id
+        return (
+          <Toast
+            action={emphasize}
+            variant="solid"
+            nativeID={uniqueToastId}
+            className="p-4 gap-6 border-error-500 w-80 shadow-hard-5 max-w-[443px] flex-row justify-between"
+          >
+            <HStack space="md">
+              <VStack space="xs">
+                {emphasize === 'error' && <ToastTitle className="font-semibold">{'Error'}</ToastTitle>}
+                <ToastDescription size="md">
+                  {emphasize === 'error'
+                    ? t('unknown-error')
+                    : action === 'decline'
+                      ? t('recruiter.crew-deleted', { profileId: crewid })
+                      : t('recruiter.crew-accepted', {
+                          profileId: crewid,
+                          salutation: cv?.gender === 'Female' ? t('female-salutation') : t('male-salutation'),
+                          lastName: cv?.surname,
+                        })}
+                </ToastDescription>
+              </VStack>
+            </HStack>
+            <HStack className="min-[450px]:gap-3 gap-1">
+              <Pressable onPress={() => toast.close(id)}>
+                <Icon as={X} />
+              </Pressable>
+            </HStack>
+          </Toast>
+        )
+      },
+    })
+  }
+
+  const handleAccept = useMutation({
+    mutationFn: () => selectProUser(token, crewid as string, searchId as string),
+    onSettled: () => {
+      queryClient.invalidateQueries(
+        {
+          queryKey: ['recruiter-crew-list', searchId],
+          exact: true,
+          refetchType: 'active',
+        },
+        {}
+      )
+      handleToast('success', 'accept')
+      router.back()
+    },
+    onError: () => {
+      handleToast('error')
+    },
+  })
+
+  const handleDecline = useMutation({
+    mutationFn: () => declineProUser(token, crewid as string, searchId as string),
+    onSettled: () => {
+      queryClient.invalidateQueries(
+        {
+          queryKey: ['recruiter-crew-list', searchId],
+          exact: true,
+          refetchType: 'active',
+        },
+        {}
+      )
+      handleToast('success', 'decline')
+      router.dismiss()
+    },
+    // onError: () => {
+    //   handleToast('error')
+    // },
+  })
 
   return (
     <>
@@ -107,8 +183,8 @@ const CrewProfile = () => {
                   alt="profile picture"
                 />
               </Box>
-              <CrewPositionCard mainPosition={cv?.mainPosition} otherPositions={otherPositions} />
-              <CrewKeyInfoGrid
+              <CrewDetails.PositionsCard mainPosition={cv?.mainPosition} otherPositions={otherPositions} />
+              <CrewDetails.KeyInfoGrid
                 numberClicked={cv?.numberClicked ?? null}
                 salary={cv?.salary}
                 passport={cv?.passport ?? ''}
@@ -193,13 +269,16 @@ const CrewProfile = () => {
                 </VStack>
               </Box>
               {/* References */}
-              <CrewReferences references={cv?.approvedReferences} />
+              <CrewDetails.References references={cv?.approvedReferences} />
               {/* IMO Courses */}
-              <CrewInfoCard icon={Award} title={t('crew.IMO-courses')} content={cv?.courses} />
+              <CrewDetails.InfoCard icon={Award} title={t('crew.IMO-courses')} content={cv?.courses} />
               {/* Boat License */}
-              <CrewInfoCard icon={FileText} title={t('crew.boat-license')} content={cv?.licenseCode} />
-              <CrewExperienceList experiences={cv?.experiences} calculatedExperience={cv?.calculatedExperience} />
-              <CrewSkillsGrid
+              <CrewDetails.InfoCard icon={FileText} title={t('crew.boat-license')} content={cv?.licenseCode} />
+              <CrewDetails.ExperienceList
+                experiences={cv?.experiences}
+                calculatedExperience={cv?.calculatedExperience}
+              />
+              <CrewDetails.SkillsGrid
                 organizationalSkills={cv?.organizationalSkills}
                 relationalSkills={cv?.relationalSkills}
                 technicalSkills={cv?.technicalSkills}
@@ -208,7 +287,7 @@ const CrewProfile = () => {
             </VStack>
           </ScrollView>
           {/* Action Buttons - Fixed at bottom */}
-          <CrewActionButtons
+          <CrewDetails.ActionButtons
             onAccept={() => handleAccept.mutate()}
             onDecline={() => handleDecline.mutate()}
             acceptLabel="crew.get-contact"
@@ -221,5 +300,3 @@ const CrewProfile = () => {
 }
 
 export default CrewProfile
-
-// atgk-sqag-izqa-phui

@@ -1,4 +1,6 @@
 {
+  "male-salutation": "Mr.",
+  "female-salutation": "Ms.",
   "accept": "Accept",
   "decline": "Decline",
   "forgot-password": "Forgot your password?",
@@ -41,6 +43,7 @@
   "alreadyApplied": "Already applied",
   "back": "Back",
   "not-declared": "Not declared",
+  "unknown-error": "Something went wrong, please try again later",
   "offer": {
     "candidates": "Candidates",
     "contacted": "Contacted",
@@ -99,6 +102,8 @@
     "other-positions": "Other positions"
   },
   "recruiter": {
+    "crew-deleted": "Crew {{profileId}} was removed from your crew list",
+    "crew-accepted": "Crew {{profileId}} contacts are available, we informed {{salutation}}.{{lastName}} about your interest.",
     "crew-list": "Candidates",
     "crew-list-description": "Manage your candidates",
     "searches": "Searches",
@@ -116,6 +121,16 @@
     "offers-list": "Job offers",
     "offer-details": {
       "contract-and-compensation": "Contract and compensation"
+    }
+  },
+  "login-screen": {
+    "form": {
+      "email": "Email",
+      "password": "Password",
+      "invalid-email": "Invalid email",
+      "invalid-password": "Enter password",
+      "login": "Login",
+      "invalid-credentials": "Email or password not correct"
     }
   }
 }

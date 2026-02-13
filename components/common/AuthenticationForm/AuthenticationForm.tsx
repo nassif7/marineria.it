@@ -62,8 +62,8 @@ const AuthenticationForm: FC<AuthenticationFormProps> = ({ authenticate, user })
               const isInvalidEmail = value
                 ? pattern.test(value)
                   ? undefined
-                  : 'provide a valid email'
-                : 'enter an email'
+                  : t('login-screen.form.invalid-email')
+                : t('login-screen.form.invalid-email')
 
               return isInvalidEmail
             },
@@ -75,7 +75,7 @@ const AuthenticationForm: FC<AuthenticationFormProps> = ({ authenticate, user })
                 <Input size="xl" isInvalid={!!field.state.meta.errors.length} isRequired>
                   <InputField
                     className=" bg-white"
-                    placeholder="Email"
+                    placeholder={t('login-screen.form.email')}
                     type="text"
                     onChangeText={field.handleChange}
                     value={field.state.value}
@@ -93,7 +93,7 @@ const AuthenticationForm: FC<AuthenticationFormProps> = ({ authenticate, user })
           name="password"
           validators={{
             onSubmit: ({ value }) => {
-              const isInvalidPassword = value ? undefined : 'please enter your password'
+              const isInvalidPassword = value ? undefined : t('login-screen.form.invalid-password')
 
               return isInvalidPassword
             },
@@ -105,7 +105,7 @@ const AuthenticationForm: FC<AuthenticationFormProps> = ({ authenticate, user })
                 <Input size="xl" className="bg-white" isInvalid={!!field.state.meta.errors.length} isRequired>
                   <InputField
                     className=" bg-white"
-                    placeholder="Password"
+                    placeholder={t('login-screen.form.password')}
                     type={showPassword ? 'text' : 'password'}
                     onChangeText={field.handleChange}
                     value={field.state.value}
@@ -123,12 +123,14 @@ const AuthenticationForm: FC<AuthenticationFormProps> = ({ authenticate, user })
         </Field>
         <Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
-          children={([canSubmit, isSubmitting]) => (
-            <Button onPress={handleSubmit} size="xl" disabled={!canSubmit || isSubmitting}>
-              {isSubmitting && <ButtonSpinner color={'white'} />}
-              <ButtonText className="text-white">{t('login')}</ButtonText>
-            </Button>
-          )}
+          children={([canSubmit, isSubmitting]) => {
+            return (
+              <Button onPress={handleSubmit} size="xl" isDisabled={!canSubmit || isSubmitting}>
+                {isSubmitting && <ButtonSpinner color={'white'} />}
+                <ButtonText className="text-white">{t('login')}</ButtonText>
+              </Button>
+            )
+          }}
         />
       </VStack>
       <Divider className="my-4 bg-secondary-800" />

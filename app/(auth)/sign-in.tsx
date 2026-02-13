@@ -23,12 +23,9 @@ const SignIn = () => {
   const { t } = useTranslation()
   const { signIn } = useSession()
 
-  // #TODO  Fix the toast showing management over all
   const onSuccess = () => router.replace('/')
   const onError = () => {
-    console.log('Error during sign in', new Date().getSeconds())
     handleToast()
-    setShowError(true)
   }
 
   const handleSignIn = async ({ email, password }: FormDate) => {
@@ -44,7 +41,6 @@ const SignIn = () => {
   }
 
   const showNewToast = () => {
-    console.log('showing new toast at:', new Date().getSeconds())
     const newId = Math.random()
     setToastId(newId)
     toast.show({
@@ -52,8 +48,6 @@ const SignIn = () => {
       placement: 'top',
       duration: 3000,
       render: ({ id }) => {
-        console.log('render new toast at:', new Date().getSeconds())
-
         const uniqueToastId = 'toast-' + id
         return (
           <Toast
@@ -66,7 +60,7 @@ const SignIn = () => {
               {/* <Icon as={HelpCircleIcon} className="stroke-error-500 mt-0.5" /> */}
               <VStack space="xs">
                 <ToastTitle className="font-semibold">{'Login Error'}</ToastTitle>
-                <ToastDescription size="md">{'user name or password are wrong '}</ToastDescription>
+                <ToastDescription size="md">{t('login-screen.form.invalid-credentials')}</ToastDescription>
               </VStack>
             </HStack>
             <HStack className="min-[450px]:gap-3 gap-1">
@@ -78,16 +72,6 @@ const SignIn = () => {
         )
       },
     })
-  }
-
-  const [showError, setShowError] = React.useState(false)
-
-  const ErrorCom = () => {
-    return (
-      <View className="bg-red-500 p-4 rounded-md mb-4">
-        <Text className="text-white">Error</Text>
-      </View>
-    )
   }
 
   return (
@@ -104,7 +88,6 @@ const SignIn = () => {
       <KeyboardAvoidingView className="w-11/12" behavior={'padding'}>
         <AuthenticationForm authenticate={handleSignIn} />
       </KeyboardAvoidingView>
-      {showError && <ErrorCom />}
     </View>
   )
 }

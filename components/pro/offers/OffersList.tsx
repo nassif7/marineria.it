@@ -44,7 +44,7 @@ const JobOfferList: FC = () => {
   const offers = isSuccess ? (data as any) : []
 
   return (
-    <View className="px-2">
+    <View className="px-2 h-full flex-1 pb-5">
       {isFetching && <Loading />}
 
       {isSuccess && (

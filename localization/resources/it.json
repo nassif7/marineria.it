@@ -1,4 +1,6 @@
 {
+  "male-salutation": "Signore",
+  "female-salutation": "Signora",
   "accept": "Accetta",
   "decline": "Rifiuta",
   "login": "Accedi",
@@ -39,6 +41,7 @@
   "alreadyApplied": "Hai già inviato la tua candidatura per questa offerta",
   "not-declared": " Non dichiarato",
   "back": "Indietro",
+  "unknown-error": "Qualcosa è andato storto, riprova più tardi",
   "offer": {
     "candidates": "Candidati",
     "contacted": "Contattati",
@@ -97,6 +100,8 @@
     "other-positions": "Altre posizioni"
   },
   "recruiter": {
+    "crew-deleted": "L'equipaggio {{profileId}} è stato rimosso dal tuo elenco equipaggio",
+    "crew-accepted": "Sono disponibili i contatti dell'equipaggio {{profileId}}, abbiamo informato {{salutation}}.{{lastName}} del tuo interesse.",
     "crew-list": "Candidati",
     "crew-list-description": "Gestisci il tuo equipaggio",
     "searches": "Ricerche",
@@ -114,6 +119,16 @@
     "offers-list": "Offerte di lavoro",
     "offer-details": {
       "contract-and-compensation": "Contratto e compenso"
+    }
+  },
+  "login-screen": {
+    "form": {
+      "email": "Email",
+      "password": "Password",
+      "invalid-email": "Email non valida",
+      "invalid-password": "Inserisci password",
+      "login": "Login",
+      "invalid-credentials": "Email o password non corretti"
     }
   }
 }
