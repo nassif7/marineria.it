@@ -78,7 +78,7 @@ export default function SearchDetails() {
           <ScrollView className="flex-1">
             <VStack className="gap-4 p-2">
               {/* HEADER CARD */}
-              <Box className="bg-white rounded-2xl p-5 shadow-sm">
+              <Box className="bg-white rounded-2xl p-5  ">
                 <VStack className="gap-3">
                   {/* Top Row: ID, Date, Edit */}
                   <HStack className="justify-between items-start gap-3">
@@ -117,7 +117,7 @@ export default function SearchDetails() {
               </Box>
 
               {/* CONTRACT & COMPENSATION */}
-              <Box className="bg-white rounded-2xl p-5 shadow-sm">
+              <Box className="bg-white rounded-2xl p-5  ">
                 <HStack className="items-center gap-2 mb-4">
                   <Icon as={FileText} className="text-primary-600" size="md" />
                   <Heading size="lg" className="text-primary-600">
@@ -183,7 +183,7 @@ export default function SearchDetails() {
               </Box>
 
               {/* POSITION DETAILS */}
-              <Box className="bg-white rounded-2xl p-5 shadow-sm">
+              <Box className="bg-white rounded-2xl p-5  ">
                 <HStack className="items-center gap-2 mb-4">
                   <Icon as={Briefcase} className="text-primary-600" size="md" />
                   <Heading size="lg" className="text-primary-600">
@@ -291,7 +291,7 @@ export default function SearchDetails() {
               </Box>
 
               {/* CANDIDATES SECTION */}
-              <Box className="bg-white rounded-lg shadow-sm">
+              <Box className="bg-white rounded-lg  ">
                 <Pressable
                   onPress={
                     () => console.log('clicked')
@@ -336,7 +336,7 @@ export default function SearchDetails() {
                   </Text>
                 </HStack>
               </Box>
-              <Box className="bg-white border-t border-outline-100 p-4 shadow-2xl rounded-xl">
+              <Box className="bg-white border-t border-outline-100 p-4  rounded-xl">
                 <VStack className="gap-3">
                   <Button
                     size="lg"

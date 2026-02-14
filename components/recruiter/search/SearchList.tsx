@@ -32,7 +32,7 @@ const OwnerSearchList: FC = () => {
       {isSuccess && data && (
         <>
           <Box className="mb-2">
-            <Box className="bg-background-50 rounded-lg p-2 shadow-sm border border-outline-100">
+            <Box className="bg-background-50 rounded-lg p-2   border border-outline-100">
               <HStack className="items-center justify-between gap-4">
                 <HStack className="items-center gap-3 flex-1">
                   <Box className="bg-success-100 rounded-xl p-3">

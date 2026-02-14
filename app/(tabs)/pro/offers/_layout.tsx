@@ -16,7 +16,7 @@ export default function OffersLayout() {
         name="index"
         options={{
           headerShown: true,
-          title: t('crew-screens.offers-list'),
+          title: t('pro-screens.offers-list'),
         }}
       />
       <Stack.Screen

@@ -12,7 +12,7 @@ const OfferListItem: FC<IOfferListItemProps> = ({ offer }) => {
     router.push(`/pro/offers/${offerId}`)
   }
   return (
-    <Box key={offer.idoffer} className="bg-white rounded-xl shadow-sm overflow-hidden">
+    <Box key={offer.idoffer} className="bg-white rounded-xl   overflow-hidden">
       <VStack className="gap-0">
         {/* Header with Title */}
         <Box className="p-4 pb-3">

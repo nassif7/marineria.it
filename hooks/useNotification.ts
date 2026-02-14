@@ -5,12 +5,27 @@ import Constants from 'expo-constants'
 import { Platform } from 'react-native'
 import { router } from 'expo-router'
 
+// Configure how notifications are handled when app is in foreground
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: false,
+  }),
+})
+
 export async function schedulePushNotification() {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: 'Marineria!',
       body: 'There is a job offer for you!',
-      data: { id: 'goes here', test: { test1: 'more data' } },
+      data: {
+        type: 'job_offer', // or 'cv_profile'
+        offerId: '123',
+        cvId: '456', // only for cv_profile type
+      },
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
@@ -43,10 +58,6 @@ export async function registerForPushNotificationsAsync() {
       return
     }
 
-    // Learn more about projectId:
-    // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
-    // EAS projectId is used here.
-
     try {
       const projectId = Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId
       if (!projectId) {
@@ -67,6 +78,31 @@ export async function registerForPushNotificationsAsync() {
   return pushToken
 }
 
+// Helper function to handle notification navigation
+const handleNotificationNavigation = (notificationData: any) => {
+  if (!notificationData) return
+
+  const { type, offerId, cvId } = notificationData
+
+  switch (type) {
+    case 'cv_profile':
+      if (offerId && cvId) {
+        router.push(`/recruiter/search/${offerId}/crew/${cvId}`)
+      }
+      break
+
+    case 'job_offer':
+      if (offerId) {
+        router.push(`/pro/offers/${offerId}`)
+      }
+      break
+
+    default:
+      router.push('/(tabs)')
+      break
+  }
+}
+
 const useNotification = () => {
   const [expoPushToken, setExpoPushToken] = useState('')
   const [channels, setChannels] = useState<Notifications.NotificationChannel[]>([])
@@ -78,12 +114,18 @@ const useNotification = () => {
     if (Platform.OS === 'android') {
       Notifications.getNotificationChannelsAsync().then((value) => setChannels(value ?? []))
     }
+
+    // Notification received while app is in foreground
     const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
+      console.log('📬 Notification received:', notification)
       setNotification(notification)
     })
 
-    const responseListener = Notifications.addNotificationResponseReceivedListener(async () => {
-      router.replace('/')
+    const responseListener = Notifications.addNotificationResponseReceivedListener((response) => {
+      console.log('🔔 Notification tapped:', response)
+
+      const data = response.notification.request.content.data
+      handleNotificationNavigation(data)
     })
 
     return () => {

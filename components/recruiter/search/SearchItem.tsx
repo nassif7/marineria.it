@@ -56,7 +56,7 @@ const SearchListItem: FC<SearchItemsProps> = ({ search }) => {
         </Heading>
       </Box>
       {/* Header Section */}
-      <Box className="bg-white rounded-lg p-4 mb-4 shadow-sm">
+      <Box className="bg-white rounded-lg p-4 mb-4  ">
         <HStack className="justify-between items-start gap-3">
           <VStack className="gap-1 flex-1">
             <HStack className="items-center gap-2">
@@ -93,7 +93,7 @@ const SearchListItem: FC<SearchItemsProps> = ({ search }) => {
         <Box className=" border border-secondary-200 rounded-lg p-2 mb-3">
           <Pressable onPress={viewCrewList}>
             <HStack className="items-center gap-3">
-              <Box className="bg-white rounded-lg border border-success-600 p-2.5 shadow-sm">
+              <Box className="bg-white rounded-lg border border-success-600 p-2.5  ">
                 <Icon as={Users} className="text-success-600" size="lg" />
               </Box>
               <VStack className="flex-1 gap-1">

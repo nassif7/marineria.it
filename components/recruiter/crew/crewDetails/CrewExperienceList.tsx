@@ -12,7 +12,7 @@ const CrewExperienceList: FC<{ experiences: CrewExperienceType[]; calculatedExpe
   const { t } = useTranslation()
 
   return (
-    <Box className="bg-white rounded-2xl p-3 shadow-sm">
+    <Box className="bg-white rounded-2xl p-3  ">
       <HStack className="items-center justify-between mb-4">
         <HStack className="items-center gap-2">
           <Icon

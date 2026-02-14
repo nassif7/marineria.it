@@ -13,7 +13,7 @@ interface CrewPositionCardProps {
 const CrewPositionCard: FC<CrewPositionCardProps> = ({ mainPosition, otherPositions }) => {
   const { t } = useTranslation()
   return (
-    <Box className="bg-white rounded-lg p-3 shadow-sm">
+    <Box className="bg-white rounded-lg p-3  ">
       <VStack className="gap-3">
         <VStack className="gap-1">
           <Text className="text-typography-500 text-sm  font-medium  tracking-wide">{t('crew.main-position')}</Text>

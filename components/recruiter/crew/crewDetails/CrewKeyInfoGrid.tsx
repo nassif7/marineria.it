@@ -16,7 +16,7 @@ const CrewKeyInfoGrid: FC<CrewKeyInfoGridProps> = ({ numberClicked, salary, pass
   return (
     <VStack className="gap-3">
       <HStack className="gap-3">
-        <Box className="bg-white rounded-lg p-3 flex-1 shadow-sm">
+        <Box className="bg-white rounded-lg p-3 flex-1  ">
           <HStack className="items-center gap-2 mb-1">
             <Icon as={Briefcase} className="text-primary-600" size="sm" />
             <Text className="text-typography-500 text-sm  ">{t('crew.job-offers-received')}</Text>
@@ -24,7 +24,7 @@ const CrewKeyInfoGrid: FC<CrewKeyInfoGridProps> = ({ numberClicked, salary, pass
           <Text className="text-typography-900 font-bold ">{numberClicked ?? 0}</Text>
         </Box>
 
-        <Box className="bg-white rounded-lg p-3 flex-1 shadow-sm">
+        <Box className="bg-white rounded-lg p-3 flex-1  ">
           <HStack className="items-center gap-2 mb-1">
             <Icon as={Euro} className="text-primary-600" size="sm" />
             <Text className="text-typography-500 text-sm ">{t('crew.salary')}</Text>
@@ -33,7 +33,7 @@ const CrewKeyInfoGrid: FC<CrewKeyInfoGridProps> = ({ numberClicked, salary, pass
         </Box>
       </HStack>
 
-      <Box className="bg-white rounded-lg p-3 shadow-sm">
+      <Box className="bg-white rounded-lg p-3  ">
         <HStack className="items-center gap-2 mb-2">
           <Icon as={Globe} className="text-primary-600" size="sm" />
           <Text className="text-typography-500 text-sm  font-medium  tracking-wide">{t('crew.citizenship')}</Text>
@@ -41,7 +41,7 @@ const CrewKeyInfoGrid: FC<CrewKeyInfoGridProps> = ({ numberClicked, salary, pass
         <Text className="text-typography-900 font-semibold text-base">{passport}</Text>
       </Box>
 
-      <Box className="bg-white rounded-lg p-3 shadow-sm">
+      <Box className="bg-white rounded-lg p-3  ">
         <HStack className="items-center gap-2 mb-2">
           <Icon as={MapPin} className="text-primary-600" size="sm" />
           <Text className="text-typography-500 text-sm  font-medium  tracking-wide">{t('crew.current-location')}</Text>

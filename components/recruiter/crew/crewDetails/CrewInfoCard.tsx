@@ -17,7 +17,7 @@ const CrewInfoCard: FC<CrewInfoCardProps> = ({
   titleColor = 'text-primary-600',
 }) => {
   return (
-    <Box className="bg-white rounded-2xl p-5 shadow-sm">
+    <Box className="bg-white rounded-2xl p-5  ">
       <HStack className="items-center gap-2 mb-3">
         <Icon as={icon} className={iconColor} size="md" />
         <Heading size="md" className={titleColor}>
