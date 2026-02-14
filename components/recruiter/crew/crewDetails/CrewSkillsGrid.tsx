@@ -54,7 +54,7 @@ const CrewSkillsGrid: FC<CrewSkillsGridProps> = ({
   ]
 
   return (
-    <Box className="bg-white rounded-2xl p-5 shadow-sm">
+    <Box className="bg-white rounded-2xl p-5  ">
       <HStack className="items-center gap-2 mb-3">
         <Icon as={Award} className="text-primary-600" size="md" />
         <Heading size="md" className="text-primary-600">

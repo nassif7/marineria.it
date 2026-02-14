@@ -51,6 +51,8 @@
     "offer-crew-count": "{{candidates}} Candidati (Contattati: {{contacted}} Rimanenti: {{residual}})"
   },
   "crew": {
+    "contact-information": "Contatti",
+    "no-contact-available": "Nessun contatto disponibile",
     "boat-license": "Patente nautica",
     "candidates": "Candidati",
     "certificate-of-competency": "Certificato di Competenza (CoC)",
@@ -115,10 +117,31 @@
       }
     }
   },
-  "crew-screens": {
+  "pro-screens": {
     "offers-list": "Offerte di lavoro",
     "offer-details": {
-      "contract-and-compensation": "Contratto e compenso"
+      "additional-information": "Informazioni aggiuntive",
+      "already-applied": "Già applicato",
+      "apply": "Applicare",
+      "applying": "Applicazione",
+      "apply-for-this-position": "Candidati per questa posizione",
+      "apply-success": "Hai presentato domanda con successo per questa posizione",
+      "boarding": "Imbarco",
+      "contract": "Tipo di contratto",
+      "contract-and-compensation": "Contratto e compenso",
+      "description": "Descrizione",
+      "duration": "Durata",
+      "expires": "L'offerta scade",
+      "from": "Da",
+      "gender": "Genere",
+      "location": "Posizione",
+      "main-position": "Posizione principale",
+      "owner": "Owner",
+      "position-requirements": "Posizione e requisiti",
+      "requirements": "Requisiti",
+      "salary": "Stipendio",
+      "share": "Condividi questa offerta",
+      "to": "A"
     }
   },
   "login-screen": {

@@ -28,6 +28,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
 
 const CrewProfile = () => {
+  const [showContact, setShowContact] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(false)
   const { t } = useTranslation()
   const { crewid, searchId } = useLocalSearchParams()
   const { activeProfile } = useUser()
@@ -76,7 +78,7 @@ const CrewProfile = () => {
             action={emphasize}
             variant="solid"
             nativeID={uniqueToastId}
-            className="p-4 gap-6 border-error-500 w-80 shadow-hard-5 max-w-[443px] flex-row justify-between"
+            className="p-4 gap-6 border-error-500 w-80  max-w-[443px] flex-row justify-between"
           >
             <HStack space="md">
               <VStack space="xs">
@@ -106,26 +108,26 @@ const CrewProfile = () => {
   }
 
   const handleAccept = useMutation({
-    mutationFn: () => selectProUser(token, crewid as string, searchId as string),
-    onSettled: () => {
-      queryClient.invalidateQueries(
-        {
-          queryKey: ['recruiter-crew-list', searchId],
-          exact: true,
-          refetchType: 'active',
-        },
-        {}
-      )
+    mutationFn: () => {
+      setIsLoading(true)
+      return selectProUser(token, crewid as string, searchId as string)
+    },
+    onSuccess: () => {
+      setIsLoading(false)
+      setShowContact(true)
       handleToast('success', 'accept')
-      router.back()
     },
     onError: () => {
+      setIsLoading(false)
       handleToast('error')
     },
   })
 
   const handleDecline = useMutation({
-    mutationFn: () => declineProUser(token, crewid as string, searchId as string),
+    mutationFn: () => {
+      setIsLoading(true)
+      return declineProUser(token, crewid as string, searchId as string)
+    },
     onSettled: () => {
       queryClient.invalidateQueries(
         {
@@ -135,23 +137,21 @@ const CrewProfile = () => {
         },
         {}
       )
+      setIsLoading(false)
       handleToast('success', 'decline')
       router.dismiss()
     },
-    // onError: () => {
-    //   handleToast('error')
-    // },
   })
 
   return (
     <>
-      {isFetching && <Loading />}
+      {(isFetching || isLoading) && <Loading />}
       {isSuccess && (
         <Box className="flex-1 relative ">
           <ScrollView className="bg-background-50 rounded-lg">
             <VStack className="gap-4 p-2 pb-24 ">
               {/* Header Card */}
-              <Box className="bg-white rounded-lg p-3 shadow-sm">
+              <Box className="bg-white rounded-lg p-3  ">
                 <VStack className="gap-3">
                   <HStack className="justify-between items-start">
                     <VStack className="gap-1 flex-1">
@@ -175,7 +175,7 @@ const CrewProfile = () => {
                 </VStack>
               </Box>
               {/* Profile Image */}
-              <Box className="bg-white rounded-lg overflow-hidden shadow-sm">
+              <Box className="bg-white rounded-lg overflow-hidden  ">
                 <Image
                   size="none"
                   className="aspect-square w-full"
@@ -183,6 +183,9 @@ const CrewProfile = () => {
                   alt="profile picture"
                 />
               </Box>
+              {showContact && (
+                <CrewDetails.ContactCard email={cv?.email} phone={cv?.cellular} whatsapp={cv?.callWhatsapp} />
+              )}
               <CrewDetails.PositionsCard mainPosition={cv?.mainPosition} otherPositions={otherPositions} />
               <CrewDetails.KeyInfoGrid
                 numberClicked={cv?.numberClicked ?? null}
@@ -191,7 +194,7 @@ const CrewProfile = () => {
                 currentPosition={cv?.currentPosition ?? ''}
               />
               {/* Personal Data */}
-              <Box className="bg-white rounded-2xl p-3 shadow-sm">
+              <Box className="bg-white rounded-xl p-3  ">
                 <Heading size="md" className="text-primary-600 mb-3">
                   {t('crew.personal-data')}
                 </Heading>
@@ -214,7 +217,7 @@ const CrewProfile = () => {
                 </VStack>
               </Box>
               {/* Sea Experience */}
-              <Box className="bg-white rounded-2xl p-3 shadow-sm">
+              <Box className="bg-white rounded-2xl p-3  ">
                 <HStack className="items-center gap-2 mb-3">
                   <Icon as={Anchor} className="text-primary-600" size="md" />
                   <Heading size="md" className="text-primary-600">
@@ -230,7 +233,7 @@ const CrewProfile = () => {
                 </VStack>
               </Box>
               {/* Seaman's Book */}
-              <Box className="bg-white rounded-2xl p-3 shadow-sm">
+              <Box className="bg-white rounded-2xl p-3  ">
                 <Heading size="md" className="text-primary-600 mb-3">
                   {t('crew.seamans-book')}
                 </Heading>
@@ -250,7 +253,7 @@ const CrewProfile = () => {
                 </VStack>
               </Box>
               {/* Education & Languages */}
-              <Box className="bg-white rounded-2xl p-3 shadow-sm">
+              <Box className="bg-white rounded-2xl p-3  ">
                 <HStack className="items-center gap-2 mb-3">
                   <Icon as={GraduationCap} className="text-primary-600" size="md" />
                   <Heading size="md" className="text-primary-600">

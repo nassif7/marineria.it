@@ -30,8 +30,6 @@
   "notifications": "Notifications",
   "error": "Error",
   "loginError": "Sorry, the data provided do not match an existing user.",
-  "offerFrom": "From",
-  "offerTo": "To",
   "offerSalary": "Salary",
   "jobOffers": "Job offers",
   "noProUserJobOffers": "There are currently no job offers that match your profile!",
@@ -53,6 +51,8 @@
     "offer-crew-count": "{{candidates}} Candidates (Contacted: {{contacted}} Residual: {{residual}})"
   },
   "crew": {
+    "contact-information": "Contact Information",
+    "no-contact-available": "No contact available",
     "boat-license": "Boat License",
     "candidates": "Candidates",
     "certificate-of-competency": "Certificate of Competency (CoC)",
@@ -117,10 +117,31 @@
       }
     }
   },
-  "crew-screens": {
+  "pro-screens": {
     "offers-list": "Job offers",
     "offer-details": {
-      "contract-and-compensation": "Contract and compensation"
+      "additional-information": "Additional Information",
+      "already-applied": "Already applied",
+      "apply": "Apply",
+      "applying": "Applying",
+      "apply-for-this-position": "Apply for this position",
+      "apply-success": "You have successfully applied for this position",
+      "boarding": "Boarding",
+      "contract": "Contract type",
+      "contract-and-compensation": "Contract and compensation",
+      "description": "Job Description",
+      "duration": "Duration",
+      "expires": "Offer expires",
+      "from": "From",
+      "gender": "Gender",
+      "location": "Location",
+      "main-position": "Main Position",
+      "owner": "Owner",
+      "position-requirements": "Position & requirements",
+      "requirements": "Requirements",
+      "salary": "Salary",
+      "share": "Share this offer",
+      "to": "To"
     }
   },
   "login-screen": {

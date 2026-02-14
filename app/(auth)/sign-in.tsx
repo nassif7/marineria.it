@@ -54,7 +54,7 @@ const SignIn = () => {
             action={'error'}
             variant="solid"
             nativeID={uniqueToastId}
-            className="p-4 gap-6 border-error-500 w-full shadow-hard-5 max-w-[443px] flex-row justify-between"
+            className="p-4 gap-6 border-error-500 w-full  max-w-[443px] flex-row justify-between"
           >
             <HStack space="md">
               {/* <Icon as={HelpCircleIcon} className="stroke-error-500 mt-0.5" /> */}

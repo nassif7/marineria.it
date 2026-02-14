@@ -8,7 +8,7 @@ const CrewExperienceCard: FC<{ experience: CrewExperienceType }> = ({ experience
   const { t } = useTranslation()
 
   return (
-    <Box className="bg-white border border-outline-200 rounded-xl p-4 shadow-sm">
+    <Box className="bg-white border border-outline-200 rounded-xl p-4  ">
       <VStack className="gap-1 mb-3 pb-3 border-b border-outline-100">
         <HStack className="items-center gap-2">
           <Icon as={Calendar} className="text-primary-600" size="sm" />

@@ -13,7 +13,7 @@ interface CrewActionButtonsProps {
 const CrewActionButtons: FC<CrewActionButtonsProps> = ({ onAccept, onDecline, acceptLabel, declineLabel }) => {
   const { t } = useTranslation()
   return (
-    <Box className="absolute bottom-0 left-0 right-0 bg-white border-t border-outline-100 p-3 shadow-lg rounded-lg">
+    <Box className="absolute bottom-0 left-0 right-0 bg-white border-t border-outline-100 p-3  rounded-lg">
       <HStack className="gap-3">
         <Button className="flex-1 rounded-lg" onPress={onAccept} action="positive" size="lg">
           <ButtonIcon as={Check} />
