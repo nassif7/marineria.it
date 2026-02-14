@@ -32,6 +32,7 @@ const CrewProfile = () => {
   const [isLoading, setIsLoading] = React.useState(false)
   const { t } = useTranslation()
   const { crewid, searchId } = useLocalSearchParams()
+
   const { activeProfile } = useUser()
   const { token } = activeProfile as ActiveProfile
   const queryClient = useQueryClient()
