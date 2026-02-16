@@ -8,8 +8,6 @@
   "forgot-password": "Password dimenticata?",
   "register-as-crew": "Registrati come equipaggio",
   "register-as-recruiter": "Registrati come datore di lavoro",
-  "welcomeCrew": "Hai effettuato l'accesso come Equipaggio",
-  "welcomeOwner": "Hai effettuato l'accesso come Datore di Lavoro",
   "forgotPassword": "Password dimenticata?",
   "newUser": "Nuovo Utente?",
   "crewRegister": "Registrati come equipaggio",
@@ -42,6 +40,12 @@
   "not-declared": " Non dichiarato",
   "back": "Indietro",
   "unknown-error": "Qualcosa è andato storto, riprova più tardi",
+  "home-screen": {
+    "welcome-owner": "Hai effettuato l'accesso come Datore di Lavoro",
+    "welcome-pro": "Hai effettuato l'accesso come Equipaggio",
+    "manage-search": "Go to your search",
+    "job-list": "Job list"
+  },
   "offer": {
     "candidates": "Candidati",
     "contacted": "Contattati",

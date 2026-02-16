@@ -10,8 +10,6 @@
   "common": {},
   "login": "Login",
   "logout": "Logout",
-  "welcomeCrew": "You are logged in as Crew",
-  "welcomeOwner": "You are logged in as Recruiter",
   "forgotPassword": "Forgot Password?",
   "newUser": "New User?",
   "crewRegister": "Register as Crew",
@@ -42,6 +40,12 @@
   "back": "Back",
   "not-declared": "Not declared",
   "unknown-error": "Something went wrong, please try again later",
+  "home-screen": {
+    "welcome-owner": "You are logged in as Recruiter",
+    "welcome-pro": "You are logged in as Crew",
+    "manage-search": "Go to your search",
+    "job-list": "Job list"
+  },
   "offer": {
     "candidates": "Candidates",
     "contacted": "Contacted",
