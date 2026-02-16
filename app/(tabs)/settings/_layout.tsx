@@ -10,7 +10,7 @@ function _layout() {
     auth: { role },
   } = useSession()
 
-  const isPro = role === AuthTypes.UserRole.PRO
+  const isPro = role === AuthTypes.UserRole.CREW
 
   const { t } = useTranslation()
 

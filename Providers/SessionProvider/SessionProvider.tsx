@@ -19,7 +19,7 @@ const SessionContext = createContext<SessionContextType>({
   signOut: () => null,
   switchAuth: () => null,
   auth: { role: null, token: null },
-  storedAuthTokens: { [AuthTypes.UserRole.PRO]: null, [AuthTypes.UserRole.OWNER]: null },
+  storedAuthTokens: { [AuthTypes.UserRole.CREW]: null, [AuthTypes.UserRole.RECRUITER]: null },
   isLoading: false,
 })
 
@@ -35,8 +35,8 @@ export const useSession = () => {
 
 const SessionProvider = (props: React.PropsWithChildren) => {
   const [storedAuthTokens, setStoredAuthTokens] = useState<AuthTypes.UserAuth>({
-    [AuthTypes.UserRole.PRO]: null,
-    [AuthTypes.UserRole.OWNER]: null,
+    [AuthTypes.UserRole.CREW]: null,
+    [AuthTypes.UserRole.RECRUITER]: null,
   })
   const [auth, setAuth] = useState<{ role: AuthTypes.UserRole | null; token: string | null }>({
     role: null,
@@ -69,13 +69,13 @@ const SessionProvider = (props: React.PropsWithChildren) => {
       setIsLoading(true)
       const role = (await SecureStore.getItemAsync('role')) as AuthTypes.UserRole
       const token = role && (await SecureStore.getItemAsync(role as string))
-      const storedProToken = await SecureStore.getItemAsync(AuthTypes.UserRole.PRO)
-      const storedOwnerToken = await SecureStore.getItemAsync(AuthTypes.UserRole.OWNER)
+      const storedProToken = await SecureStore.getItemAsync(AuthTypes.UserRole.CREW)
+      const storedOwnerToken = await SecureStore.getItemAsync(AuthTypes.UserRole.RECRUITER)
       role && token && setAuth({ role, token })
 
       setStoredAuthTokens({
-        [AuthTypes.UserRole.PRO]: storedProToken,
-        [AuthTypes.UserRole.OWNER]: storedOwnerToken,
+        [AuthTypes.UserRole.CREW]: storedProToken,
+        [AuthTypes.UserRole.RECRUITER]: storedOwnerToken,
       })
 
       setIsLoading(false)
@@ -85,12 +85,12 @@ const SessionProvider = (props: React.PropsWithChildren) => {
   }, [])
 
   const unAuthenticate = async (role: AuthTypes.UserRole) => {
-    const proToken = storedAuthTokens[AuthTypes.UserRole.PRO]
-    const ownerToken = storedAuthTokens[AuthTypes.UserRole.OWNER]
+    const proToken = storedAuthTokens[AuthTypes.UserRole.CREW]
+    const ownerToken = storedAuthTokens[AuthTypes.UserRole.RECRUITER]
 
     if (proToken && ownerToken) {
-      const activeRole = role == AuthTypes.UserRole.PRO ? AuthTypes.UserRole.OWNER : AuthTypes.UserRole.PRO
-      const activeToken = role == AuthTypes.UserRole.PRO ? ownerToken : proToken
+      const activeRole = role == AuthTypes.UserRole.CREW ? AuthTypes.UserRole.RECRUITER : AuthTypes.UserRole.CREW
+      const activeToken = role == AuthTypes.UserRole.CREW ? ownerToken : proToken
 
       await SecureStore.setItemAsync('role', activeRole)
       setAuth({

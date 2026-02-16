@@ -21,12 +21,8 @@ const AppLayout = () => {
     return <Redirect href="/sign-in" />
   }
 
-  const headerStyle = {
-    backgroundColor: 'rgb(30 41 59)',
-  }
-
   const sceneStyle = {
-    backgroundColor: 'rgb(30 41 59)',
+    backgroundColor: 'white',
     paddingStart: 8,
     paddingEnd: 8,
     paddingTop: insets.top,
@@ -47,14 +43,14 @@ const AppLayout = () => {
           options={{
             sceneStyle,
             headerShown: false,
-            headerStyle,
+
             title: 'Home',
             tabBarIcon: HomeIcon,
           }}
         />
         <Tabs.Screen
           name="pro"
-          redirect={role !== AuthTypes.UserRole.PRO}
+          redirect={role !== AuthTypes.UserRole.CREW}
           options={{
             headerShown: false,
             sceneStyle,
@@ -64,7 +60,7 @@ const AppLayout = () => {
         />
         <Tabs.Screen
           name="recruiter"
-          redirect={role !== AuthTypes.UserRole.OWNER}
+          redirect={role !== AuthTypes.UserRole.RECRUITER}
           options={{
             headerShown: false,
             sceneStyle,
@@ -77,7 +73,7 @@ const AppLayout = () => {
           options={{
             sceneStyle,
             headerShown: false,
-            headerStyle,
+
             title: 'Settings',
             tabBarIcon: UserIcon,
           }}

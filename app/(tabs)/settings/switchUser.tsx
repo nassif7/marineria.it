@@ -30,7 +30,7 @@ const switchUser = () => {
   const { user, activeProfile, switchProfile } = useUser()
   const activeRole = activeProfile?.role as AuthTypes.UserRole
   const role = useMemo(
-    () => (activeRole == AuthTypes.UserRole.PRO ? AuthTypes.UserRole.OWNER : AuthTypes.UserRole.PRO),
+    () => (activeRole == AuthTypes.UserRole.CREW ? AuthTypes.UserRole.RECRUITER : AuthTypes.UserRole.CREW),
     [activeRole]
   )
   const onSuccess = async () => {
