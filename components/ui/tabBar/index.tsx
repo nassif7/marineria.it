@@ -13,9 +13,9 @@ export const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation, 
 
   return (
     <Box
-      className="bg-secondary-900"
+      className="bg-secondary-800"
       style={{
-        paddingBottom: Platform.OS === 'ios' ? insets.bottom : 8,
+        paddingBottom: Platform.OS === 'ios' ? (insets.bottom > 0 ? 8 : 12) : 8,
       }}
     >
       <HStack className="justify-around items-center">
@@ -54,23 +54,19 @@ export const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation, 
               className="flex-1 items-center justify-center py-3"
             >
               <VStack className="items-center gap-1">
-                {/* Tab Icon */}
                 {options.tabBarIcon && (
                   <Icon
                     as={options.tabBarIcon}
                     size={isFocused ? '3xl' : '2xl'}
-                    className={isFocused ? 'text-primary-600' : 'text-secondary-300'}
+                    className={isFocused ? 'text-primary-600' : 'text-white'}
                   />
                 )}
-
-                {showLabel && (
-                  <Text
-                    className={isFocused ? 'text-primary-600 text-xs font-semibold' : 'text-secondary-300 text-xs'}
-                    numberOfLines={1}
-                  >
-                    {label}
-                  </Text>
-                )}
+                <Text
+                  className={isFocused ? 'text-primary-600 text-sm font-semibold' : 'text-secondary-300 text-xs'}
+                  numberOfLines={1}
+                >
+                  {label}
+                </Text>
               </VStack>
             </Pressable>
           )
