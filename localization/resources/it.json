@@ -41,8 +41,9 @@
   "back": "Indietro",
   "unknown-error": "Qualcosa è andato storto, riprova più tardi",
   "home-screen": {
-    "welcome-owner": "Hai effettuato l'accesso come Datore di Lavoro",
-    "welcome-pro": "Hai effettuato l'accesso come Equipaggio",
+    "welcome": "Welcome",
+    "recruiter-message": "Hai effettuato l'accesso come Datore di Lavoro",
+    "crew-message": "Hai effettuato l'accesso come Equipaggio",
     "manage-search": "Go to your search",
     "job-list": "Job list"
   },

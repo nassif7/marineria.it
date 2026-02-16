@@ -41,8 +41,9 @@
   "not-declared": "Not declared",
   "unknown-error": "Something went wrong, please try again later",
   "home-screen": {
-    "welcome-owner": "You are logged in as Recruiter",
-    "welcome-pro": "You are logged in as Crew",
+    "welcome": "Welcome",
+    "recruiter-message": "You are logged in as Recruiter",
+    "crew-message": "You are logged in as Crew",
     "manage-search": "Go to your search",
     "job-list": "Job list"
   },

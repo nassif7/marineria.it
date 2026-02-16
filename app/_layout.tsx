@@ -26,16 +26,14 @@ export default function RootLayout() {
 
   return (
     <ThemeUIProvider mode="light">
-      <View className="bg-secondary-800 h-full w-full">
-        <QueryClientProvider client={queryClient}>
-          <SafeAreaProvider>
-            <SessionProvider>
-              <StatusBar style="light" />
-              <Slot screenOptions={{ headerShown: false }}></Slot>
-            </SessionProvider>
-          </SafeAreaProvider>
-        </QueryClientProvider>
-      </View>
+      <QueryClientProvider client={queryClient}>
+        <SafeAreaProvider>
+          <SessionProvider>
+            <StatusBar style="light" />
+            <Slot screenOptions={{ headerShown: false }}></Slot>
+          </SessionProvider>
+        </SafeAreaProvider>
+      </QueryClientProvider>
     </ThemeUIProvider>
   )
 }
