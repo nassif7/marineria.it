@@ -40,12 +40,21 @@
   "back": "Back",
   "not-declared": "Not declared",
   "unknown-error": "Something went wrong, please try again later",
+  "screens-labels": {
+    "offers": "Job offers"
+  },
   "home-screen": {
     "welcome": "Welcome",
     "recruiter-message": "You are logged in as Recruiter",
     "crew-message": "You are logged in as Crew",
     "manage-search": "Go to your search",
     "job-list": "Job list"
+  },
+  "offers-screen": {
+    "filter": {
+      "own-offers": "Job offers for me",
+      "all-offers": "All job offers"
+    }
   },
   "offer": {
     "candidates": "Candidates",

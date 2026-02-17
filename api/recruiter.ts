@@ -1,5 +1,5 @@
 import { API } from './const'
-import { ProJobOfferType, OwnerSearchType } from './types/jobOffer'
+import { ProJobOfferType, OwnerSearchType } from './types/offer'
 import { CrewType } from './types/crew'
 import { getLanguageCode } from './types'
 

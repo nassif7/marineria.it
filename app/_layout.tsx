@@ -29,7 +29,7 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <SafeAreaProvider>
           <SessionProvider>
-            <StatusBar style="light" />
+            <StatusBar />
             <Slot screenOptions={{ headerShown: false }}></Slot>
           </SessionProvider>
         </SafeAreaProvider>

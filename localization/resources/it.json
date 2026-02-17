@@ -40,12 +40,21 @@
   "not-declared": " Non dichiarato",
   "back": "Indietro",
   "unknown-error": "Qualcosa è andato storto, riprova più tardi",
+  "screens-labels": {
+    "offers": "Offerte di lavoro"
+  },
   "home-screen": {
     "welcome": "Welcome",
     "recruiter-message": "Hai effettuato l'accesso come Datore di Lavoro",
     "crew-message": "Hai effettuato l'accesso come Equipaggio",
     "manage-search": "Go to your search",
     "job-list": "Job list"
+  },
+  "offers-screen": {
+    "filter": {
+      "own-offers": "Tutte le offerte",
+      "all-offers": "Offerte per me"
+    }
   },
   "offer": {
     "candidates": "Candidati",

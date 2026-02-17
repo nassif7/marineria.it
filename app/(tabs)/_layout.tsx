@@ -6,9 +6,23 @@ import { useSession } from '@/Providers/SessionProvider'
 import '@/localization'
 import { TabBar } from '@/components/ui'
 import { AuthTypes } from '@/api/types'
-import { Anchor, HomeIcon, UserIcon } from 'lucide-react-native'
+import {
+  Anchor,
+  HomeIcon,
+  UserIcon,
+  Briefcase,
+  FileText,
+  Clipboard,
+  ScrollText,
+  Search,
+  UserSearch,
+  Users,
+  ListFilter,
+} from 'lucide-react-native'
+import { useTranslation } from 'react-i18next'
 
 const AppLayout = () => {
+  const { t } = useTranslation(['screens-labels'])
   const { auth, isLoading } = useSession()
   const { token, role } = auth
   const insets = useSafeAreaInsets()
@@ -23,9 +37,7 @@ const AppLayout = () => {
 
   const sceneStyle = {
     backgroundColor: 'white',
-    paddingStart: 8,
-    paddingEnd: 8,
-    paddingTop: insets.top,
+    paddingTop: insets.top - 16,
   }
 
   return (
@@ -43,7 +55,6 @@ const AppLayout = () => {
           options={{
             sceneStyle,
             headerShown: false,
-
             title: 'Home',
             tabBarIcon: HomeIcon,
           }}
@@ -54,8 +65,8 @@ const AppLayout = () => {
           options={{
             headerShown: false,
             sceneStyle,
-            title: 'Crew',
-            tabBarIcon: Anchor,
+            title: t('offers'),
+            tabBarIcon: Briefcase,
           }}
         />
         <Tabs.Screen
@@ -73,7 +84,6 @@ const AppLayout = () => {
           options={{
             sceneStyle,
             headerShown: false,
-
             title: 'Settings',
             tabBarIcon: UserIcon,
           }}

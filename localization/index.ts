@@ -21,7 +21,16 @@ const initI18n = async () => {
     resources,
     lng: savedLanguage,
     fallbackLng: 'en',
-    ns: ['home-screen', 'crew-screen', 'recruiter-screen', 'settings', 'common', 'login-screen'],
+    ns: [
+      'screens-labels',
+      'home-screen',
+      'offers-screen',
+      'crew-screen',
+      'recruiter-screen',
+      'settings',
+      'common',
+      'login-screen',
+    ],
     defaultNS: 'home-screen',
     fallbackNS: false,
     interpolation: {
