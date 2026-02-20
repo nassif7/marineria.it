@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/select'
 import OfferListItem from './OfferListItem'
 import { useQuery } from '@tanstack/react-query'
+import { ScreenContainer } from '@/components/appUI'
 
 const selectOptions = [
   { label: 'filter.all-offers', value: 'all' },
@@ -34,17 +35,14 @@ const ListHeader: FC<{
       <Box className="bg-white p-2">
         <VStack className="gap-2">
           <HStack className="items-center justify-between gap-4">
-            {/* <Box className="bg-success-100 rounded-xl p-3">
-              <Icon as={Briefcase} className="text-success-600" size="lg" />
-            </Box> */}
             <Box>
               <Select
                 defaultValue={ownOffers}
                 onValueChange={setOwnOffers}
                 initialLabel={t(selectOptions.find((o) => o.value === ownOffers)?.label as string)}
-                className=" bg-white rounded-lg"
+                className=" bg-white "
               >
-                <SelectTrigger variant="outline" size="lg" className="w-80 flex justify-between pr-2">
+                <SelectTrigger variant="rounded" size="lg" className="w-80 flex justify-between pr-2 rounded-md">
                   <SelectInput className="text-typography-900 text-md font-semibold" />
                   <SelectIcon as={ChevronDown} />
                 </SelectTrigger>
@@ -70,7 +68,9 @@ const ListHeader: FC<{
               </Select>
             </Box>
             <Box className="bg-success-500 rounded-full w-10 h-10 items-center justify-center shrink-0">
-              <Text className="text-white font-bold text-base">{itemsCount}</Text>
+              <Text color="white" bold>
+                {itemsCount}
+              </Text>
             </Box>
           </HStack>
         </VStack>
@@ -88,14 +88,14 @@ const JobOfferList: FC = () => {
   const { token } = activeProfile as ActiveProfile
   const [ownOffers, setOwnOffers] = useState<string>('all')
 
-  const { isFetching, isSuccess, isError, isRefetching, refetch, data } = useQuery({
+  const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
     queryKey: ['offers', ownOffers],
     queryFn: () => getProOffers(token, ownOffers == 'all', language),
   })
 
   return (
-    <View className=" h-full px-2 flex-1 pb-2 bg-background-100">
-      {isFetching && <Loading />}
+    <ScreenContainer>
+      {isLoading && <Loading />}
       {isSuccess && (
         <>
           <FlatList
@@ -112,19 +112,8 @@ const JobOfferList: FC = () => {
         </>
       )}
       {isError && <Text className="text-error-600 text-center">{t('error')}</Text>}
-    </View>
+    </ScreenContainer>
   )
 }
 
 export default JobOfferList
-
-{
-  /* <HStack className="items-center gap-3 flex-1">
-              <Box className="bg-success-100 rounded-xl p-3">
-                <Icon as={Briefcase} className="text-success-600" size="lg" />
-              </Box>
-              <VStack className="gap-0.5">
-                <Text className="text-typography-700 text-md">{t('jobList')}</Text>
-              </VStack>
-            </HStack> */
-}

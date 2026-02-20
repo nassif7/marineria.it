@@ -39,7 +39,7 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
         variant: 'solid' as const,
         disabled: false,
         icon: AlertCircle,
-        text: "Why can't I apply?",
+        text: 'Not matching! Why? ',
       }
     }
 
@@ -55,25 +55,23 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
   const buttonConfig = getApplyButtonConfig()
 
   return (
-    <Box className="bg-white border-t border-outline-100 p-4 shadow-sm">
-      <VStack className="gap-2">
-        {/* Apply Button */}
+    <Box className="bg-white p-2 rounded-md">
+      <VStack className="gap-1">
         <Button
           size="lg"
           // action={buttonConfig.action}
           variant={buttonConfig.variant}
           onPress={onApply}
           isDisabled={buttonConfig.disabled}
-          className="rounded-sm"
+          className="rounded-md"
         >
           <ButtonIcon as={buttonConfig.icon} />
           <ButtonText className="ml-2">{buttonConfig.text}</ButtonText>
         </Button>
 
-        {/* Share Button */}
-        <Button size="lg" variant="outline" action="secondary" onPress={handleShare} className="rounded-sm">
-          <ButtonIcon as={Share2} />
-          <ButtonText className="ml-2">Share this offer</ButtonText>
+        <Button size="lg" variant="solid" action="secondary" onPress={handleShare} className="rounded-md">
+          <ButtonIcon as={Share2} className=" text-white" />
+          <ButtonText className="ml-2 text-white">Share this offer</ButtonText>
         </Button>
       </VStack>
     </Box>

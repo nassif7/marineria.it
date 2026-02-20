@@ -469,7 +469,7 @@ import { ScrollView } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import { useQuery } from '@tanstack/react-query'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Box, VStack } from '@/components/ui'
+import { Box, VStack, View } from '@/components/ui'
 import { Loading } from '@/components/ui/loading'
 import { getProOfferById, applyToOffer } from '@/api'
 import OfferHeader from './offerDetails/OfferHeader'
@@ -481,6 +481,7 @@ import NotApplicableModal from './offerDetails/NotApplicableModal'
 import ApplyModal from './offerDetails/ApplyModal'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 import { useTranslation } from 'react-i18next'
+import { ScreenContainer } from '@/components/appUI'
 
 export default function OfferDetailsScreen() {
   //   const [applying, setApplying] = useState(false)
@@ -522,9 +523,9 @@ export default function OfferDetailsScreen() {
     }
   }
 
-  const handleConfirmApply = async (privacyAccepted: boolean, consentAccepted: boolean) => {
+  const handleConfirmApply = async (consentAccepted: boolean) => {
     // API call to apply
-    console.log('Applying with:', { privacyAccepted, consentAccepted })
+    console.log('Applying with:', { consentAccepted })
     setShowApply(false)
   }
 
@@ -534,25 +535,16 @@ export default function OfferDetailsScreen() {
     <>
       {isLoading && <Loading />}
       {offer && (
-        <>
-          <ScrollView className=" h-full px-2 flex-1 pb-2 bg-background-100">
-            <VStack className="gap-2 ">
-              <OfferHeader offer={offer} />
-              <OfferContract offer={offer} />
-              <OfferPosition offer={offer} />
-              <OfferLocation offer={offer} />
-              <OfferActions offer={offer} onApply={handleApply} />
-            </VStack>
-          </ScrollView>
-
-          <NotApplicableModal
-            visible={showNotApplicable}
-            onClose={() => setShowNotApplicable(false)}
-            reasons={[]} // Will be filled later
-          />
-
+        <ScreenContainer useScrollView>
+          <VStack className="gap-1 pb-2 ">
+            <OfferHeader offer={offer} />
+            <OfferContract offer={offer} />
+            <OfferPosition offer={offer} />
+            <OfferActions offer={offer} onApply={handleApply} />
+          </VStack>
+          <NotApplicableModal visible={showNotApplicable} onClose={() => setShowNotApplicable(false)} reasons={[]} />
           <ApplyModal visible={showApply} onClose={() => setShowApply(false)} onConfirm={handleConfirmApply} />
-        </>
+        </ScreenContainer>
       )}
     </>
   )

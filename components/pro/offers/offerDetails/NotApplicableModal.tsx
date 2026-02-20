@@ -20,9 +20,9 @@ const NotApplicableModal: React.FC<NotApplicableModalProps> = ({ visible, onClos
               {/* Header */}
               <HStack className="justify-between items-center">
                 <HStack className="items-center gap-2 flex-1">
-                  <Icon as={AlertCircle} className="text-warning-600" size="lg" />
+                  <Icon as={AlertCircle} className="text-warning-600" size="xl" />
                   <Heading size="xl" className="text-warning-600">
-                    Why can't I apply?
+                    Not matching! Why?
                   </Heading>
                 </HStack>
                 <Pressable onPress={onClose}>

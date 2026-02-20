@@ -6,7 +6,7 @@ const baseStyle = isWeb
   : ''
 
 export const textStyle = tva({
-  base: `text-typography-700 font-body ${baseStyle}`,
+  base: `text-typography-800 font-body ${baseStyle}`,
 
   variants: {
     isTruncated: {
@@ -14,6 +14,9 @@ export const textStyle = tva({
     },
     bold: {
       true: 'font-bold',
+    },
+    semiBold: {
+      true: 'font-semibold',
     },
     underline: {
       true: 'underline',
@@ -43,5 +46,31 @@ export const textStyle = tva({
     highlight: {
       true: 'bg-yellow-500',
     },
+    uppercase: {
+      true: 'uppercase',
+    },
+    color: {
+      primary: 'primary',
+      secondary: 'secondary',
+      success: 'green',
+      warning: 'yellow',
+      error: 'red',
+      info: 'info',
+      muted: 'muted',
+      typography: 'typography',
+      white: 'white',
+    },
+    shade: {
+      100: '100',
+      200: '200',
+      300: '300',
+      400: '400',
+      500: '500',
+      600: '600',
+      700: '700',
+      800: '800',
+      900: '900',
+    },
+    fontColor: '',
   },
 })

@@ -14,10 +14,11 @@ import {
   BadgeText,
   Pressable,
 } from '@/components/ui'
-import { Eye, Calendar, Euro, CheckCircle, Clock, AlertCircle, Briefcase, MapPin } from 'lucide-react-native'
+import { Eye, Calendar, Euro, CheckCircle, AlertCircle, MapPin } from 'lucide-react-native'
 import { router } from 'expo-router'
 import { OfferType } from '@/api/types'
 import { Linking } from 'react-native'
+import { SubSection, SubSectionHeader } from '@/components/appUI'
 
 interface IOfferListItemProps {
   offer: OfferType
@@ -36,76 +37,76 @@ const OfferListItem: FC<IOfferListItemProps> = ({ offer }) => {
   const hasLocation = offer.positionArm || (offer.latArm !== 0 && offer.lngArm !== 0)
 
   return (
-    <Box key={offer.idoffer} className="bg-white p-3">
+    <Box key={offer.idoffer} className="bg-white p-4 rounded-md">
       <VStack className="gap-1">
         {/* Title */}
         <Heading size="lg" className="text-primary-600 leading-tight">
           {offer.offer.trim()}
         </Heading>
-
         {/* Reference & Date */}
         <HStack className="justify-between items-center border-b border-background-200 pb-2">
-          <Text className="text-typography-800 text-xs ">[Ref: {offer.reference.split('_')[1]}]</Text>
-          <Text className="text-typography-800 text-xs">{offer.offerdate}</Text>
+          <Text size="xs" shade={400}>
+            [Ref: {offer.reference.split('_')[1]}]
+          </Text>
+          <Text shade={400} size="xs">
+            {offer.offerdate}
+          </Text>
         </HStack>
-
         {/* Status Badges */}
         {(offer.alreadyApplied || !offer.offerApplicable) && (
           <HStack className="gap-2 flex-wrap py-1">
             {offer.alreadyApplied && (
-              <Badge action="info" variant="outline" className="rounded-sm">
-                <BadgeIcon as={CheckCircle} />
-                <BadgeText>Already Applied</BadgeText>
+              <Badge action="muted" variant="outline" className="rounded-md">
+                <BadgeIcon as={CheckCircle} className="mr-1 text-typography-800" />
+                <BadgeText className="text-typography-800">Already Applied</BadgeText>
               </Badge>
             )}
             {!offer.offerApplicable && (
-              <Badge action="warning" variant="outline" className="rounded-sm">
-                <BadgeIcon as={AlertCircle} />
-                <BadgeText>Not applicable</BadgeText>
+              <Badge action="muted" variant="outline" className="rounded-md">
+                <BadgeIcon as={AlertCircle} className="mr-1 text-typography-800" />
+                <BadgeText className="text-typography-800">Not applicable</BadgeText>
               </Badge>
             )}
           </HStack>
         )}
-        {hasLocation && (
-          <Box className="bg-background-muted border border-background-300 rounded-sm py-2 px-3">
-            <Pressable onPress={handleOpenMap}>
-              <HStack className="items-center gap-2 py-2 ">
-                <Icon as={MapPin} className="text-primary-600" size="md" />
-                <VStack className="flex-1">
-                  <Text className="text-primary-600 font-semibold text-sm">{offer.positionArm || 'View Location'}</Text>
-                </VStack>
-              </HStack>
-            </Pressable>
-          </Box>
-        )}
-        {/* Salary Box */}
-        <Box className="bg-background-muted border border-background-300 rounded-sm p-2 px-3">
-          <HStack className="items-center gap-1 mb-1">
-            <Icon as={Euro} className="text-typography-600" size="sm" />
-            <Text className="text-typography-600 text-sm font-medium">Salary</Text>
-          </HStack>
-          <Text className="text-typography-800 font-bold text-sm">
-            {offer.salary_From} - {offer.salary_To}
+        {/* Salary  Location Box */}
+        <HStack className="gap-1">
+          <SubSection className="flex-1">
+            <VStack>
+              <SubSectionHeader icon={Euro} title="Salary" />
+              <Text size="sm" semiBold shade={800}>
+                {offer.salary_From} - {offer.salary_To}
+              </Text>
+            </VStack>
+          </SubSection>
+          {hasLocation && (
+            <SubSection className="flex-1 ">
+              <VStack>
+                <SubSectionHeader icon={MapPin} title="Location" />
+                <Pressable onPress={console.log}>
+                  <Text color="primary" size="sm" semiBold>
+                    {offer.positionArm || 'View on Map'}
+                  </Text>
+                </Pressable>
+              </VStack>
+            </SubSection>
+          )}
+        </HStack>
+        <SubSection>
+          <SubSectionHeader icon={Calendar} title="Duration" />
+          <Text size="sm" semiBold shade={800}>
+            From: {offer.offerdate}
           </Text>
-        </Box>
-
-        {/* Duration Box */}
-        <Box className="bg-background-muted border border-background-300 rounded-sm p-2 px-3">
-          <HStack className="items-center gap-1 mb-1">
-            <Icon as={Calendar} className="text-typography-600" size="sm" />
-            <Text className="text-typography-600 text-sm font-medium">Duration</Text>
-          </HStack>
-          <Text className="text-typography-800 font-bold text-sm">From: {offer.offerdate}</Text>
-          <Text className="text-typography-800 font-bold text-sm">To: {offer.duration}</Text>
-        </Box>
-
-        {/* View Button */}
+          <Text size="sm" semiBold shade={800}>
+            To: {offer.duration}
+          </Text>
+        </SubSection>
         <Button
           size="lg"
           action="positive"
           variant="solid"
           onPress={() => handleViewOffer(offer.idoffer)}
-          className="w-full rounded-sm mt-2"
+          className="w-full rounded-md "
         >
           <ButtonIcon as={Eye} />
           <ButtonText className="ml-2">View offer</ButtonText>

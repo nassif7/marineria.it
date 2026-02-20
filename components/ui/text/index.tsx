@@ -7,19 +7,40 @@ import { textStyle } from './styles'
 type ITextProps = React.ComponentProps<typeof RNText> & VariantProps<typeof textStyle>
 
 const Text = React.forwardRef<React.ElementRef<typeof RNText>, ITextProps>(
-  ({ className, isTruncated, bold, underline, strikeThrough, size = 'md', sub, italic, highlight, ...props }, ref) => {
+  (
+    {
+      className,
+      isTruncated,
+      bold,
+      semiBold,
+      underline,
+      strikeThrough,
+      size = 'md',
+      sub,
+      italic,
+      highlight,
+      shade = 600,
+      uppercase,
+      color = 'typography',
+      ...props
+    },
+    ref
+  ) => {
+    const fontColor = color === 'white' ? 'text-white' : 'text-' + color + '-' + shade
     return (
       <RNText
         className={textStyle({
           isTruncated,
           bold,
+          semiBold,
           underline,
           strikeThrough,
           size,
           sub,
           italic,
           highlight,
-          class: className,
+          uppercase,
+          class: fontColor + ' ' + className,
         })}
         {...props}
         ref={ref}

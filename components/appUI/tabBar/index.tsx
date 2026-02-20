@@ -13,7 +13,7 @@ export const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation, 
 
   return (
     <Box
-      className="bg-secondary-800"
+      className="bg-white"
       style={{
         paddingBottom: Platform.OS === 'ios' ? (insets.bottom > 0 ? 8 : 12) : 8,
       }}
@@ -58,11 +58,11 @@ export const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation, 
                   <Icon
                     as={options.tabBarIcon}
                     size={isFocused ? '3xl' : '2xl'}
-                    className={isFocused ? 'text-primary-600' : 'text-white'}
+                    className={isFocused ? 'text-primary-600' : 'text-typography-600'}
                   />
                 )}
                 <Text
-                  className={isFocused ? 'text-primary-600 text-sm font-semibold' : 'text-secondary-300 text-xs'}
+                  className={isFocused ? 'text-primary-600 text-sm font-semibold' : 'text-typography-600 text-xs'}
                   numberOfLines={1}
                 >
                   {label}

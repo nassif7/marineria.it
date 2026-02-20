@@ -37,7 +37,7 @@ const AppLayout = () => {
 
   const sceneStyle = {
     backgroundColor: 'white',
-    paddingTop: insets.top - 16,
+    paddingTop: insets.top - 12,
   }
 
   return (
