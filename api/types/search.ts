@@ -1,11 +1,14 @@
-export type OfferType = {
+export type TRecruiterSearch = {
   idoffer: number
+  name: string
+  surname: string
+  username: string
+  email: string
   iduser: number
   pushNotificationToken: string
   contractDescription: string
   unit: number
   gender: string
-  seamensBookCode: number
   seamensBook: string
   nauticaLicense: string
   espCharter: string
@@ -16,6 +19,9 @@ export type OfferType = {
   offertExpirationdate: string
   descriptionOffer: string
   reference: string
+  countCandidates: number
+  countContacted: number
+  countResidual: number
   ownerDescription: string
   mainPosition: string
   jobOffer: string
@@ -35,12 +41,15 @@ export type OfferType = {
   mcaDeckRya: string
   stcwNavyDeck: string
   stcwNavyEngine: string
-  date_start_boarding: string
-  date_end_boarding: string
   salary_From: string
   salary_To: string
   latArm: number
   lngArm: number
+  listurl: string
+  listgeourl: string
   offerApplicable: boolean
   alreadyApplied: boolean
+  paid: boolean
+  credit: boolean
+  offerPublished: 0 | 1
 }

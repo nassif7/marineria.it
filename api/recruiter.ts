@@ -1,18 +1,15 @@
 import { API } from './const'
-import { ProJobOfferType, OwnerSearchType } from './types/offer'
+import { TRecruiterSearch } from './types'
 import { CrewType } from './types/crew'
 import { getLanguageCode } from './types'
 
-export const getRecruiterActiveSearches = async (
-  ownerToken: string,
-  language: string
-): Promise<OwnerSearchType[] | Error> => {
+export const getRecruiterActiveSearches = async (ownerToken: string, language: string): Promise<TRecruiterSearch[]> => {
   const languageCode = getLanguageCode(language)
   const url = `${API.OWNER_OFFERS}/${ownerToken}?language=${languageCode}`
   const response = await fetch(url)
 
   if (!response.ok) {
-    return new Error(`Failed to fetch owner job offers (${response.status})`)
+    throw new Error(`Failed to fetch owner job offers (${response.status})`)
   }
 
   return response.json()
@@ -22,7 +19,7 @@ export const getRecruiterSearchById = async (
   searchId: string,
   ownerToken: string,
   language?: string
-): Promise<OwnerSearchType[] | Error> => {
+): Promise<TRecruiterSearch[] | Error> => {
   const languageCode = getLanguageCode(language)
   const url = API.OWNER_OFFERS + `/${ownerToken}/${searchId}?language=${languageCode}`
   const response = await fetch(url)

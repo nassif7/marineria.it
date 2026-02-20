@@ -2,6 +2,8 @@ export * as AuthTypes from './auth'
 export * as ErrorTypes from './errors'
 export * from './offer'
 export * as UserTypes from './user'
+export * from './search'
+
 export { CrewType } from './crew'
 
 import { ErrorResponse } from './errors'

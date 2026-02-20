@@ -1,17 +1,14 @@
 import { FC } from 'react'
-import { FlatList } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { getRecruiterActiveSearches } from '@/api'
 import { useAppState } from '@/hooks'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-import { Loading, ListEmptyComponent, Box, Heading, VStack, HStack, Text, Icon, View, Divider } from '@/components/ui'
-import SearchItem from './SearchItem'
+import { Loading, Text } from '@/components/ui'
+import SearchListItem from './SearchListItem'
 import { useQuery } from '@tanstack/react-query'
-import { Briefcase } from 'lucide-react-native'
-// import { useFocusEffect } from '@react-navigation/native'
-//#TODO: get the offers when the app state change from inactive to active
-import { SafeAreaView } from 'react-native'
-const OwnerSearchList: FC = () => {
+import { List, ScreenContainer } from '@/components/appUI'
+
+const RecruiterSearchList: FC = () => {
   const {
     t,
     i18n: { language },
@@ -20,44 +17,26 @@ const OwnerSearchList: FC = () => {
   const { activeProfile } = useUser()
   const { token } = activeProfile as ActiveProfile
 
-  const { data, isFetching, isSuccess } = useQuery({
+  const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
     queryKey: ['recruiter-search-list'],
     queryFn: () => getRecruiterActiveSearches(token, language),
     enabled: state === 'active',
   })
 
   return (
-    <View className="px-2 h-full flex-1 pb-5">
-      {isFetching && <Loading />}
-      {isSuccess && data && (
-        <>
-          <Box className="mb-2">
-            <Box className="bg-background-50 rounded-lg p-2   border border-outline-100">
-              <HStack className="items-center justify-between gap-4">
-                <HStack className="items-center gap-3 flex-1">
-                  <Box className="bg-success-100 rounded-xl p-3">
-                    <Icon as={Briefcase} className="text-success-600" size="lg" />
-                  </Box>
-                  <VStack className="gap-0.5">
-                    <Text className="text-typography-700 text-md">{t('recruiter.active-searches-description')}</Text>
-                  </VStack>
-                </HStack>
-                <Box className="bg-success-500 rounded-full w-10 h-10 items-center justify-center shrink-0">
-                  <Text className="text-white font-bold text-base">{(data as any)?.length}</Text>
-                </Box>
-              </HStack>
-            </Box>
-          </Box>
-          <FlatList
-            ItemSeparatorComponent={() => <Divider className="my-1 bg-transparent" />}
-            data={(data as any).filter((i: any) => i.paid && !i.offerPublished && i.credit)}
-            renderItem={({ item }) => <SearchItem search={item} key={item.reference} />}
-            ListEmptyComponent={<ListEmptyComponent message={t('owner.no-active-searches')} />}
-          />
-        </>
+    <ScreenContainer>
+      {(isLoading || isRefetching) && <Loading />}
+      {isSuccess && (
+        <List
+          data={data}
+          isRefetching={isRefetching}
+          onRefresh={refetch}
+          renderItem={({ item }) => <SearchListItem search={item} key={item.reference} />}
+        />
       )}
-    </View>
+      {isError && <Text className="text-error-600 text-center">{t('error')}</Text>}
+    </ScreenContainer>
   )
 }
 
-export default OwnerSearchList
+export default RecruiterSearchList

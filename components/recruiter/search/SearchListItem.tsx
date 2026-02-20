@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { router } from 'expo-router'
 import * as Linking from 'expo-linking'
 import { EyeIcon, Edit, Users, UserSearch, Map } from 'lucide-react-native'
-import { JobOfferTypes } from '@/api/types'
+import { TRecruiterSearch } from '@/api/types'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 import {
   Box,
@@ -19,11 +19,11 @@ import {
   Icon,
 } from '@/components/ui'
 
-interface SearchItemsProps {
-  search: JobOfferTypes.OwnerSearchType
+interface ISearchItemsProps {
+  search: TRecruiterSearch
 }
 
-const SearchListItem: FC<SearchItemsProps> = ({ search }) => {
+const SearchListItem: FC<ISearchItemsProps> = ({ search }) => {
   const {
     t,
     i18n: { language },
