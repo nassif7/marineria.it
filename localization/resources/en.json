@@ -1,6 +1,7 @@
 {
   "screens-labels": {
-    "offers": "Job offers"
+    "offer-list": "Job offers",
+    "search-list": "Searches"
   },
   "home-screen": {
     "welcome": "Welcome",

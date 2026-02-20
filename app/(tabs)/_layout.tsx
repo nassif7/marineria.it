@@ -4,7 +4,7 @@ import UserProvider from '@/Providers/UserProvider'
 import { Text } from '@/components/ui'
 import { useSession } from '@/Providers/SessionProvider'
 import '@/localization'
-import { TabBar } from '@/components/ui'
+import { TabBar, View } from '@/components/ui'
 import { AuthTypes } from '@/api/types'
 import {
   Anchor,
@@ -18,8 +18,10 @@ import {
   UserSearch,
   Users,
   ListFilter,
+  Settings,
 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
+import { NavBar } from '@/components/ui'
 
 const AppLayout = () => {
   const { t } = useTranslation(['screens-labels'])
@@ -54,9 +56,9 @@ const AppLayout = () => {
           name="index"
           options={{
             sceneStyle,
-            headerShown: false,
             title: 'Home',
             tabBarIcon: HomeIcon,
+            header: (props) => <View className="min-h-[50px]  bg-white"></View>,
           }}
         />
         <Tabs.Screen
@@ -75,8 +77,8 @@ const AppLayout = () => {
           options={{
             headerShown: false,
             sceneStyle,
-            title: 'Recruiter',
-            tabBarIcon: Anchor,
+            title: 'Search',
+            tabBarIcon: UserSearch,
           }}
         />
         <Tabs.Screen
@@ -85,7 +87,7 @@ const AppLayout = () => {
             sceneStyle,
             headerShown: false,
             title: 'Settings',
-            tabBarIcon: UserIcon,
+            tabBarIcon: Settings,
           }}
         />
       </Tabs>

@@ -18,6 +18,7 @@ import {
   View,
 } from '@/components/ui'
 import { router } from 'expo-router'
+import { ScreenContainer } from '@/components/appUI'
 
 const UserProfile = () => {
   const { t } = useTranslation(['home-screen'])
@@ -29,7 +30,7 @@ const UserProfile = () => {
   const photoUrl = useMemo(() => `https://www.marineria.it/PROFoto/${user?.namephotoA}.jpg`, [user])
 
   return (
-    <View className="h-full justify-center items-center">
+    <ScreenContainer className="justify-center items-center">
       {isLoading ? (
         <Loading />
       ) : (
@@ -71,7 +72,7 @@ const UserProfile = () => {
           )}
         </>
       )}
-    </View>
+    </ScreenContainer>
   )
 }
 
