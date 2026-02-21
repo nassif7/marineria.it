@@ -16,6 +16,7 @@ import {
   ScrollText,
   Search,
   UserSearch,
+  UserRoundSearch,
   Users,
   ListFilter,
   Settings,

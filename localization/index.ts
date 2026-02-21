@@ -25,6 +25,7 @@ const initI18n = async () => {
       'screens-labels',
       'home-screen',
       'offers-screen',
+      'searches-screen',
       'crew-screen',
       'recruiter-screen',
       'settings',

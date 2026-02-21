@@ -39,6 +39,18 @@
       "share": "Share this offer"
     }
   },
+  "searches-screen": {
+    "no-searches": "Non hai ricerche attive",
+    "view-search": "Visualizza ricerca",
+    "offer": "Offerte",
+    "candidates": "Candidati",
+    "contacted": "Contattati",
+    "residual": "Rimanenti",
+    "find-crew": "Cerca equipaggio",
+    "by-location": "Per località",
+    "by-skill": "Per caratteristiche",
+    "candidates-overview": "Candidati"
+  },
   "offer": {
     "candidates": "Candidati",
     "contacted": "Contattati",

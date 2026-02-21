@@ -39,6 +39,18 @@
       "share": "Share this offer"
     }
   },
+  "searches-screen": {
+    "no-searches": "You have no active searches",
+    "view-search": "View search",
+    "offer": "Offers",
+    "candidates": "Candidates",
+    "contacted": "Contacted",
+    "residual": "Residual",
+    "find-crew": "Find crew",
+    "by-location": "By location",
+    "by-skill": "By skills",
+    "candidates-overview": "Candidates overview"
+  },
   "offer": {
     "candidates": "Candidates",
     "contacted": "Contacted",
