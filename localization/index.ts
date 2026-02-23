@@ -25,7 +25,7 @@ const initI18n = async () => {
       'screens-labels',
       'home-screen',
       'offers-screen',
-      'searches-screen',
+      'search-screen',
       'crew-screen',
       'recruiter-screen',
       'settings',
@@ -33,7 +33,7 @@ const initI18n = async () => {
       'login-screen',
     ],
     defaultNS: 'home-screen',
-    fallbackNS: false,
+    fallbackNS: ['common', 'offer'],
     interpolation: {
       escapeValue: false,
     },

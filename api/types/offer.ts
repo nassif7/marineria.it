@@ -1,4 +1,4 @@
-export type OfferType = {
+export type TOffer = {
   idoffer: number
   iduser: number
   pushNotificationToken: string

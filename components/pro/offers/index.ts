@@ -1,2 +1,2 @@
-export { default as OfferDetails } from './OfferDetails'
-export { default as OffersList } from './OffersList'
+export { default as OfferDetails } from './offerDetails/OfferDetails'
+export { default as OffersList } from './offerList/OffersList'

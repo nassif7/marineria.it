@@ -1,33 +1,25 @@
-import React, { FC } from 'react'
+import React from 'react'
+import { VStack, HStack, ButtonText, Button, ButtonIcon, Badge, BadgeText } from '@/components/ui'
+import { Users, Info, Search, UserCheck, MapPin } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { router } from 'expo-router'
-import * as Linking from 'expo-linking'
-import { Users, MapPin, Briefcase, Search, UserCheck } from 'lucide-react-native'
-import { TRecruiterSearch } from '@/api/types'
+import { SectionHeader, Section, SubSection } from '@/components/appUI'
+import { Linking } from 'react-native'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-import { Box, VStack, HStack, Heading, Text, Button, ButtonText, ButtonIcon, Badge, BadgeText } from '@/components/ui'
-import { SubSection, SubSectionHeader } from '@/components/appUI'
+import { router } from 'expo-router'
+import { TRecruiterSearch } from '@/api/types/search'
 
-interface ISearchListItemProps {
+interface SearchCandidatesProps {
   search: TRecruiterSearch
+  onViewCandidates: () => void
 }
 
-const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
+const SearchCandidates: React.FC<SearchCandidatesProps> = ({ search }) => {
   const {
     t,
     i18n: { language },
   } = useTranslation(['search-screen'])
   const { activeProfile } = useUser()
   const { token } = activeProfile as ActiveProfile
-
-  const viewSearch = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}`)
-  const viewCrewList = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list`)
-
-  // const handleEditSearch = () => {
-  //   const url = `https://www.marineria.it/${language}/Rec/Post.aspx?idofferta=${search.idoffer}&token=${token}`
-  //   Linking.openURL(url)
-  // https://www.marineria.it/It/rec/Post.aspx?idofferta=10342&idutente=76135
-  // }
 
   const openSearchByLocation = () => {
     const url = `https://www.marineria.it/${language}/${search.listgeourl}?token=${token}`
@@ -39,27 +31,12 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
     Linking.openURL(url)
   }
 
-  const referenceShort = search.reference.includes('_') ? search.reference.split('_')[1] : search.reference
+  const viewCrewList = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list`)
 
   return (
-    <Box className="bg-white p-3 rounded-md">
+    <Section>
+      <SectionHeader title={t('candidates-overview')} icon={Users} />
       <VStack space="xs">
-        <Heading size="lg" className="text-primary-600 leading-tight">
-          {search.title.trim() || '—'}
-        </Heading>
-        <HStack className="justify-between items-center border-b border-background-200 pb-2 mb-1">
-          <Text size="xs" shade={400}>
-            {`[${t('search-id')}: ${referenceShort}]`}
-          </Text>
-          <Text shade={400} size="xs">
-            {search.offerdate}
-          </Text>
-        </HStack>
-        <SubSection title={t('offer')} icon={Briefcase} onPress={viewSearch}>
-          <Text size="sm" semiBold shade={800}>
-            {search.offer.trim() || '—'}
-          </Text>
-        </SubSection>
         <SubSection title={t('candidates-overview')} icon={Users} onPress={viewCrewList}>
           <HStack className="items-center justify-between">
             <Badge action="muted" variant="outline" className="rounded-md">
@@ -92,8 +69,8 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
           </HStack>
         </SubSection>
       </VStack>
-    </Box>
+    </Section>
   )
 }
 
-export default SearchListItem
+export default SearchCandidates

@@ -3,10 +3,10 @@ import React from 'react'
 import { Linking } from 'react-native'
 import { Box, VStack, HStack, Heading, Text, Icon, Pressable } from '@/components/ui'
 import { MapPin } from 'lucide-react-native'
-import { OfferType } from '@/api/types'
+import { TOffer } from '@/api/types'
 
 interface OfferLocationProps {
-  offer: OfferType
+  offer: TOffer
 }
 
 const OfferLocation: React.FC<OfferLocationProps> = ({ offer }) => {

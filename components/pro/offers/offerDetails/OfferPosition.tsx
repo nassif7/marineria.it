@@ -2,42 +2,38 @@
 import React from 'react'
 import { VStack, Text } from '@/components/ui'
 import { Anchor, Briefcase, CheckCircle, FileText } from 'lucide-react-native'
-import { OfferType } from '@/api/types'
+import { TOffer } from '@/api/types'
 import { SectionHeader, Section, SubSection, SubSectionHeader } from '@/components/appUI'
+import { useTranslation } from 'react-i18next'
 
 interface OfferPositionProps {
-  offer: OfferType
+  offer: TOffer
 }
 
 const OfferPosition: React.FC<OfferPositionProps> = ({ offer }) => {
+  const { t } = useTranslation()
+
   return (
     <Section>
-      <SectionHeader title="Position & Requirements" icon={Briefcase} />
-      <VStack className="gap-1">
-        <SubSection>
-          <SubSectionHeader icon={Anchor} title="Main Position" />
+      <SectionHeader title={t('position-requirements')} icon={Briefcase} />
+      <VStack space="xs">
+        <SubSection title={t('main-position')} icon={Anchor}>
           <Text size="sm" semiBold shade={800}>
             {offer.mainPosition}
           </Text>
         </SubSection>
         {offer.requirements && (
-          <SubSection>
-            <VStack className="gap-2">
-              <SubSectionHeader icon={CheckCircle} title="Requirements" />
-              <Text size="sm" semiBold shade={800}>
-                {offer.requirements}
-              </Text>
-            </VStack>
+          <SubSection title={t('requirements')} icon={CheckCircle}>
+            <Text size="sm" semiBold shade={800}>
+              {offer.requirements}
+            </Text>
           </SubSection>
         )}
         {offer.descriptionOffer && (
-          <SubSection>
-            <VStack className="gap-2">
-              <SubSectionHeader icon={FileText} title="Job Description" />
-              <Text size="sm" semiBold shade={800}>
-                {offer.descriptionOffer.replace(/<\/?b>/g, '')}
-              </Text>
-            </VStack>
+          <SubSection icon={FileText} title={t('description')}>
+            <Text size="sm" semiBold shade={800}>
+              {offer.descriptionOffer.replace(/<\/?b>/g, '')}
+            </Text>
           </SubSection>
         )}
       </VStack>

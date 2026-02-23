@@ -27,8 +27,17 @@ export { Link, LinkText } from './link'
 export { ListEmptyComponent } from './listEmptyComponent'
 export { Loading } from './loading'
 export { Modal, ModalBackdrop, ModalContent, ModalCloseButton, ModalHeader, ModalBody, ModalFooter } from './modal'
-export { NavBar } from '../appUI/navBar'
 export { Pressable } from './pressable'
+export {
+  Popover,
+  PopoverBackdrop,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverBody,
+  PopoverContent,
+} from './popover'
 export { Spinner } from './spinner'
 export { Switch } from './switch'
 export { TabBar } from '../appUI/tabBar'

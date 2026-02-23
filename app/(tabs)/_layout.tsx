@@ -22,7 +22,7 @@ import {
   Settings,
 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { NavBar } from '@/components/ui'
+import { NavBar } from '@/components/appUI'
 
 const AppLayout = () => {
   const { t } = useTranslation(['screens-labels'])
@@ -78,8 +78,8 @@ const AppLayout = () => {
           options={{
             headerShown: false,
             sceneStyle,
-            title: 'Search',
-            tabBarIcon: UserSearch,
+            title: 'Recruitment',
+            tabBarIcon: Users,
           }}
         />
         <Tabs.Screen

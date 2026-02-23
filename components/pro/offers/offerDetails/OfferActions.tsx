@@ -1,12 +1,12 @@
 // components/offers/OfferActions.tsx
 import React from 'react'
 import { Share } from 'react-native'
-import { Box, VStack, Button, ButtonText, ButtonIcon } from '@/components/ui'
+import { VStack, Button, ButtonText, ButtonIcon } from '@/components/ui'
 import { Send, Share2, AlertCircle, CheckCircle } from 'lucide-react-native'
-import { OfferType } from '@/api/types'
-
+import { TOffer } from '@/api/types'
+import { Section } from '@/components/appUI'
 interface OfferActionsProps {
-  offer: OfferType
+  offer: TOffer
   onApply: () => void
 }
 
@@ -55,8 +55,8 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
   const buttonConfig = getApplyButtonConfig()
 
   return (
-    <Box className="bg-white p-2 rounded-md">
-      <VStack className="gap-1">
+    <Section>
+      <VStack space="xs">
         <Button
           size="lg"
           // action={buttonConfig.action}
@@ -74,7 +74,7 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
           <ButtonText className="ml-2 text-white">Share this offer</ButtonText>
         </Button>
       </VStack>
-    </Box>
+    </Section>
   )
 }
 

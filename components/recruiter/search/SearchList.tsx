@@ -28,13 +28,14 @@ const RecruiterSearchList: FC = () => {
       {(isLoading || isRefetching) && <Loading />}
       {isSuccess && (
         <List
+          noHeader
           data={data}
           isRefetching={isRefetching}
           onRefresh={refetch}
           renderItem={({ item }) => <SearchListItem search={item} key={item.reference} />}
         />
       )}
-      {isError && <Text className="text-error-600 text-center">{t('error')}</Text>}
+      {isError && <Text color="error">{t('error')}</Text>}
     </ScreenContainer>
   )
 }

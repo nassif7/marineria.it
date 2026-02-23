@@ -32,8 +32,8 @@ export type TRecruiterSearch = {
   posHarbour: string
   positionSpecial: string
   courses: string
-  boarding: string
-  duration: string
+  boarding: string //from immediate imbarcation
+  duration: string //to // permanent
   positionArm: string
   itaYachtsDeck: string
   itaYachtsEngine: string

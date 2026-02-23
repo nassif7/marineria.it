@@ -465,23 +465,21 @@
 
 // app/pro/offers/[id].tsx
 import React, { useState } from 'react'
-import { ScrollView } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import { useQuery } from '@tanstack/react-query'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Box, VStack, View } from '@/components/ui'
+import { VStack, Text } from '@/components/ui'
 import { Loading } from '@/components/ui/loading'
-import { getProOfferById, applyToOffer } from '@/api'
-import OfferHeader from './offerDetails/OfferHeader'
-import OfferContract from './offerDetails/OfferContract'
-import OfferPosition from './offerDetails/OfferPosition'
-import OfferLocation from './offerDetails/OfferLocation'
-import OfferActions from './offerDetails/OfferActions'
-import NotApplicableModal from './offerDetails/NotApplicableModal'
-import ApplyModal from './offerDetails/ApplyModal'
+import { getProOfferById } from '@/api'
+import OfferHeader from './OfferHeader'
+import OfferContract from './OfferContract'
+import OfferPosition from './OfferPosition'
+import OfferActions from './OfferActions'
+import NotApplicableModal from './NotApplicableModal'
+import ApplyModal from './ApplyModal'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 import { useTranslation } from 'react-i18next'
 import { ScreenContainer } from '@/components/appUI'
+import { FlatList, RefreshControl, View } from 'react-native'
 
 export default function OfferDetailsScreen() {
   //   const [applying, setApplying] = useState(false)
@@ -508,17 +506,17 @@ export default function OfferDetailsScreen() {
   const [showNotApplicable, setShowNotApplicable] = useState(false)
   const [showApply, setShowApply] = useState(false)
 
-  const { data, isLoading, isSuccess } = useQuery({
-    queryKey: ['offer', offerId],
+  const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
+    queryKey: ['offer', offerId, language],
     queryFn: () => getProOfferById(offerId as string, token, language),
   })
 
-  const offer = isSuccess ? (data as any)?.[0] : null
+  const offer = isSuccess ? data?.[0] : null
 
   const handleApply = () => {
-    if (!offer.offerApplicable) {
+    if (!offer?.offerApplicable) {
       setShowNotApplicable(true)
-    } else if (!offer.alreadyApplied) {
+    } else if (!offer?.alreadyApplied) {
       setShowApply(true)
     }
   }
@@ -529,14 +527,27 @@ export default function OfferDetailsScreen() {
     setShowApply(false)
   }
 
-  if (isLoading) return <Loading />
+  if (isLoading || isRefetching) {
+    return (
+      <ScreenContainer>
+        <Loading />
+      </ScreenContainer>
+    )
+  }
+
+  if (isError) {
+    return (
+      <ScreenContainer>
+        <Text color="error">{t('error')}</Text>
+      </ScreenContainer>
+    )
+  }
 
   return (
-    <>
-      {isLoading && <Loading />}
-      {offer && (
-        <ScreenContainer useScrollView>
-          <VStack className="gap-1 pb-2 ">
+    <ScreenContainer useScrollView refreshing={isRefetching} onRefresh={refetch}>
+      {isSuccess && offer && (
+        <>
+          <VStack className="pb-2" space="xs">
             <OfferHeader offer={offer} />
             <OfferContract offer={offer} />
             <OfferPosition offer={offer} />
@@ -544,8 +555,8 @@ export default function OfferDetailsScreen() {
           </VStack>
           <NotApplicableModal visible={showNotApplicable} onClose={() => setShowNotApplicable(false)} reasons={[]} />
           <ApplyModal visible={showApply} onClose={() => setShowApply(false)} onConfirm={handleConfirmApply} />
-        </ScreenContainer>
+        </>
       )}
-    </>
+    </ScreenContainer>
   )
 }

@@ -78,6 +78,7 @@ export const ListHeader: FC<ListHeaderProps> = ({ itemsCount, filter }) => {
 }
 
 interface ListProps<T> {
+  noHeader?: boolean
   data: T[]
   renderItem: ({ item }: { item: T }) => React.ReactElement
   isRefetching: boolean
@@ -85,11 +86,12 @@ interface ListProps<T> {
   filter?: FilterType
 }
 
-export function List<T>({ data, renderItem, isRefetching, onRefresh, filter }: ListProps<T>) {
+export function List<T>({ data, renderItem, isRefetching, onRefresh, filter, noHeader }: ListProps<T>) {
+  // TODO: add empty state
   if (!data) return null
   return (
     <FlatList
-      ListHeaderComponent={() => (filter ? <ListHeader itemsCount={data?.length || 0} filter={filter} /> : null)}
+      ListHeaderComponent={() => (noHeader ? null : <ListHeader itemsCount={data.length} filter={filter} />)}
       ItemSeparatorComponent={() => <Divider className="my-0.5 bg-transparent" />}
       data={data}
       renderItem={({ item }) => renderItem({ item })}

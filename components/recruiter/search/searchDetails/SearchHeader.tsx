@@ -1,42 +1,42 @@
-// components/offers/OfferHeader.tsx
+// components/search/SearchHeader.tsx
 import React from 'react'
 import { VStack, HStack, Heading, Text, Divider } from '@/components/ui'
-import { TOffer } from '@/api/types'
-import { Section } from '@/components/appUI'
 import { useTranslation } from 'react-i18next'
+import { TRecruiterSearch } from '@/api/types'
+import { Section } from '@/components/appUI'
 
-interface IOfferHeaderProps {
-  offer: TOffer
+interface ISearchHeaderProps {
+  search: TRecruiterSearch
+  onEdit: () => void
 }
 
-const OfferHeader: React.FC<IOfferHeaderProps> = ({ offer }) => {
-  const { t } = useTranslation(['offer-screen'])
+const SearchHeader: React.FC<ISearchHeaderProps> = ({ search }) => {
+  const { t } = useTranslation(['search-screen'])
 
   return (
     <Section>
       <VStack space="xs">
         <HStack className="justify-between items-start">
           <VStack className="gap-1">
-            <Text size="sm">{t('job-reference')}</Text>
+            <Text size="sm">{t('search-id')}</Text>
             <Text size="sm" semiBold shade={800}>
-              {offer.reference.split('_')[1]}
+              {search.reference.split('_')[1]}
             </Text>
           </VStack>
-
           <VStack className="items-end gap-1">
             <Text size="sm">{t('posted')}</Text>
             <Text size="sm" semiBold shade={800}>
-              {offer.offerdate}
+              {search.offerdate}
             </Text>
           </VStack>
         </HStack>
         <Divider />
         <Heading size="lg" className="text-primary-600 leading-tight py-1">
-          {offer.offer.trim()}
+          {search.offer.trim()}
         </Heading>
       </VStack>
     </Section>
   )
 }
 
-export default OfferHeader
+export default SearchHeader

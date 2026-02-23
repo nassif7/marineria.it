@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router'
-import { NavBar } from '@/components/ui'
+import { NavBar } from '@/components/appUI'
 import { useTranslation } from 'react-i18next'
 
 export default function OffersLayout() {
@@ -22,7 +22,7 @@ export default function OffersLayout() {
       <Stack.Screen
         name="[offerId]"
         options={{
-          title: 'Offer',
+          title: t('offer'),
           headerShown: true,
         }}
       />

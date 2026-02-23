@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stack } from 'expo-router'
-import { NavBar } from '@/components/ui'
+import { NavBar } from '@/components/appUI'
 import { useTranslation } from 'react-i18next'
 import { useSession } from '@/Providers/SessionProvider'
 import { AuthTypes } from '@/api/types'

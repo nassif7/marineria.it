@@ -15,7 +15,7 @@ const NotApplicableModal: React.FC<NotApplicableModalProps> = ({ visible, onClos
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <Pressable className="flex-1 bg-black/50 justify-end" onPress={onClose}>
         <Pressable onPress={(e) => e.stopPropagation()}>
-          <Box className="bg-white rounded-t-3xl p-6">
+          <Box className="bg-white rounded-t-md p-6">
             <VStack className="gap-4">
               {/* Header */}
               <HStack className="justify-between items-center">

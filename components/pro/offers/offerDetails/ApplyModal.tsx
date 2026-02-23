@@ -49,7 +49,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm }) 
       <Pressable className="flex-1 bg-black/80 justify-end" onPress={handleClose}>
         <Pressable onPress={(e) => e.stopPropagation()}>
           <Box className="bg-white rounded-md p-4 pb-20">
-            <VStack className="gap-2">
+            <VStack space="md">
               <HStack className="justify-between items-center">
                 <Heading size="xl" className="text-primary-600 flex-1">
                   Confirm Application
