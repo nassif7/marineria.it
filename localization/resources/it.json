@@ -3,7 +3,8 @@
     "offer-list": "Offerte",
     "offer": "Offerta",
     "search-list": "Ricerche",
-    "search": "Ricerca"
+    "search": "Ricerca",
+    "crew-list": "Equipaggio"
   },
   "home-screen": {
     "welcome": "Welcome",
@@ -33,6 +34,13 @@
     "by-skill": "Per caratteristiche",
     "candidates-overview": "Candidati"
   },
+  "crew-screen": {
+    "id": "ID",
+    "availability": "Disponibilità",
+    "available-from": "Disponibile da",
+    "last-seen": "Ultimo visita",
+    "view-profile": "Vedi scheda"
+  },
   "offer": {
     "contract-and-compensation": "Contratto e compensazione",
     "job-reference": "Ref",
@@ -55,6 +63,19 @@
     "position-specialty": "Specialità posizione",
     "expires": "Scade",
     "modify-offer": "Modifica offerta"
+  },
+  "crew": {
+    "citizenship": "Cittadinanza",
+    "address": "Indirizzo",
+    "city": "Citta",
+    "province": "Provincia",
+    "country": "Paese",
+    "marital-status": "Stato civile",
+    "years": "anni",
+    "experience": "Esperienza",
+    "no-experience": "Senza esperienza",
+    "courses": "Corsi",
+    "no-courses": "Senza corsi"
   },
   "common": {
     "edit": "Modifica",

@@ -37,7 +37,7 @@ const SearchCandidates: React.FC<SearchCandidatesProps> = ({ search }) => {
     <Section>
       <SectionHeader title={t('candidates-overview')} icon={Users} />
       <VStack space="xs">
-        <SubSection title={t('candidates-overview')} icon={Users} onPress={viewCrewList}>
+        <SubSection title={t('candidates')} icon={Users} onPress={viewCrewList}>
           <HStack className="items-center justify-between">
             <Badge action="muted" variant="outline" className="rounded-md">
               <BadgeText>

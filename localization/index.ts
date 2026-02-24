@@ -26,10 +26,13 @@ const initI18n = async () => {
       'home-screen',
       'offers-screen',
       'search-screen',
+      'offer',
       'crew-screen',
+      'crew',
       'recruiter-screen',
       'settings',
       'common',
+
       'login-screen',
     ],
     defaultNS: 'home-screen',

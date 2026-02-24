@@ -45,7 +45,7 @@ const OfferListItem: FC<IOfferListItemProps> = ({ offer }) => {
       <VStack space="xs">
         {/* Title */}
         <Heading size="lg" className="text-primary-600 leading-tight">
-          {offer.offer.trim()}
+          {offer.title.trim()}
         </Heading>
         {/* Reference & Date */}
         <HStack className="justify-between items-center border-b border-background-200 pb-2">
@@ -58,7 +58,7 @@ const OfferListItem: FC<IOfferListItemProps> = ({ offer }) => {
         </HStack>
         {/* Status Badges */}
         {(offer.alreadyApplied || !offer.offerApplicable) && (
-          <HStack className="gap-2 flex-wrap py-1">
+          <HStack className="flex-wrap py-1" space="sm">
             {offer.alreadyApplied && (
               <Badge action="muted" variant="outline" className="rounded-md">
                 <BadgeIcon as={CheckCircle} className="mr-1 text-typography-800" />
@@ -74,32 +74,23 @@ const OfferListItem: FC<IOfferListItemProps> = ({ offer }) => {
           </HStack>
         )}
         {/* Salary  Location Box */}
-        <HStack className="gap-1">
-          <SubSection className="flex-1">
-            <VStack>
-              <SubSectionHeader icon={Euro} title={t('salary')} />
-              <Text size="sm" semiBold shade={800}>
-                {offer.salary_From} - {offer.salary_To}
-              </Text>
-            </VStack>
+        <HStack space="xs">
+          <SubSection icon={Euro} title={t('salary')} className="flex-1">
+            <Text size="sm" semiBold shade={800}>
+              {offer.salary_From} - {offer.salary_To}
+            </Text>
           </SubSection>
           {hasLocation && (
-            <SubSection className="flex-1 ">
-              <VStack>
-                <SubSectionHeader icon={MapPin} title={t('location')} />
-                <Pressable onPress={handleOpenMap}>
-                  <Text color="primary" size="sm" semiBold>
-                    {offer.positionArm || 'View on Map'}
-                  </Text>
-                </Pressable>
-              </VStack>
+            <SubSection className="flex-1" icon={MapPin} title={t('location')}>
+              <Pressable onPress={handleOpenMap}>
+                <Text color="primary" size="sm" semiBold>
+                  {offer.positionArm || 'View on Map'}
+                </Text>
+              </Pressable>
             </SubSection>
           )}
         </HStack>
-        <SubSection>
-          <HStack className="items-center gap-1 mb-1">
-            <SubSectionHeader icon={Calendar} title={t('period')} />
-          </HStack>
+        <SubSection icon={Calendar} title={t('period')}>
           <Text size="sm" semiBold shade={800}>
             {isDateString(offer.boarding) ? `${t('from')}:` : ''}
             {offer.boarding}
@@ -116,7 +107,6 @@ const OfferListItem: FC<IOfferListItemProps> = ({ offer }) => {
           onPress={() => handleViewOffer(offer.idoffer)}
           className="w-full rounded-md "
         >
-          <ButtonIcon as={Eye} />
           <ButtonText className="ml-2">{t('view-offer')}</ButtonText>
         </Button>
       </VStack>

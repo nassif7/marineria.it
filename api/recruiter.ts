@@ -1,6 +1,6 @@
 import { API } from './const'
 import { TRecruiterSearch } from './types'
-import { CrewType } from './types/crew'
+import { TCrew } from './types/crew'
 import { getLanguageCode } from './types'
 
 export const getRecruiterActiveSearches = async (ownerToken: string, language: string): Promise<TRecruiterSearch[]> => {
@@ -31,23 +31,19 @@ export const getRecruiterSearchById = async (
   return response.json()
 }
 
-export const getCrewList = async (
-  offerId: string,
-  ownerToken: string,
-  language: string
-): Promise<CrewType[] | Error> => {
+export const getCrewList = async (offerId: string, ownerToken: string, language: string): Promise<TCrew[]> => {
   const languageCode = getLanguageCode(language)
   const url = API.CREW_LIST + `/${ownerToken}/${offerId}?language=${languageCode}`
   const response = await fetch(url)
 
   if (!response.ok) {
-    return new Error(`Failed to fetch owner job offers (${response.status})`)
+    throw new Error(`Failed to fetch owner job offers (${response.status})`)
   }
 
   return response.json()
 }
 
-export const getCrewCV = async (ownerToken: string, crewId: string, language?: string): Promise<CrewType[] | Error> => {
+export const getCrewCV = async (ownerToken: string, crewId: string, language?: string): Promise<TCrew[] | Error> => {
   const languageCode = getLanguageCode(language)
   const url = `https://www.comunicazione.it/api/Owneruser/CvUser/${ownerToken}/${crewId}?language=${languageCode}`
   const response = await fetch(url)

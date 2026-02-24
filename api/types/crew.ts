@@ -1,4 +1,4 @@
-export type CrewType = {
+export type TCrew = {
   organizationalSkills: string
   relationalSkills: string
   technicalSkills: string

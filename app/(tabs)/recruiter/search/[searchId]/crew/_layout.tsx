@@ -2,21 +2,24 @@
 import { Stack } from 'expo-router'
 import { NavBar } from '@/components/appUI'
 import { useTranslation } from 'react-i18next'
+import { Box, Text } from '@/components/ui'
 
 export default function CrewLayout() {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['screens-labels'])
   return (
     <Stack
       screenOptions={{
-        header: (props) => <NavBar {...props} />,
-        contentStyle: { backgroundColor: 'rgb(30 41 59)' },
+        headerShown: false,
+        header: (props) => {
+          return <NavBar {...props} />
+        },
+        contentStyle: { backgroundColor: 'white' },
       }}
     >
       <Stack.Screen
         name="list"
         options={{
-          headerShown: true,
-          title: t('recruiter.crew-list'),
+          title: t('crew-list'),
         }}
       />
 

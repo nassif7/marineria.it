@@ -3,8 +3,9 @@ export * as ErrorTypes from './errors'
 export * from './offer'
 export * as UserTypes from './user'
 export * from './search'
+export * from './crew'
 
-export { CrewType } from './crew'
+export { TCrew as CrewType } from './crew'
 
 import { ErrorResponse } from './errors'
 

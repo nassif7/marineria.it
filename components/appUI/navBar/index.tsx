@@ -29,7 +29,11 @@ export const NavBar: FC<NavBarProps> = ({ options, back, rightAction }) => {
         )}
 
         {title && (
-          <Heading size="md" className="absolute left-0 right-0 text-center font-bold" style={{ zIndex: -1 }}>
+          <Heading
+            size="md"
+            className="absolute left-0 right-0 text-center font-bold text-typography-800"
+            style={{ zIndex: -1 }}
+          >
             {title}
           </Heading>
         )}

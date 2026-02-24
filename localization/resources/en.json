@@ -3,7 +3,8 @@
     "offer-list": "Job offers",
     "offer": "Offer",
     "search-list": "Searches",
-    "search": "Search"
+    "search": "Search",
+    "crew-list": "Crew list"
   },
   "home-screen": {
     "welcome": "Welcome",
@@ -33,6 +34,13 @@
     "by-skill": "By skills",
     "candidates-overview": "Candidates overview"
   },
+  "crew-screen": {
+    "id": "ID",
+    "availability": "Availability",
+    "available-from": "Available from",
+    "last-seen": "Last seen",
+    "view-profile": "View profile"
+  },
   "offer": {
     "contract-and-compensation": "Contract with compensation",
     "job-reference": "Ref",
@@ -55,6 +63,19 @@
     "position-specialty": "Position specialty",
     "expires": "Expires",
     "modify-offer": "Modify offer"
+  },
+  "crew": {
+    "citizenship": "Citizenship",
+    "address": "Address",
+    "city": "City",
+    "province": "Province",
+    "country": "Country",
+    "marital-status": "Marital status",
+    "years": "years",
+    "experience": "Experience",
+    "no-experience": "No experience",
+    "courses": "Courses",
+    "no-courses": "No courses"
   },
   "common": {
     "edit": "Edit",

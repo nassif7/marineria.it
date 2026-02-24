@@ -3,17 +3,17 @@ import { vars } from 'nativewind'
 export const config = {
   light: vars({
     '--color-primary-0': '255 247 237',
-    '--color-primary-50': '255 247 237',
-    '--color-primary-100': '255 237 213',
-    '--color-primary-200': '254 215 170',
-    '--color-primary-300': '253 186 116',
-    '--color-primary-400': '251 146 60',
-    '--color-primary-500': '249 115 22',
-    '--color-primary-600': '234 88 12',
-    '--color-primary-700': '194 65 12',
-    '--color-primary-800': '154 52 18',
-    '--color-primary-900': '124 45 18',
-    '--color-primary-950': '67 20 7',
+    '--color-primary-50': '255 240 220',
+    '--color-primary-100': '255 220 190',
+    '--color-primary-200': '254 190 150',
+    '--color-primary-300': '253 160 100',
+    '--color-primary-400': '252 130 75',
+    '--color-primary-500': '251 115 60',
+    '--color-primary-600': '255 102 51',
+    '--color-primary-700': '230 85 40',
+    '--color-primary-800': '200 70 35',
+    '--color-primary-900': '170 55 30',
+    '--color-primary-950': '120 35 20',
 
     /* Secondary  */
     '--color-secondary-0': '248 250 252',
