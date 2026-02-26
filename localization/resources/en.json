@@ -7,6 +7,12 @@
     "crew-list": "Crew list",
     "crew-profile": "Crew profile"
   },
+  "login-screen": {
+    "title": "Login",
+    "email": "Email",
+    "password": "Password",
+    "login": "Login"
+  },
   "home-screen": {
     "welcome": "Welcome",
     "recruiter-message": "You are logged in as Recruiter",

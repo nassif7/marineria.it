@@ -23,6 +23,7 @@ const initI18n = async () => {
     fallbackLng: 'en',
     ns: [
       'screens-labels',
+      'login-screen',
       'home-screen',
       'offers-screen',
       'search-screen',

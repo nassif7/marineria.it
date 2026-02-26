@@ -7,6 +7,12 @@
     "crew-list": "Equipaggio",
     "crew-profile": "Scheda equipaggio"
   },
+  "login-screen": {
+    "title": "Login",
+    "email": "Email",
+    "password": "Password",
+    "login": "Login"
+  },
   "home-screen": {
     "welcome": "Welcome",
     "recruiter-message": "Hai effettuato l'accesso come Datore di Lavoro",
