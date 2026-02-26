@@ -3,6 +3,7 @@ export { Badge, BadgeIcon, BadgeText } from './badge'
 export { Box } from './box'
 export { Button, ButtonText, ButtonSpinner, ButtonIcon, ButtonGroup } from './button'
 export { Card } from './card'
+export { Checkbox, CheckboxIndicator, CheckboxLabel, CheckboxIcon, CheckboxGroup } from './checkbox'
 export { Center } from './center'
 export { Divider } from './divider'
 export { Fab, FabLabel, FabIcon } from './fab'
@@ -26,11 +27,20 @@ export { Link, LinkText } from './link'
 export { ListEmptyComponent } from './listEmptyComponent'
 export { Loading } from './loading'
 export { Modal, ModalBackdrop, ModalContent, ModalCloseButton, ModalHeader, ModalBody, ModalFooter } from './modal'
-export { NavBar } from './navBar'
 export { Pressable } from './pressable'
+export {
+  Popover,
+  PopoverBackdrop,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverBody,
+  PopoverContent,
+} from './popover'
 export { Spinner } from './spinner'
 export { Switch } from './switch'
-export { TabBar } from './tabBar'
+export { TabBar } from '../appUI/tabBar'
 export { Text } from './text'
 export { Toast, ToastTitle, ToastDescription, useToast } from './toast'
 // export { ToggleButtons, ToggleVariants } from './ToggleButtons'

@@ -6,8 +6,8 @@ import translationEn from './resources/en.json'
 import translationIt from './resources/it.json'
 
 const resources = {
-  en: { translation: translationEn },
-  it: { translation: translationIt },
+  en: translationEn,
+  it: translationIt,
 }
 
 const initI18n = async () => {
@@ -21,6 +21,22 @@ const initI18n = async () => {
     resources,
     lng: savedLanguage,
     fallbackLng: 'en',
+    ns: [
+      'screens-labels',
+      'home-screen',
+      'offers-screen',
+      'search-screen',
+      'offer',
+      'crew-screen',
+      'crew',
+      'recruiter-screen',
+      'settings',
+      'common',
+
+      'login-screen',
+    ],
+    defaultNS: 'home-screen',
+    fallbackNS: ['common', 'offer'],
     interpolation: {
       escapeValue: false,
     },

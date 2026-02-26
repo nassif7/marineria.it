@@ -1,0 +1,55 @@
+export type TRecruiterSearch = {
+  idoffer: number
+  name: string
+  surname: string
+  username: string
+  email: string
+  iduser: number
+  pushNotificationToken: string
+  contractDescription: string
+  unit: number
+  gender: string
+  seamensBook: string
+  nauticaLicense: string
+  espCharter: string
+  requirements: string
+  title: string
+  offer: string
+  offerdate: string
+  offertExpirationdate: string
+  descriptionOffer: string
+  reference: string
+  countCandidates: number
+  countContacted: number
+  countResidual: number
+  ownerDescription: string
+  mainPosition: string
+  jobOffer: string
+  specseling: string
+  posDeck: string
+  posEngine: string
+  posHotel: string
+  posHarbour: string
+  positionSpecial: string
+  courses: string
+  boarding: string //from immediate imbarcation
+  duration: string //to // permanent
+  positionArm: string
+  itaYachtsDeck: string
+  itaYachtsEngine: string
+  mcaYachtsDeck: string
+  mcaDeckRya: string
+  stcwNavyDeck: string
+  stcwNavyEngine: string
+  salary_From: string
+  salary_To: string
+  latArm: number
+  lngArm: number
+  listurl: string
+  listgeourl: string
+  offerApplicable: boolean
+  alreadyApplied: boolean
+  paid: boolean
+  credit: boolean
+  offerPublished: 0 | 1
+}

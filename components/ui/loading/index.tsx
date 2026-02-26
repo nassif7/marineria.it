@@ -3,7 +3,7 @@ import { BlurView } from 'expo-blur'
 import { StyleSheet } from 'react-native'
 import { Spinner } from '../spinner'
 import { Box } from '../box'
-
+import { View } from '../view'
 const Loading: FC = () => {
   return (
     <BlurView intensity={50} tint="extraLight" style={styles.container}>

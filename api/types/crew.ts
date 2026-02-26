@@ -1,19 +1,89 @@
-export type CrewType = {
-  organizationalSkills: string
-  relationalSkills: string
-  technicalSkills: string
-  professionalSkills: string
-  userId: number
-  experiences: CrewExperienceType[]
-  approvedReferences: CrewReferenceType[]
-  educationalLevel: string
-  yearofBirth: string
-  currentPosition: string
-  province: string
-  numberClicked: string
-  registraton_date: string
-  namephotoA: string
+export type TCrew = {
+  offersRecieved: number //??
+  selected: boolean // ????
+  certificateOfCompetence: boolean // ??
   iduser: number
+  publisched: string
+  photoapproved: string
+  pushNotificationToken: string
+  userName: string
+  name: string
+  surname: string
+  yearofBirth: string
+  gender: string
+  maritalStatus: string
+  nationality: string
+  company: string
+  address: string
+  city: string
+  province: string
+  zip_code: string
+  emailCc: string
+  email: string
+  url: string
+  telephone: string
+  cellular: string
+  callWhatsapp: string
+  userPhoto: string
+  smoker: string
+  currentPosition: string
+  lat: string
+  lng: string
+  mainPosition: string
+  qualificationCode: string
+  licenseCode: string
+  seamansBook: string
+  registration_Number: string
+  registration_City: string
+  registration_Category: string
+  registration_Year: string
+  navigationBook: string
+  calculatedExperience: string
+  availability: string
+  dateAvailability: string
+  lastAccessDate: string
+  registraton_date: string
+  courses: string
+  notesCourses: string
+  specseling: string
+  referencesNumber: number
+  approvedReferences: TCrewReference[]
+  experiences: TCrewExperience[]
+  curriculum: string
+  professionalSkills: string
+  relationalSkills: string
+  organizationalSkills: string
+  technicalSkills: string
+  couplewith: string
+  card1Couple: string
+  salary: string
+  date_lastchange: string
+  educationalLevel: string
+  language1: string
+  language2: string
+  language3: string
+  language4: string
+  pos_deck: string
+  pos_engine: string
+  pos_hotel: string
+  pos_harbour: string
+  pos_special: string
+  ita_yachts_deck: string
+  ita_yachts_engine: string
+  mca_yachts_deck: string
+  mca_deck_rya: string
+  stcw_navy_deck: string
+  stcw_navy_engine: string
+  numberClick: number
+  passport: string
+  secondaryTasks: string
+  namephotoA: string
+  namephotoB: string
+  namephotoC: string
+}
+
+export type TCrewSimple = {
+  userId: number
   autoCandidate: boolean
   selected: boolean
   rejected: boolean
@@ -62,7 +132,6 @@ export type CrewType = {
   stcw_navy_deck: string
   stcw_navy_engine: string
   navigationBook: string
-  navigationPerformed: string
   availability: string
   dateAvailability: string
   lastAccessDate: string
@@ -71,35 +140,33 @@ export type CrewType = {
   salary: string
   documentStatus: string
   calculatedExperience: string
-  stars: 0
+  stars: number
   notes: string
-  crewlistId: 0
-  offerId: 0
+  crewlistId: number
+  offerId: number
   sent: boolean
   comment: string
-  language1: string
-  language2: string
-  language3: string
-  language4: string
 }
 
-export type CrewReferenceType = {
-  company_name: string
-  email: string
+export type TCrewReference = {
   idReference: number
-  notes: string
   positionreferent: string
-  telephone: string
+  company_name: string
   yacht: string
   yearreference: string
+  telephone: string
+  email: string
+  notes: string
 }
 
-export type CrewExperienceType = {
-  duration?: string
+export type TCrewExperience = {
+  idesperienza: number
+  fromDate: string
+  toDate: string
+  experiencedate: string
   boatcompany: string
   employer: string
-  experiencedate: null
-  idesperienza: number
-  typeofassignment: string
   typeofemployment: string
+  typeofassignment: string
+  idreference: string
 }

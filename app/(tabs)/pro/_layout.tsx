@@ -3,7 +3,7 @@ import { Stack } from 'expo-router'
 
 const _layout = () => {
   return (
-    <Stack screenOptions={{ contentStyle: { backgroundColor: 'rgb(30 41 59)' } }}>
+    <Stack>
       <Stack.Screen
         name="offers"
         options={{

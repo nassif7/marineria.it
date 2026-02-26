@@ -138,12 +138,12 @@ const AuthenticationForm: FC<AuthenticationFormProps> = ({ authenticate, user })
         <Link href="https://www.marineria.it/En/Forgot_PSW.aspx" className="mb-1">
           <LinkText className="text-left">{t('forgot-password')}</LinkText>
         </Link>
-        {(!user || user?.role == AuthTypes.UserRole.PRO) && (
+        {(!user || user?.role == AuthTypes.UserRole.CREW) && (
           <Link href="https://www.marineria.it/En/Rec/Reg.aspx" className="mb-1">
             <LinkText>{t('register-as-recruiter')}</LinkText>
           </Link>
         )}
-        {(!user || user?.role == AuthTypes.UserRole.OWNER) && (
+        {(!user || user?.role == AuthTypes.UserRole.RECRUITER) && (
           <Link href="https://www.marineria.it/En/Pro/Reg.aspx">
             <LinkText>{t('register-as-crew')}</LinkText>
           </Link>

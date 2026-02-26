@@ -1,15 +1,15 @@
 import { Stack } from 'expo-router'
-import { NavBar } from '@/components/ui'
+import { NavBar } from '@/components/appUI'
 import { useTranslation } from 'react-i18next'
 
 export default function OfferDetailLayout() {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['screens-labels'])
   return (
     <Stack
       screenOptions={{
+        headerShown: false,
         header: (props) => <NavBar {...props} />,
-        contentStyle: { backgroundColor: 'rgb(30 41 59)' },
-        animation: 'slide_from_right',
+        contentStyle: { backgroundColor: 'white' },
       }}
     >
       {/* Offer details */}
@@ -20,7 +20,7 @@ export default function OfferDetailLayout() {
           const { searchId } = params as { searchId: string }
           return {
             headerShown: true,
-            title: `${t('recruiter.view-search-id')} # ${searchId}`,
+            title: t('search'),
           }
         }}
       />

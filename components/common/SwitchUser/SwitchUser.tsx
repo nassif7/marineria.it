@@ -14,12 +14,12 @@ const SwitchUser = () => {
     switchAuth,
     storedAuthTokens,
   } = useSession()
-  const proToken = storedAuthTokens[AuthTypes.UserRole.PRO]
-  const ownerToken = storedAuthTokens[AuthTypes.UserRole.OWNER]
+  const proToken = storedAuthTokens[AuthTypes.UserRole.CREW]
+  const ownerToken = storedAuthTokens[AuthTypes.UserRole.RECRUITER]
   const { user, activeProfile, switchProfile } = useUser()
   const hasBothTokens = proToken && ownerToken
 
-  const targetRole = role == AuthTypes.UserRole.PRO ? AuthTypes.UserRole.OWNER : AuthTypes.UserRole.PRO
+  const targetRole = role == AuthTypes.UserRole.CREW ? AuthTypes.UserRole.RECRUITER : AuthTypes.UserRole.CREW
 
   const handleSwitch = async () => {
     if (hasBothTokens) {
@@ -32,12 +32,12 @@ const SwitchUser = () => {
 
   return (
     <View>
-      {role == AuthTypes.UserRole.OWNER && (
+      {role == AuthTypes.UserRole.RECRUITER && (
         <Button onPress={handleSwitch}>
           <ButtonText className="text-white ">{t('switchToPro')}</ButtonText>
         </Button>
       )}
-      {role == AuthTypes.UserRole.PRO && (
+      {role == AuthTypes.UserRole.CREW && (
         <Button onPress={handleSwitch}>
           <ButtonText className="text-white ">{t('switchToOwner')}</ButtonText>
         </Button>

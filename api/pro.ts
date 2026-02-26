@@ -1,34 +1,25 @@
 import { API } from './const'
-import { ProJobOfferType } from './types/jobOffer'
-import { getLanguageCode } from './types'
+import { TOffer, getLanguageCode } from './types'
 
-export const getProOffers = async (
-  proToken: string,
-  allOffers?: boolean,
-  language?: string
-): Promise<ProJobOfferType[] | Error> => {
+export const getProOffers = async (proToken: string, allOffers?: boolean, language?: string): Promise<TOffer[]> => {
   const languageCode = getLanguageCode(language)
   const url = API.PRO_OFFERS + `${allOffers ? '/AllOffers' : ''}/${proToken}?language=${languageCode}`
   const response = await fetch(url)
 
   if (!response.ok) {
-    return new Error(`Failed to fetch  job offers (${response.status})`)
+    throw new Error(`Failed to fetch  job offers (${response.status})`)
   }
 
   return response.json()
 }
 
-export const getProOfferById = async (
-  offerId: string,
-  proToken: string,
-  language: string
-): Promise<ProJobOfferType[] | Error> => {
+export const getProOfferById = async (offerId: string, proToken: string, language: string): Promise<TOffer[]> => {
   const languageCode = getLanguageCode(language)
   const url = API.PRO_OFFERS + `/${offerId}/${proToken}?language=${languageCode}`
   const response = await fetch(url)
 
   if (!response.ok) {
-    return new Error(`Failed to fetch  job offer (${response.status})`)
+    throw new Error(`Failed to fetch  job offer (${response.status})`)
   }
 
   return response.json()

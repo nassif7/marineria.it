@@ -9,7 +9,7 @@ export const getUserProfile = async (
   role: UserRole,
   language: string
 ): Promise<User | ErrorResponse> => {
-  const userRole = role == UserRole.OWNER ? 'Owneruser' : 'Prouser'
+  const userRole = role == UserRole.RECRUITER ? 'Owneruser' : 'Prouser'
   const languageCode = getLanguageCode(language)
 
   try {

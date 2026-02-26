@@ -1,6 +1,6 @@
 import React from 'react'
 import SearchList from '@/components/recruiter/search'
 
-const OwnerSearchList = () => <SearchList />
+const RecruiterSearchList = () => <SearchList />
 
-export default OwnerSearchList
+export default RecruiterSearchList

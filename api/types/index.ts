@@ -1,8 +1,11 @@
 export * as AuthTypes from './auth'
 export * as ErrorTypes from './errors'
-export * as JobOfferTypes from './jobOffer'
+export * from './offer'
 export * as UserTypes from './user'
-export { CrewType } from './crew'
+export * from './search'
+export * from './crew'
+
+export { TCrew as CrewType } from './crew'
 
 import { ErrorResponse } from './errors'
 

@@ -4,11 +4,28 @@ import UserProvider from '@/Providers/UserProvider'
 import { Text } from '@/components/ui'
 import { useSession } from '@/Providers/SessionProvider'
 import '@/localization'
-import { TabBar } from '@/components/ui'
+import { TabBar, View } from '@/components/ui'
 import { AuthTypes } from '@/api/types'
-import { Anchor, HomeIcon, UserIcon } from 'lucide-react-native'
+import {
+  Anchor,
+  HomeIcon,
+  UserIcon,
+  Briefcase,
+  FileText,
+  Clipboard,
+  ScrollText,
+  Search,
+  UserSearch,
+  UserRoundSearch,
+  Users,
+  ListFilter,
+  Settings,
+} from 'lucide-react-native'
+import { useTranslation } from 'react-i18next'
+import { NavBar } from '@/components/appUI'
 
 const AppLayout = () => {
+  const { t } = useTranslation(['screens-labels'])
   const { auth, isLoading } = useSession()
   const { token, role } = auth
   const insets = useSafeAreaInsets()
@@ -21,15 +38,9 @@ const AppLayout = () => {
     return <Redirect href="/sign-in" />
   }
 
-  const headerStyle = {
-    backgroundColor: 'rgb(30 41 59)',
-  }
-
   const sceneStyle = {
-    backgroundColor: 'rgb(30 41 59)',
-    paddingStart: 8,
-    paddingEnd: 8,
-    paddingTop: insets.top,
+    backgroundColor: 'white',
+    paddingTop: insets.top - 12,
   }
 
   return (
@@ -46,30 +57,29 @@ const AppLayout = () => {
           name="index"
           options={{
             sceneStyle,
-            headerShown: false,
-            headerStyle,
             title: 'Home',
             tabBarIcon: HomeIcon,
+            header: (props) => <View className="min-h-[50px]  bg-white"></View>,
           }}
         />
         <Tabs.Screen
           name="pro"
-          redirect={role !== AuthTypes.UserRole.PRO}
+          redirect={role !== AuthTypes.UserRole.CREW}
           options={{
             headerShown: false,
             sceneStyle,
-            title: 'Crew',
-            tabBarIcon: Anchor,
+            title: t('offers'),
+            tabBarIcon: Briefcase,
           }}
         />
         <Tabs.Screen
           name="recruiter"
-          redirect={role !== AuthTypes.UserRole.OWNER}
+          redirect={role !== AuthTypes.UserRole.RECRUITER}
           options={{
             headerShown: false,
             sceneStyle,
-            title: 'Recruiter',
-            tabBarIcon: Anchor,
+            title: 'Recruitment',
+            tabBarIcon: Users,
           }}
         />
         <Tabs.Screen
@@ -77,9 +87,8 @@ const AppLayout = () => {
           options={{
             sceneStyle,
             headerShown: false,
-            headerStyle,
             title: 'Settings',
-            tabBarIcon: UserIcon,
+            tabBarIcon: Settings,
           }}
         />
       </Tabs>
