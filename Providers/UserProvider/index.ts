@@ -1,1 +1,1 @@
-export { default, useUser, ActiveProfile } from './UserProvider'
+export { default, useUser, TActiveProfile as ActiveProfile } from './UserProvider'

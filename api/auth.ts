@@ -1,7 +1,7 @@
 import { API } from './const'
-import { AuthResponse } from '@/api/types/auth'
+import { TAuthResponse } from '@/api/types/auth'
 
-export const signIn = async (username: string, password: string): Promise<AuthResponse> => {
+export const signIn = async (username: string, password: string): Promise<TAuthResponse> => {
   const requestHeaders: HeadersInit = {
     'Content-Type': 'application/json; charset=utf-8',
   }

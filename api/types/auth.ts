@@ -2,7 +2,7 @@ export enum UserRole {
   CREW = 'PRO',
   RECRUITER = 'ARM',
 }
-export type AuthResponse = {
+export type TAuthResponse = {
   category: UserRole
   token: string
 }
