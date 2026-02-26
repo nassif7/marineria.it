@@ -6,16 +6,16 @@ import { FlatList, RefreshControl } from 'react-native'
 const ScreenContainer: FC<
   PropsWithChildren<{
     className?: string
-    useScrollView?: boolean
+    scroll?: boolean
     refreshing?: boolean
     onRefresh?: () => void
   }>
-> = ({ children, className: containerClassName = '', useScrollView = false, refreshing = false, onRefresh }) => {
-  const Container = useScrollView ? ScrollView : View
+> = ({ children, className = '', scroll = false, refreshing = false, onRefresh }) => {
+  const Container = scroll ? ScrollView : View
 
   return (
     <Container
-      className={`${containerClassName} h-full px-2 flex-1 pb-2 bg-background-100`}
+      className={`${className} h-full px-2 flex-1 pb-2 bg-background-50`}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
       {children}

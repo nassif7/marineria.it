@@ -544,7 +544,7 @@ export default function OfferDetailsScreen() {
   }
 
   return (
-    <ScreenContainer useScrollView refreshing={isRefetching} onRefresh={refetch}>
+    <ScreenContainer scroll refreshing={isRefetching} onRefresh={refetch}>
       {isSuccess && offer && (
         <>
           <VStack className="pb-2" space="xs">

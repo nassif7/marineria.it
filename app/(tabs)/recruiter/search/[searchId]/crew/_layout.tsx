@@ -25,12 +25,10 @@ export default function CrewLayout() {
 
       <Stack.Screen
         name="[crewid]"
-        options={({ route }) => {
-          const { params } = route
-          const { crewid } = params as { crewid: string }
+        options={() => {
           return {
             headerShown: true,
-            title: `ID # ${crewid}`,
+            title: t('crew-profile'),
           }
         }}
       />

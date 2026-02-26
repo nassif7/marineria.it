@@ -64,7 +64,7 @@ const OfferContract: React.FC<OfferContractProps> = ({ offer }) => {
               {offer.contractDescription}
             </Text>
           </HStack>
-          <HStack className="items-start gap-1">
+          <HStack className="items-start" space="xs">
             <Text size="sm" className="w-32 shrink-0 ">
               {t('owner-type')}:
             </Text>

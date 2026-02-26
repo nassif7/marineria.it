@@ -15,18 +15,18 @@ import {
   ButtonText,
 } from '@/components/ui'
 import { User, Calendar, MapPin, Award, Heart, Cake, Cigarette, IdCard, Briefcase } from 'lucide-react-native'
-import { TCrew } from '@/api/types'
+import { TCrewSimple } from '@/api/types'
 import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'
 import { SubSection } from '@/components/appUI'
 import { getAgeByYear } from '@/utils/dateUtils'
 
 interface ICrewListItem {
-  crew: TCrew
+  crew: TCrewSimple
 }
 
 const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
-  const { t } = useTranslation(['crew-screen'])
+  const { t } = useTranslation(['crew-screen', 'crew'])
 
   const router = useRouter()
   const { searchId } = useLocalSearchParams()
@@ -99,21 +99,21 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
         </HStack>
 
         <HStack space="xs">
-          <SubSection title={t('available-from')} icon={Calendar} className="flex-1 ">
+          <SubSection title={t('available-from', { ns: 'crew' })} icon={Calendar} className="flex-1 ">
             <Text size="sm" semiBold shade={800}>
               {crew.dateAvailability}
             </Text>
           </SubSection>
           <SubSection title={t('city', { ns: 'crew' })} icon={MapPin} className="flex-1 ">
             <Text size="sm" semiBold shade={800}>
-              {crew.city} {crew.province ? `(${crew.province})` : ''} - {crew.country}
+              {crew.city}
             </Text>
           </SubSection>
         </HStack>
 
         {crew.calculatedExperience && (
-          <SubSection title={t('experience', { ns: 'crew' })} icon={Briefcase} className="flex-1 ">
-            <HStack className="items-center justify-between">
+          <SubSection title={t('experience', { ns: 'crew' })} icon={Briefcase} className=" min-h-[50px] ">
+            <HStack className="items-center justify-between flex-wrap">
               <Text size="sm" semiBold shade={800}>
                 {crew.calculatedExperience}
               </Text>
@@ -126,7 +126,7 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
           </SubSection>
         )}
         {crew.courses && (
-          <SubSection title={t('courses', { ns: 'crew' })} icon={Award} className="flex-1 ">
+          <SubSection title={t('courses', { ns: 'crew' })} icon={Award}>
             <Text size="sm" semiBold shade={800}>
               {crew.courses}
             </Text>

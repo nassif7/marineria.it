@@ -96,6 +96,7 @@ export function List<T>({ data, renderItem, isRefetching, onRefresh, filter, noH
       data={data}
       renderItem={({ item }) => renderItem({ item })}
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={onRefresh} className="text-primary-600" />}
+      removeClippedSubviews={false}
     />
   )
 }

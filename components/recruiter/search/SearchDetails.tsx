@@ -448,7 +448,7 @@ export default function SearchDetails() {
   }
 
   return (
-    <ScreenContainer useScrollView refreshing={isRefetching} onRefresh={refetch}>
+    <ScreenContainer scroll refreshing={isRefetching} onRefresh={refetch}>
       {isSuccess && search && (
         <VStack className="pb-2" space="xs">
           <SearchHeader search={search} onEdit={handleEdit} />
