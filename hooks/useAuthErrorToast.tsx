@@ -6,7 +6,7 @@ import { X } from 'lucide-react-native'
 
 export const useAuthErrorToast = () => {
   const toast = useToast()
-  const { t } = useTranslation()
+  const { t } = useTranslation('login-screen')
   const [toastId, setToastId] = useState(0)
 
   const showErrorToast = () => {
@@ -28,8 +28,8 @@ export const useAuthErrorToast = () => {
         >
           <HStack space="md">
             <VStack space="xs">
-              <ToastTitle className="font-semibold">{t('login-screen.form.error-title')}</ToastTitle>
-              <ToastDescription size="md">{t('login-screen.form.invalid-credentials')}</ToastDescription>
+              <ToastTitle className="font-semibold">{t('login-error')}</ToastTitle>
+              <ToastDescription size="md">{t('invalid-credentials')}</ToastDescription>
             </VStack>
           </HStack>
           <Pressable onPress={() => toast.close(id)}>

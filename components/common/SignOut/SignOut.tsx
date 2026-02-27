@@ -1,19 +1,15 @@
-import { Button, ButtonText, ButtonIcon } from '@/components/ui'
-import { useSession } from '@/Providers/SessionProvider'
-import { useUser } from '@/Providers/UserProvider'
-import { AuthTypes } from '@/api/types'
-import { useTranslation } from 'react-i18next'
+import { FC } from 'react'
 import { LogOut } from 'lucide-react-native'
+import { Button, ButtonText, ButtonIcon } from '@/components/ui'
 
-const SignOut = () => {
-  const { t } = useTranslation()
-  const { signOut } = useSession()
-  const { activeProfile: selectedProfile } = useUser()
-  const role = selectedProfile?.role as AuthTypes.UserRole
-
+interface ISignOutProps {
+  buttonLabel: string
+  handleLogout: () => void
+}
+const SignOut: FC<ISignOutProps> = ({ buttonLabel = 'Logout', handleLogout }) => {
   return (
-    <Button className="bg-error-900 flex-row " onPress={async () => await signOut(role)}>
-      <ButtonText>{t('logout')}</ButtonText>
+    <Button className="bg-error-900 flex-row " onPress={handleLogout}>
+      <ButtonText>{buttonLabel}</ButtonText>
       <ButtonIcon as={LogOut} />
     </Button>
   )

@@ -5,13 +5,22 @@
     "search-list": "Searches",
     "search": "Search",
     "crew-list": "Crew list",
-    "crew-profile": "Crew profile"
+    "crew-profile": "Crew profile",
+    "settings": "Settings",
+    "login-as-crew": "Login as crew",
+    "login-as-recruiter": "Login as recruiter"
   },
   "login-screen": {
     "title": "Login",
-    "email": "Email",
-    "password": "Password",
-    "login": "Login"
+    "login": "Login",
+    "email-helper-text": "We'll never share your email with anyone else.",
+    "invalid-email": "Invalid email",
+    "invalid-password": "Please enter your password",
+    "login-error": "Login error",
+    "invalid-credentials": "Email or password are incorrect",
+    "forgot-password": "Forgot password?",
+    "register-as-crew": "Register as crew",
+    "register-as-recruiter": "Register as recruiter"
   },
   "home-screen": {
     "welcome": "Welcome",
@@ -52,6 +61,15 @@
     "languages-and-education": "Languages and education",
     "corses-and-certificates": "Courses and certificates",
     "skills-and-abilities": "Skills and abilities"
+  },
+  "settings-screen": {
+    "change-language": "Change language",
+    "notifications": "Notifications",
+    "login-as-crew": "Login as crew",
+    "login-as-recruiter": "Login as recruiter",
+    "logout": "Logout",
+    "edit-profile": "Edit profile",
+    "change-password": "Change password"
   },
   "offer": {
     "contract-and-compensation": "Contract with compensation",
@@ -138,6 +156,10 @@
     "to": "To",
     "location": "Location",
     "gender": "Gender",
-    "need-support": "Need support?"
+    "need-support": "Need support?",
+    "email": "Email",
+    "password": "Password",
+    "en": "EN",
+    "it": "IT"
   }
 }

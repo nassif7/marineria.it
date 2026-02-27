@@ -1,8 +1,9 @@
 import React, { useState, FC } from 'react'
 import { KeyboardAvoidingView } from 'react-native'
-import { useForm, FieldComponent } from '@tanstack/react-form'
 import { useTranslation } from 'react-i18next'
+import { useForm } from '@tanstack/react-form'
 import { EyeIcon, EyeOffIcon } from 'lucide-react-native'
+import { TUserRole } from '@/api/types'
 import {
   Button,
   ButtonSpinner,
@@ -22,7 +23,6 @@ import {
   View,
   Divider,
 } from '@/components/ui'
-import { AuthTypes } from '@/api/types'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -33,10 +33,10 @@ export type FormDate = {
 
 type SwitchUserRole = {
   email: string
-  role: AuthTypes.UserRole
+  role: TUserRole
 }
 
-interface AuthenticationFormProps {
+interface IAuthenticationForm {
   authenticate: (args: FormDate) => void
   user?: SwitchUserRole
   isLoading?: boolean
@@ -56,6 +56,7 @@ type FormFieldProps = {
   onBlur?: () => void
   type?: 'text' | 'password'
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters'
+  helperText?: string
 }
 
 const FormField: FC<FormFieldProps> = ({
@@ -67,13 +68,14 @@ const FormField: FC<FormFieldProps> = ({
   onBlur,
   type = 'text',
   autoCapitalize = 'sentences',
+  helperText,
 }) => {
   const [showPassword, setShowPassword] = useState(false)
   const isPassword = type === 'password'
   const isInvalid = !!errors.length
 
   return (
-    <FormControl isRequired isInvalid={isInvalid} className="mb-2">
+    <FormControl isRequired isInvalid={isInvalid}>
       <Input size="xl" className="bg-white" isInvalid={isInvalid} isRequired>
         <InputField
           className="bg-white"
@@ -91,9 +93,11 @@ const FormField: FC<FormFieldProps> = ({
           </InputSlot>
         )}
       </Input>
-      <FormControlHelper>
-        <FormControlHelperText />
-      </FormControlHelper>
+      {helperText && (
+        <FormControlHelper>
+          <FormControlHelperText>{helperText}</FormControlHelperText>
+        </FormControlHelper>
+      )}
       <FormControlError>
         <FormControlErrorText>{errors?.[0]}</FormControlErrorText>
       </FormControlError>
@@ -101,10 +105,8 @@ const FormField: FC<FormFieldProps> = ({
   )
 }
 
-// --- AuthenticationForm ---
-
-const AuthenticationForm: FC<AuthenticationFormProps> = ({ authenticate, user, isLoading, onFocus, onBlur }) => {
-  const { t } = useTranslation()
+const AuthenticationForm: FC<IAuthenticationForm> = ({ authenticate, user, isLoading, onFocus, onBlur }) => {
+  const { t } = useTranslation('login-screen')
 
   const { Field, Subscribe, handleSubmit } = useForm({
     defaultValues: {
@@ -120,26 +122,28 @@ const AuthenticationForm: FC<AuthenticationFormProps> = ({ authenticate, user, i
     type?: 'text' | 'password'
     autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters'
     validate: (value: string) => string | undefined
+    helperText?: string
   }[] = [
     {
       name: 'email',
-      placeholder: t('login-screen.form.email'),
+      placeholder: t('email'),
       autoCapitalize: 'none',
-      validate: (value) => (!value || !EMAIL_PATTERN.test(value) ? t('login-screen.form.invalid-email') : undefined),
+      validate: (value) => (!value || !EMAIL_PATTERN.test(value) ? t('invalid-email') : undefined),
+      helperText: t('email-helper-text'),
     },
     {
       name: 'password',
-      placeholder: t('login-screen.form.password'),
+      placeholder: t('password'),
       type: 'password',
-      validate: (value) => (!value ? t('login-screen.form.invalid-password') : undefined),
+      validate: (value) => (!value ? t('invalid-password') : undefined),
     },
   ]
 
   return (
     <KeyboardAvoidingView className="w-11/12" behavior="padding">
-      <View className="rounded bg-secondary-200 py-4 px-4">
-        <VStack>
-          {fields.map(({ name, placeholder, type, autoCapitalize, validate }) => (
+      <View className="rounded-md bg-background-100 p-4">
+        <VStack space="sm">
+          {fields.map(({ name, placeholder, type, autoCapitalize, validate, helperText }) => (
             <Field key={name} name={name} validators={{ onSubmit: ({ value }) => validate(value) }}>
               {(field) => (
                 <FormField
@@ -152,6 +156,7 @@ const AuthenticationForm: FC<AuthenticationFormProps> = ({ authenticate, user, i
                   autoCapitalize={autoCapitalize}
                   onFocus={onFocus}
                   onBlur={onBlur}
+                  helperText={helperText}
                 />
               )}
             </Field>
@@ -167,18 +172,18 @@ const AuthenticationForm: FC<AuthenticationFormProps> = ({ authenticate, user, i
           </Subscribe>
         </VStack>
 
-        <Divider className="my-4 bg-secondary-800" />
+        <Divider className="my-4" />
 
         <VStack>
           <Link href="https://www.marineria.it/En/Forgot_PSW.aspx" className="mb-1">
-            <LinkText className="text-left">{t('forgot-password')}</LinkText>
+            <LinkText>{t('forgot-password')}</LinkText>
           </Link>
-          {(!user || user.role === AuthTypes.UserRole.CREW) && (
+          {(!user || user.role === TUserRole.CREW) && (
             <Link href="https://www.marineria.it/En/Rec/Reg.aspx" className="mb-1">
               <LinkText>{t('register-as-recruiter')}</LinkText>
             </Link>
           )}
-          {(!user || user.role === AuthTypes.UserRole.RECRUITER) && (
+          {(!user || user.role === TUserRole.RECRUITER) && (
             <Link href="https://www.marineria.it/En/Pro/Reg.aspx">
               <LinkText>{t('register-as-crew')}</LinkText>
             </Link>

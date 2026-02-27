@@ -1,9 +1,9 @@
-export enum UserRole {
+export enum TUserRole {
   CREW = 'PRO',
   RECRUITER = 'ARM',
 }
 export type TAuthResponse = {
-  category: UserRole
+  category: TUserRole
   token: string
 }
-export type UserAuth = Record<UserRole, string | null>
+export type TUserAuth = Record<TUserRole, string | null>

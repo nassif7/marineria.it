@@ -5,13 +5,22 @@
     "search-list": "Ricerche",
     "search": "Ricerca",
     "crew-list": "Equipaggio",
-    "crew-profile": "Scheda equipaggio"
+    "crew-profile": "Scheda equipaggio",
+    "settings": "Impostazioni",
+    "login-as-crew": "Accedi come equipaggio",
+    "login-as-recruiter": "Accedi come datore di lavoro"
   },
   "login-screen": {
     "title": "Login",
-    "email": "Email",
-    "password": "Password",
-    "login": "Login"
+    "login": "Accedi",
+    "email-helper-text": "Non condivideremo mai la tua Email con alcuno",
+    "invalid-email": "Email non valida",
+    "invalid-password": "Inserisci la tua password",
+    "login-error": "Errore di login",
+    "invalid-credentials": "Email o password non corretti",
+    "forgot-password": "Password dimenticata?",
+    "register-as-crew": "Registrati come equipaggio",
+    "register-as-recruiter": "Registrati come datore di lavoro"
   },
   "home-screen": {
     "welcome": "Welcome",
@@ -52,6 +61,15 @@
     "languages-and-education": "Lingue e formazione",
     "corses-and-certificates": "Corsi e certificati",
     "skills-and-abilities": "Capacità e competenze"
+  },
+  "settings-screen": {
+    "change-language": "Cambia lingua",
+    "notifications": "Notifiche",
+    "login-as-crew": "Accedi come equipaggio",
+    "login-as-recruiter": "Accedi come datore di lavoro",
+    "logout": "Esci",
+    "edit-profile": "Edit profile",
+    "change-password": "Change password"
   },
   "offer": {
     "contract-and-compensation": "Contratto e compensazione",
@@ -138,6 +156,10 @@
     "to": "A",
     "location": "Località",
     "gender": "Genere",
-    "need-support": "Hai bisogno di supporto?"
+    "need-support": "Hai bisogno di supporto?",
+    "email": "Email",
+    "password": "Password",
+    "en": "EN",
+    "it": "IT"
   }
 }

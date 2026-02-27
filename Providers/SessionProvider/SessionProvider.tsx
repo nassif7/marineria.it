@@ -1,15 +1,14 @@
 import { useState, createContext, useContext, useEffect } from 'react'
-import { signIn } from '@/api/auth'
-import { router } from 'expo-router'
-import { AuthTypes } from '@/api/types'
 import * as SecureStore from 'expo-secure-store'
+import { TUserRole, TUserAuth } from '@/api/types'
+import { signIn } from '@/api/auth'
 
 type SessionContextType = {
   signIn: (userName: string, password: string) => Promise<void>
-  signOut: (role: AuthTypes.UserRole) => void
-  switchAuth: (role: AuthTypes.UserRole) => void
-  auth: { role: AuthTypes.UserRole | null; token: string | null }
-  storedAuthTokens: AuthTypes.UserAuth
+  signOut: (role: TUserRole) => void
+  switchAuth: (role: TUserRole) => void
+  auth: { role: TUserRole | null; token: string | null }
+  storedAuthTokens: TUserAuth
   isLoading: boolean
 }
 
@@ -18,7 +17,7 @@ const SessionContext = createContext<SessionContextType>({
   signOut: () => null,
   switchAuth: () => null,
   auth: { role: null, token: null },
-  storedAuthTokens: { [AuthTypes.UserRole.CREW]: null, [AuthTypes.UserRole.RECRUITER]: null },
+  storedAuthTokens: { [TUserRole.CREW]: null, [TUserRole.RECRUITER]: null },
   isLoading: false,
 })
 
@@ -33,11 +32,11 @@ export const useSession = () => {
 }
 
 const SessionProvider = (props: React.PropsWithChildren) => {
-  const [storedAuthTokens, setStoredAuthTokens] = useState<AuthTypes.UserAuth>({
-    [AuthTypes.UserRole.CREW]: null,
-    [AuthTypes.UserRole.RECRUITER]: null,
+  const [storedAuthTokens, setStoredAuthTokens] = useState<TUserAuth>({
+    [TUserRole.CREW]: null,
+    [TUserRole.RECRUITER]: null,
   })
-  const [auth, setAuth] = useState<{ role: AuthTypes.UserRole | null; token: string | null }>({
+  const [auth, setAuth] = useState<{ role: TUserRole | null; token: string | null }>({
     role: null,
     token: null,
   })
@@ -50,13 +49,13 @@ const SessionProvider = (props: React.PropsWithChildren) => {
   const hydrateSession = async () => {
     setIsLoading(true)
     try {
-      const role = (await SecureStore.getItemAsync('role')) as AuthTypes.UserRole | null
-      const crewToken = await SecureStore.getItemAsync(AuthTypes.UserRole.CREW)
-      const recruiterToken = await SecureStore.getItemAsync(AuthTypes.UserRole.RECRUITER)
+      const role = (await SecureStore.getItemAsync('role')) as TUserRole | null
+      const crewToken = await SecureStore.getItemAsync(TUserRole.CREW)
+      const recruiterToken = await SecureStore.getItemAsync(TUserRole.RECRUITER)
 
       const tokens = {
-        [AuthTypes.UserRole.CREW]: crewToken,
-        [AuthTypes.UserRole.RECRUITER]: recruiterToken,
+        [TUserRole.CREW]: crewToken,
+        [TUserRole.RECRUITER]: recruiterToken,
       }
 
       setStoredAuthTokens(tokens)
@@ -79,18 +78,16 @@ const SessionProvider = (props: React.PropsWithChildren) => {
     setAuth({ role: category, token })
   }
 
-  const unAuthenticate = async (role: AuthTypes.UserRole) => {
-    const otherRole = role === AuthTypes.UserRole.CREW ? AuthTypes.UserRole.RECRUITER : AuthTypes.UserRole.CREW
+  const unAuthenticate = async (role: TUserRole) => {
+    const otherRole = role === TUserRole.CREW ? TUserRole.RECRUITER : TUserRole.CREW
     const otherToken = storedAuthTokens[otherRole]
 
     await SecureStore.deleteItemAsync(role)
 
     if (otherToken) {
-      // User has another active role — switch to it
       await SecureStore.setItemAsync('role', otherRole)
       setAuth({ role: otherRole, token: otherToken })
     } else {
-      // No other active role — fully sign out
       await SecureStore.deleteItemAsync('role')
       setAuth({ role: null, token: null })
     }
@@ -98,7 +95,7 @@ const SessionProvider = (props: React.PropsWithChildren) => {
     setStoredAuthTokens((prev) => ({ ...prev, [role]: null }))
   }
 
-  const switchAuth = async (role: AuthTypes.UserRole) => {
+  const switchAuth = async (role: TUserRole) => {
     const token = storedAuthTokens[role]
     if (!token) return
     await SecureStore.setItemAsync('role', role)
