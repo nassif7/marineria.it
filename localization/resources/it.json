@@ -35,7 +35,20 @@
       "own-offers": "Tutte le offerte",
       "all-offers": "Offerte per me"
     },
-    "no-offers": "There are currently no job offers that match your profile!"
+    "no-offers": "There are currently no job offers that match your profile!",
+    "already-applied": "Candidato",
+    "not-matching-why": "Non corrispondente, perche?",
+    "apply-for-this-position": "Applica per questa posizione",
+    "apply": "Applica",
+    "share-offer": "Condividi offerta",
+    "privacy": "Privacy",
+    "privacy-policy": "io sottoscritto/a sono interessato/a questa offerta di lavoro per la quale desidero che vengano acquisiti il mio curriculum ed i miei recapiti personali ed cui autorizzo il trattamento dei miei dati personali in conformità alle disposizioni della legge n. 196 del 30.06.2003 art 7 e art. 13 in vigore dal 04.01.2004.",
+    "compliance": "Dichiarazione",
+    "i-declare": "dichiaro di",
+    "agree-to-policy": "accetto le clausole di privacy",
+    "confirm-availability": "sono disponibile per il periodo dell'imbarco",
+    "confirm-requirements": "sono in possesso dei requisiti richiesti",
+    "review-your-profile": "Click se prima desideri controllare il tuo profilo"
   },
   "search-screen": {
     "search-id": "Search ID",
@@ -92,7 +105,8 @@
     "share-offer": "Condividi questa offerta",
     "position-specialty": "Specialità posizione",
     "expires": "Scade",
-    "modify-offer": "Modifica offerta"
+    "modify-offer": "Modifica offerta",
+    "apply-success": "Il tuo profilo sarà condiviso con il reclutatore"
   },
   "crew": {
     "availability": "Disponibilità",
@@ -160,6 +174,8 @@
     "email": "Email",
     "password": "Password",
     "en": "EN",
-    "it": "IT"
+    "it": "IT",
+    "success": "Successo",
+    "unknown-error": "Si è verificato un errore, riprova più tardi!"
   }
 }

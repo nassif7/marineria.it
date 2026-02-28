@@ -1,11 +1,37 @@
 import { FC, useState } from 'react'
+import { ActivityIndicator } from 'react-native'
+import { Stack } from 'expo-router'
 import { useTranslation } from 'react-i18next'
+import { useQuery } from '@tanstack/react-query'
 import { getProOffers } from '@/api'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-import { Text, Loading, View } from '@/components/ui'
+import { Text, Loading, HStack, Box } from '@/components/ui'
+import { List, ScreenContainer, NavBar } from '@/components/appUI'
 import OfferListItem from './OfferListItem'
-import { useQuery } from '@tanstack/react-query'
-import { List, ScreenContainer } from '@/components/appUI'
+
+const RightAction = ({
+  itemsCount,
+  isLoading,
+  onAction,
+}: {
+  itemsCount: number
+  isLoading: boolean
+  onAction?: () => void
+}) => {
+  return (
+    <HStack className="pr-3 items-center" space="xs">
+      <Box className="bg-success-500 rounded-md w-6 h-6 items-center justify-center shrink-0">
+        {isLoading && <ActivityIndicator size={4} color="white" />}
+        {!isLoading && (
+          <Text color="white" bold size="sm">
+            {itemsCount}
+          </Text>
+        )}
+      </Box>
+      {/* <Icon as={ListFilter} size="2xl" className="text-typography-400 font-bold" /> */}
+    </HStack>
+  )
+}
 
 const JobOfferList: FC = () => {
   const {
@@ -15,6 +41,7 @@ const JobOfferList: FC = () => {
   const { activeProfile } = useUser()
   const { token } = activeProfile as ActiveProfile
   const [ownOffers, setOwnOffers] = useState<string>('all')
+  const [showFilter, setShowFilter] = useState(false)
 
   const filterOptions = [
     { label: t('filter.all-offers'), value: 'all' },
@@ -27,23 +54,39 @@ const JobOfferList: FC = () => {
   })
 
   return (
-    <ScreenContainer>
-      {(isLoading || isRefetching) && <Loading />}
-      {isSuccess && (
-        <List
-          data={data}
-          isRefetching={isRefetching}
-          onRefresh={refetch}
-          filter={{
-            value: ownOffers,
-            setValue: setOwnOffers,
-            filterOptions,
-          }}
-          renderItem={({ item }) => <OfferListItem offer={item} key={item.reference} />}
-        />
-      )}
-      {isError && <Text color="error">{t('error')}</Text>}
-    </ScreenContainer>
+    <>
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: t('crew-list', { ns: 'screens-labels' }),
+          contentStyle: { backgroundColor: 'white' },
+          header: (props) => (
+            <NavBar
+              {...props}
+              rightAction={<RightAction itemsCount={data?.length || 0} isLoading={isLoading || isRefetching} />}
+            />
+          ),
+        }}
+      />
+
+      <ScreenContainer>
+        {(isLoading || isRefetching) && <Loading />}
+        {isSuccess && (
+          <List
+            filter={{
+              value: ownOffers,
+              setValue: setOwnOffers,
+              filterOptions,
+            }}
+            data={data}
+            isRefetching={isRefetching}
+            onRefresh={refetch}
+            renderItem={({ item }) => <OfferListItem offer={item} key={item.reference} />}
+          />
+        )}
+        {isError && <Text color="error">{t('error')}</Text>}
+      </ScreenContainer>
+    </>
   )
 }
 

@@ -101,7 +101,7 @@ const OfferListItem: FC<IOfferListItemProps> = ({ offer }) => {
           </Text>
         </SubSection>
         <Button
-          size="lg"
+          size="md"
           action="positive"
           variant="solid"
           onPress={() => handleViewOffer(offer.idoffer)}

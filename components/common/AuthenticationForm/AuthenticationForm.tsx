@@ -171,24 +171,6 @@ const AuthenticationForm: FC<IAuthenticationForm> = ({ authenticate, user, isLoa
             )}
           </Subscribe>
         </VStack>
-
-        <Divider className="my-4" />
-
-        <VStack>
-          <Link href="https://www.marineria.it/En/Forgot_PSW.aspx" className="mb-1">
-            <LinkText>{t('forgot-password')}</LinkText>
-          </Link>
-          {(!user || user.role === TUserRole.CREW) && (
-            <Link href="https://www.marineria.it/En/Rec/Reg.aspx" className="mb-1">
-              <LinkText>{t('register-as-recruiter')}</LinkText>
-            </Link>
-          )}
-          {(!user || user.role === TUserRole.RECRUITER) && (
-            <Link href="https://www.marineria.it/En/Pro/Reg.aspx">
-              <LinkText>{t('register-as-crew')}</LinkText>
-            </Link>
-          )}
-        </VStack>
       </View>
     </KeyboardAvoidingView>
   )

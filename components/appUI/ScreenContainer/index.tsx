@@ -15,7 +15,7 @@ const ScreenContainer: FC<
 
   return (
     <Container
-      className={`${className} h-full px-2 flex-1 pb-2 bg-background-50`}
+      className={`h-full px-2 flex-1 pb-5 bg-background-50 ${className} `}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
       {children}

@@ -3,10 +3,10 @@ import { ActivityIndicator } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { Users, ListFilter } from 'lucide-react-native'
+import { ListFilter } from 'lucide-react-native'
 import { getCrewList } from '@/api'
 import { useUser } from '@/Providers/UserProvider'
-import { Loading, Box, HStack, Text, VStack, Icon, ButtonSpinner } from '@/components/ui'
+import { Loading, Box, HStack, Text } from '@/components/ui'
 import { List, NavBar, ScreenContainer } from '@/components/appUI'
 import CrewListItem from './CrewListItem'
 
@@ -21,7 +21,7 @@ const RightAction = ({ itemsCount, isLoading }: { itemsCount: number; isLoading:
           </Text>
         )}
       </Box>
-      <Icon as={ListFilter} size="2xl" className="text-typography-400 font-bold" />
+      {/* <Icon as={ListFilter} size="2xl" className="text-typography-400 font-bold" /> */}
     </HStack>
   )
 }
@@ -34,7 +34,7 @@ const CrewList: FC = () => {
 
   const { searchId } = useLocalSearchParams()
   const { activeProfile } = useUser()
-  const { role, token } = activeProfile as any
+  const { token } = activeProfile as any
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
     queryKey: ['recruiter-crew-list', searchId],

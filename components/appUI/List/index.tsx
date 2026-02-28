@@ -21,55 +21,45 @@ type FilterType = {
 
 interface ListHeaderProps {
   itemsCount: number
-  filter?: FilterType
+  filter: FilterType
 }
 
-export const ListHeader: FC<ListHeaderProps> = ({ itemsCount, filter }) => {
+export const ListHeader: FC<ListHeaderProps> = ({ filter }) => {
   return (
     <Box className="mb-1">
-      <Box className="bg-white p-2">
+      <Box className="bg-white p-2 w-full">
         <VStack className="gap-2">
           <HStack className="items-center justify-between gap-4">
-            <Box className="flex-1">
-              {filter && (
-                <Select
-                  defaultValue={filter.value}
-                  onValueChange={filter.setValue}
-                  initialLabel={filter.filterOptions.find((o) => o.value === filter.value)?.label as string}
-                  className=" bg-white "
-                >
-                  <SelectTrigger variant="rounded" size="lg" className=" flex justify-between pr-2 rounded-md">
-                    <SelectInput className="text-typography-900 text-md font-semibold" />
-                    <SelectIcon as={ChevronDown} />
-                  </SelectTrigger>
-                  <SelectPortal>
-                    <SelectBackdrop />
-                    <SelectContent>
-                      {filter.filterOptions.map((o) => (
-                        <SelectItem
-                          textStyle={{
-                            style: {
-                              padding: 8,
-                              fontSize: 18,
-                              fontWeight: 'bold',
-                            },
-                          }}
-                          label={o.label}
-                          value={o.value}
-                          key={o.value}
-                        />
-                      ))}
-                    </SelectContent>
-                  </SelectPortal>
-                </Select>
-              )}
-            </Box>
-
-            <Box className="bg-success-500 rounded-full w-10 h-10 items-center justify-center shrink-0">
-              <Text color="white" bold>
-                {itemsCount}
-              </Text>
-            </Box>
+            <Select
+              defaultValue={filter.value}
+              onValueChange={filter.setValue}
+              initialLabel={filter.filterOptions.find((o) => o.value === filter.value)?.label as string}
+              className=" bg-white w-full"
+            >
+              <SelectTrigger variant="rounded" size="md" className=" flex justify-between pr-2 rounded-md">
+                <SelectInput className="text-typography-900 text-md font-semibold" />
+                <SelectIcon as={ChevronDown} />
+              </SelectTrigger>
+              <SelectPortal>
+                <SelectBackdrop />
+                <SelectContent>
+                  {filter.filterOptions.map((o) => (
+                    <SelectItem
+                      textStyle={{
+                        style: {
+                          padding: 8,
+                          fontSize: 18,
+                          fontWeight: 'bold',
+                        },
+                      }}
+                      label={o.label}
+                      value={o.value}
+                      key={o.value}
+                    />
+                  ))}
+                </SelectContent>
+              </SelectPortal>
+            </Select>
           </HStack>
         </VStack>
       </Box>
@@ -91,7 +81,7 @@ export function List<T>({ data, renderItem, isRefetching, onRefresh, filter, noH
   if (!data) return null
   return (
     <FlatList
-      ListHeaderComponent={() => (noHeader ? null : <ListHeader itemsCount={data.length} filter={filter} />)}
+      ListHeaderComponent={() => (filter ? <ListHeader itemsCount={data.length} filter={filter} /> : null)}
       ItemSeparatorComponent={() => <Divider className="my-0.5 bg-transparent" />}
       data={data}
       renderItem={({ item }) => renderItem({ item })}

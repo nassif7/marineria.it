@@ -35,7 +35,20 @@
       "own-offers": "Job offers for me",
       "all-offers": "All job offers"
     },
-    "no-offers": "There are currently no job offers that match your profile!"
+    "no-offers": "There are currently no job offers that match your profile!",
+    "already-applied": "Already Applied",
+    "not-matching-why": "Not matching, why?",
+    "apply-for-this-position": "Apply for this position",
+    "apply": "Apply",
+    "share-offer": "Share offer",
+    "privacy": "Privacy",
+    "privacy-policy": "I am seriousley interested in this job offer for which I wish my curriculum and my personal details to be shared with the employer posting the ad as is in compliance with the provision of the italian Law n.196 30.06.2003 art.7 and art.13 enforced from 04.01.2004 onward.",
+    "compliance": "Compliance",
+    "i-declare": "I agree to",
+    "agree-to-policy": "I agree to privacy terms and conditions",
+    "confirm-availability": "I am available for hire during the time period specified by the advert",
+    "confirm-requirements": "I satisfy the requirements",
+    "review-your-profile": "Click here to check your profile"
   },
   "search-screen": {
     "search-id": "Search ID",
@@ -92,7 +105,8 @@
     "seamans-book": "Seaman's book",
     "position-specialty": "Position specialty",
     "expires": "Expires",
-    "modify-offer": "Modify offer"
+    "modify-offer": "Modify offer",
+    "apply-success": "Your profile will be shared with the recruiter!"
   },
   "crew": {
     "availability": "Availability",
@@ -160,6 +174,8 @@
     "email": "Email",
     "password": "Password",
     "en": "EN",
-    "it": "IT"
+    "it": "IT",
+    "success": "Success",
+    "unknown-error": "Something went wrong, please try again later!"
   }
 }
