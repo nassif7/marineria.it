@@ -20,6 +20,7 @@ import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'
 import { SubSection } from '@/components/appUI'
 import { getAgeByYear } from '@/utils/dateUtils'
+import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 
 interface ICrewListItem {
   crew: TCrewSimple
@@ -35,6 +36,9 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
   const handlePress = () => {
     router.push(`/recruiter/search/${searchId}/crew/${crew.userId}`)
   }
+
+  const hasSeamansBook = getSeamansBook(crew)
+  const { hasCertificateOfCompetence } = getCertificateOfCompetence(crew)
 
   return (
     <Box className="bg-white rounded-md p-4">
@@ -53,12 +57,14 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
             <VStack className="flex-1" space="xs">
               <HStack className="items-center gap-2 flex-wrap">
                 <Heading size="sm" className="text-primary-600">
-                  {crew.firstName} {crew.lastName}
+                  {crew.contacted ? crew.firstName + ' ' + crew.lastName : crew.mainPosition}
                 </Heading>
               </HStack>
-              <Text bold size="sm">
-                {crew.mainPosition}
-              </Text>
+              {crew.contacted && (
+                <Text bold size="sm">
+                  {crew.mainPosition}
+                </Text>
+              )}
             </VStack>
           </HStack>
           <Text bold size="sm">
@@ -90,6 +96,13 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
               <BadgeText className="text-error-900">{t('no-experience', { ns: 'crew' })}</BadgeText>
             </Badge>
           )}
+          <Badge action={hasCertificateOfCompetence ? 'success' : 'error'} variant="outline" className="rounded-md">
+            <BadgeText className={`text-${hasCertificateOfCompetence ? 'success' : 'error'}-900`}>
+              {t(hasCertificateOfCompetence ? 'certificate-of-competence' : 'no-certificate-of-competence', {
+                ns: 'crew-screen',
+              })}
+            </BadgeText>
+          </Badge>
           {!crew.courses && (
             <Badge action="error" variant="outline" className="rounded-md">
               <BadgeIcon as={Award} className="mr-1 text-error-900" />
@@ -117,11 +130,10 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
               <Text size="sm" semiBold shade={800}>
                 {crew.calculatedExperience}
               </Text>
-              {crew.seamansBook && (
-                <Badge action="muted" variant="outline" className="rounded-md">
-                  <BadgeText className="text-typography-800">{crew.seamansBook}</BadgeText>
-                </Badge>
-              )}
+
+              <Badge action={hasSeamansBook ? 'success' : 'error'} variant="outline" className="rounded-md">
+                <BadgeText className={`text-${hasSeamansBook ? 'success' : 'error'}-900`}>{crew.seamansBook}</BadgeText>
+              </Badge>
             </HStack>
           </SubSection>
         )}
@@ -133,7 +145,7 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
           </SubSection>
         )}
 
-        <Button size="lg" action="positive" variant="solid" onPress={handlePress}>
+        <Button size="md" action="positive" variant="solid" onPress={handlePress}>
           <ButtonText>{t('view-profile')}</ButtonText>
         </Button>
       </VStack>

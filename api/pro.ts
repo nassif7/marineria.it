@@ -1,4 +1,4 @@
-import { API } from './const'
+import { API } from './consts'
 import { TOffer } from './types'
 import { getLanguageCode } from './utils'
 

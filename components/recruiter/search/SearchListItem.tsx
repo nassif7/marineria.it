@@ -41,6 +41,7 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
 
   const referenceShort = search.reference.includes('_') ? search.reference.split('_')[1] : search.reference
 
+  console.log(search.idoffer)
   return (
     <Box className="bg-white p-3 rounded-md">
       <VStack space="xs">

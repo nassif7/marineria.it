@@ -117,13 +117,10 @@ const useNotification = () => {
 
     // Notification received while app is in foreground
     const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
-      console.log('📬 Notification received:', notification)
       setNotification(notification)
     })
 
     const responseListener = Notifications.addNotificationResponseReceivedListener((response) => {
-      console.log('🔔 Notification tapped:', response)
-
       const data = response.notification.request.content.data
       handleNotificationNavigation(data)
     })

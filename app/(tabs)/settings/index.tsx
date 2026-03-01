@@ -53,7 +53,6 @@ const Settings = () => {
     }
   }
 
-  console.log(pushNotificationToken)
   return (
     <ScreenContainer>
       <VStack className="h-full justify-between py-4">

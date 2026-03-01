@@ -1,4 +1,4 @@
-import { API } from './const'
+import { API } from './consts'
 import { TAuthResponse } from '@/api/types/auth'
 
 export const signIn = async (username: string, password: string): Promise<TAuthResponse> => {

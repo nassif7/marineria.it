@@ -8,6 +8,7 @@ import { getAgeByYear } from '@/utils/dateUtils'
 import { TCrew } from '@/api/types'
 import { faker } from '@faker-js/faker'
 import { PhotoSlider } from '@/components/appUI'
+import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 
 const baseUrl = 'https://www.comunicazione.it/PROFoto/'
 
@@ -29,12 +30,14 @@ const ProfileHeader: FC<{ crew: TCrew }> = ({ crew }) => {
   const photos = useMemo(() => [fakerImage1, fakerImage2], [crew])
   const hasPhotos = photos.length > 0
   const age = getAgeByYear(crew.yearofBirth)
+  const { hasCertificateOfCompetence, certificateOfCompetence } = getCertificateOfCompetence(crew)
+  const hasSeamansBook = getSeamansBook(crew)
 
   return (
-    <Section className="bg-background-200">
+    <Section className="bg-background-200 mx-0 rounded-none">
       <VStack space="sm" className="items-center">
         <TouchableOpacity onPress={() => setPhotoVisible(true)} activeOpacity={fakerImage1 ? 0.75 : 1}>
-          <Box className="w-28 h-28 rounded-xl bg-primary-100 items-center justify-center overflow-hidden border border-outline-200">
+          <Box className="w-28 h-28 rounded-md bg-primary-100 items-center justify-center overflow-hidden border border-outline-200">
             {fakerImage1 ? (
               <Image source={{ uri: fakerImage1 }} className="w-full h-full" alt="profile" />
             ) : (
@@ -57,14 +60,11 @@ const ProfileHeader: FC<{ crew: TCrew }> = ({ crew }) => {
         <PhotoSlider visible={photoVisible} photos={photos} onClose={() => setPhotoVisible(false)} initialIndex={0} />
         <VStack space="xs" className="items-center">
           <Heading size="md" className="text-primary-600 text-center ">
-            {crew.mainPosition}
+            {crew?.contacted ? crew.name + ' ' + crew.surname : crew.mainPosition}
           </Heading>
           <HStack space="md">
             <Text size="sm" bold shade={800}>
               {t('id')}: {crew.iduser}
-            </Text>
-            <Text size="sm" bold color="success">
-              {t('offers-received', { ns: 'crew' })}: {crew.numberClick}
             </Text>
           </HStack>
         </VStack>
@@ -103,14 +103,14 @@ const ProfileHeader: FC<{ crew: TCrew }> = ({ crew }) => {
               <BadgeText className="text-typography-800">{crew.gender}</BadgeText>
             </Badge>
           )}
-          {/* Seamans Book */}
-          <Badge
-            action={crew.seamansBook === 'Seamans Book' ? 'success' : 'error'}
-            variant="outline"
-            className="rounded-md"
-          >
-            <BadgeText className={`text-${crew.seamansBook === 'Seamans Book' ? 'success' : 'error'}-900`}>
-              {crew.seamansBook}
+          <Badge action={hasSeamansBook ? 'success' : 'error'} variant="outline" className="rounded-md">
+            <BadgeText className={`text-${hasSeamansBook ? 'success' : 'error'}-900`}>{crew.seamansBook}</BadgeText>
+          </Badge>
+          <Badge action={hasCertificateOfCompetence ? 'success' : 'error'} variant="outline" className="rounded-md">
+            <BadgeText className={`text-${hasCertificateOfCompetence ? 'success' : 'error'}-900`}>
+              {t(hasCertificateOfCompetence ? 'certificate-of-competence' : 'no-certificate-of-competence', {
+                ns: 'crew-screen',
+              })}
             </BadgeText>
           </Badge>
         </HStack>

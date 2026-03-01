@@ -56,8 +56,8 @@ const ExperiencesSection: FC<{ crew: TCrew }> = ({ crew }) => {
     <Section>
       <SectionHeader icon={Compass} title={t('experience', { ns: 'crew' })} />
       <HStack className="items-center justify-between mb-2">
-        <Text size="sm" bold className="text-typography-800">
-          {crew.calculatedExperience?.trim()} - {crew.navigationBook}
+        <Text size="sm" semiBold shade={800}>
+          {crew.calculatedExperience?.trim()}
         </Text>
       </HStack>
 

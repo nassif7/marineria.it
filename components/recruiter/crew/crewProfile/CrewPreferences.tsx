@@ -66,7 +66,7 @@ const PreferencesSection: FC<{ crew: TCrew }> = ({ crew }) => {
             <Text size="sm">{t('in-team-with', { ns: 'crew' })}:</Text>
           </HStack>
           <Text size="sm" semiBold>
-            {crew.card1Couple || 'No'}
+            {crew.card1Couple || '—'}
           </Text>
         </HStack>
         {/* {crew.couplewith && (

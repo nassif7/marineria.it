@@ -1,4 +1,4 @@
-import { API } from './const'
+import { API } from './consts'
 import { TUserRole } from '@/api/types/auth'
 import { TUser } from '@/api/types/user'
 import { getLanguageCode } from './utils'

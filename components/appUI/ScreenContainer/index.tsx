@@ -1,25 +1,45 @@
 import { FC, PropsWithChildren } from 'react'
 import { View } from '@/components/ui'
 import { ScrollView } from 'react-native'
-import { FlatList, RefreshControl } from 'react-native'
+import { FlatList, RefreshControl, StyleProp, ViewStyle } from 'react-native'
 
-const ScreenContainer: FC<
-  PropsWithChildren<{
-    className?: string
-    scroll?: boolean
-    refreshing?: boolean
-    onRefresh?: () => void
-  }>
-> = ({ children, className = '', scroll = false, refreshing = false, onRefresh }) => {
-  const Container = scroll ? ScrollView : View
+interface IScreenContainerProps {
+  className?: string
+  scroll?: boolean
+  refreshing?: boolean
+  onRefresh?: () => void
+  handleScroll?: (e: any) => void
+  scrollEventThrottle?: number
+  contentContainerStyle?: StyleProp<ViewStyle>
+}
 
+const ScreenContainer: FC<PropsWithChildren<IScreenContainerProps>> = ({
+  children,
+  className = '',
+  scroll = false,
+  refreshing = false,
+  onRefresh,
+  handleScroll,
+  scrollEventThrottle,
+  contentContainerStyle,
+}) => {
   return (
-    <Container
-      className={`h-full px-2 flex-1 pb-5 bg-background-50 ${className} `}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-    >
-      {children}
-    </Container>
+    <>
+      {scroll ? (
+        <ScrollView
+          className={`flex-1 bg-background-50 pb-5 ${className} `}
+          showsVerticalScrollIndicator={false}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          onScroll={handleScroll}
+          scrollEventThrottle={scrollEventThrottle}
+          contentContainerStyle={contentContainerStyle}
+        >
+          {children}
+        </ScrollView>
+      ) : (
+        <View className={`h-full flex-1 pb-5 bg-background-50 ${className} `}>{children}</View>
+      )}
+    </>
   )
 }
 

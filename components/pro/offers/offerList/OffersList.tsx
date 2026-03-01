@@ -58,7 +58,7 @@ const JobOfferList: FC = () => {
       <Stack.Screen
         options={{
           headerShown: true,
-          title: t('crew-list', { ns: 'screens-labels' }),
+          title: t('offer-list', { ns: 'screens-labels' }),
           contentStyle: { backgroundColor: 'white' },
           header: (props) => (
             <NavBar

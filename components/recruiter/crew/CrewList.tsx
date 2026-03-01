@@ -9,6 +9,8 @@ import { useUser } from '@/Providers/UserProvider'
 import { Loading, Box, HStack, Text } from '@/components/ui'
 import { List, NavBar, ScreenContainer } from '@/components/appUI'
 import CrewListItem from './CrewListItem'
+import ContactSupport from '@/components/common/ContactSupport'
+import { supportTeam } from '@/api'
 
 const RightAction = ({ itemsCount, isLoading }: { itemsCount: number; isLoading: boolean }) => {
   return (
@@ -21,7 +23,8 @@ const RightAction = ({ itemsCount, isLoading }: { itemsCount: number; isLoading:
           </Text>
         )}
       </Box>
-      {/* <Icon as={ListFilter} size="2xl" className="text-typography-400 font-bold" /> */}
+
+      <ContactSupport title="Supporto" supportTeam={supportTeam} />
     </HStack>
   )
 }

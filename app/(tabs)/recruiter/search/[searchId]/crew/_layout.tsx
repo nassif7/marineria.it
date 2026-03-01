@@ -3,6 +3,8 @@ import { Stack } from 'expo-router'
 import { NavBar } from '@/components/appUI'
 import { useTranslation } from 'react-i18next'
 import { Box, Text } from '@/components/ui'
+import { supportTeam } from '@/api'
+import ContactSupport from '@/components/common/ContactSupport'
 
 export default function CrewLayout() {
   const { t } = useTranslation(['screens-labels'])
@@ -11,7 +13,9 @@ export default function CrewLayout() {
       screenOptions={{
         headerShown: false,
         header: (props) => {
-          return <NavBar {...props} />
+          return (
+            <NavBar {...props} rightAction={<ContactSupport title="contact support" supportTeam={supportTeam} />} />
+          )
         },
         contentStyle: { backgroundColor: 'white' },
       }}

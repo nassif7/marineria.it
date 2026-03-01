@@ -73,7 +73,11 @@
     "no-other-roles": "Nessun altro ruolo",
     "languages-and-education": "Lingue e formazione",
     "corses-and-certificates": "Corsi e certificati",
-    "skills-and-abilities": "Capacità e competenze"
+    "skills-and-abilities": "Capacità e competenze",
+    "certificate-of-competence": "Certificato di competenza (CoC)",
+    "no-certificate-of-competence": "Senza Certificato di competenza",
+    "contact-crew": "Contatta questa persona",
+    "remove-crew": "rimuovere dalla lista dell'equipaggio"
   },
   "settings-screen": {
     "change-language": "Cambia lingua",
