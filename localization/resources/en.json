@@ -77,7 +77,13 @@
     "certificate-of-competence": "Certificate of Competence (CoC)",
     "no-certificate-of-competence": "No Certificate of Competence",
     "contact-crew": "Contact this candidate",
-    "remove-crew": "Remove from crew list"
+    "remove-crew": "Remove from crew list",
+    "unlock-contact-information": "Unlock contact information",
+    "receive-cv": "Get his CV via email in PDF format",
+    "send-job-offer": "Send your job offer",
+    "request-cv-as-pdf": " Also request a copy of CV in PDF",
+    "longer-time": "Longer time",
+    "contact": "Contact"
   },
   "settings-screen": {
     "change-language": "Change language",

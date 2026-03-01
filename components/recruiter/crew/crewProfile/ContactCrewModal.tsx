@@ -1,16 +1,5 @@
-import { FC, useState, useMemo, useRef, useEffect } from 'react'
-import Reanimated, { FadeInDown, FadeOutDown } from 'react-native-reanimated'
-import {
-  ScrollView,
-  TouchableOpacity,
-  Linking,
-  Modal,
-  Pressable,
-  FlatList,
-  useWindowDimensions,
-  View as RNView,
-  Image as RNImage,
-} from 'react-native'
+import { FC, useState } from 'react'
+import { TouchableOpacity, Image as RNImage } from 'react-native'
 import {
   Box,
   VStack,
@@ -18,57 +7,28 @@ import {
   Heading,
   Text,
   Icon,
-  Image,
-  Badge,
-  BadgeText,
-  BadgeIcon,
   Button,
   ButtonText,
   ButtonIcon,
   Divider,
+  Checkbox,
+  CheckboxIndicator,
+  CheckboxIcon,
+  CheckboxLabel,
+  Modal,
+  ModalBackdrop,
+  ModalContent,
+  ModalBody,
 } from '@/components/ui'
-import {
-  User,
-  Calendar,
-  MapPin,
-  Award,
-  Heart,
-  Cake,
-  Cigarette,
-  IdCard,
-  Briefcase,
-  Phone,
-  Mail,
-  MessageCircle,
-  Link,
-  Star,
-  Globe,
-  BookOpen,
-  Anchor,
-  ChevronDown,
-  ChevronUp,
-  GraduationCap,
-  Expand,
-  X,
-  Images,
-  UserX,
-  PhoneCall,
-  Check,
-  FileText,
-  Unlock,
-  Send,
-} from 'lucide-react-native'
-import { useTranslation } from 'react-i18next'
+import { User, Unlock, FileText, Send, Check, PhoneCall } from 'lucide-react-native'
 import { SubSection } from '@/components/appUI'
-import { getAgeByYear } from '@/utils/dateUtils'
 import { TCrew } from '@/api/types'
-
-// interface IContactModalProps {
-//   visible: boolean
-//   crew: TCrew
-//   onClose: () => void
-//   onConfirm: (requestPdf: boolean) => void
-// }
+import { faker } from '@faker-js/faker'
+import { useLocalSearchParams } from 'expo-router'
+import { getRecruiterSearchById } from '@/api'
+import { useTranslation } from 'react-i18next'
+import { useQuery } from '@tanstack/react-query'
+import { ActiveProfile, useUser } from '@/Providers/UserProvider'
 
 interface IContactModal {
   visible: boolean
@@ -78,53 +38,60 @@ interface IContactModal {
 }
 
 const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) => {
+  const { searchId } = useLocalSearchParams()
+  const { activeProfile } = useUser()
+  const { token } = activeProfile as ActiveProfile
+  const fakeImage = faker.image.avatar()
+
+  const {
+    i18n: { language },
+    t,
+  } = useTranslation(['search-details-screen'])
+
+  const [isConfirmed, setIsConfirmed] = useState(true)
   const [requestPdf, setRequestPdf] = useState(false)
 
-  const photoUrl = `https://www.comunicazione.it/PROFoto/${crew?.userPhoto}`
-
   const benefits = [
-    { icon: Unlock, label: 'Unlock contact information', color: 'text-primary-500', bg: 'bg-primary-50' },
-    { icon: FileText, label: 'Receive their CV by email as PDF', color: 'text-warning-600', bg: 'bg-warning-50' },
-    { icon: Send, label: 'Send your job offer directly', color: 'text-success-600', bg: 'bg-success-50' },
+    { icon: Unlock, label: t('unlock-contact-information'), color: 'text-primary-500', bg: 'bg-primary-50' },
+    { icon: FileText, label: t('receive-cv'), color: 'text-primary-600', bg: 'bg-warning-50' },
+    { icon: Send, label: t('send-job-offer'), color: 'text-success-600', bg: 'bg-success-50' },
   ]
 
+  const { isSuccess, data } = useQuery({
+    queryKey: ['recruiter-search-by-id', searchId, language],
+    queryFn: () => getRecruiterSearchById(searchId as string, token, language),
+  })
+  const searchLabel = isSuccess ? data?.[0]?.title : searchId
+
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose} statusBarTranslucent>
-      <Pressable style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.55)', justifyContent: 'flex-end' }} onPress={onClose}>
-        <Pressable onPress={(e) => e.stopPropagation()}>
-          <Box className="bg-white rounded-t-3xl overflow-hidden">
-            {/* Drag handle */}
-            <Box className="items-center pt-3 pb-1">
-              <Box className="w-10 h-1 rounded-full bg-outline-200" />
+    <Modal isOpen={visible} onClose={onClose}>
+      <ModalBackdrop />
+      <ModalContent className="w-full mb-0 mt-auto rounded-t-md overflow-hidden p-0">
+        <ModalBody className="p-0">
+          <Box className="items-center pt-3 pb-1">
+            <Box className="w-10 h-1 rounded-full bg-outline-200" />
+          </Box>
+
+          {/* Header with avatar */}
+          <VStack className="items-center px-5 pt-3 pb-5">
+            <Box className="w-16 h-16 rounded-md bg-primary-100 overflow-hidden border-2 border-primary-200 mb-3">
+              {crew.userPhoto ? (
+                <RNImage source={{ uri: fakeImage }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+              ) : (
+                <Box className="flex-1 items-center justify-center">
+                  <Icon as={User} size="xl" className="text-primary-400" />
+                </Box>
+              )}
             </Box>
+            <Heading size="md" className="text-typography-900 text-center">
+              {t('contact-crew')}
+            </Heading>
+          </VStack>
 
-            {/* Header with avatar */}
-            <VStack className="items-center px-5 pt-3 pb-5">
-              <Box className="w-16 h-16 rounded-2xl bg-primary-100 overflow-hidden border-2 border-primary-200 mb-3">
-                {crew.userPhoto ? (
-                  <RNImage source={{ uri: photoUrl }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
-                ) : (
-                  <Box className="flex-1 items-center justify-center">
-                    <Icon as={User} size="xl" className="text-primary-400" />
-                  </Box>
-                )}
-              </Box>
-              {/* <Heading size="md" className="text-typography-900 text-center">
-                Contact this candidate
-              </Heading>
-              <Text size="sm" className="text-typography-500 text-center mt-0.5">
-                {crew.firstName} {crew.lastName} · {crew.mainPosition}
-              </Text> */}
-            </VStack>
-
-            {/* Benefits */}
-            <VStack space="xs" className="mx-4 mb-4">
-              {benefits.map((b, i) => (
-                <HStack
-                  key={i}
-                  space="sm"
-                  className="items-center bg-background-50 rounded-xl px-4 py-3 border border-outline-100"
-                >
+          <VStack space="xs" className="mx-4">
+            {benefits.map((b, i) => (
+              <SubSection key={i}>
+                <HStack space="sm" className="items-center">
                   <Box className={`w-8 h-8 rounded-full items-center justify-center ${b.bg}`}>
                     <Icon as={b.icon} size="sm" className={b.color} />
                   </Box>
@@ -133,73 +100,70 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
                   </Text>
                   <Icon as={Check} size="xs" className="text-success-500" />
                 </HStack>
-              ))}
-            </VStack>
+              </SubSection>
+            ))}
+          </VStack>
 
-            <Divider className="bg-outline-100 mx-4" />
+          <Divider className="bg-outline-100 mx-4 my-4" />
 
-            {/* Search tag — always selected */}
-            <Box className="mx-4 mt-3 mb-1">
-              <Text size="xs" bold className="text-typography-400 uppercase tracking-widest mb-2">
-                Sending for
-              </Text>
-              <HStack space="sm" className="items-center bg-primary-50 rounded-xl px-4 py-3 border border-primary-200">
-                <Box className="w-5 h-5 rounded bg-primary-500 items-center justify-center">
-                  <Icon as={Check} size="xs" className="text-white" />
-                </Box>
-                <Text size="sm" bold className="text-primary-700 flex-1">
-                  {crew.mainPosition} · {crew.company ?? 'your search'}
-                </Text>
-              </HStack>
-            </Box>
+          <VStack space="xs" className="mx-4 mb-4">
+            <SubSection>
+              <TouchableOpacity activeOpacity={0.7} onPress={() => setIsConfirmed((v) => !v)}>
+                <Checkbox value="search" isChecked={isConfirmed} onChange={(val) => setIsConfirmed(val)}>
+                  <CheckboxIndicator className="mr-3">
+                    <CheckboxIcon as={Check} />
+                  </CheckboxIndicator>
+                  <CheckboxLabel>
+                    <Text size="sm" bold className="text-primary-700">
+                      {crew.mainPosition} · {searchLabel}
+                    </Text>
+                  </CheckboxLabel>
+                </Checkbox>
+              </TouchableOpacity>
+            </SubSection>
 
-            {/* PDF toggle */}
-            <TouchableOpacity activeOpacity={0.7} className="mx-4 mt-2 mb-4" onPress={() => setRequestPdf((v) => !v)}>
-              <HStack
-                space="sm"
-                className={`items-center rounded-xl px-4 py-3 border ${
-                  requestPdf ? 'bg-warning-50 border-warning-200' : 'bg-background-50 border-outline-100'
-                }`}
-              >
-                <Box
-                  className={`w-5 h-5 rounded border items-center justify-center ${
-                    requestPdf ? 'bg-warning-500 border-warning-500' : 'bg-white border-outline-300'
-                  }`}
-                >
-                  {requestPdf && <Icon as={Check} size="xs" className="text-white" />}
-                </Box>
-                <VStack className="flex-1">
-                  <Text size="sm" bold className={requestPdf ? 'text-warning-700' : 'text-typography-800'}>
-                    Also request CV in PDF
-                  </Text>
-                  <Text size="xs" className="text-typography-400">
-                    Longer waiting time
-                  </Text>
-                </VStack>
-                <Icon as={FileText} size="sm" className={requestPdf ? 'text-warning-500' : 'text-typography-300'} />
-              </HStack>
-            </TouchableOpacity>
+            <SubSection>
+              <TouchableOpacity activeOpacity={0.7} onPress={() => setRequestPdf((v) => !v)}>
+                <Checkbox value="pdf" isChecked={requestPdf} onChange={(val) => setRequestPdf(val)}>
+                  <CheckboxIndicator className="mr-3">
+                    <CheckboxIcon as={Check} />
+                  </CheckboxIndicator>
+                  <CheckboxLabel className="flex-1">
+                    <VStack>
+                      <Text size="sm" bold className={'text-typography-800'}>
+                        {t('request-cv-as-pdf"')}
+                      </Text>
+                      <Text size="xs" className="text-typography-400">
+                        {t('longer-time')}
+                      </Text>
+                    </VStack>
+                  </CheckboxLabel>
+                </Checkbox>
+              </TouchableOpacity>
+            </SubSection>
+          </VStack>
 
-            {/* Footer buttons */}
-            <HStack space="sm" className="px-4 pb-10 pt-1">
-              <Button size="lg" action="secondary" variant="outline" className="flex-1 rounded-xl" onPress={onClose}>
-                <ButtonText className="text-typography-600">Cancel</ButtonText>
-              </Button>
-              <Button
-                size="lg"
-                action="positive"
-                variant="solid"
-                className="flex-1 rounded-xl"
-                onPress={() => onConfirm(requestPdf)}
-              >
-                <ButtonIcon as={PhoneCall} className="mr-1.5 text-white" />
-                <ButtonText>Yes, Contact</ButtonText>
-              </Button>
-            </HStack>
-          </Box>
-        </Pressable>
-      </Pressable>
+          {/* Footer buttons */}
+          <HStack space="sm" className="px-4 pb-10 pt-1">
+            <Button size="md" action="secondary" variant="outline" className="flex-1 rounded-md" onPress={onClose}>
+              <ButtonText className="text-typography-600">{t('close')}</ButtonText>
+            </Button>
+            <Button
+              size="md"
+              action="positive"
+              variant="solid"
+              className="flex-1 rounded-md"
+              onPress={() => onConfirm(requestPdf)}
+              isDisabled={!isConfirmed}
+            >
+              <ButtonIcon as={PhoneCall} className="mr-1.5 text-white" />
+              <ButtonText>{t('contact', { ns: 'crew-screen' })}</ButtonText>
+            </Button>
+          </HStack>
+        </ModalBody>
+      </ModalContent>
     </Modal>
   )
 }
+
 export default ContactModal

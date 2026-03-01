@@ -7,26 +7,26 @@ export type TSupportTeam = {
   email: string
   phoneNumber: string
   photoUrl?: string
+  isOnline?: boolean
 }
 
 export const supportTeam = [
   {
     firstName: 'Michele',
     lastName: 'Costabile',
-    position: 'project-manager',
-    whatsApp: '+39 333 333 3333',
-    email: 't7oBt@example.com',
-    phoneNumber: '+39 333 333 3333',
+    whatsApp: '+39 338 6337722 ',
+    email: 'info@marineria.it',
+    phoneNumber: '+39 338 6337722 ',
     photoUrl: 'https://www.marineria.it/img/Michele.jpg',
+    isOnline: true,
   },
   {
     firstName: 'Elisa',
     lastName: 'Rossi',
-    position: 'human-resources',
-    whatsApp: '+39 333 333 3333',
-    telegram: '@elisa.rossi',
-    email: 't7oBt@example.com',
-    phoneNumber: '+39 333 333 3333',
+    whatsApp: '+39 351 3967077',
+    email: 'elisa.rossi@marineria.it',
+    phoneNumber: '+39 351 3967077',
     photoUrl: 'https://www.marineria.it/img/ElisaRossi.jpg',
+    isOnline: new Date().getHours() >= 20,
   },
 ]

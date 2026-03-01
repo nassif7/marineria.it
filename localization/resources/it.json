@@ -77,7 +77,13 @@
     "certificate-of-competence": "Certificato di competenza (CoC)",
     "no-certificate-of-competence": "Senza Certificato di competenza",
     "contact-crew": "Contatta questa persona",
-    "remove-crew": "rimuovere dalla lista dell'equipaggio"
+    "remove-crew": "rimuovere dalla lista dell'equipaggio",
+    "unlock-contact-information": "Leggi informazioni personali e contatti",
+    "receive-cv": "Ottieni questo CV via Email in formato PDF",
+    "send-job-offer": "Invia la tua offerta di lavoro",
+    "request-cv-as-pdf": " Richiedi anche una copia del CV in PDF",
+    "longer-time": "tempo di attesa superiore",
+    "contact": "Contatta"
   },
   "settings-screen": {
     "change-language": "Cambia lingua",

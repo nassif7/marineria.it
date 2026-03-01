@@ -41,6 +41,11 @@ function SupportMemberCard({ member }: { member: TSupportTeam }) {
     Linking.openURL(url)
   }
 
+  const handleEmail = () => {
+    const url = `mailto:${member.email}`
+    Linking.openURL(url)
+  }
+
   return (
     <HStack className="items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
       {/* Avatar + Info */}
@@ -54,16 +59,20 @@ function SupportMemberCard({ member }: { member: TSupportTeam }) {
             )}
           </Avatar>
           {/* Online dot */}
-          <Box className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900" />
+          <Box
+            className={`absolute bottom-0 right-0 w-3 h-3 bg-${member.isOnline ? 'success' : 'secondary'}-500 rounded-full border-2 border-white dark:border-gray-900`}
+          />
         </Box>
 
         <VStack className="gap-0.5 flex-1">
           <Text className="text-sm font-semibold text-gray-900 dark:text-gray-50" numberOfLines={1}>
             {fullName}
           </Text>
-          <Text className="text-xs text-gray-500 dark:text-gray-400" numberOfLines={1}>
-            {member.email}
-          </Text>
+          <Pressable onPress={handleEmail}>
+            <Text className="text-xs text-gray-500 dark:text-gray-400" numberOfLines={1}>
+              {member.email}
+            </Text>
+          </Pressable>
         </VStack>
       </HStack>
 
@@ -71,17 +80,17 @@ function SupportMemberCard({ member }: { member: TSupportTeam }) {
       <HStack className="gap-2 ml-2">
         {/* WhatsApp */}
         <Pressable
-          onPress={handleWhatsApp}
-          className="w-9 h-9 bg-green-100 dark:bg-green-900 rounded-full items-center justify-center active:opacity-70"
+          onPress={member.isOnline ? handleWhatsApp : undefined}
+          className={`w-9 h-9 bg-${member.isOnline ? 'success' : 'secondary'}-100  rounded-full items-center justify-center active:opacity-70`}
         >
-          <Icon as={MessageCircle} size="sm" className="text-green-600" />
+          <Icon as={MessageCircle} size="sm" className={`text-${member.isOnline ? 'success' : 'secondary'}-600`} />
         </Pressable>
 
         {/* Telegram */}
         {member.telegram && (
           <Pressable
-            onPress={handleTelegram}
-            className="w-9 h-9 bg-blue-100 dark:bg-blue-900 rounded-full items-center justify-center active:opacity-70"
+            onPress={member.isOnline ? handleTelegram : undefined}
+            className="w-9 h-9 bg-blue-100  rounded-full items-center justify-center active:opacity-70"
           >
             <Icon as={Send} size="sm" className="text-blue-600" />
           </Pressable>
@@ -107,7 +116,7 @@ export function ContactSupport({ title, supportTeam }: ContactSupportProps) {
       {/* Modal */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
         <ModalBackdrop />
-        <ModalContent className="rounded-md dark:bg-gray-900 w-[90%]">
+        <ModalContent className="rounded-t-md dark:bg-gray-900 w-full mb-0 mt-auto">
           {/* Header */}
           <ModalHeader className="border-b-0 pb-0 pt-2 px-2">
             <HStack className="items-center gap-2 flex-1">
@@ -125,7 +134,6 @@ export function ContactSupport({ title, supportTeam }: ContactSupportProps) {
               </Box>
             </ModalCloseButton>
           </ModalHeader>
-
           {/* Online status */}
           {/* <HStack className="px-5 pt-2 pb-1 items-center gap-2">
             <Box className="w-2 h-2 bg-green-500 rounded-full" />
@@ -133,7 +141,6 @@ export function ContactSupport({ title, supportTeam }: ContactSupportProps) {
               {supportTeam.length} member{supportTeam.length !== 1 ? 's' : ''} online
             </Text>
           </HStack> */}
-
           {/* Body */}
           <ModalBody className="px-2 pb-2 pt-2">
             <VStack className="gap-2">
