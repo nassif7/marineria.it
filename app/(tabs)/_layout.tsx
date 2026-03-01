@@ -1,28 +1,12 @@
 import { Redirect, Tabs } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import UserProvider from '@/Providers/UserProvider'
-import { Text } from '@/components/ui'
-import { useSession } from '@/Providers/SessionProvider'
-import '@/localization'
-import { TabBar, View } from '@/components/ui'
-import { AuthTypes } from '@/api/types'
-import {
-  Anchor,
-  HomeIcon,
-  UserIcon,
-  Briefcase,
-  FileText,
-  Clipboard,
-  ScrollText,
-  Search,
-  UserSearch,
-  UserRoundSearch,
-  Users,
-  ListFilter,
-  Settings,
-} from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { NavBar } from '@/components/appUI'
+import { HomeIcon, Briefcase, Users, Settings } from 'lucide-react-native'
+import '@/localization'
+import { TUserRole } from '@/api/types'
+import UserProvider from '@/Providers/UserProvider'
+import { useSession } from '@/Providers/SessionProvider'
+import { Text, TabBar, View } from '@/components/ui'
 
 const AppLayout = () => {
   const { t } = useTranslation(['screens-labels'])
@@ -64,7 +48,7 @@ const AppLayout = () => {
         />
         <Tabs.Screen
           name="pro"
-          redirect={role !== AuthTypes.UserRole.CREW}
+          redirect={role !== TUserRole.CREW}
           options={{
             headerShown: false,
             sceneStyle,
@@ -74,7 +58,7 @@ const AppLayout = () => {
         />
         <Tabs.Screen
           name="recruiter"
-          redirect={role !== AuthTypes.UserRole.RECRUITER}
+          redirect={role !== TUserRole.RECRUITER}
           options={{
             headerShown: false,
             sceneStyle,

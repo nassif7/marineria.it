@@ -1,9 +1,10 @@
-import { ScreenContainer, SubSection } from '@/components/appUI'
+import { useState } from 'react'
+import { ScreenContainer } from '@/components/appUI'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getCrewCV } from '@/api'
 import { useLocalSearchParams } from 'expo-router'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-import { VStack, Text } from '@/components/ui'
+import { VStack, Text, HStack, Button, ButtonText, ButtonIcon } from '@/components/ui'
 import { Loading } from '@/components/ui/loading'
 import { useTranslation } from 'react-i18next'
 
@@ -18,6 +19,12 @@ import CrewPreferences from './CrewPreferences'
 import LanguagesSection from './CrewLanguagesAndEducation'
 import PositionsSection from './CrewPosition'
 import CrewSkills from './CrewSkills'
+import ProfileActionButtons from './ProfileActionButtons'
+import ContactCrewModal from './ContactCrewModal'
+
+import { UserX, Phone, View } from 'lucide-react-native'
+import Reanimated, { FadeInDown, FadeOutDown } from 'react-native-reanimated'
+import { ScrollView, View as RNView, Image as RNImage } from 'react-native'
 
 const CrewProfile = () => {
   const { t } = useTranslation(['crew-screen'])
@@ -33,6 +40,22 @@ const CrewProfile = () => {
   })
 
   const crew = isSuccess ? data?.[0] : null
+
+  const [actionsVisible, setActionsVisible] = useState(false)
+  const [contactModalVisible, setContactModalVisible] = useState(false)
+
+  const handleConfirmContact = (requestPdf: boolean) => {
+    setContactModalVisible(false)
+    // TODO: call your API here with requestPdf flag
+  }
+
+  const handleScroll = (e: any) => {
+    const y = e.nativeEvent.contentOffset.y
+    if (y > 60 && !actionsVisible) setActionsVisible(true)
+    else if (y <= 60 && actionsVisible) setActionsVisible(false)
+  }
+
+  const AnimatedView = Reanimated.View
 
   if (isLoading || isRefetching) {
     return (
@@ -51,60 +74,42 @@ const CrewProfile = () => {
   }
 
   return (
-    <ScreenContainer scroll refreshing={isRefetching} onRefresh={refetch}>
-      {isSuccess && crew && (
-        <VStack space="xs" className="pb-10">
-          <ProfileHeader crew={crew} />
-          <CrewAvailability crew={crew} />
-          <CrewPreferences crew={crew} />
-          <ProfileContact crew={crew} />
-          <CrewReferences crew={crew} />
-          <PositionsSection crew={crew} />
-          <LanguagesSection crew={crew} />
-          <CrewCourses crew={crew} />
-          <CrewExperiences crew={crew} />
-          <CrewSkills crew={crew} />
-          <AboutSection crew={crew} />
-        </VStack>
+    <>
+      <ScreenContainer
+        className="flex-1 bg-background-100"
+        scroll
+        handleScroll={handleScroll}
+        scrollEventThrottle={16}
+        contentContainerStyle={{ paddingBottom: 100 }}
+      >
+        {isSuccess && crew && (
+          <VStack space="xs">
+            <ProfileHeader crew={crew} />
+            <CrewAvailability crew={crew} />
+            <CrewPreferences crew={crew} />
+            {crew.contacted && <ProfileContact crew={crew} />}
+            <CrewReferences crew={crew} />
+            <PositionsSection crew={crew} />
+            <LanguagesSection crew={crew} />
+            <CrewCourses crew={crew} />
+            <CrewExperiences crew={crew} />
+            <CrewSkills crew={crew} />
+            <AboutSection crew={crew} />
+            <ContactCrewModal
+              visible={contactModalVisible}
+              crew={crew}
+              onClose={() => setContactModalVisible(false)}
+              onConfirm={handleConfirmContact}
+            />
+          </VStack>
+        )}
+      </ScreenContainer>
+
+      {actionsVisible && (
+        <ProfileActionButtons onGetContact={() => setContactModalVisible(true)} onRemove={console.log} />
       )}
-    </ScreenContainer>
+    </>
   )
 }
 
 export default CrewProfile
-
-{
-  /* <ProfileHeader crew={crew} /> */
-}
-{
-  /* <ContactSection crew={crew} /> */
-}
-{
-  /* <AvailabilitySection crew={crew} /> */
-}
-{
-  /* <ExperiencesSection crew={crew} /> */
-}
-{
-  /* <CoursesSection crew={crew} /> */
-}
-{
-  /* <PositionsSection crew={crew} /> */
-}
-{
-  /* <LanguagesSection crew={crew} /> */
-}
-{
-  /* <PreferencesSection crew={crew} /> */
-}
-{
-  /* <ReferencesSection crew={crew} /> */
-}
-{
-  /* <AboutSection crew={crew} /> */
-}
-{
-  /* <Button size="lg" action="positive" variant="solid" className="mt-1">
-        <ButtonText>Contact Crew</ButtonText>
-      </Button> */
-}

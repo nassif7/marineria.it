@@ -1,7 +1,7 @@
-import { API } from './const'
+import { API } from './consts'
 import { TRecruiterSearch } from './types'
 import { TCrew, TCrewSimple } from './types/crew'
-import { getLanguageCode } from './types'
+import { getLanguageCode } from './utils'
 
 export const getRecruiterActiveSearches = async (ownerToken: string, language: string): Promise<TRecruiterSearch[]> => {
   const languageCode = getLanguageCode(language)
@@ -19,13 +19,13 @@ export const getRecruiterSearchById = async (
   searchId: string,
   ownerToken: string,
   language?: string
-): Promise<TRecruiterSearch[] | Error> => {
+): Promise<TRecruiterSearch[]> => {
   const languageCode = getLanguageCode(language)
   const url = API.OWNER_OFFERS + `/${ownerToken}/${searchId}?language=${languageCode}`
   const response = await fetch(url)
 
   if (!response.ok) {
-    return new Error(`Failed to fetch owner job offers (${response.status})`)
+    throw new Error(`Failed to fetch owner job offers (${response.status})`)
   }
 
   return response.json()
@@ -48,7 +48,6 @@ export const getCrewCV = async (ownerToken: string, crewId: string, language?: s
   const url = `https://www.comunicazione.it/api/Owneruser/CvUser/${ownerToken}/${crewId}?language=${languageCode}`
   const response = await fetch(url)
 
-  console.log(ownerToken, crewId, languageCode)
   if (!response.ok) {
     throw new Error(`Failed to fetch owner CV (${response.status})`)
   }
@@ -67,7 +66,7 @@ export const selectProUser = async (
   const response = await fetch(url)
 
   if (!response.ok) {
-    return new Error(`Failed to select CV (${response.status})`)
+    throw new Error(`Failed to select CV (${response.status})`)
   }
 
   return response.json()
@@ -82,10 +81,9 @@ export const declineProUser = async (
   const languageCode = getLanguageCode(language)
   const url = `https://www.comunicazione.it/api/Owneruser/RejectPRO/${ownerToken}/${offerId}/${crewId}?language=${languageCode}`
   const response = await fetch(url)
-  console.log(response.ok, response.status)
 
   if (!response.ok) {
-    return new Error(`Failed to delete CV (${response.status})`)
+    throw new Error(`Failed to delete CV (${response.status})`)
   }
 
   return response.json()

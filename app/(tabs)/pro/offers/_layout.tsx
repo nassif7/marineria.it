@@ -15,7 +15,6 @@ export default function OffersLayout() {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: true,
           title: t('offer-list'),
         }}
       />

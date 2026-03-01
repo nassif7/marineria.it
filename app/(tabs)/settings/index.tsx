@@ -1,44 +1,102 @@
 import React from 'react'
+import { router } from 'expo-router'
+import * as SecureStore from 'expo-secure-store'
 import { useTranslation } from 'react-i18next'
-import { Box, View, VStack, Heading } from '@/components/ui'
+import { Globe, Bell } from 'lucide-react-native'
+import { TUserRole } from '@/api/types'
+import { TLocales } from '@/localization'
+import { useSession } from '@/Providers/SessionProvider'
+import { useUser } from '@/Providers/UserProvider'
+import { Box, VStack, Heading, HStack, Icon } from '@/components/ui'
 import SwitchLanguage from '@/components/common/SwitchLanguage'
 import NotificationsToggle from '@/components/common/NotificationsToggle'
 import SignOut from '@/components/common/SignOut'
 import SwitchUser from '@/components/common/SwitchUser'
+import { ScreenContainer } from '@/components/appUI'
 
 const Settings = () => {
-  const { t } = useTranslation()
+  const {
+    i18n: { language, changeLanguage },
+    t,
+  } = useTranslation('settings-screen')
+  const {
+    auth: { role },
+    switchAuth,
+    storedAuthTokens,
+    signOut,
+  } = useSession()
+  const proToken = storedAuthTokens[TUserRole.CREW]
+  const ownerToken = storedAuthTokens[TUserRole.RECRUITER]
+  const hasBothTokens = proToken && ownerToken
+  const targetRole = role == TUserRole.CREW ? TUserRole.RECRUITER : TUserRole.CREW
+  const switchUserButtonLabel = role == TUserRole.CREW ? t('login-as-recruiter') : t('login-as-crew')
+
+  const { user, togglePushNotifications, isTogglingNotifications } = useUser()
+  const pushNotificationToken = user?.pushNotificationToken
+
+  const languageOptions = [
+    { label: t(TLocales.EN), value: TLocales.EN },
+    { label: t(TLocales.IT), value: TLocales.IT },
+  ]
+
+  const handleLanguageChange = async (v: string) => {
+    changeLanguage(v.toLocaleLowerCase())
+    await SecureStore.setItemAsync('language', v.toLocaleLowerCase())
+  }
+
+  const handleSwitch = async () => {
+    if (hasBothTokens) {
+      await switchAuth(targetRole)
+      router.replace('/')
+    } else {
+      router.navigate(`/(tabs)/settings/switchUser`)
+    }
+  }
 
   return (
-    <View className="bg-secondary-800">
-      <VStack className="px-3 h-full">
-        <Box className="p-4">
-          <Heading size="2xl" className="text-white">
-            {t('settings')}:
-          </Heading>
-        </Box>
-        <VStack className="h-5/6 justify-between py-4">
+    <ScreenContainer>
+      <VStack className="h-full justify-between py-4">
+        <VStack space="md">
+          <HStack className="justify-between items-center bg-white rounded-md p-3 mb-5 border border-background-300 min-h-[60px]">
+            <HStack className="items-center" space="sm">
+              <Icon as={Globe} className="text-typography-600" size="md" />
+              <Heading size="sm" className="text-typography-600">
+                {t('change-language')}
+              </Heading>
+            </HStack>
+            <SwitchLanguage
+              language={language as TLocales}
+              onLanguageChange={handleLanguageChange}
+              initialLabel={t(language)}
+              languageOptions={languageOptions}
+            />
+          </HStack>
+          <HStack className="justify-between items-center bg-white rounded-md p-3 mb-5 border border-background-300 min-h-[60px] ">
+            <HStack className="items-center" space="sm">
+              <Icon as={Bell} className="text-typography-600" size="md" />
+              <Heading size="sm" className="text-typography-600">
+                {t('notifications')}
+              </Heading>
+            </HStack>
+            <NotificationsToggle
+              enabled={!!pushNotificationToken}
+              handleSetPushNotification={togglePushNotifications}
+              isPending={isTogglingNotifications}
+            />
+          </HStack>
+        </VStack>
+        <Box className="p-6 ">
           <VStack>
-            <Box className="mb-4 rounded border-secondary-500 border-2 p-6 flex-row justify-between items-center">
-              <SwitchLanguage />
+            <Box className="mb-4">
+              <SwitchUser label={switchUserButtonLabel} handleSwitch={handleSwitch} />
             </Box>
-            <Box className="mb-4 rounded border-secondary-500 border-2 p-6 flex-row justify-between items-center">
-              <NotificationsToggle />
+            <Box>
+              <SignOut buttonLabel={t('logout')} handleLogout={async () => await signOut(role as TUserRole)} />
             </Box>
           </VStack>
-          <Box className="p-6 ">
-            <VStack>
-              <Box className="mb-4">
-                <SwitchUser />
-              </Box>
-              <Box>
-                <SignOut />
-              </Box>
-            </VStack>
-          </Box>
-        </VStack>
+        </Box>
       </VStack>
-    </View>
+    </ScreenContainer>
   )
 }
 

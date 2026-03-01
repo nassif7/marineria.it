@@ -1,72 +1,34 @@
 import { FC } from 'react'
-import {
-  Select,
-  SelectTrigger,
-  SelectInput,
-  SelectIcon,
-  SelectPortal,
-  SelectBackdrop,
-  SelectContent,
-  SelectDragIndicator,
-  SelectDragIndicatorWrapper,
-  SelectItem,
-} from '@/components/ui/select'
-import { useTranslation } from 'react-i18next'
-import { ChevronDownIcon, Loader } from 'lucide-react-native'
-import { Text } from '@/components/ui'
-import { useUser } from '@/Providers/UserProvider'
+import { ActivityIndicator, View } from 'react-native'
+import { Switch } from '@/components/ui'
 
-const NotificationsToggle: FC = () => {
-  const { t } = useTranslation()
-  const { user, isLoading, setPushNotificationToken } = useUser()
-  const pushNotificationToken = user?.pushNotificationToken
+interface INotificationsToggleProps {
+  enabled: boolean
+  isPending: boolean
+  handleSetPushNotification: () => void
+}
 
+const NotificationsToggle: FC<INotificationsToggleProps> = ({ enabled, isPending, handleSetPushNotification }) => {
   return (
-    <>
-      <Text className="text-secondary-50 text-lg font-bold">{t('notifications')}: </Text>
-      <Select
-        key={pushNotificationToken ? 'ON' : 'OFF'}
-        selectedValue={pushNotificationToken ? 'ON' : 'OFF'}
-        isDisabled={isLoading}
-        onValueChange={setPushNotificationToken}
-        initialLabel={pushNotificationToken ? 'ON' : 'OFF'}
-      >
-        <SelectTrigger variant="outline" size="lg">
-          <SelectInput className="text-primary-600 text-lg font-bold " />
-          <SelectIcon className="mr-0 pr-0" as={isLoading ? Loader : ChevronDownIcon} />
-        </SelectTrigger>
-        <SelectPortal>
-          <SelectBackdrop />
-          <SelectContent>
-            <SelectDragIndicatorWrapper>
-              <SelectDragIndicator />
-            </SelectDragIndicatorWrapper>
-            <SelectItem
-              textStyle={{
-                style: {
-                  padding: 8,
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                },
-              }}
-              label="ON"
-              value={'ON'}
-            />
-            <SelectItem
-              textStyle={{
-                style: {
-                  padding: 8,
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                },
-              }}
-              label="OFF"
-              value={'OFF'}
-            />
-          </SelectContent>
-        </SelectPortal>
-      </Select>
-    </>
+    <View style={{ position: 'relative' }}>
+      <Switch value={enabled} onToggle={handleSetPushNotification} isDisabled={isPending} />
+      {isPending && (
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 999,
+          }}
+        >
+          <ActivityIndicator size="small" color="rgb(255,102,51)" />
+        </View>
+      )}
+    </View>
   )
 }
 

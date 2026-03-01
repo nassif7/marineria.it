@@ -1,7 +1,7 @@
-import { API } from './const'
-import { AuthResponse } from '@/api/types/auth'
+import { API } from './consts'
+import { TAuthResponse } from '@/api/types/auth'
 
-export const signIn = async (username: string, password: string): Promise<AuthResponse | Error> => {
+export const signIn = async (username: string, password: string): Promise<TAuthResponse> => {
   const requestHeaders: HeadersInit = {
     'Content-Type': 'application/json; charset=utf-8',
   }
@@ -17,7 +17,7 @@ export const signIn = async (username: string, password: string): Promise<AuthRe
   })
 
   if (!response.ok) {
-    return new Error(`Failed to login (${response.status})`)
+    throw new Error(`Failed to login (${response.status})`)
   }
 
   return response.json()

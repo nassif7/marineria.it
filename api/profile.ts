@@ -1,46 +1,34 @@
-import { API } from './const'
-import { UserRole } from '@/api/types/auth'
-import { User } from '@/api/types/user'
-import { ErrorResponse } from '@/api/types/errors'
-import { getLanguageCode } from '@/api/types'
+import { API } from './consts'
+import { TUserRole } from '@/api/types/auth'
+import { TUser } from '@/api/types/user'
+import { getLanguageCode } from './utils'
 
-export const getUserProfile = async (
-  token: string,
-  role: UserRole,
-  language: string
-): Promise<User | ErrorResponse> => {
-  const userRole = role == UserRole.RECRUITER ? 'Owneruser' : 'Prouser'
+export const getUserProfile = async (token: string, role: TUserRole, language: string): Promise<TUser[]> => {
+  const userRole = role == TUserRole.RECRUITER ? 'Owneruser' : 'Prouser'
   const languageCode = getLanguageCode(language)
+  const url = `${API.PROFILE}/${userRole}/${token}?lang=${languageCode}`
+  const response = await fetch(url)
 
-  try {
-    const response = await fetch(`${API.PROFILE}/${userRole}/${token}?lang=${language}`)
-
-    const data = await response.json()
-    if (response.ok) {
-      return data as User
-    } else {
-      return data as ErrorResponse
-    }
-  } catch (error) {
-    throw error
+  if (!response.ok) {
+    throw new Error(`Failed to fetch user profile (${response.status})`)
   }
+
+  return response.json()
 }
 
-export const setNotificationToken = async (token: string, pushToken: string): Promise<any> => {
-  const formData = JSON.stringify({
-    token,
-    pushToken,
+export const setPushNotificationToken = async (token: string, pushToken: string): Promise<void> => {
+  const url = `${API.NOTIFICATION}/SetPushNotificationToken`
+  const body = JSON.stringify({ token, pushToken })
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+    body,
   })
 
-  try {
-    const res = await fetch(`${API.NOTIFICATION}/SetPushNotificationToken`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-      body: formData,
-    })
-  } catch (e) {
-    console.log('first', e)
+  if (!response.ok) {
+    throw new Error(`Failed to set push notification token (${response.status})`)
   }
+  return
 }

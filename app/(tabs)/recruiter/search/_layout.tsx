@@ -1,7 +1,8 @@
 import { Stack } from 'expo-router'
 import { NavBar } from '@/components/appUI'
 import { useTranslation } from 'react-i18next'
-
+import ContactSupport from '@/components/common/ContactSupport'
+import { supportTeam } from '@/api'
 export default function OffersLayout() {
   const { t } = useTranslation(['screens-labels'])
 
@@ -9,7 +10,9 @@ export default function OffersLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        header: (props) => <NavBar {...props} />,
+        header: (props) => (
+          <NavBar {...props} rightAction={<ContactSupport title="contact support" supportTeam={supportTeam} />} />
+        ),
         contentStyle: { backgroundColor: 'white' },
       }}
     >

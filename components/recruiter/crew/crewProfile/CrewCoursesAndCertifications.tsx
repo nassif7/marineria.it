@@ -4,34 +4,47 @@ import { Book, GraduationCap, Award, BookOpen, BookMarked, ScrollText } from 'lu
 import { useTranslation } from 'react-i18next'
 import { SubSection, Section, SectionHeader } from '@/components/appUI'
 import { TCrew } from '@/api/types'
+import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 
 const CoursesSection: FC<{ crew: TCrew }> = ({ crew }) => {
   const { t } = useTranslation()
+
+  const { hasCertificateOfCompetence, certificateOfCompetence } = getCertificateOfCompetence(crew)
+
+  const hasSeamansBook = getSeamansBook(crew)
 
   return (
     <Section>
       <SectionHeader title={t('corses-and-certificates', { ns: 'crew-screen' })} icon={Award} />
 
       <VStack space="xs">
-        <HStack className="items-start" space="sm">
-          {crew.seamansBook !== 'Seamans Book' && (
-            <Badge action="error" variant="outline" className="rounded-md self-start mb-2">
+        <HStack className="items-start flex-wrap align-middle" space="sm">
+          {!hasSeamansBook && (
+            <Badge action="error" variant="outline" className="rounded-md self-start ">
               <BadgeText className="text-error-900">{crew.seamansBook}</BadgeText>
             </Badge>
           )}
+          {!hasCertificateOfCompetence && (
+            <Badge action="error" variant="outline" className="rounded-md self-start ">
+              <BadgeText className="text-error-900">
+                {t('no-certificate-of-competence', { ns: 'crew-screen' })}
+              </BadgeText>
+            </Badge>
+          )}
+
           {!crew.courses && (
-            <Badge action="error" variant="outline" className="rounded-md self-start mb-2">
+            <Badge action="error" variant="outline" className="rounded-md self-start ">
               <BadgeText className="text-error-900">{t('no-courses', { ns: 'crew' })}</BadgeText>
             </Badge>
           )}
           {!crew.licenseCode && (
-            <Badge action="error" variant="outline" className="rounded-md self-start mb-2">
+            <Badge action="error" variant="outline" className="rounded-md self-start ">
               <BadgeText className="text-error-900">{t('no-license', { ns: 'crew' })}</BadgeText>
             </Badge>
           )}
         </HStack>
 
-        {crew.seamansBook === 'Seamans Book' && (
+        {hasSeamansBook && (
           <SubSection title={t('seamans-book', { ns: 'crew' })} icon={BookOpen}>
             <Text size="sm" semiBold shade={800}>
               {crew.navigationBook}
@@ -61,6 +74,17 @@ const CoursesSection: FC<{ crew: TCrew }> = ({ crew }) => {
                   {crew?.qualificationCode}
                 </Text>
               </HStack>
+            </VStack>
+          </SubSection>
+        )}
+        {hasCertificateOfCompetence && (
+          <SubSection title={t('certificate-of-competence', { ns: 'crew-screen' })} icon={Book}>
+            <VStack>
+              {certificateOfCompetence.map((i) => (
+                <Text size="sm" semiBold shade={800} key={i}>
+                  {i}
+                </Text>
+              ))}
             </VStack>
           </SubSection>
         )}

@@ -1,33 +1,33 @@
 import React from 'react'
 import { Stack } from 'expo-router'
-import { NavBar } from '@/components/appUI'
 import { useTranslation } from 'react-i18next'
+import { TUserRole } from '@/api/types'
 import { useSession } from '@/Providers/SessionProvider'
-import { AuthTypes } from '@/api/types'
+import { NavBar } from '@/components/appUI'
 
 function _layout() {
   const {
     auth: { role },
   } = useSession()
 
-  const isPro = role === AuthTypes.UserRole.CREW
+  const isPro = role === TUserRole.CREW
 
-  const { t } = useTranslation()
+  const { t } = useTranslation('screens-labels')
 
   return (
     <Stack
       screenOptions={{
         headerShown: false,
         header: (props) => <NavBar {...props} />,
-        contentStyle: { backgroundColor: 'rgb(30 41 59)' },
+        contentStyle: { backgroundColor: 'white' },
       }}
     >
-      <Stack.Screen name="index" options={{ title: 'Settings' }} />
+      <Stack.Screen name="index" options={{ title: t('settings'), headerShown: true }} />
       <Stack.Screen
         name="switchUser"
         options={{
           headerShown: true,
-          title: t(isPro ? 'switchToOwner' : 'switchToPro'),
+          title: t(isPro ? 'login-as-crew' : 'login-as-recruiter'),
         }}
       />
     </Stack>

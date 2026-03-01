@@ -1,13 +1,18 @@
-import i18n from 'i18next'
 import * as SecureStore from 'expo-secure-store'
 import { getLocales } from 'expo-localization'
 import { initReactI18next } from 'react-i18next'
+import i18n from 'i18next'
 import translationEn from './resources/en.json'
 import translationIt from './resources/it.json'
 
 const resources = {
   en: translationEn,
   it: translationIt,
+}
+
+export enum TLocales {
+  EN = 'en',
+  IT = 'it',
 }
 
 const initI18n = async () => {
@@ -23,14 +28,15 @@ const initI18n = async () => {
     fallbackLng: 'en',
     ns: [
       'screens-labels',
+      'login-screen',
       'home-screen',
       'offers-screen',
       'search-screen',
-      'offer',
       'crew-screen',
-      'crew',
       'recruiter-screen',
-      'settings',
+      'settings-screen',
+      'offer',
+      'crew',
       'common',
 
       'login-screen',

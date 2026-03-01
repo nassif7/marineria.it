@@ -1,6 +1,7 @@
 // components/offers/OfferActions.tsx
 import React from 'react'
 import { Share } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import { VStack, Button, ButtonText, ButtonIcon } from '@/components/ui'
 import { Send, Share2, AlertCircle, CheckCircle } from 'lucide-react-native'
 import { TOffer } from '@/api/types'
@@ -11,6 +12,7 @@ interface OfferActionsProps {
 }
 
 const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
+  const { t } = useTranslation()
   const handleShare = async () => {
     try {
       await Share.share({
@@ -29,17 +31,17 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
         variant: 'outline' as const,
         disabled: true,
         icon: CheckCircle,
-        text: 'Already Applied',
+        text: t('already-applied', { ns: 'offer-screen' }),
       }
     }
 
     if (!offer.offerApplicable) {
       return {
-        action: 'warning' as const,
+        action: 'primary' as const,
         variant: 'solid' as const,
         disabled: false,
         icon: AlertCircle,
-        text: 'Not matching! Why? ',
+        text: t('not-matching-why', { ns: 'offer-screen' }),
       }
     }
 
@@ -48,7 +50,7 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
       variant: 'solid' as const,
       disabled: false,
       icon: Send,
-      text: 'Apply for this position',
+      text: t('apply-for-this-position', { ns: 'offer-screen' }),
     }
   }
 
@@ -58,8 +60,8 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
     <Section>
       <VStack space="xs">
         <Button
-          size="lg"
-          // action={buttonConfig.action}
+          size="md"
+          action={buttonConfig.action}
           variant={buttonConfig.variant}
           onPress={onApply}
           isDisabled={buttonConfig.disabled}
@@ -69,9 +71,9 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
           <ButtonText className="ml-2">{buttonConfig.text}</ButtonText>
         </Button>
 
-        <Button size="lg" variant="solid" action="secondary" onPress={handleShare} className="rounded-md">
+        <Button size="md" variant="solid" action="secondary" onPress={handleShare} className="rounded-md">
           <ButtonIcon as={Share2} className=" text-white" />
-          <ButtonText className="ml-2 text-white">Share this offer</ButtonText>
+          <ButtonText className="ml-2 text-white">{t('share-offer', { ns: 'offer-screen' })}</ButtonText>
         </Button>
       </VStack>
     </Section>

@@ -1,7 +1,8 @@
 export type TCrew = {
   offersRecieved: number //??
-  selected: boolean // ????
   certificateOfCompetence: boolean // ??
+
+  contacted: boolean
   iduser: number
   publisched: string
   photoapproved: string
@@ -68,12 +69,14 @@ export type TCrew = {
   pos_hotel: string
   pos_harbour: string
   pos_special: string
+  // Certificates of Competence
   ita_yachts_deck: string
   ita_yachts_engine: string
   mca_yachts_deck: string
   mca_deck_rya: string
   stcw_navy_deck: string
   stcw_navy_engine: string
+  //
   numberClick: number
   passport: string
   secondaryTasks: string
@@ -83,6 +86,7 @@ export type TCrew = {
 }
 
 export type TCrewSimple = {
+  contacted: boolean
   userId: number
   autoCandidate: boolean
   selected: boolean

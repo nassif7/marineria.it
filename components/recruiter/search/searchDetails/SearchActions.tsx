@@ -5,7 +5,6 @@ import { Edit, MessageCircleQuestionMark } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { TRecruiterSearch } from '@/api/types/search'
 import { Section } from '@/components/appUI'
-import ContactSupport from './ContactSupport'
 
 interface SearchActionsProps {
   onEdit: () => void
@@ -21,7 +20,6 @@ const SearchActions: React.FC<SearchActionsProps> = ({ onEdit }) => {
           <ButtonIcon as={Edit} />
           <ButtonText className="ml-2">{t('modify-offer')}</ButtonText>
         </Button>
-        <ContactSupport />
       </VStack>
     </Section>
   )

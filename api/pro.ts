@@ -1,5 +1,6 @@
-import { API } from './const'
-import { TOffer, getLanguageCode } from './types'
+import { API } from './consts'
+import { TOffer } from './types'
+import { getLanguageCode } from './utils'
 
 export const getProOffers = async (proToken: string, allOffers?: boolean, language?: string): Promise<TOffer[]> => {
   const languageCode = getLanguageCode(language)
@@ -25,13 +26,13 @@ export const getProOfferById = async (offerId: string, proToken: string, languag
   return response.json()
 }
 
-export const applyToOffer = async (proToken: string, offerId: number, language: string): Promise<any | Error> => {
+export const applyToOffer = async (proToken: string, offerId: number, language: string): Promise<any> => {
   const languageCode = getLanguageCode(language)
   const url = API.PRO_OFFERS + `/Apply/${offerId}/${proToken}?language=${languageCode}`
   const response = await fetch(url)
 
   if (!response.ok) {
-    return new Error(`Failed to apply to job offers (${response.status})`)
+    throw new Error(`Failed to apply to job offers (${response.status})`)
   }
 
   return response.json()

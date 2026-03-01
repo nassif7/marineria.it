@@ -5,7 +5,22 @@
     "search-list": "Ricerche",
     "search": "Ricerca",
     "crew-list": "Equipaggio",
-    "crew-profile": "Scheda equipaggio"
+    "crew-profile": "Scheda equipaggio",
+    "settings": "Impostazioni",
+    "login-as-crew": "Accedi come equipaggio",
+    "login-as-recruiter": "Accedi come datore di lavoro"
+  },
+  "login-screen": {
+    "title": "Login",
+    "login": "Accedi",
+    "email-helper-text": "Non condivideremo mai la tua Email con alcuno",
+    "invalid-email": "Email non valida",
+    "invalid-password": "Inserisci la tua password",
+    "login-error": "Errore di login",
+    "invalid-credentials": "Email o password non corretti",
+    "forgot-password": "Password dimenticata?",
+    "register-as-crew": "Registrati come equipaggio",
+    "register-as-recruiter": "Registrati come datore di lavoro"
   },
   "home-screen": {
     "welcome": "Welcome",
@@ -20,7 +35,20 @@
       "own-offers": "Tutte le offerte",
       "all-offers": "Offerte per me"
     },
-    "no-offers": "There are currently no job offers that match your profile!"
+    "no-offers": "There are currently no job offers that match your profile!",
+    "already-applied": "Candidato",
+    "not-matching-why": "Non corrispondente, perche?",
+    "apply-for-this-position": "Applica per questa posizione",
+    "apply": "Applica",
+    "share-offer": "Condividi offerta",
+    "privacy": "Privacy",
+    "privacy-policy": "io sottoscritto/a sono interessato/a questa offerta di lavoro per la quale desidero che vengano acquisiti il mio curriculum ed i miei recapiti personali ed cui autorizzo il trattamento dei miei dati personali in conformità alle disposizioni della legge n. 196 del 30.06.2003 art 7 e art. 13 in vigore dal 04.01.2004.",
+    "compliance": "Dichiarazione",
+    "i-declare": "dichiaro di",
+    "agree-to-policy": "accetto le clausole di privacy",
+    "confirm-availability": "sono disponibile per il periodo dell'imbarco",
+    "confirm-requirements": "sono in possesso dei requisiti richiesti",
+    "review-your-profile": "Click se prima desideri controllare il tuo profilo"
   },
   "search-screen": {
     "search-id": "Search ID",
@@ -45,7 +73,26 @@
     "no-other-roles": "Nessun altro ruolo",
     "languages-and-education": "Lingue e formazione",
     "corses-and-certificates": "Corsi e certificati",
-    "skills-and-abilities": "Capacità e competenze"
+    "skills-and-abilities": "Capacità e competenze",
+    "certificate-of-competence": "Certificato di competenza (CoC)",
+    "no-certificate-of-competence": "Senza Certificato di competenza",
+    "contact-crew": "Contatta questa persona",
+    "remove-crew": "rimuovere dalla lista dell'equipaggio",
+    "unlock-contact-information": "Leggi informazioni personali e contatti",
+    "receive-cv": "Ottieni questo CV via Email in formato PDF",
+    "send-job-offer": "Invia la tua offerta di lavoro",
+    "request-cv-as-pdf": " Richiedi anche una copia del CV in PDF",
+    "longer-time": "tempo di attesa superiore",
+    "contact": "Contatta"
+  },
+  "settings-screen": {
+    "change-language": "Cambia lingua",
+    "notifications": "Notifiche",
+    "login-as-crew": "Accedi come equipaggio",
+    "login-as-recruiter": "Accedi come datore di lavoro",
+    "logout": "Esci",
+    "edit-profile": "Edit profile",
+    "change-password": "Change password"
   },
   "offer": {
     "contract-and-compensation": "Contratto e compensazione",
@@ -68,7 +115,8 @@
     "share-offer": "Condividi questa offerta",
     "position-specialty": "Specialità posizione",
     "expires": "Scade",
-    "modify-offer": "Modifica offerta"
+    "modify-offer": "Modifica offerta",
+    "apply-success": "Il tuo profilo sarà condiviso con il reclutatore"
   },
   "crew": {
     "availability": "Disponibilità",
@@ -132,6 +180,12 @@
     "to": "A",
     "location": "Località",
     "gender": "Genere",
-    "need-support": "Hai bisogno di supporto?"
+    "need-support": "Hai bisogno di supporto?",
+    "email": "Email",
+    "password": "Password",
+    "en": "EN",
+    "it": "IT",
+    "success": "Successo",
+    "unknown-error": "Si è verificato un errore, riprova più tardi!"
   }
 }

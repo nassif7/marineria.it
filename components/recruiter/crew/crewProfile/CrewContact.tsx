@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react'
 import { Linking, TouchableOpacity } from 'react-native'
-import { Box, VStack, HStack, Heading, Text, Icon } from '@/components/ui'
+import { Box, VStack, HStack, Heading, Text, Icon, Badge, BadgeText } from '@/components/ui'
 import { MapPin, Phone, Mail, MessageCircle, Contact, Smartphone } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { SubSection, Section, SectionHeader } from '@/components/appUI'
@@ -15,50 +15,43 @@ const ContactSection: FC<{ crew: TCrew }> = ({ crew }) => {
         {
           key: 'cellular',
           label: t('cellular'),
-          value: crew.cellular || faker.phone.number(),
+          value: crew.cellular,
           icon: Smartphone,
           color: 'text-primary-600',
 
           border: 'border-primary-600',
-          onPress: () =>
-            (crew.cellular || faker.phone.number()) && Linking.openURL(`tel:${crew.cellular || faker.phone.number()}`),
+          onPress: () => crew.cellular && Linking.openURL(`tel:${crew.cellular}`),
         },
         {
           key: 'telephone',
           label: t('phone'),
-          value: crew.telephone || faker.phone.number(),
+          value: crew.telephone,
           icon: Phone,
           color: 'text-primary-600',
 
           border: 'border-primary-600',
-          onPress: () =>
-            (crew.telephone || faker.phone.number()) &&
-            Linking.openURL(`tel:${crew.telephone || faker.phone.number()}`),
+          onPress: () => crew.telephone && Linking.openURL(`tel:${crew.telephone}`),
         },
         {
           key: 'whatsapp',
           label: t('whatsapp'),
-          value: crew.callWhatsapp || faker.phone.number(),
+          value: crew.callWhatsapp,
           icon: MessageCircle,
           color: 'text-success-600',
 
           border: 'border-success-600',
-          onPress: () =>
-            (crew.callWhatsapp || faker.phone.number()) &&
-            Linking.openURL(`https://wa.me/${(crew.callWhatsapp || faker.phone.number()).replace(/\D/g, '')}`),
+          onPress: () => crew.callWhatsapp && Linking.openURL(`https://wa.me/${crew.callWhatsapp.replace(/\D/g, '')}`),
           green: true,
         },
         {
           key: 'email',
           label: t('email'),
-          value: crew.email || faker.internet.email(),
+          value: crew.email,
           icon: Mail,
           color: 'text-primary-600',
 
           border: 'border-primary-600',
-          onPress: () =>
-            (crew.email || faker.internet.email()) &&
-            Linking.openURL(`mailto:${crew.callWhatsapp || faker.phone.number()}`),
+          onPress: () => crew.email && Linking.openURL(`mailto:${crew.email}`),
         },
       ].filter((c) => c.value),
     [crew]
@@ -69,19 +62,17 @@ const ContactSection: FC<{ crew: TCrew }> = ({ crew }) => {
       <SectionHeader title={t('contact-information')} icon={Contact} />
 
       {contacts.length === 0 ? (
-        <Text size="sm" semiBold shade={800}>
-          {t('no-contacts')}
-        </Text>
+        <Badge action="error" variant="outline" className="rounded-md self-start mb-2">
+          <BadgeText className="text-error-900">{t('no-contacts')}</BadgeText>
+        </Badge>
       ) : (
         <>
           <VStack space="xs">
-            {(crew.address || crew.city) && (
-              <SubSection title={t('address')} icon={MapPin}>
-                <Text size="sm" shade={800}>
-                  {crew.city}, {crew.province} {crew.zip_code} {crew.address}
-                </Text>
-              </SubSection>
-            )}
+            <SubSection title={t('address')} icon={MapPin}>
+              <Text size="sm" shade={800}>
+                {crew.city}, {crew.province} {crew.zip_code} {crew.address}
+              </Text>
+            </SubSection>
 
             {contacts.map((c, i) => (
               <SubSection key={c.key} onPress={c.onPress} className="">

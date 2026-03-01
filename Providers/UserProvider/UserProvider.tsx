@@ -1,90 +1,82 @@
-import { useState, createContext, useContext, useEffect } from 'react'
+import { createContext, useContext } from 'react'
 import * as SecureStore from 'expo-secure-store'
-import { UserTypes } from '@/api/types'
-import { AuthTypes } from '@/api/types'
-import { setNotificationToken } from '@/api/profile'
+import { useTranslation } from 'react-i18next'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+import { TUserRole, TUser } from '@/api/types'
+import { getUserProfile, setPushNotificationToken } from '@/api'
 import { useSession } from '@/Providers/SessionProvider'
-import { useNotification } from '@/hooks'
 import { registerForPushNotificationsAsync } from '@/hooks/useNotification'
 
-export type ActiveProfile = {
-  role: AuthTypes.UserRole
+export type TActiveProfile = {
+  role: TUserRole
   token: string
 }
 
-const UserContext = createContext<{
-  user?: UserTypes.User
-  isLoading?: boolean
-  activeProfile?: ActiveProfile
-  switchProfile?: (targetRole: AuthTypes.UserRole) => Promise<any>
-  setPushNotificationToken?: () => Promise<any>
-}>({})
+type UserContextType = {
+  user?: TUser
+  isLoading: boolean
+  isTogglingNotifications: boolean
+  activeProfile?: TActiveProfile
+  switchProfile: (targetRole: TUserRole) => Promise<void>
+  togglePushNotifications: () => void
+}
 
-import { getUserProfile } from '@/api'
-import { useTranslation } from 'react-i18next'
+const UserContext = createContext<UserContextType>({
+  isLoading: false,
+  isTogglingNotifications: false,
+  activeProfile: undefined,
+  user: undefined,
+  switchProfile: async () => {},
+  togglePushNotifications: () => {},
+})
 
 export const useUser = () => useContext(UserContext)
 
 const UserProvider = (props: React.PropsWithChildren) => {
   const { i18n } = useTranslation()
-  const { auth, storedAuthTokens } = useSession()
-  const { expoPushToken } = useNotification()
+  const { auth, storedAuthTokens, switchAuth } = useSession()
+  const queryClient = useQueryClient()
 
   const { role, token } = auth
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [user, setUser] = useState<any>()
-  const [activeProfile, setActiveProfile] = useState<any>({
-    role,
-    token,
+  const { data: user, isLoading } = useQuery({
+    queryKey: ['user', token, role, i18n.language],
+    queryFn: async () => {
+      const data = await getUserProfile(token as string, role as TUserRole, i18n.language)
+      return data[0] as TUser
+    },
+    enabled: !!token && !!role,
   })
 
-  const fetchUser = async (token: string, role: AuthTypes.UserRole) => {
-    setIsLoading(true)
-    try {
-      const data: any = await getUserProfile(token, role, i18n.language)
-
-      setUser(data[0])
-      setActiveProfile({ role, token })
-      setIsLoading(false)
-    } catch (e) {
-      setIsLoading(false)
-    }
-  }
-
-  const toggleNotifications = async () => {
-    setIsLoading(true)
-
-    if (user?.pushNotificationToken) {
-      await setNotificationToken(token as string, '')
-      await fetchUser(token as string, role as AuthTypes.UserRole)
-    } else {
-      const expoPushToken = await registerForPushNotificationsAsync()
-      expoPushToken && (await setNotificationToken(token as string, expoPushToken))
-      await fetchUser(token as string, role as AuthTypes.UserRole)
-    }
-    setIsLoading(false)
-  }
-
-  useEffect(() => {
-    token && fetchUser(token, role as AuthTypes.UserRole)
-  }, [token, role, expoPushToken])
-
-  const switchProfile = async (targetRole: AuthTypes.UserRole) => {
-    const token = storedAuthTokens[targetRole] as string
+  const switchProfile = async (targetRole: TUserRole) => {
+    const targetToken = storedAuthTokens[targetRole] as string
     await SecureStore.setItemAsync('role', targetRole)
-    await fetchUser(token, targetRole as AuthTypes.UserRole)
-    setActiveProfile({ token, targetRole })
+    await switchAuth(targetRole)
   }
+
+  const { mutate: togglePushNotifications, isPending: isTogglingNotifications } = useMutation({
+    mutationFn: async () => {
+      if (user?.pushNotificationToken) {
+        await setPushNotificationToken(token as string, '')
+      } else {
+        const pushToken = await registerForPushNotificationsAsync()
+        pushToken && (await setPushNotificationToken(token as string, pushToken))
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user', token, role] })
+    },
+  })
 
   return (
     <UserContext.Provider
       value={{
         user,
         isLoading,
-        activeProfile,
+        isTogglingNotifications,
+        activeProfile: token && role ? { token, role } : undefined,
         switchProfile,
-        setPushNotificationToken: toggleNotifications,
+        togglePushNotifications,
       }}
     >
       {props.children}

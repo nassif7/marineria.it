@@ -5,7 +5,22 @@
     "search-list": "Searches",
     "search": "Search",
     "crew-list": "Crew list",
-    "crew-profile": "Crew profile"
+    "crew-profile": "Crew profile",
+    "settings": "Settings",
+    "login-as-crew": "Login as crew",
+    "login-as-recruiter": "Login as recruiter"
+  },
+  "login-screen": {
+    "title": "Login",
+    "login": "Login",
+    "email-helper-text": "We'll never share your email with anyone else.",
+    "invalid-email": "Invalid email",
+    "invalid-password": "Please enter your password",
+    "login-error": "Login error",
+    "invalid-credentials": "Email or password are incorrect",
+    "forgot-password": "Forgot password?",
+    "register-as-crew": "Register as crew",
+    "register-as-recruiter": "Register as recruiter"
   },
   "home-screen": {
     "welcome": "Welcome",
@@ -20,7 +35,20 @@
       "own-offers": "Job offers for me",
       "all-offers": "All job offers"
     },
-    "no-offers": "There are currently no job offers that match your profile!"
+    "no-offers": "There are currently no job offers that match your profile!",
+    "already-applied": "Already Applied",
+    "not-matching-why": "Not matching, why?",
+    "apply-for-this-position": "Apply for this position",
+    "apply": "Apply",
+    "share-offer": "Share offer",
+    "privacy": "Privacy",
+    "privacy-policy": "I am seriousley interested in this job offer for which I wish my curriculum and my personal details to be shared with the employer posting the ad as is in compliance with the provision of the italian Law n.196 30.06.2003 art.7 and art.13 enforced from 04.01.2004 onward.",
+    "compliance": "Compliance",
+    "i-declare": "I agree to",
+    "agree-to-policy": "I agree to privacy terms and conditions",
+    "confirm-availability": "I am available for hire during the time period specified by the advert",
+    "confirm-requirements": "I satisfy the requirements",
+    "review-your-profile": "Click here to check your profile"
   },
   "search-screen": {
     "search-id": "Search ID",
@@ -45,7 +73,26 @@
     "no-other-roles": "No other roles",
     "languages-and-education": "Languages and education",
     "corses-and-certificates": "Courses and certificates",
-    "skills-and-abilities": "Skills and abilities"
+    "skills-and-abilities": "Skills and abilities",
+    "certificate-of-competence": "Certificate of Competence (CoC)",
+    "no-certificate-of-competence": "No Certificate of Competence",
+    "contact-crew": "Contact this candidate",
+    "remove-crew": "Remove from crew list",
+    "unlock-contact-information": "Unlock contact information",
+    "receive-cv": "Get his CV via email in PDF format",
+    "send-job-offer": "Send your job offer",
+    "request-cv-as-pdf": " Also request a copy of CV in PDF",
+    "longer-time": "Longer time",
+    "contact": "Contact"
+  },
+  "settings-screen": {
+    "change-language": "Change language",
+    "notifications": "Notifications",
+    "login-as-crew": "Login as crew",
+    "login-as-recruiter": "Login as recruiter",
+    "logout": "Logout",
+    "edit-profile": "Edit profile",
+    "change-password": "Change password"
   },
   "offer": {
     "contract-and-compensation": "Contract with compensation",
@@ -68,7 +115,8 @@
     "seamans-book": "Seaman's book",
     "position-specialty": "Position specialty",
     "expires": "Expires",
-    "modify-offer": "Modify offer"
+    "modify-offer": "Modify offer",
+    "apply-success": "Your profile will be shared with the recruiter!"
   },
   "crew": {
     "availability": "Availability",
@@ -132,6 +180,12 @@
     "to": "To",
     "location": "Location",
     "gender": "Gender",
-    "need-support": "Need support?"
+    "need-support": "Need support?",
+    "email": "Email",
+    "password": "Password",
+    "en": "EN",
+    "it": "IT",
+    "success": "Success",
+    "unknown-error": "Something went wrong, please try again later!"
   }
 }
