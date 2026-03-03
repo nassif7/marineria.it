@@ -62,7 +62,7 @@ const AppLayout = () => {
           options={{
             headerShown: false,
             sceneStyle,
-            title: 'Recruitment',
+            title: t('recruitment'),
             tabBarIcon: Users,
           }}
         />
@@ -71,7 +71,7 @@ const AppLayout = () => {
           options={{
             sceneStyle,
             headerShown: false,
-            title: 'Settings',
+            title: t('settings'),
             tabBarIcon: Settings,
           }}
         />

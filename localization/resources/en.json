@@ -2,8 +2,9 @@
   "screens-labels": {
     "offer-list": "Job offers",
     "offer": "Offer",
-    "search-list": "Searches",
-    "search": "Search",
+    "search-list": "Recruitment",
+    "recruitment": "Recruitment",
+    "search": "",
     "crew-list": "Crew list",
     "crew-profile": "Crew profile",
     "settings": "Settings",
@@ -55,13 +56,15 @@
     "no-searches": "You have no active searches",
     "view-search": "View search",
     "offer": "Offer",
+    "candidates-overview": "Candidates overview",
     "candidates": "Candidates",
     "contacted": "Contacted",
     "residual": "Residual",
     "find-crew": "Find crew",
     "by-location": "By location",
     "by-skill": "By skills",
-    "candidates-overview": "Candidates overview"
+    "contract-and-compensation": "Contract, salary, recruiter",
+    "additional-info": "Additional requested skills"
   },
   "crew-screen": {
     "id": "ID",
@@ -102,7 +105,7 @@
     "posted": "Posted",
     "already-applied": "Already applied",
     "not-matching": "Not matching",
-    "contract-type": "Contract type",
+    "contract-type": "Contract",
     "boarding": "Boarding",
     "reference": "Reference",
     "owner-type": "Owner type",

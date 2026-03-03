@@ -36,6 +36,7 @@ const SessionProvider = (props: React.PropsWithChildren) => {
     [TUserRole.CREW]: null,
     [TUserRole.RECRUITER]: null,
   })
+
   const [auth, setAuth] = useState<{ role: TUserRole | null; token: string | null }>({
     role: null,
     token: null,

@@ -2,8 +2,9 @@
   "screens-labels": {
     "offer-list": "Offerte",
     "offer": "Offerta",
-    "search-list": "Ricerche",
-    "search": "Ricerca",
+    "search-list": "Le mie ricerche",
+    "recruitment": "Ricercare",
+    "search": "",
     "crew-list": "Equipaggio",
     "crew-profile": "Scheda equipaggio",
     "settings": "Impostazioni",
@@ -55,13 +56,15 @@
     "no-searches": "Non hai ricerche attive",
     "view-search": "Visualizza ricerca",
     "offer": "Offerte",
+    "candidates-overview": "Candidati",
     "candidates": "Candidati",
     "contacted": "Contattati",
     "residual": "Rimanenti",
     "find-crew": "Cerca equipaggio",
     "by-location": "Per località",
     "by-skill": "Per caratteristiche",
-    "candidates-overview": "Candidati"
+    "contract-and-compensation": "Contratto, salario, reclutatore",
+    "additional-info": "Additional requested skills"
   },
   "crew-screen": {
     "id": "ID",
@@ -102,7 +105,7 @@
     "posted": "Pubblicato",
     "already-applied": "Candidato",
     "not-matching": "Non corrispondente",
-    "contract-type": "Tipo contratto",
+    "contract-type": "Contratto",
     "boarding": "Imbarco",
     "owner-type": "Tipo proprietario",
     "reference": "Riferimento",

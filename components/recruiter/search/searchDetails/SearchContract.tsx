@@ -25,7 +25,7 @@ const SearchContract: React.FC<SearchContractProps> = ({ search }) => {
 
   return (
     <Section>
-      <SectionHeader title={t('contract-and-compensation')} icon={FileText} />
+      <SectionHeader title={t('contract-and-compensation', { ns: 'search-screen' })} icon={FileText} />
       <VStack space="xs">
         <HStack space="xs">
           <SubSection className="flex-1" title={t('salary')} icon={Euro}>
@@ -55,25 +55,15 @@ const SearchContract: React.FC<SearchContractProps> = ({ search }) => {
           </Text>
         </SubSection>
 
+        <SubSection title={t('contract-type')}>
+          <Text size="sm" semiBold shade={800}>
+            {search.contractDescription}
+          </Text>
+        </SubSection>
+
         {/* Contract Details */}
+        <Divider className="my-2" />
         <VStack className="pl-2">
-          <HStack className="items-start" space="xs">
-            <Text size="sm" className="w-32 shrink-0 ">
-              {t('contract-type')}:
-            </Text>
-            <Text size="sm" shade={800} className="flex-1">
-              {search.contractDescription}
-            </Text>
-          </HStack>
-          <HStack className="items-start gap-1">
-            <Text size="sm" className="w-32 shrink-0 ">
-              {t('owner-type')}:
-            </Text>
-            <Text size="sm" shade={800} className="flex-1">
-              {search.ownerDescription}
-            </Text>
-          </HStack>
-          <Divider className="my-2" />
           <HStack className="items-start gap-1">
             <Box className="w-32 shrink-0 flex-row items-center gap-1">
               <Icon as={Info} size="sm" className="text-warning-600" />

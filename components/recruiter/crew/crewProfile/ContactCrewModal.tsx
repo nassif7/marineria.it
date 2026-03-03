@@ -46,7 +46,7 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
   const {
     i18n: { language },
     t,
-  } = useTranslation(['search-details-screen'])
+  } = useTranslation(['crew-screen'])
 
   const [isConfirmed, setIsConfirmed] = useState(true)
   const [requestPdf, setRequestPdf] = useState(false)
@@ -68,12 +68,11 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
       <ModalBackdrop />
       <ModalContent className="w-full mb-0 mt-auto rounded-t-md overflow-hidden p-0">
         <ModalBody className="p-0">
-          <Box className="items-center pt-3 pb-1">
-            <Box className="w-10 h-1 rounded-full bg-outline-200" />
+          <Box className="items-center pb-1">
+            <Box className="w-20 h-1 rounded-full bg-outline-200" />
           </Box>
 
-          {/* Header with avatar */}
-          <VStack className="items-center px-5 pt-3 pb-5">
+          <VStack className="items-center  pt-4 pb-6">
             <Box className="w-16 h-16 rounded-md bg-primary-100 overflow-hidden border-2 border-primary-200 mb-3">
               {crew.userPhoto ? (
                 <RNImage source={{ uri: fakeImage }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
@@ -95,16 +94,16 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
                   <Box className={`w-8 h-8 rounded-full items-center justify-center ${b.bg}`}>
                     <Icon as={b.icon} size="sm" className={b.color} />
                   </Box>
-                  <Text size="sm" bold className="text-typography-800 flex-1">
+                  <Text size="sm" bold className="flex-1" shade={800}>
                     {b.label}
                   </Text>
-                  <Icon as={Check} size="xs" className="text-success-500" />
+                  <Icon as={Check} size="xs" className="text-success-600" />
                 </HStack>
               </SubSection>
             ))}
           </VStack>
 
-          <Divider className="bg-outline-100 mx-4 my-4" />
+          <Divider className="bg-outline-200 mx-4 my-4" />
 
           <VStack space="xs" className="mx-4 mb-4">
             <SubSection>
@@ -114,7 +113,7 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
                     <CheckboxIcon as={Check} />
                   </CheckboxIndicator>
                   <CheckboxLabel>
-                    <Text size="sm" bold className="text-primary-700">
+                    <Text size="sm" bold color="primary">
                       {crew.mainPosition} · {searchLabel}
                     </Text>
                   </CheckboxLabel>
@@ -130,10 +129,10 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
                   </CheckboxIndicator>
                   <CheckboxLabel className="flex-1">
                     <VStack>
-                      <Text size="sm" bold className={'text-typography-800'}>
-                        {t('request-cv-as-pdf"')}
+                      <Text size="sm" bold shade={800}>
+                        {t('request-cv-as-pdf')}
                       </Text>
-                      <Text size="xs" className="text-typography-400">
+                      <Text size="xs" shade={600}>
                         {t('longer-time')}
                       </Text>
                     </VStack>

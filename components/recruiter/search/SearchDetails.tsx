@@ -42,14 +42,6 @@ export default function SearchDetails() {
     router.push(`/recruiter/search/${searchId}/crew/list`)
   }
 
-  // const handleFindBySkills = () => {
-  //   router.push(`/recruiterScreens/offers/${searchId}/crew/search-skills`)
-  // }
-
-  // const handleFindByLocation = () => {
-  //   router.push(`/recruiterScreens/offers/${searchId}/crew/search-location`)
-  // }
-
   if (isLoading || isRefetching) {
     return (
       <ScreenContainer>
@@ -75,7 +67,6 @@ export default function SearchDetails() {
           <SearchPosition search={search} />
           <SearchCandidates search={search} onViewCandidates={handleViewCandidates} />
           <SearchActions onEdit={handleEdit} />
-          {/* <ContactSupportModal visible={showContactModal} onClose={() => setShowContactModal(false)} /> */}
         </VStack>
       )}
     </ScreenContainer>
