@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store'
 import { useTranslation } from 'react-i18next'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { TUserRole, TUser } from '@/api/types'
-import { getUserProfile, setPushNotificationToken } from '@/api'
+import { getProUserProfile, getOwnerUserProfile, setPushNotificationToken } from '@/api'
 import { useSession } from '@/Providers/SessionProvider'
 import { registerForPushNotificationsAsync } from '@/hooks/useNotification'
 
@@ -44,9 +44,15 @@ const UserProvider = (props: React.PropsWithChildren) => {
   const { data: user, isLoading } = useQuery({
     queryKey: ['user', token, role, language],
     queryFn: async () => {
-      const data = await getUserProfile(token as string, role as TUserRole, language)
-      return data[0] as TUser
+      const data = await (role === TUserRole.RECRUITER ? getOwnerUserProfile : getProUserProfile)(
+        token as string,
+        role as TUserRole,
+        language
+      )
+
+      return Array.isArray(data) ? data?.[0] : data
     },
+
     enabled: !!token && !!role,
   })
 
