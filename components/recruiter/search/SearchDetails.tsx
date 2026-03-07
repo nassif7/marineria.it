@@ -12,7 +12,7 @@ import SearchContract from './searchDetails/SearchContract'
 import SearchPosition from './searchDetails/SearchPosition'
 import SearchCandidates from './searchDetails/SearchCandidates'
 import SearchActions from './searchDetails/SearchActions'
-import { ScreenContainer } from '@/components/appUI'
+import { ScreenContainer, ErrorMessage } from '@/components/appUI'
 
 export default function SearchDetails() {
   const [showContactModal, setShowContactModal] = useState(false)
@@ -53,7 +53,7 @@ export default function SearchDetails() {
   if (isError) {
     return (
       <ScreenContainer>
-        <Text color="error">{t('error')}</Text>
+        <ErrorMessage />
       </ScreenContainer>
     )
   }

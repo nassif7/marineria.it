@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { getCrewList } from '@/api'
 import { useUser } from '@/Providers/UserProvider'
 import { Loading, Box, HStack, Text } from '@/components/ui'
-import { List, NavBar, ScreenContainer } from '@/components/appUI'
+import { List, NavBar, ScreenContainer, ErrorMessage } from '@/components/appUI'
 import CrewListItem from './CrewListItem'
 import ContactSupport from '@/components/common/ContactSupport'
 import { supportTeam } from '@/api'
@@ -73,7 +73,7 @@ const CrewList: FC = () => {
             listEmptyComponent={<CrewListEmptyComponent />}
           />
         )}
-        {isError && <Text color="error">{t('error')}</Text>}
+        {isError && <ErrorMessage />}
       </ScreenContainer>
     </>
   )

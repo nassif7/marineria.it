@@ -7,6 +7,7 @@ import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 import { VStack, Text } from '@/components/ui'
 import { Loading } from '@/components/ui/loading'
 import { useTranslation } from 'react-i18next'
+import { ErrorMessage } from '@/components/appUI'
 
 import ProfileHeader from './ProfileHeader'
 import ProfileContact from './CrewContact'
@@ -66,7 +67,7 @@ const CrewProfile = () => {
   if (isError) {
     return (
       <ScreenContainer>
-        <Text color="error">{t('error')}</Text>
+        <ErrorMessage />
       </ScreenContainer>
     )
   }

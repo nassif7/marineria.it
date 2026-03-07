@@ -7,6 +7,7 @@ import { Loading, Text } from '@/components/ui'
 import SearchListItem from './SearchListItem'
 import { useQuery } from '@tanstack/react-query'
 import { List, ScreenContainer } from '@/components/appUI'
+import { ErrorMessage } from '@/components/appUI'
 
 const RecruiterSearchList: FC = () => {
   const {
@@ -35,7 +36,7 @@ const RecruiterSearchList: FC = () => {
           renderItem={({ item }) => <SearchListItem search={item} key={item.reference} />}
         />
       )}
-      {isError && <Text color="error">{t('error')}</Text>}
+      {isError && <ErrorMessage />}
     </ScreenContainer>
   )
 }

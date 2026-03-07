@@ -12,7 +12,7 @@ import NotApplicableModal from './NotApplicableModal'
 import ApplyModal from './ApplyModal'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 import { useTranslation } from 'react-i18next'
-import { ScreenContainer } from '@/components/appUI'
+import { ScreenContainer, ErrorMessage } from '@/components/appUI'
 import { useStatusToast } from '@/hooks'
 
 export default function OfferDetailsScreen() {
@@ -77,7 +77,7 @@ export default function OfferDetailsScreen() {
   if (isError) {
     return (
       <ScreenContainer>
-        <Text color="error">{t('error')}</Text>
+        <ErrorMessage />
       </ScreenContainer>
     )
   }
