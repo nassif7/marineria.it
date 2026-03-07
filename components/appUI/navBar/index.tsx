@@ -11,7 +11,7 @@ interface NavBarProps extends NativeStackHeaderProps {
   rightAction?: React.ReactNode
 }
 
-export const NavBar: FC<NavBarProps> = ({ options, back, rightAction }) => {
+const NavBar: FC<NavBarProps> = ({ options, back, rightAction }) => {
   const title = options?.title || ''
   const canGoBack = back !== undefined
   const router = useRouter()
@@ -22,7 +22,7 @@ export const NavBar: FC<NavBarProps> = ({ options, back, rightAction }) => {
         {canGoBack ? (
           <Pressable onPress={() => router.back()} className="flex-row items-center  -ml-2">
             <Icon as={ChevronLeft} size="3xl" className="text-typography-400" />
-            <Text className="text-typography-500 text-lg font-medium">{back.title}</Text>
+            {/* <Text className="text-typography-500 text-lg font-medium">{back.title}</Text> */}
           </Pressable>
         ) : (
           <Box className="w-20" />
@@ -42,3 +42,5 @@ export const NavBar: FC<NavBarProps> = ({ options, back, rightAction }) => {
     </Box>
   )
 }
+
+export default NavBar

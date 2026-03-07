@@ -15,7 +15,7 @@ const AuthScreen = ({ children }: React.PropsWithChildren) => (
           resizeMode: 'contain',
         }}
       />
-      {children}
+      <View className="rounded-md bg-background-100 p-4 w-11/12">{children}</View>
     </View>
   </ImageBackground>
 )

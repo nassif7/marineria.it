@@ -2,11 +2,11 @@ import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { router } from 'expo-router'
 import * as Linking from 'expo-linking'
-import { Users, MapPin, Briefcase, Search, UserCheck } from 'lucide-react-native'
+import { Users, MapPin, Briefcase, Search, UserCheck, Banknote, Calendar, FileText } from 'lucide-react-native'
 import { TRecruiterSearch } from '@/api/types'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 import { Box, VStack, HStack, Heading, Text, Button, ButtonText, ButtonIcon, Badge, BadgeText } from '@/components/ui'
-import { SubSection, SubSectionHeader } from '@/components/appUI'
+import { SubSection, InfoRow } from '@/components/appUI'
 
 interface ISearchListItemProps {
   search: TRecruiterSearch
@@ -23,12 +23,6 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
   const viewSearch = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}`)
   const viewCrewList = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list`)
 
-  // const handleEditSearch = () => {
-  //   const url = `https://www.marineria.it/${language}/Rec/Post.aspx?idofferta=${search.idoffer}&token=${token}`
-  //   Linking.openURL(url)
-  // https://www.marineria.it/It/rec/Post.aspx?idofferta=10342&idutente=76135
-  // }
-
   const openSearchByLocation = () => {
     const url = `https://www.marineria.it/${language}/${search.listgeourl}?token=${token}`
     Linking.openURL(url)
@@ -40,6 +34,11 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
   }
 
   const referenceShort = search.reference.includes('_') ? search.reference.split('_')[1] : search.reference
+
+  const boardingRange =
+    search.boarding && search.duration
+      ? `${search.boarding.trim()} → ${search.duration.trim()}`
+      : (search.boarding?.trim() ?? '—')
 
   return (
     <Box className="bg-white p-3 rounded-md">
@@ -55,13 +54,31 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
             {search.offerdate}
           </Text>
         </HStack>
-        <SubSection title={t('offer')} icon={Briefcase} onPress={viewSearch}>
-          <Text size="sm" semiBold shade={800}>
+        <SubSection>
+          {search.salary_From && (
+            <InfoRow
+              icon={Banknote}
+              label={t('salary')}
+              value={
+                search.salary_From === search.salary_To
+                  ? search.salary_From
+                  : `${search.salary_From} – ${search.salary_To}`
+              }
+            />
+          )}
+          {boardingRange && <InfoRow icon={Calendar} label={t('boarding')} value={boardingRange} />}
+          {search.contractDescription && (
+            <InfoRow icon={FileText} label={t('contract-type')} value={search.contractDescription} className="mb-0" />
+          )}
+        </SubSection>
+
+        <SubSection icon={Briefcase} title={t('offer')} onPress={viewSearch}>
+          <Text size="sm" shade={700} numberOfLines={2}>
             {search.offer.trim() || '—'}
           </Text>
         </SubSection>
-        <SubSection title={t('candidates-overview')} icon={Users} onPress={viewCrewList}>
-          <HStack className="items-center justify-between">
+        <SubSection icon={Users} title={t('candidates-overview')} onPress={viewCrewList}>
+          <HStack className="items-center justify-between mt-2">
             <Badge action="muted" variant="outline" className="rounded-md">
               <BadgeText>
                 {t('candidates')}: {search.countCandidates}
@@ -80,12 +97,24 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
           </HStack>
         </SubSection>
         <SubSection title={t('find-crew')} icon={Search}>
-          <HStack space="xs">
-            <Button variant="solid" action="positive" onPress={openSearchBySkill} className="rounded-md  flex-1">
+          <HStack space="sm">
+            <Button
+              variant="solid"
+              action="positive"
+              onPress={openSearchBySkill}
+              className="rounded-md flex-1"
+              size="sm"
+            >
               <ButtonIcon as={UserCheck} />
               <ButtonText>{t('by-skill')}</ButtonText>
             </Button>
-            <Button variant="solid" action="positive" onPress={openSearchByLocation} className="rounded-md flex-1">
+            <Button
+              variant="solid"
+              action="positive"
+              onPress={openSearchByLocation}
+              className="rounded-md flex-1"
+              size="sm"
+            >
               <ButtonIcon as={MapPin} />
               <ButtonText>{t('by-location')}</ButtonText>
             </Button>

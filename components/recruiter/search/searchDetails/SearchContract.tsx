@@ -1,4 +1,3 @@
-// components/search/SearchContract.tsx
 import React from 'react'
 import { Box, VStack, HStack, Text, Icon, Divider, Pressable } from '@/components/ui'
 import { FileText, Calendar, Euro, MapPin, Info } from 'lucide-react-native'
@@ -61,7 +60,6 @@ const SearchContract: React.FC<SearchContractProps> = ({ search }) => {
           </Text>
         </SubSection>
 
-        {/* Contract Details */}
         <Divider className="my-2" />
         <VStack className="pl-2">
           <HStack className="items-start gap-1">
