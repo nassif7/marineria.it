@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getProOffers } from '@/api'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 import { Text, Loading, HStack, Box } from '@/components/ui'
-import { List, ScreenContainer, NavBar, ErrorMessage } from '@/components/appUI'
+import { List, ScreenContainer, NavBar, ErrorMessage, EmptyList } from '@/components/appUI'
 import OfferListItem from './OfferListItem'
 
 const RightAction = ({
@@ -82,6 +82,7 @@ const JobOfferList: FC = () => {
             isRefetching={isRefetching}
             onRefresh={refetch}
             renderItem={({ item }) => <OfferListItem offer={item} key={item.reference} />}
+            listEmptyComponent={<EmptyList message={t('offer-screen:no-offers')} />}
           />
         )}
         {isError && <ErrorMessage />}
