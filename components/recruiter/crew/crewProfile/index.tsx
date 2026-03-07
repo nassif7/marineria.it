@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getCrewCV } from '@/api'
 import { useLocalSearchParams } from 'expo-router'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-import { VStack, Text, HStack, Button, ButtonText, ButtonIcon } from '@/components/ui'
+import { VStack, Text } from '@/components/ui'
 import { Loading } from '@/components/ui/loading'
 import { useTranslation } from 'react-i18next'
 
@@ -22,9 +22,7 @@ import CrewSkills from './CrewSkills'
 import ProfileActionButtons from './ProfileActionButtons'
 import ContactCrewModal from './ContactCrewModal'
 
-import { UserX, Phone, View } from 'lucide-react-native'
-import Reanimated, { FadeInDown, FadeOutDown } from 'react-native-reanimated'
-import { ScrollView, View as RNView, Image as RNImage } from 'react-native'
+import Reanimated from 'react-native-reanimated'
 
 const CrewProfile = () => {
   const { t } = useTranslation(['crew-screen'])
@@ -39,7 +37,7 @@ const CrewProfile = () => {
     queryFn: () => getCrewCV(token, crewid as string),
   })
 
-  const crew = isSuccess ? data?.[0] : null
+  const crew = isSuccess ? data : null
 
   const [actionsVisible, setActionsVisible] = useState(false)
   const [contactModalVisible, setContactModalVisible] = useState(false)
@@ -80,7 +78,8 @@ const CrewProfile = () => {
         scroll
         handleScroll={handleScroll}
         scrollEventThrottle={16}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 140 }}
+        onRefresh={refetch}
       >
         {isSuccess && crew && (
           <VStack space="xs">
@@ -113,3 +112,5 @@ const CrewProfile = () => {
 }
 
 export default CrewProfile
+
+CrewProfile.displayName = 'CrewProfile'

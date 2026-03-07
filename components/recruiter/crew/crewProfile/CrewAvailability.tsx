@@ -27,3 +27,5 @@ const Availability: FC<{ crew: TCrew }> = ({ crew }) => {
 }
 
 export default Availability
+
+Availability.displayName = 'Availability'

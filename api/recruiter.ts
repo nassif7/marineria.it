@@ -43,7 +43,7 @@ export const getCrewList = async (offerId: string, ownerToken: string, language:
   return response.json()
 }
 
-export const getCrewCV = async (ownerToken: string, crewId: string, language?: string): Promise<TCrew[]> => {
+export const getCrewCV = async (ownerToken: string, crewId: string, language?: string): Promise<TCrew> => {
   const languageCode = getLanguageCode(language)
   const url = `https://www.comunicazione.it/api/Owneruser/CvUser/${ownerToken}/${crewId}?language=${languageCode}`
   const response = await fetch(url)

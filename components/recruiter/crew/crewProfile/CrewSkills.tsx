@@ -69,7 +69,6 @@ const CrewSkillsGrid: FC<{ crew: TCrew }> = ({ crew }) => {
   return (
     <Section>
       <SectionHeader title={t('skills-and-abilities', { ns: 'crew-screen' })} icon={Sparkles} />
-
       <VStack space="xs">
         <HStack className="items-start flex-wrap" space="sm">
           {skills.map((skill, index) => !skill.value && <CrewSkill key={index} {...skill} />)}
@@ -93,3 +92,5 @@ const CrewSkillsGrid: FC<{ crew: TCrew }> = ({ crew }) => {
 }
 
 export default CrewSkillsGrid
+
+CrewSkillsGrid.displayName = 'CrewSkillsGrid'

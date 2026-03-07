@@ -26,3 +26,5 @@ const AboutSection: FC<{ crew: TCrew }> = ({ crew }) => {
 }
 
 export default AboutSection
+
+AboutSection.displayName = 'AboutSection'

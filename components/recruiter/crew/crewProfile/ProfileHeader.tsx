@@ -120,3 +120,5 @@ const ProfileHeader: FC<{ crew: TCrew }> = ({ crew }) => {
 }
 
 export default ProfileHeader
+
+ProfileHeader.displayName = 'ProfileHeader'

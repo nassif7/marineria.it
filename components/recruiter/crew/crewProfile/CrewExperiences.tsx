@@ -75,3 +75,5 @@ const ExperiencesSection: FC<{ crew: TCrew }> = ({ crew }) => {
 }
 
 export default ExperiencesSection
+
+ExperiencesSection.displayName = 'ExperiencesSection'

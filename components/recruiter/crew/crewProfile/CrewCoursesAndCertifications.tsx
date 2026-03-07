@@ -109,3 +109,5 @@ const CoursesSection: FC<{ crew: TCrew }> = ({ crew }) => {
 }
 
 export default CoursesSection
+
+CoursesSection.displayName = 'CoursesSection'

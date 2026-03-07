@@ -69,20 +69,11 @@ const PreferencesSection: FC<{ crew: TCrew }> = ({ crew }) => {
             {crew.card1Couple || '—'}
           </Text>
         </HStack>
-        {/* {crew.couplewith && (
-          <HStack space="xs" className="items-center">
-            <Icon as={User} size="xs" className="text-typography-400" />
-            <Text size="xs" className="text-typography-500">
-              Couple with:
-            </Text>
-            <Text size="xs" bold className="text-typography-800">
-              {crew.couplewith}
-            </Text>
-          </HStack>
-        )} */}
       </SubSection>
     </Section>
   )
 }
 
 export default PreferencesSection
+
+PreferencesSection.displayName = 'PreferencesSection'

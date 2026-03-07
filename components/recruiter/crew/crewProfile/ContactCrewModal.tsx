@@ -166,3 +166,5 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
 }
 
 export default ContactModal
+
+ContactModal.displayName = 'ContactModal'

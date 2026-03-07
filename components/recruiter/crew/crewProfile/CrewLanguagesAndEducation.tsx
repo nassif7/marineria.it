@@ -87,3 +87,5 @@ const LanguagesSection: FC<{ crew: TCrew }> = ({ crew }) => {
 }
 
 export default LanguagesSection
+
+LanguagesSection.displayName = 'LanguagesSection'

@@ -55,3 +55,5 @@ const ProfileActionButtons: FC<IProfileActionButtonsProps> = ({ onGetContact, on
 }
 
 export default ProfileActionButtons
+
+ProfileActionButtons.displayName = 'ProfileActionButtons'

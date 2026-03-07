@@ -88,15 +88,6 @@ const ContactSection: FC<{ crew: TCrew }> = ({ crew }) => {
                 </HStack>
               </SubSection>
             ))}
-            {/* <Box className="flex flex-row justify-between">
-              {contacts.map((c) => (
-                <TouchableOpacity key={c.key} onPress={c.onPress} activeOpacity={0.7} className="items-center gap-1.5">
-                  <Icon as={c.icon} size="lg" className={`${c.color}`} strokeWidth={2.5} />
-
-                  <Text size="xs">{c.label}</Text>
-                </TouchableOpacity>
-              ))}
-            </Box> */}
           </VStack>
         </>
       )}
@@ -105,3 +96,5 @@ const ContactSection: FC<{ crew: TCrew }> = ({ crew }) => {
 }
 
 export default ContactSection
+
+ContactSection.displayName = 'ContactSection'

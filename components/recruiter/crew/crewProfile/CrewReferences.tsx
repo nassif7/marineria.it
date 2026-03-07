@@ -91,3 +91,5 @@ const ReferencesSection: FC<{ crew: TCrew }> = ({ crew }) => {
 }
 
 export default ReferencesSection
+
+ReferencesSection.displayName = 'ReferencesSection'
