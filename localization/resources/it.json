@@ -33,8 +33,8 @@
   "offer-screen": {
     "view-offer": "Vedi offerta",
     "filter": {
-      "own-offers": "Tutte le offerte",
-      "all-offers": "Offerte per me"
+      "own-offers": "Offerte per me",
+      "all-offers": "Tutte le offerte"
     },
     "no-offers": "There are currently no job offers that match your profile!",
     "already-applied": "Candidato",

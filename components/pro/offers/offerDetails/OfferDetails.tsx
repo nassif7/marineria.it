@@ -60,9 +60,7 @@ export default function OfferDetailsScreen() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ['offer', offerId],
-        exact: true,
-        refetchType: 'active',
+        queryKey: ['offer', offerId, language],
       })
       setShowApply(false)
     },
@@ -98,7 +96,7 @@ export default function OfferDetailsScreen() {
           <ApplyModal
             visible={showApply}
             onClose={() => setShowApply(false)}
-            onConfirm={() => handleConfirmApply()}
+            onConfirm={handleConfirmApply}
             isSubmitting={isPending}
           />
         </>
