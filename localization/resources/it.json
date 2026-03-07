@@ -86,7 +86,8 @@
     "send-job-offer": "Invia la tua offerta di lavoro",
     "request-cv-as-pdf": " Richiedi anche una copia del CV in PDF",
     "longer-time": "tempo di attesa superiore",
-    "contact": "Contatta"
+    "contact": "Contatta",
+    "empty-crew-list": "La tua lista di equipaggio e' vuota"
   },
   "settings-screen": {
     "change-language": "Cambia lingua",

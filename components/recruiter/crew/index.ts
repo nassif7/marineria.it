@@ -1,2 +1,2 @@
-export { default as CrewList } from './CrewList'
+export { default as CrewList } from './crewList/CrewList'
 export { default as CrewProfile } from './crewProfile'

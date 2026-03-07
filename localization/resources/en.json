@@ -61,8 +61,8 @@
     "contacted": "Contacted",
     "residual": "Residual",
     "find-crew": "Find crew",
-    "by-location": "By location",
-    "by-skill": "By skills",
+    "by-location": "by location",
+    "by-skill": "by skills",
     "contract-and-compensation": "Contract, salary, recruiter",
     "additional-info": "Additional requested skills"
   },
@@ -86,7 +86,8 @@
     "send-job-offer": "Send your job offer",
     "request-cv-as-pdf": " Also request a copy of CV in PDF",
     "longer-time": "longer waiting time",
-    "contact": "Contact"
+    "contact": "Contact",
+    "empty-crew-list": "Your crew list is empty"
   },
   "settings-screen": {
     "change-language": "Change language",
