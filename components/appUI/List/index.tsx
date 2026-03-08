@@ -37,12 +37,12 @@ export const ListHeader: FC<ListHeaderProps> = ({ filter }) => {
               className=" bg-white w-full"
             >
               <SelectTrigger variant="rounded" size="md" className=" flex justify-between pr-2 rounded-md">
-                <SelectInput className="text-typography-900 text-md font-semibold" />
+                <SelectInput />
                 <SelectIcon as={ChevronDown} />
               </SelectTrigger>
               <SelectPortal>
                 <SelectBackdrop />
-                <SelectContent>
+                <SelectContent className="bg-white rounded-md">
                   {filter.filterOptions.map((o) => (
                     <SelectItem
                       textStyle={{
