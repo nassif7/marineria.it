@@ -31,7 +31,7 @@ const ScreenContainer: FC<PropsWithChildren<IScreenContainerProps>> = ({
     <>
       {scroll ? (
         <ScrollView
-          className={`flex-1 bg-background-50 pb-5 ${className} `}
+          className={`flex-1 bg-background-50 pb-5  ${className} `}
           showsVerticalScrollIndicator={false}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           onScroll={handleScroll}
@@ -45,7 +45,7 @@ const ScreenContainer: FC<PropsWithChildren<IScreenContainerProps>> = ({
         </ScrollView>
       ) : (
         <View
-          className={`h-full flex-1 pb-5 bg-background-50 ${className} `}
+          className={`h-full flex-1 pb-5 bg-background-50  ${className} `}
           style={{
             ...flatContentStyle,
             paddingBottom: insets.bottom + ((flatContentStyle?.paddingBottom as number) || 0),

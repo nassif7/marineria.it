@@ -23,13 +23,6 @@ function _layout() {
       }}
     >
       <Stack.Screen name="index" options={{ title: t('settings'), headerShown: true }} />
-      <Stack.Screen
-        name="switchUser"
-        options={{
-          headerShown: true,
-          title: t(isPro ? 'login-as-crew' : 'login-as-recruiter'),
-        }}
-      />
     </Stack>
   )
 }

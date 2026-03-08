@@ -14,7 +14,10 @@ export default function CrewLayout() {
         headerShown: false,
         header: (props) => {
           return (
-            <NavBar {...props} rightAction={<ContactSupport title="contact support" supportTeam={supportTeam} />} />
+            <NavBar
+              {...props}
+              rightAction={<ContactSupport title={t('contact-support', { ns: 'common' })} supportTeam={supportTeam} />}
+            />
           )
         },
         contentStyle: { backgroundColor: 'white' },
@@ -28,7 +31,7 @@ export default function CrewLayout() {
       />
 
       <Stack.Screen
-        name="[crewid]"
+        name="[crewId]"
         options={() => {
           return {
             headerShown: true,

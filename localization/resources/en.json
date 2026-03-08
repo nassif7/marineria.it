@@ -87,7 +87,13 @@
     "request-cv-as-pdf": " Also request a copy of CV in PDF",
     "longer-time": "longer waiting time",
     "contact": "Contact",
-    "empty-crew-list": "Your crew list is empty"
+    "empty-crew-list": "Your crew list is empty",
+    "contact-crew-success": "Now you can see the contact details of the crew member, and the crew will be notified about your interest",
+    "contact-crew-error": "Something went wrong, please try again",
+    "remove-crew-success": "The crew member has been removed from your list",
+    "remove-crew-error": "Something went wrong, please try again",
+    "search-not-paid": "Search not paid",
+    "to-proceed": "To proceed"
   },
   "settings-screen": {
     "change-language": "Change language",
@@ -190,6 +196,7 @@
     "en": "English",
     "it": "Italiano",
     "success": "Success",
-    "unknown-error": "Something went wrong, please try again later!"
+    "unknown-error": "Something went wrong, please try again later!",
+    "contact-support": "Contact support"
   }
 }

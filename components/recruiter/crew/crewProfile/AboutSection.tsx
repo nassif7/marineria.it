@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import { Text } from '@/components/ui'
 import { User } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
@@ -25,6 +25,6 @@ const AboutSection: FC<{ crew: TCrew }> = ({ crew }) => {
   )
 }
 
-export default AboutSection
+export default memo(AboutSection)
 
 AboutSection.displayName = 'AboutSection'

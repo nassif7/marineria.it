@@ -30,7 +30,7 @@ export default function OfferDetailsScreen() {
   const [showApply, setShowApply] = useState(false)
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
-    queryKey: ['offer', offerId, language],
+    queryKey: ['offer', offerId],
     queryFn: () => getProOfferById(offerId as string, token, language),
   })
 
@@ -60,7 +60,10 @@ export default function OfferDetailsScreen() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ['offer', offerId, language],
+        queryKey: ['offer', offerId],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['offers'],
       })
       setShowApply(false)
     },

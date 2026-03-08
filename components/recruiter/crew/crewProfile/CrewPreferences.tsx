@@ -1,4 +1,4 @@
-import { FC, useState, useMemo } from 'react'
+import { FC, useState, useMemo, memo } from 'react'
 import { ScrollView, TouchableOpacity, Linking } from 'react-native'
 import {
   Box,
@@ -74,6 +74,6 @@ const PreferencesSection: FC<{ crew: TCrew }> = ({ crew }) => {
   )
 }
 
-export default PreferencesSection
+export default memo(PreferencesSection)
 
 PreferencesSection.displayName = 'PreferencesSection'

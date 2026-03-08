@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import { HStack, Text } from '@/components/ui'
 import { Clock, Calendar, Euro } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
@@ -26,6 +26,6 @@ const Availability: FC<{ crew: TCrew }> = ({ crew }) => {
   )
 }
 
-export default Availability
+export default memo(Availability)
 
 Availability.displayName = 'Availability'

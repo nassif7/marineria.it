@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import { Box, Heading, VStack, HStack, Text, Icon, Badge, BadgeText } from '@/components/ui'
 import { Sparkles, MessageCircle, ClipboardList, Terminal, Zap, Wrench, Code2 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
@@ -91,6 +91,6 @@ const CrewSkillsGrid: FC<{ crew: TCrew }> = ({ crew }) => {
   )
 }
 
-export default CrewSkillsGrid
+export default memo(CrewSkillsGrid)
 
 CrewSkillsGrid.displayName = 'CrewSkillsGrid'

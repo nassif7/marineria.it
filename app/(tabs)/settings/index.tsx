@@ -36,9 +36,9 @@ const Settings = () => {
   }
 
   return (
-    <ScreenContainer>
+    <ScreenContainer className="px-2">
       <VStack className="h-full justify-between py-4">
-        <VStack space="md">
+        <VStack space="sm">
           <HStack className="justify-between items-center bg-white rounded-md p-3 mb-5 border border-background-300 min-h-[60px]">
             <HStack className="items-center" space="sm">
               <Icon as={Globe} className="text-typography-600" size="md" />

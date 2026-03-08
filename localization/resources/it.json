@@ -87,7 +87,14 @@
     "request-cv-as-pdf": " Richiedi anche una copia del CV in PDF",
     "longer-time": "tempo di attesa superiore",
     "contact": "Contatta",
-    "empty-crew-list": "La tua lista di equipaggio e' vuota"
+    "empty-crew-list": "La tua lista di equipaggio e' vuota",
+    "contact-success": "Ora puoi vedere le informazioni di contatto dell'equipaggio, e l'equipaggio verra' notificato di tuo interesse",
+    "contact-fail": "Qualcosa e' andato storto, riprova",
+    "contact-error": "Qualcosa e' andato storto, riprova",
+    "remove-crew-success": "L'equipaggio e' stato rimosso dalla tua lista",
+    "remove-crew-error": "Qualcosa e' andato storto, riprova",
+    "search-not-paid": "Ricerca non pagata",
+    "to-proceed": "Per proseguire"
   },
   "settings-screen": {
     "change-language": "Cambia lingua",
@@ -190,6 +197,7 @@
     "en": "English",
     "it": "Italiano",
     "success": "Successo",
-    "unknown-error": "Si è verificato un errore, riprova più tardi!"
+    "unknown-error": "Si è verificato un errore, riprova più tardi!",
+    "contact-support": "Contatta il supporto"
   }
 }

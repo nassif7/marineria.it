@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, memo, useState } from 'react'
 import { TouchableOpacity, Image as RNImage } from 'react-native'
 import {
   Box,
@@ -20,7 +20,7 @@ import {
   ModalContent,
   ModalBody,
 } from '@/components/ui'
-import { User, Unlock, FileText, Send, Check, PhoneCall } from 'lucide-react-native'
+import { User, Unlock, FileText, Send, Check, PhoneCall, ReceiptEuro } from 'lucide-react-native'
 import { SubSection } from '@/components/appUI'
 import { TCrew } from '@/api/types'
 import { faker } from '@faker-js/faker'
@@ -29,12 +29,14 @@ import { getRecruiterSearchById } from '@/api'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { ActiveProfile, useUser } from '@/Providers/UserProvider'
+import ContactSupport from '@/components/common/ContactSupport'
+import { supportTeam } from '@/api'
 
 interface IContactModal {
   visible: boolean
   crew: TCrew
   onClose: () => void
-  onConfirm: (requestPdf: boolean) => void
+  onConfirm: () => void
 }
 
 const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) => {
@@ -61,7 +63,9 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
     queryKey: ['recruiter-search-by-id', searchId, language],
     queryFn: () => getRecruiterSearchById(searchId as string, token, language),
   })
+
   const searchLabel = isSuccess ? data?.[0]?.title : searchId
+  const isPaid = isSuccess && data?.[0]?.paid
 
   return (
     <Modal isOpen={visible} onClose={onClose}>
@@ -72,7 +76,7 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
             <Box className="w-20 h-1 rounded-full bg-outline-200" />
           </Box>
 
-          <VStack className="items-center  pt-4 pb-6">
+          <VStack className="items-center pt-4 pb-6">
             <Box className="w-16 h-16 rounded-md bg-primary-100 overflow-hidden border-2 border-primary-200 mb-3">
               {crew.userPhoto ? (
                 <RNImage source={{ uri: fakeImage }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
@@ -85,6 +89,23 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
             <Heading size="md" className="text-typography-900 text-center">
               {t('contact-crew')}
             </Heading>
+
+            {!isPaid && (
+              <HStack className="bg-background-50 border border-error-300 rounded-md p-4 gap-2 items-start mx-4">
+                <Icon as={ReceiptEuro} size="md" className="text-error-600" />
+                <Text size="md" semiBold className="text-typography-800 ">
+                  {t('search-not-paid', { ns: 'crew-screen' })}
+                </Text>
+                <ContactSupport
+                  isTextTrigger
+                  supportTeam={supportTeam}
+                  title={t('contact-support', { ns: 'common' })}
+                />
+                <Text size="md" semiBold className="text-typography-800 ">
+                  {t('to-proceed', { ns: 'crew-screen' })}
+                </Text>
+              </HStack>
+            )}
           </VStack>
 
           <VStack space="xs" className="mx-4">
@@ -120,7 +141,6 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
                 </Checkbox>
               </TouchableOpacity>
             </SubSection>
-
             <SubSection>
               <TouchableOpacity activeOpacity={0.7} onPress={() => setRequestPdf((v) => !v)}>
                 <Checkbox value="pdf" isChecked={requestPdf} onChange={(val) => setRequestPdf(val)}>
@@ -152,8 +172,8 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
               action="positive"
               variant="solid"
               className="flex-1 rounded-md"
-              onPress={() => onConfirm(requestPdf)}
-              isDisabled={!isConfirmed}
+              onPress={onConfirm}
+              isDisabled={!isConfirmed || !isPaid}
             >
               <ButtonIcon as={PhoneCall} className="mr-1.5 text-white" />
               <ButtonText>{t('contact', { ns: 'crew-screen' })}</ButtonText>
@@ -165,6 +185,6 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
   )
 }
 
-export default ContactModal
+export default memo(ContactModal)
 
 ContactModal.displayName = 'ContactModal'

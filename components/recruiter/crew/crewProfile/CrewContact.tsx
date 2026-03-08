@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC, memo, useMemo } from 'react'
 import { Linking, TouchableOpacity } from 'react-native'
 import { Box, VStack, HStack, Heading, Text, Icon, Badge, BadgeText } from '@/components/ui'
 import { MapPin, Phone, Mail, MessageCircle, Contact, Smartphone } from 'lucide-react-native'
@@ -95,6 +95,6 @@ const ContactSection: FC<{ crew: TCrew }> = ({ crew }) => {
   )
 }
 
-export default ContactSection
+export default memo(ContactSection)
 
 ContactSection.displayName = 'ContactSection'

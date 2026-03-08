@@ -147,3 +147,5 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm, is
 }
 
 export default ApplyModal
+
+ApplyModal.displayName = 'ApplyModal'

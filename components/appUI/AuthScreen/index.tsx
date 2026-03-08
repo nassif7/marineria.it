@@ -59,6 +59,7 @@ const AuthScreen = ({ children }: React.PropsWithChildren) => {
             justifyContent: 'center',
             alignItems: 'center',
             paddingVertical: verticalScale(0),
+            paddingHorizontal: 2,
           }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}

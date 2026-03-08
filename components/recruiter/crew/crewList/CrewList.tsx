@@ -13,6 +13,7 @@ import { supportTeam } from '@/api'
 import CrewListEmptyComponent from './CrewListEmptyComponent'
 
 const RightAction = ({ itemsCount, isLoading }: { itemsCount: number; isLoading: boolean }) => {
+  const { t } = useTranslation()
   return (
     <HStack className="pr-3 items-center" space="xs">
       <Box className="bg-success-500 rounded-md w-6 h-6 items-center justify-center shrink-0">
@@ -24,7 +25,7 @@ const RightAction = ({ itemsCount, isLoading }: { itemsCount: number; isLoading:
         )}
       </Box>
 
-      <ContactSupport title="Supporto" supportTeam={supportTeam} />
+      <ContactSupport title={t('contact-support', { ns: 'common' })} supportTeam={supportTeam} />
     </HStack>
   )
 }

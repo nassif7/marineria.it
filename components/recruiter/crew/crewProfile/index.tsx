@@ -1,13 +1,14 @@
 import { useState } from 'react'
-import { ScreenContainer } from '@/components/appUI'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getCrewCV } from '@/api'
-import { useLocalSearchParams } from 'expo-router'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
-import { VStack, Text } from '@/components/ui'
-import { Loading } from '@/components/ui/loading'
+import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
+import { useLocalSearchParams } from 'expo-router'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { ScreenContainer } from '@/components/appUI'
+import { getCrewCV, contactCrew, removeCrew } from '@/api'
+import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { VStack, Loading } from '@/components/ui'
 import { ErrorMessage } from '@/components/appUI'
+import { useStatusToast } from '@/hooks'
 
 import ProfileHeader from './ProfileHeader'
 import ProfileContact from './CrewContact'
@@ -23,30 +24,19 @@ import CrewSkills from './CrewSkills'
 import ProfileActionButtons from './ProfileActionButtons'
 import ContactCrewModal from './ContactCrewModal'
 
-import Reanimated from 'react-native-reanimated'
-
 const CrewProfile = () => {
-  const { t } = useTranslation(['crew-screen'])
-  const { crewid, searchId } = useLocalSearchParams()
-
-  const { activeProfile } = useUser()
-  const { token } = activeProfile as ActiveProfile
-  const queryClient = useQueryClient()
-
-  const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
-    queryKey: ['recruiter-crew-cv', searchId],
-    queryFn: () => getCrewCV(token, crewid as string),
-  })
-
-  const crew = isSuccess ? data : null
-
   const [actionsVisible, setActionsVisible] = useState(false)
   const [contactModalVisible, setContactModalVisible] = useState(false)
+  const {
+    i18n: { language },
+    t,
+  } = useTranslation()
+  const { crewId, searchId } = useLocalSearchParams()
+  const queryClient = useQueryClient()
+  const { activeProfile } = useUser()
+  const { showToast } = useStatusToast()
 
-  const handleConfirmContact = (requestPdf: boolean) => {
-    setContactModalVisible(false)
-    // TODO: call your API here with requestPdf flag
-  }
+  const { token } = activeProfile as ActiveProfile
 
   const handleScroll = (e: any) => {
     const y = e.nativeEvent.contentOffset.y
@@ -54,7 +44,61 @@ const CrewProfile = () => {
     else if (y <= 60 && actionsVisible) setActionsVisible(false)
   }
 
-  const AnimatedView = Reanimated.View
+  const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
+    queryKey: ['recruiter-crew-cv', searchId, crewId],
+    queryFn: () => getCrewCV(token, crewId as string),
+  })
+  const crew = isSuccess ? data : null
+
+  const { mutate: handleContactCrew, isPending } = useMutation({
+    mutationFn: () => {
+      return contactCrew(token, crewId as string, searchId as string, language)
+    },
+    onSuccess: () => {
+      showToast({
+        emphasize: 'success',
+        title: t('success', { ns: 'common' }),
+        description: t('contact-crew-success', { ns: 'crew-screen' }),
+      })
+    },
+    onError: (message) => {
+      showToast({ emphasize: 'error', title: 'Error', description: t('contact-crew-error', { ns: 'crew-screen' }) })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['recruiter-crew-cv', searchId, crewId],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['recruiter-crew-list', searchId],
+      })
+      setContactModalVisible(false)
+    },
+  })
+
+  const { mutate: handleRemoveCrew, isPending: isPendingRemove } = useMutation({
+    mutationFn: () => {
+      return removeCrew(token, crewId as string, searchId as string, language)
+    },
+    onSuccess: () => {
+      showToast({
+        emphasize: 'success',
+        title: t('success', { ns: 'common' }),
+        description: t('remove-crew-success', { ns: 'crew-screen' }),
+      })
+    },
+    onError: () => {
+      showToast({ emphasize: 'error', title: 'Error', description: t('remove-crew-error', { ns: 'crew-screen' }) })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['recruiter-crew-cv', searchId, crewId],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['recruiter-crew-list', searchId],
+      })
+      router.back()
+    },
+  })
 
   if (isLoading || isRefetching) {
     return (
@@ -99,14 +143,18 @@ const CrewProfile = () => {
               visible={contactModalVisible}
               crew={crew}
               onClose={() => setContactModalVisible(false)}
-              onConfirm={handleConfirmContact}
+              onConfirm={handleContactCrew}
             />
           </VStack>
         )}
       </ScreenContainer>
 
       {actionsVisible && (
-        <ProfileActionButtons onGetContact={() => setContactModalVisible(true)} onRemove={console.log} />
+        <ProfileActionButtons
+          onGetContact={() => setContactModalVisible(true)}
+          onRemove={handleRemoveCrew}
+          isLoading={isPending || isPendingRemove}
+        />
       )}
     </>
   )

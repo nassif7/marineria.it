@@ -26,6 +26,7 @@ const useStatusToast = () => {
       id: newId.toString(),
       placement: 'top',
       duration: 3000,
+      containerStyle: { marginTop: 40, marginLeft: 20, marginRight: 20, borderRadius: 8 },
       render: ({ id }) => {
         const uniqueToastId = 'toast-' + id
         return (

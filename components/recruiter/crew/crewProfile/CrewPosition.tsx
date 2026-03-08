@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC, memo, useMemo } from 'react'
 import { VStack, HStack, Text, Icon, Badge, BadgeText } from '@/components/ui'
 import { User, Briefcase, Anchor, Drama } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
@@ -54,6 +54,6 @@ const PositionsSection: FC<{ crew: TCrew }> = ({ crew }) => {
   )
 }
 
-export default PositionsSection
+export default memo(PositionsSection)
 
 PositionsSection.displayName = 'PositionsSection'

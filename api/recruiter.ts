@@ -55,29 +55,29 @@ export const getCrewCV = async (ownerToken: string, crewId: string, language?: s
   return response.json()
 }
 
-export const selectProUser = async (
+export const contactCrew = async (
   ownerToken: string,
   crewId: string | number,
   offerId: string | number,
   language?: string
-) => {
+): Promise<string> => {
   const languageCode = getLanguageCode(language)
-  const url = `https://www.comunicazione.it/api/Owneruser/SelectPro/${ownerToken}/${offerId}/${crewId}?language=${languageCode}`
+  const url = `https://www.comunicazione.it/api/Owneruser/ContactPro/${ownerToken}/${offerId}/${crewId}?language=${languageCode}`
   const response = await fetch(url)
 
   if (!response.ok) {
     throw new Error(`Failed to select CV (${response.status})`)
   }
 
-  return response.json()
+  return response.text()
 }
 
-export const declineProUser = async (
+export const removeCrew = async (
   ownerToken: string,
   crewId: string | number,
   offerId: string | number,
   language?: string
-) => {
+): Promise<string> => {
   const languageCode = getLanguageCode(language)
   const url = `https://www.comunicazione.it/api/Owneruser/RejectPRO/${ownerToken}/${offerId}/${crewId}?language=${languageCode}`
   const response = await fetch(url)
@@ -86,5 +86,5 @@ export const declineProUser = async (
     throw new Error(`Failed to delete CV (${response.status})`)
   }
 
-  return response.json()
+  return response.text()
 }

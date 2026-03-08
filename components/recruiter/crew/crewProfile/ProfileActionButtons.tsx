@@ -1,5 +1,5 @@
-import { FC } from 'react'
-import { HStack, Button, ButtonText, ButtonIcon, VStack } from '@/components/ui'
+import { FC, memo } from 'react'
+import { HStack, Button, ButtonText, ButtonIcon, ButtonSpinner, VStack } from '@/components/ui'
 import { UserX, Phone, Contact, PhoneCall, UserCheck } from 'lucide-react-native'
 import Animated, { FadeInDown, FadeOutDown } from 'react-native-reanimated'
 import { useTranslation } from 'react-i18next'
@@ -7,9 +7,10 @@ import { useTranslation } from 'react-i18next'
 interface IProfileActionButtonsProps {
   onGetContact: () => void
   onRemove: () => void
+  isLoading?: boolean
 }
 
-const ProfileActionButtons: FC<IProfileActionButtonsProps> = ({ onGetContact, onRemove }) => {
+const ProfileActionButtons: FC<IProfileActionButtonsProps> = ({ onGetContact, onRemove, isLoading }) => {
   const { t } = useTranslation('crew-screen')
   return (
     <Animated.View
@@ -34,8 +35,15 @@ const ProfileActionButtons: FC<IProfileActionButtonsProps> = ({ onGetContact, on
       }}
     >
       <VStack space="sm">
-        <Button size="md" action="positive" variant="solid" className="flex-1 rounded-md" onPress={onGetContact}>
-          <ButtonIcon as={UserCheck} className="mr-2 text-white" />
+        <Button
+          size="md"
+          action="positive"
+          variant="solid"
+          className="flex-1 rounded-md"
+          onPress={onGetContact}
+          isDisabled={isLoading}
+        >
+          {isLoading ? <ButtonSpinner /> : <ButtonIcon as={UserCheck} className="mr-2 text-white" />}
           <ButtonText>{t('contact-crew')}</ButtonText>
         </Button>
 
@@ -45,8 +53,9 @@ const ProfileActionButtons: FC<IProfileActionButtonsProps> = ({ onGetContact, on
           variant="outline"
           className="flex-1 rounded-md border-error-300"
           onPress={onRemove}
+          isDisabled={isLoading}
         >
-          <ButtonIcon as={UserX} className="mr-2 text-error-600" />
+          {isLoading ? <ButtonSpinner /> : <ButtonIcon as={UserX} className="mr-2 text-error-600" />}
           <ButtonText className="text-error-600">{t('remove-crew')}</ButtonText>
         </Button>
       </VStack>
@@ -54,6 +63,6 @@ const ProfileActionButtons: FC<IProfileActionButtonsProps> = ({ onGetContact, on
   )
 }
 
-export default ProfileActionButtons
+export default memo(ProfileActionButtons)
 
 ProfileActionButtons.displayName = 'ProfileActionButtons'
