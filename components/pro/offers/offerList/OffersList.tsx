@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getProOffers } from '@/api'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 import { Text, Loading, HStack, Box } from '@/components/ui'
-import { List, ScreenContainer, NavBar } from '@/components/appUI'
+import { List, ScreenContainer, NavBar, ErrorMessage, EmptyList } from '@/components/appUI'
 import OfferListItem from './OfferListItem'
 
 const RightAction = ({
@@ -49,7 +49,7 @@ const JobOfferList: FC = () => {
   ]
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
-    queryKey: ['offers', ownOffers],
+    queryKey: ['offers'],
     queryFn: () => getProOffers(token, ownOffers == 'all', language),
   })
 
@@ -82,9 +82,10 @@ const JobOfferList: FC = () => {
             isRefetching={isRefetching}
             onRefresh={refetch}
             renderItem={({ item }) => <OfferListItem offer={item} key={item.reference} />}
+            listEmptyComponent={<EmptyList message={t('offer-screen:no-offers')} />}
           />
         )}
-        {isError && <Text color="error">{t('error')}</Text>}
+        {isError && <ErrorMessage />}
       </ScreenContainer>
     </>
   )

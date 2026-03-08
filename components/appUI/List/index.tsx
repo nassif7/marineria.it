@@ -37,12 +37,12 @@ export const ListHeader: FC<ListHeaderProps> = ({ filter }) => {
               className=" bg-white w-full"
             >
               <SelectTrigger variant="rounded" size="md" className=" flex justify-between pr-2 rounded-md">
-                <SelectInput className="text-typography-900 text-md font-semibold" />
+                <SelectInput />
                 <SelectIcon as={ChevronDown} />
               </SelectTrigger>
               <SelectPortal>
                 <SelectBackdrop />
-                <SelectContent>
+                <SelectContent className="bg-white rounded-md">
                   {filter.filterOptions.map((o) => (
                     <SelectItem
                       textStyle={{
@@ -71,12 +71,21 @@ interface ListProps<T> {
   noHeader?: boolean
   data: T[]
   renderItem: ({ item }: { item: T }) => React.ReactElement
+  listEmptyComponent?: React.ReactElement
   isRefetching: boolean
   onRefresh?: () => void
   filter?: FilterType
 }
 
-export function List<T>({ data, renderItem, isRefetching, onRefresh, filter, noHeader }: ListProps<T>) {
+export function List<T>({
+  data,
+  renderItem,
+  isRefetching,
+  onRefresh,
+  filter,
+  noHeader,
+  listEmptyComponent,
+}: ListProps<T>) {
   // TODO: add empty state
   if (!data) return null
   return (
@@ -87,6 +96,7 @@ export function List<T>({ data, renderItem, isRefetching, onRefresh, filter, noH
       renderItem={({ item }) => renderItem({ item })}
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={onRefresh} className="text-primary-600" />}
       removeClippedSubviews={false}
+      ListEmptyComponent={listEmptyComponent}
     />
   )
 }

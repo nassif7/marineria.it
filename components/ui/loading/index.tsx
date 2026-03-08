@@ -7,7 +7,7 @@ import { View } from '../view'
 const Loading: FC = () => {
   return (
     <BlurView intensity={50} tint="extraLight" style={styles.container}>
-      <Box className="bg-white/50 rounded-2xl p-8 shadow-2xl">
+      <Box className="bg-white/50 rounded-2xl p-8 ">
         <Spinner size="large" className="text-primary-600" />
       </Box>
     </BlurView>

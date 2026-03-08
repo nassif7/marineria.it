@@ -1,4 +1,4 @@
-import { FC, useState, useMemo } from 'react'
+import { FC, useState, useMemo, memo } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { Box, VStack, HStack, Heading, Text, Icon, Image, Badge, BadgeText, BadgeIcon } from '@/components/ui'
 import { User, MapPin, Heart, Cake, Cigarette, IdCard, Images, Expand } from 'lucide-react-native'
@@ -60,7 +60,7 @@ const ProfileHeader: FC<{ crew: TCrew }> = ({ crew }) => {
         <PhotoSlider visible={photoVisible} photos={photos} onClose={() => setPhotoVisible(false)} initialIndex={0} />
         <VStack space="xs" className="items-center">
           <Heading size="md" className="text-primary-600 text-center ">
-            {crew?.contacted ? crew.name + ' ' + crew.surname : crew.mainPosition}
+            {crew?.contacted === 'True' ? crew.name + ' ' + crew.surname : crew.mainPosition}
           </Heading>
           <HStack space="md">
             <Text size="sm" bold shade={800}>
@@ -119,4 +119,6 @@ const ProfileHeader: FC<{ crew: TCrew }> = ({ crew }) => {
   )
 }
 
-export default ProfileHeader
+export default memo(ProfileHeader)
+
+ProfileHeader.displayName = 'ProfileHeader'

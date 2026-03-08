@@ -11,7 +11,10 @@ export default function OffersLayout() {
       screenOptions={{
         headerShown: false,
         header: (props) => (
-          <NavBar {...props} rightAction={<ContactSupport title="contact support" supportTeam={supportTeam} />} />
+          <NavBar
+            {...props}
+            rightAction={<ContactSupport title={t('contact-support', { ns: 'common' })} supportTeam={supportTeam} />}
+          />
         ),
         contentStyle: { backgroundColor: 'white' },
       }}

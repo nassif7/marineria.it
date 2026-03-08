@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import {
   Modal,
   ModalBackdrop,
@@ -20,10 +20,12 @@ import {
 import { MessageCircle, Send, X, HeadphonesIcon } from 'lucide-react-native'
 import { TSupportTeam } from '@/api'
 import { Linking } from 'react-native'
+import { useTranslation } from 'react-i18next'
 
-type ContactSupportProps = {
+type IContactSupportProps = {
   title: string
   supportTeam: TSupportTeam[]
+  isTextTrigger?: boolean
 }
 
 function SupportMemberCard({ member }: { member: TSupportTeam }) {
@@ -100,20 +102,39 @@ function SupportMemberCard({ member }: { member: TSupportTeam }) {
   )
 }
 
-export function ContactSupport({ title, supportTeam }: ContactSupportProps) {
+export const ContactSupportIconTrigger: FC<{ onPress: () => void }> = ({ onPress }) => {
+  return (
+    <Pressable
+      onPress={onPress}
+      className="w-10 h-10 rounded-full items-center justify-center bg-gray-100 dark:bg-gray-800 active:opacity-70"
+    >
+      <Icon as={HeadphonesIcon} size="md" className="text-primary-600 dark:text-gray-200" />
+    </Pressable>
+  )
+}
+
+export const ContactSupportTextTrigger: FC<{ onPress: () => void }> = ({ onPress }) => {
+  const { t } = useTranslation('common')
+  return (
+    <Pressable onPress={onPress}>
+      <Text size="md" bold className="text-primary-600 underline">
+        {t('contact-support', { ns: 'common' })}
+      </Text>{' '}
+    </Pressable>
+  )
+}
+
+const ContactSupport: FC<IContactSupportProps> = ({ title, supportTeam, isTextTrigger }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
-      {/* Trigger — place this in your NavBar right action */}
-      <Pressable
-        onPress={() => setIsOpen(true)}
-        className="w-10 h-10 rounded-full items-center justify-center bg-gray-100 dark:bg-gray-800 active:opacity-70"
-      >
-        <Icon as={HeadphonesIcon} size="md" className="text-primary-600 dark:text-gray-200" />
-      </Pressable>
+      {isTextTrigger ? (
+        <ContactSupportTextTrigger onPress={() => setIsOpen(true)} />
+      ) : (
+        <ContactSupportIconTrigger onPress={() => setIsOpen(true)} />
+      )}
 
-      {/* Modal */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
         <ModalBackdrop />
         <ModalContent className="rounded-t-md dark:bg-gray-900 w-full mb-0 mt-auto">
@@ -156,3 +177,5 @@ export function ContactSupport({ title, supportTeam }: ContactSupportProps) {
 }
 
 export default ContactSupport
+
+ContactSupport.displayName = 'ContactSupport'

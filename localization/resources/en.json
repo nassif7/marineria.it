@@ -2,8 +2,9 @@
   "screens-labels": {
     "offer-list": "Job offers",
     "offer": "Offer",
-    "search-list": "Searches",
-    "search": "Search",
+    "search-list": "Recruitment",
+    "recruitment": "Recruitment",
+    "search": "",
     "crew-list": "Crew list",
     "crew-profile": "Crew profile",
     "settings": "Settings",
@@ -55,13 +56,15 @@
     "no-searches": "You have no active searches",
     "view-search": "View search",
     "offer": "Offer",
+    "candidates-overview": "Candidates overview",
     "candidates": "Candidates",
     "contacted": "Contacted",
     "residual": "Residual",
     "find-crew": "Find crew",
-    "by-location": "By location",
-    "by-skill": "By skills",
-    "candidates-overview": "Candidates overview"
+    "by-location": "by location",
+    "by-skill": "by skills",
+    "contract-and-compensation": "Contract, salary, recruiter",
+    "additional-info": "Additional requested skills"
   },
   "crew-screen": {
     "id": "ID",
@@ -82,8 +85,15 @@
     "receive-cv": "Get his CV via email in PDF format",
     "send-job-offer": "Send your job offer",
     "request-cv-as-pdf": " Also request a copy of CV in PDF",
-    "longer-time": "Longer time",
-    "contact": "Contact"
+    "longer-time": "longer waiting time",
+    "contact": "Contact",
+    "empty-crew-list": "Your crew list is empty",
+    "contact-crew-success": "Now you can see the contact details of the crew member, and the crew will be notified about your interest",
+    "contact-crew-error": "Something went wrong, please try again",
+    "remove-crew-success": "The crew member has been removed from your list",
+    "remove-crew-error": "Something went wrong, please try again",
+    "search-not-paid": "Search not paid",
+    "to-proceed": "To proceed"
   },
   "settings-screen": {
     "change-language": "Change language",
@@ -102,7 +112,7 @@
     "posted": "Posted",
     "already-applied": "Already applied",
     "not-matching": "Not matching",
-    "contract-type": "Contract type",
+    "contract-type": "Contract",
     "boarding": "Boarding",
     "reference": "Reference",
     "owner-type": "Owner type",
@@ -183,9 +193,10 @@
     "need-support": "Need support?",
     "email": "Email",
     "password": "Password",
-    "en": "EN",
-    "it": "IT",
+    "en": "English",
+    "it": "Italiano",
     "success": "Success",
-    "unknown-error": "Something went wrong, please try again later!"
+    "unknown-error": "Something went wrong, please try again later!",
+    "contact-support": "Contact support"
   }
 }

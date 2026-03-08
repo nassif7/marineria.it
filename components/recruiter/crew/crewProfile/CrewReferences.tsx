@@ -1,4 +1,4 @@
-import { FC, useState, useMemo } from 'react'
+import { FC, useState, useMemo, memo } from 'react'
 import { TouchableOpacity, Linking } from 'react-native'
 import { Box, VStack, HStack, Text, Icon, Divider, Badge, BadgeText } from '@/components/ui'
 import { Phone, Mail, Star, ChevronDown, ChevronUp } from 'lucide-react-native'
@@ -90,4 +90,6 @@ const ReferencesSection: FC<{ crew: TCrew }> = ({ crew }) => {
   )
 }
 
-export default ReferencesSection
+export default memo(ReferencesSection)
+
+ReferencesSection.displayName = 'ReferencesSection'

@@ -3,16 +3,17 @@ import { ActivityIndicator } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { ListFilter } from 'lucide-react-native'
 import { getCrewList } from '@/api'
 import { useUser } from '@/Providers/UserProvider'
 import { Loading, Box, HStack, Text } from '@/components/ui'
-import { List, NavBar, ScreenContainer } from '@/components/appUI'
+import { List, NavBar, ScreenContainer, ErrorMessage } from '@/components/appUI'
 import CrewListItem from './CrewListItem'
 import ContactSupport from '@/components/common/ContactSupport'
 import { supportTeam } from '@/api'
+import CrewListEmptyComponent from './CrewListEmptyComponent'
 
 const RightAction = ({ itemsCount, isLoading }: { itemsCount: number; isLoading: boolean }) => {
+  const { t } = useTranslation()
   return (
     <HStack className="pr-3 items-center" space="xs">
       <Box className="bg-success-500 rounded-md w-6 h-6 items-center justify-center shrink-0">
@@ -24,7 +25,7 @@ const RightAction = ({ itemsCount, isLoading }: { itemsCount: number; isLoading:
         )}
       </Box>
 
-      <ContactSupport title="Supporto" supportTeam={supportTeam} />
+      <ContactSupport title={t('contact-support', { ns: 'common' })} supportTeam={supportTeam} />
     </HStack>
   )
 }
@@ -70,9 +71,10 @@ const CrewList: FC = () => {
             isRefetching={isRefetching}
             onRefresh={refetch}
             renderItem={({ item }) => <CrewListItem crew={item} key={item.userId} />}
+            listEmptyComponent={<CrewListEmptyComponent />}
           />
         )}
-        {isError && <Text color="error">{t('error')}</Text>}
+        {isError && <ErrorMessage />}
       </ScreenContainer>
     </>
   )

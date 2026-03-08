@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import { Box, Heading, VStack, HStack, Text, Icon, Badge, BadgeText } from '@/components/ui'
 import { Sparkles, MessageCircle, ClipboardList, Terminal, Zap, Wrench, Code2 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
@@ -69,7 +69,6 @@ const CrewSkillsGrid: FC<{ crew: TCrew }> = ({ crew }) => {
   return (
     <Section>
       <SectionHeader title={t('skills-and-abilities', { ns: 'crew-screen' })} icon={Sparkles} />
-
       <VStack space="xs">
         <HStack className="items-start flex-wrap" space="sm">
           {skills.map((skill, index) => !skill.value && <CrewSkill key={index} {...skill} />)}
@@ -92,4 +91,6 @@ const CrewSkillsGrid: FC<{ crew: TCrew }> = ({ crew }) => {
   )
 }
 
-export default CrewSkillsGrid
+export default memo(CrewSkillsGrid)
+
+CrewSkillsGrid.displayName = 'CrewSkillsGrid'

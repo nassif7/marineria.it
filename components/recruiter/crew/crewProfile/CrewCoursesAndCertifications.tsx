@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import { VStack, HStack, Text, Badge, BadgeText } from '@/components/ui'
 import { Book, GraduationCap, Award, BookOpen, BookMarked, ScrollText } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
@@ -108,4 +108,6 @@ const CoursesSection: FC<{ crew: TCrew }> = ({ crew }) => {
   )
 }
 
-export default CoursesSection
+export default memo(CoursesSection)
+
+CoursesSection.displayName = 'CoursesSection'

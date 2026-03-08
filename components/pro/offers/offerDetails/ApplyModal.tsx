@@ -1,7 +1,5 @@
-// components/offers/ApplyModal.tsx
 import React, { useState } from 'react'
 import {
-  Box,
   VStack,
   HStack,
   Heading,
@@ -9,7 +7,6 @@ import {
   Button,
   ButtonText,
   Icon,
-  Pressable,
   Checkbox,
   CheckboxIndicator,
   CheckboxIcon,
@@ -25,14 +22,14 @@ import {
   ModalCloseButton,
 } from '@/components/ui'
 import { X, Check, ShieldUser, ListCheck, Minus } from 'lucide-react-native'
-import { Section, SubSection, SubSectionHeader } from '@/components/appUI'
+import { SubSection, SubSectionHeader } from '@/components/appUI'
 import { useTranslation } from 'react-i18next'
 import { useUser } from '@/Providers/UserProvider'
 
 interface ApplyModalProps {
   visible: boolean
   onClose: () => void
-  onConfirm: (consentAccepted: boolean) => void
+  onConfirm: () => void
   isSubmitting?: boolean
 }
 
@@ -48,7 +45,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm, is
 
   const handleApply = () => {
     if (consentAccepted) {
-      onConfirm(consentAccepted)
+      onConfirm()
       setConsentAccepted(false)
     }
   }
@@ -63,7 +60,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm, is
   return (
     <Modal isOpen={visible} onClose={handleClose}>
       <ModalBackdrop />
-      <ModalContent className="rounded-md pb-6 mx-4 mb-0 mt-auto">
+      <ModalContent className="w-full mb-0 mt-auto rounded-t-md overflow-hidden p-4 max-h-[85%]">
         <ModalHeader className="justify-between items-center">
           <Heading size="xl" className="text-primary-600 flex-1">
             Confirm Application
@@ -72,7 +69,6 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm, is
             <Icon as={X} className="text-typography-500" size="md" />
           </ModalCloseButton>
         </ModalHeader>
-
         <ModalBody>
           <VStack className="gap-2">
             <SubSection className="p-4">
@@ -151,3 +147,5 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm, is
 }
 
 export default ApplyModal
+
+ApplyModal.displayName = 'ApplyModal'

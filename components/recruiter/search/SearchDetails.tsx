@@ -12,7 +12,7 @@ import SearchContract from './searchDetails/SearchContract'
 import SearchPosition from './searchDetails/SearchPosition'
 import SearchCandidates from './searchDetails/SearchCandidates'
 import SearchActions from './searchDetails/SearchActions'
-import { ScreenContainer } from '@/components/appUI'
+import { ScreenContainer, ErrorMessage } from '@/components/appUI'
 
 export default function SearchDetails() {
   const [showContactModal, setShowContactModal] = useState(false)
@@ -42,14 +42,6 @@ export default function SearchDetails() {
     router.push(`/recruiter/search/${searchId}/crew/list`)
   }
 
-  // const handleFindBySkills = () => {
-  //   router.push(`/recruiterScreens/offers/${searchId}/crew/search-skills`)
-  // }
-
-  // const handleFindByLocation = () => {
-  //   router.push(`/recruiterScreens/offers/${searchId}/crew/search-location`)
-  // }
-
   if (isLoading || isRefetching) {
     return (
       <ScreenContainer>
@@ -61,7 +53,7 @@ export default function SearchDetails() {
   if (isError) {
     return (
       <ScreenContainer>
-        <Text color="error">{t('error')}</Text>
+        <ErrorMessage />
       </ScreenContainer>
     )
   }
@@ -75,7 +67,6 @@ export default function SearchDetails() {
           <SearchPosition search={search} />
           <SearchCandidates search={search} onViewCandidates={handleViewCandidates} />
           <SearchActions onEdit={handleEdit} />
-          {/* <ContactSupportModal visible={showContactModal} onClose={() => setShowContactModal(false)} /> */}
         </VStack>
       )}
     </ScreenContainer>

@@ -12,7 +12,7 @@ import NotApplicableModal from './NotApplicableModal'
 import ApplyModal from './ApplyModal'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 import { useTranslation } from 'react-i18next'
-import { ScreenContainer } from '@/components/appUI'
+import { ScreenContainer, ErrorMessage } from '@/components/appUI'
 import { useStatusToast } from '@/hooks'
 
 export default function OfferDetailsScreen() {
@@ -30,7 +30,7 @@ export default function OfferDetailsScreen() {
   const [showApply, setShowApply] = useState(false)
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
-    queryKey: ['offer', offerId, language],
+    queryKey: ['offer', offerId],
     queryFn: () => getProOfferById(offerId as string, token, language),
   })
 
@@ -61,8 +61,9 @@ export default function OfferDetailsScreen() {
     onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: ['offer', offerId],
-        exact: true,
-        refetchType: 'active',
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['offers'],
       })
       setShowApply(false)
     },
@@ -79,7 +80,7 @@ export default function OfferDetailsScreen() {
   if (isError) {
     return (
       <ScreenContainer>
-        <Text color="error">{t('error')}</Text>
+        <ErrorMessage />
       </ScreenContainer>
     )
   }
@@ -98,7 +99,7 @@ export default function OfferDetailsScreen() {
           <ApplyModal
             visible={showApply}
             onClose={() => setShowApply(false)}
-            onConfirm={() => handleConfirmApply()}
+            onConfirm={handleConfirmApply}
             isSubmitting={isPending}
           />
         </>

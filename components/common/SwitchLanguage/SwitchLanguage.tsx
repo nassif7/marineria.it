@@ -25,7 +25,7 @@ const SwitchLanguage: FC<ISwitchLanguageProps> = ({ language, onLanguageChange, 
   return (
     <Select key={language} selectedValue={language} initialLabel={initialLabel} onValueChange={onLanguageChange}>
       <SelectTrigger variant="outline" size="md">
-        <SelectInput className="text-primary-600 text-lg font-bold" />
+        <SelectInput />
         <SelectIcon className="mr-1" as={ChevronDownIcon} />
       </SelectTrigger>
       <SelectPortal>

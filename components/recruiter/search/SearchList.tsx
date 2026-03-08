@@ -6,7 +6,8 @@ import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 import { Loading, Text } from '@/components/ui'
 import SearchListItem from './SearchListItem'
 import { useQuery } from '@tanstack/react-query'
-import { List, ScreenContainer } from '@/components/appUI'
+import { List, ScreenContainer, EmptyList } from '@/components/appUI'
+import { ErrorMessage } from '@/components/appUI'
 
 const RecruiterSearchList: FC = () => {
   const {
@@ -33,9 +34,10 @@ const RecruiterSearchList: FC = () => {
           isRefetching={isRefetching}
           onRefresh={refetch}
           renderItem={({ item }) => <SearchListItem search={item} key={item.reference} />}
+          listEmptyComponent={<EmptyList message={t('no-searches')} />}
         />
       )}
-      {isError && <Text color="error">{t('error')}</Text>}
+      {isError && <ErrorMessage />}
     </ScreenContainer>
   )
 }

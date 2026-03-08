@@ -2,7 +2,7 @@ export type TCrew = {
   offersRecieved: number //??
   certificateOfCompetence: boolean // ??
 
-  contacted: boolean
+  contacted: boolean | string
   iduser: number
   publisched: string
   photoapproved: string

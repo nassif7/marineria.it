@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC, memo, useMemo } from 'react'
 import { VStack, HStack, Text, Icon, Badge, BadgeText } from '@/components/ui'
 import { User, Briefcase, Anchor, Drama } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
@@ -36,7 +36,7 @@ const PositionsSection: FC<{ crew: TCrew }> = ({ crew }) => {
             </HStack>
           )}
         </SubSection>
-        {positions.length && (
+        {!!positions.length && (
           <SubSection title={t('other-roles')} icon={Drama}>
             <HStack className="flex-wrap " space="xs">
               {positions.map((p) => (
@@ -47,18 +47,6 @@ const PositionsSection: FC<{ crew: TCrew }> = ({ crew }) => {
                 </Badge>
               ))}
             </HStack>
-            {/* <VStack className="pl-2" space="xs">
-              {positions.map((p) => (
-                <HStack className="items-start" space="xs">
-                  <Text size="sm" className="w-32 shrink-0 ">
-                    {p.label}:
-                  </Text>
-                  <Text size="sm" shade={800} className="flex-1">
-                    {p.value}
-                  </Text>
-                </HStack>
-              ))}
-            </VStack> */}
           </SubSection>
         )}
       </VStack>
@@ -66,4 +54,6 @@ const PositionsSection: FC<{ crew: TCrew }> = ({ crew }) => {
   )
 }
 
-export default PositionsSection
+export default memo(PositionsSection)
+
+PositionsSection.displayName = 'PositionsSection'

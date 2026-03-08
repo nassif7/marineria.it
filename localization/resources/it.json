@@ -2,8 +2,9 @@
   "screens-labels": {
     "offer-list": "Offerte",
     "offer": "Offerta",
-    "search-list": "Ricerche",
-    "search": "Ricerca",
+    "search-list": "Le mie ricerche",
+    "recruitment": "Ricercare",
+    "search": "",
     "crew-list": "Equipaggio",
     "crew-profile": "Scheda equipaggio",
     "settings": "Impostazioni",
@@ -32,8 +33,8 @@
   "offer-screen": {
     "view-offer": "Vedi offerta",
     "filter": {
-      "own-offers": "Tutte le offerte",
-      "all-offers": "Offerte per me"
+      "own-offers": "Offerte per me",
+      "all-offers": "Tutte le offerte"
     },
     "no-offers": "There are currently no job offers that match your profile!",
     "already-applied": "Candidato",
@@ -55,13 +56,15 @@
     "no-searches": "Non hai ricerche attive",
     "view-search": "Visualizza ricerca",
     "offer": "Offerte",
+    "candidates-overview": "Candidati",
     "candidates": "Candidati",
     "contacted": "Contattati",
     "residual": "Rimanenti",
     "find-crew": "Cerca equipaggio",
     "by-location": "Per località",
     "by-skill": "Per caratteristiche",
-    "candidates-overview": "Candidati"
+    "contract-and-compensation": "Contratto, salario, reclutatore",
+    "additional-info": "Additional requested skills"
   },
   "crew-screen": {
     "id": "ID",
@@ -83,7 +86,15 @@
     "send-job-offer": "Invia la tua offerta di lavoro",
     "request-cv-as-pdf": " Richiedi anche una copia del CV in PDF",
     "longer-time": "tempo di attesa superiore",
-    "contact": "Contatta"
+    "contact": "Contatta",
+    "empty-crew-list": "La tua lista di equipaggio e' vuota",
+    "contact-success": "Ora puoi vedere le informazioni di contatto dell'equipaggio, e l'equipaggio verra' notificato di tuo interesse",
+    "contact-fail": "Qualcosa e' andato storto, riprova",
+    "contact-error": "Qualcosa e' andato storto, riprova",
+    "remove-crew-success": "L'equipaggio e' stato rimosso dalla tua lista",
+    "remove-crew-error": "Qualcosa e' andato storto, riprova",
+    "search-not-paid": "Ricerca non pagata",
+    "to-proceed": "Per proseguire"
   },
   "settings-screen": {
     "change-language": "Cambia lingua",
@@ -102,7 +113,7 @@
     "posted": "Pubblicato",
     "already-applied": "Candidato",
     "not-matching": "Non corrispondente",
-    "contract-type": "Tipo contratto",
+    "contract-type": "Contratto",
     "boarding": "Imbarco",
     "owner-type": "Tipo proprietario",
     "reference": "Riferimento",
@@ -183,9 +194,10 @@
     "need-support": "Hai bisogno di supporto?",
     "email": "Email",
     "password": "Password",
-    "en": "EN",
-    "it": "IT",
+    "en": "English",
+    "it": "Italiano",
     "success": "Successo",
-    "unknown-error": "Si è verificato un errore, riprova più tardi!"
+    "unknown-error": "Si è verificato un errore, riprova più tardi!",
+    "contact-support": "Contatta il supporto"
   }
 }
