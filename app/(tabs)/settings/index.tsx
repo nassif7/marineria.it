@@ -1,5 +1,4 @@
 import React from 'react'
-import { router } from 'expo-router'
 import * as SecureStore from 'expo-secure-store'
 import { useTranslation } from 'react-i18next'
 import { Globe, Bell } from 'lucide-react-native'
@@ -21,19 +20,11 @@ const Settings = () => {
   } = useTranslation('settings-screen')
   const {
     auth: { role },
-    switchAuth,
-    storedAuthTokens,
     signOut,
   } = useSession()
-  const proToken = storedAuthTokens[TUserRole.CREW]
-  const ownerToken = storedAuthTokens[TUserRole.RECRUITER]
-  const hasBothTokens = proToken && ownerToken
-  const targetRole = role == TUserRole.CREW ? TUserRole.RECRUITER : TUserRole.CREW
-  const switchUserButtonLabel = role == TUserRole.CREW ? t('login-as-recruiter') : t('login-as-crew')
 
   const { user, togglePushNotifications, isTogglingNotifications } = useUser()
   const pushNotificationToken = user?.pushNotificationToken
-
   const languageOptions = [
     { label: t(TLocales.EN), value: TLocales.EN },
     { label: t(TLocales.IT), value: TLocales.IT },
@@ -42,15 +33,6 @@ const Settings = () => {
   const handleLanguageChange = async (v: string) => {
     changeLanguage(v.toLocaleLowerCase())
     await SecureStore.setItemAsync('language', v.toLocaleLowerCase())
-  }
-
-  const handleSwitch = async () => {
-    if (hasBothTokens) {
-      await switchAuth(targetRole)
-      router.replace('/')
-    } else {
-      router.navigate(`/(tabs)/settings/switchUser`)
-    }
   }
 
   return (
@@ -88,7 +70,7 @@ const Settings = () => {
         <Box className="p-6 ">
           <VStack>
             <Box className="mb-4">
-              <SwitchUser label={switchUserButtonLabel} handleSwitch={handleSwitch} />
+              <SwitchUser />
             </Box>
             <Box>
               <SignOut buttonLabel={t('logout')} handleLogout={async () => await signOut(role as TUserRole)} />
@@ -101,3 +83,5 @@ const Settings = () => {
 }
 
 export default Settings
+
+Settings.displayName = 'Settings'

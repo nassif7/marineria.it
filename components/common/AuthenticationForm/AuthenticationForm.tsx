@@ -1,5 +1,4 @@
 import React, { useState, FC } from 'react'
-import { KeyboardAvoidingView } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useForm } from '@tanstack/react-form'
 import { EyeIcon, EyeOffIcon } from 'lucide-react-native'
@@ -17,11 +16,7 @@ import {
   InputField,
   InputIcon,
   InputSlot,
-  Link,
-  LinkText,
   VStack,
-  View,
-  Divider,
 } from '@/components/ui'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -140,38 +135,38 @@ const AuthenticationForm: FC<IAuthenticationForm> = ({ authenticate, user, isLoa
   ]
 
   return (
-    <KeyboardAvoidingView className="w-full" behavior="padding">
-      <VStack space="sm">
-        {fields.map(({ name, placeholder, type, autoCapitalize, validate, helperText }) => (
-          <Field key={name} name={name} validators={{ onSubmit: ({ value }) => validate(value) }}>
-            {(field) => (
-              <FormField
-                name={name}
-                value={field.state.value}
-                placeholder={placeholder}
-                onChangeText={field.handleChange}
-                errors={field.state.meta.errors as string[]}
-                type={type}
-                autoCapitalize={autoCapitalize}
-                onFocus={onFocus}
-                onBlur={onBlur}
-                helperText={helperText}
-              />
-            )}
-          </Field>
-        ))}
-
-        <Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
-          {([canSubmit, isSubmitting]) => (
-            <Button onPress={handleSubmit} size="xl" isDisabled={!canSubmit || isSubmitting || isLoading}>
-              {(isSubmitting || isLoading) && <ButtonSpinner color="white" />}
-              <ButtonText className="text-white">{t('login')}</ButtonText>
-            </Button>
+    <VStack space="sm">
+      {fields.map(({ name, placeholder, type, autoCapitalize, validate, helperText }) => (
+        <Field key={name} name={name} validators={{ onSubmit: ({ value }) => validate(value) }}>
+          {(field) => (
+            <FormField
+              name={name}
+              value={field.state.value}
+              placeholder={placeholder}
+              onChangeText={name === 'email' ? (value) => field.handleChange(value.trimStart()) : field.handleChange}
+              errors={field.state.meta.errors as string[]}
+              type={type}
+              autoCapitalize={autoCapitalize}
+              onFocus={onFocus}
+              onBlur={onBlur}
+              helperText={helperText}
+            />
           )}
-        </Subscribe>
-      </VStack>
-    </KeyboardAvoidingView>
+        </Field>
+      ))}
+
+      <Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+        {([canSubmit, isSubmitting]) => (
+          <Button onPress={handleSubmit} size="xl" isDisabled={!canSubmit || isSubmitting || isLoading}>
+            {(isSubmitting || isLoading) && <ButtonSpinner color="white" />}
+            <ButtonText className="text-white">{t('login')}</ButtonText>
+          </Button>
+        )}
+      </Subscribe>
+    </VStack>
   )
 }
 
 export default AuthenticationForm
+
+AuthenticationForm.displayName = 'AuthenticationForm'

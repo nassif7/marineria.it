@@ -5,7 +5,6 @@ import AuthenticationForm, { FormDate } from '@/components/common/Authentication
 import { useAuthErrorToast } from '@/hooks/useAuthErrorToast'
 import { AuthScreen, LoginFormLinks } from '@/components/appUI'
 import { Divider } from '@/components/ui'
-import { useTranslation } from 'react-i18next'
 
 const SignIn = () => {
   const { signIn } = useSession()
@@ -27,3 +26,5 @@ const SignIn = () => {
 }
 
 export default SignIn
+
+SignIn.displayName = 'SignIn'
