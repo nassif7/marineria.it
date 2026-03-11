@@ -1,8 +1,9 @@
 import { FC, memo } from 'react'
-import { HStack, Button, ButtonText, ButtonIcon, ButtonSpinner, VStack } from '@/components/ui'
-import { UserX, Phone, Contact, PhoneCall, UserCheck } from 'lucide-react-native'
+import { Button, ButtonText, ButtonIcon, ButtonSpinner, VStack } from '@/components/ui'
+import { UserX, UserCheck } from 'lucide-react-native'
 import Animated, { FadeInDown, FadeOutDown } from 'react-native-reanimated'
 import { useTranslation } from 'react-i18next'
+import { useRecruiterSearch } from '@/Providers/RecruiterSearchProvider'
 
 interface IProfileActionButtonsProps {
   onGetContact: () => void
@@ -12,6 +13,12 @@ interface IProfileActionButtonsProps {
 
 const ProfileActionButtons: FC<IProfileActionButtonsProps> = ({ onGetContact, onRemove, isLoading }) => {
   const { t } = useTranslation('crew-screen')
+  const {
+    search: { data: search, isRefetching, isError, isSuccess, refetch },
+  } = useRecruiterSearch()
+
+  const isPaid = isSuccess && search?.paid
+
   return (
     <Animated.View
       entering={FadeInDown.springify().damping(40).stiffness(150)}
@@ -44,7 +51,7 @@ const ProfileActionButtons: FC<IProfileActionButtonsProps> = ({ onGetContact, on
           isDisabled={isLoading}
         >
           {isLoading ? <ButtonSpinner /> : <ButtonIcon as={UserCheck} className="mr-2 text-white" />}
-          <ButtonText>{t('contact-crew')}</ButtonText>
+          <ButtonText>{isPaid ? t('contact-crew') : t('contact')}</ButtonText>
         </Button>
 
         <Button

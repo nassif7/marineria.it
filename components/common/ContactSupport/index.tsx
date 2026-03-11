@@ -119,7 +119,7 @@ export const ContactSupportTextTrigger: FC<{ onPress: () => void }> = ({ onPress
     <Pressable onPress={onPress}>
       <Text size="md" bold className="text-primary-600 underline">
         {t('contact-support', { ns: 'common' })}
-      </Text>{' '}
+      </Text>
     </Pressable>
   )
 }

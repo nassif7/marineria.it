@@ -1,40 +1,34 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Linking } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { useQuery } from '@tanstack/react-query'
-import { VStack, Text } from '@/components/ui'
+import { VStack } from '@/components/ui'
 import { Loading } from '@/components/ui/loading'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 import { useTranslation } from 'react-i18next'
-import { getRecruiterSearchById } from '@/api'
 import SearchHeader from './searchDetails/SearchHeader'
 import SearchContract from './searchDetails/SearchContract'
 import SearchPosition from './searchDetails/SearchPosition'
 import SearchCandidates from './searchDetails/SearchCandidates'
 import SearchActions from './searchDetails/SearchActions'
 import { ScreenContainer, ErrorMessage } from '@/components/appUI'
+import { useRecruiterSearch } from '@/Providers/RecruiterSearchProvider'
 
 export default function SearchDetails() {
-  const [showContactModal, setShowContactModal] = useState(false)
+  const { activeProfile } = useUser()
+  const { token } = activeProfile as ActiveProfile
+  const {
+    i18n: { language },
+  } = useTranslation()
 
   const { searchId } = useLocalSearchParams()
   const router = useRouter()
+
   const {
-    i18n: { language },
-    t,
-  } = useTranslation(['search-details-screen'])
-  const { activeProfile } = useUser()
-  const { token } = activeProfile as ActiveProfile
-
-  const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
-    queryKey: ['recruiter-search-by-id', searchId, language],
-    queryFn: () => getRecruiterSearchById(searchId as string, token, language),
-  })
-
-  const search = isSuccess ? (data as any)?.[0] : null
+    search: { data: search, isLoading, isRefetching, isError, isSuccess, refetch },
+  } = useRecruiterSearch()
 
   const handleEdit = () => {
-    const url = `https://www.marineria.it/${language}/rec/Post.aspx?idofferta=${search.idoffer}&token=${token}`
+    const url = `https://www.marineria.it/${language}/rec/Post.aspx?idofferta=${search?.idoffer}&token=${token}`
     Linking.openURL(url)
   }
 

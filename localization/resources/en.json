@@ -86,13 +86,16 @@
     "send-job-offer": "Send your job offer",
     "request-cv-as-pdf": " Also request a copy of CV in PDF",
     "longer-time": "longer waiting time",
-    "contact": "Contact",
+    "contact": "Contact?",
     "empty-crew-list": "Your crew list is empty",
     "contact-crew-success": "Now you can see the contact details of the crew member, and the crew will be notified about your interest",
     "contact-crew-error": "Something went wrong, please try again",
     "remove-crew-success": "The crew member has been removed from your list",
     "remove-crew-error": "Something went wrong, please try again",
-    "search-not-paid": "Search not paid",
+    "search-not-paid-title": "How to get in contact?",
+    "search-not-paid-description": "To disclose the contacts for this Crew Recruiting Service you should proceed to checkout and pay our little fee",
+    "search-not-paid-cta": "Pay now the service?",
+    "proceed-to-checkout": "Proceed to checkout",
     "to-proceed": "To proceed"
   },
   "settings-screen": {
@@ -180,6 +183,7 @@
     "no-technical-skills": "No technical skills"
   },
   "common": {
+    "back": "Back",
     "edit": "Edit",
     "delete": "Delete",
     "close": "Close",
