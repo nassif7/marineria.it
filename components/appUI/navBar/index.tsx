@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { Box, Heading, HStack, Pressable, Icon } from '@/components/ui'
 import { ChevronLeft } from 'lucide-react-native'
+
 import type { NativeStackHeaderProps } from '@react-navigation/native-stack'
 
 interface NavBarProps extends NativeStackHeaderProps {
@@ -12,17 +13,18 @@ interface NavBarProps extends NativeStackHeaderProps {
 }
 
 const NavBar: FC<NavBarProps> = ({ options, back, rightAction }) => {
+  const { t } = useTranslation()
   const title = options?.title || ''
   const canGoBack = back !== undefined
   const router = useRouter()
 
   return (
-    <Box className="px-1 py-2 border-b border-outline-100">
+    <Box className="px-2 py-2 border-b border-outline-100">
       <HStack className="items-center justify-between min-h-[40px] ">
         {canGoBack ? (
           <Pressable onPress={() => router.back()} className="flex-row items-center  -ml-2">
-            <Icon as={ChevronLeft} size="3xl" className="text-typography-400" />
-            {/* <Text className="text-typography-500 text-lg font-medium">{back.title}</Text> */}
+            <Icon as={ChevronLeft} size="xl" className="text-typography-400" />
+            <Text className="text-typography-400 text-md font-medium">{t('back')}</Text>
           </Pressable>
         ) : (
           <Box className="w-20" />
