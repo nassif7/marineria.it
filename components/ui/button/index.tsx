@@ -7,6 +7,17 @@ import { cssInterop } from 'nativewind'
 import { ActivityIndicator, Pressable, Text, View } from 'react-native'
 import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils'
 import { PrimitiveIcon, UIIcon } from '@gluestack-ui/core/icon/creator'
+import { useScreenSize } from '@/hooks/useScreenSize'
+
+type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+const smallScreenSizeMap: Record<ButtonSize, ButtonSize> = {
+  xs: 'xs',
+  sm: 'xs',
+  md: 'sm',
+  lg: 'sm',
+  xl: 'md',
+}
+const downscaleSize = (size: ButtonSize = 'md'): ButtonSize => smallScreenSizeMap[size]
 
 const SCOPE = 'BUTTON'
 
@@ -248,12 +259,15 @@ type IButtonProps = Omit<React.ComponentPropsWithoutRef<typeof UIButton>, 'conte
 
 const Button = React.forwardRef<React.ElementRef<typeof UIButton>, IButtonProps>(
   ({ className, variant = 'solid', size = 'md', action = 'primary', ...props }, ref) => {
+    const { isSmall } = useScreenSize()
+    const responsiveSize = isSmall ? downscaleSize(size ?? 'md') : size
+
     return (
       <UIButton
         ref={ref}
         {...props}
-        className={buttonStyle({ variant, size, action, class: className })}
-        context={{ variant, size, action }}
+        className={buttonStyle({ variant, size: responsiveSize, action, class: className })}
+        context={{ variant, size: responsiveSize, action }}
       />
     )
   }
@@ -294,10 +308,15 @@ type IButtonIcon = React.ComponentPropsWithoutRef<typeof UIButton.Icon> &
     as?: React.ElementType
     height?: number
     width?: number
+    hideOnSmallScreen?: boolean // ← add this
   }
 
 const ButtonIcon = React.forwardRef<React.ElementRef<typeof UIButton.Icon>, IButtonIcon>(
-  ({ className, size, ...props }, ref) => {
+  ({ className, size, hideOnSmallScreen = false, ...props }, ref) => {
+    const { isSmall } = useScreenSize()
+
+    if (hideOnSmallScreen && isSmall) return null
+
     const { variant: parentVariant, size: parentSize, action: parentAction } = useStyleContext(SCOPE)
 
     if (typeof size === 'number') {

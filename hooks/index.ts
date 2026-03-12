@@ -1,5 +1,4 @@
 export { default as useAppState } from './useAppState'
 export { default as useNotification } from './useNotification'
-export { default as useFetch } from './useFetch'
 export { default as useAuthErrorToast } from './useAuthErrorToast'
 export { default as useStatusToast } from './useStatusToast'
