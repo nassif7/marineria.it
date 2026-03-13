@@ -1,18 +1,12 @@
 import { API } from './consts'
 import { TRecruiterSearch } from './types'
 import { TCrew, TCrewSimple } from './types/crew'
-import { getLanguageCode } from './utils'
+import { apiFetchJson, apiFetchText, getLanguageCode } from './utils'
 
 export const getRecruiterActiveSearches = async (ownerToken: string, language: string): Promise<TRecruiterSearch[]> => {
   const languageCode = getLanguageCode(language)
   const url = `${API.OWNER_OFFERS}/${ownerToken}?language=${languageCode}`
-  const response = await fetch(url)
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch owner job offers (${response.status})`)
-  }
-
-  return response.json()
+  return apiFetchJson<TRecruiterSearch[]>(url)
 }
 
 export const getRecruiterSearchById = async (
@@ -22,37 +16,19 @@ export const getRecruiterSearchById = async (
 ): Promise<TRecruiterSearch[]> => {
   const languageCode = getLanguageCode(language)
   const url = API.OWNER_OFFERS + `/${ownerToken}/${searchId}?language=${languageCode}`
-  const response = await fetch(url)
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch owner job offers (${response.status})`)
-  }
-
-  return response.json()
+  return apiFetchJson<TRecruiterSearch[]>(url)
 }
 
 export const getCrewList = async (offerId: string, ownerToken: string, language: string): Promise<TCrewSimple[]> => {
   const languageCode = getLanguageCode(language)
   const url = API.CREW_LIST + `/${ownerToken}/${offerId}?language=${languageCode}`
-  const response = await fetch(url)
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch owner job offers (${response.status})`)
-  }
-
-  return response.json()
+  return apiFetchJson<TCrewSimple[]>(url)
 }
 
 export const getCrewCV = async (ownerToken: string, crewId: string, language?: string): Promise<TCrew> => {
   const languageCode = getLanguageCode(language)
   const url = `https://www.comunicazione.it/api/Owneruser/CvUser/${ownerToken}/${crewId}?language=${languageCode}`
-  const response = await fetch(url)
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch owner CV (${response.status})`)
-  }
-
-  return response.json()
+  return apiFetchJson<TCrew>(url)
 }
 
 export const contactCrew = async (
@@ -63,13 +39,7 @@ export const contactCrew = async (
 ): Promise<string> => {
   const languageCode = getLanguageCode(language)
   const url = `https://www.comunicazione.it/api/Owneruser/ContactPro/${ownerToken}/${offerId}/${crewId}?language=${languageCode}`
-  const response = await fetch(url)
-
-  if (!response.ok) {
-    throw new Error(`Failed to select CV (${response.status})`)
-  }
-
-  return response.text()
+  return apiFetchText(url)
 }
 
 export const removeCrew = async (
@@ -80,11 +50,5 @@ export const removeCrew = async (
 ): Promise<string> => {
   const languageCode = getLanguageCode(language)
   const url = `https://www.comunicazione.it/api/Owneruser/RejectPRO/${ownerToken}/${offerId}/${crewId}?language=${languageCode}`
-  const response = await fetch(url)
-
-  if (!response.ok) {
-    throw new Error(`Failed to delete CV (${response.status})`)
-  }
-
-  return response.text()
+  return apiFetchText(url)
 }

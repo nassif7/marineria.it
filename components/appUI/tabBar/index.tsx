@@ -8,7 +8,7 @@ interface TabBarProps extends BottomTabBarProps {
   showLabel?: boolean
 }
 
-export const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation, showLabel }) => {
+const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation, showLabel }) => {
   const insets = useSafeAreaInsets()
 
   return (
@@ -75,3 +75,7 @@ export const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation, 
     </Box>
   )
 }
+
+export default TabBar
+
+TabBar.displayName = 'TabBar'
