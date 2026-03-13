@@ -11,30 +11,34 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { ThemeUIProvider } from '@/components/ui/gluestack-ui-provider'
-import SessionProvider from '@/Providers/SessionProvider'
+import SessionProvider, { useSession } from '@/Providers/SessionProvider'
 import { Loading } from '@/components/ui'
+import { MarineriaSplash } from '@/components/appUI'
+
+// Prevent the native splash from auto-hiding
+SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const [queryClient] = useState(() => new QueryClient())
   const { i18n } = useTranslation()
   const [assetsLoaded, setAssetsLoaded] = useState(false)
 
-  // prepare the language
   useEffect(() => {
     const loadLanguage = async () => {
       const savedLanguage = await SecureStore.getItemAsync('language')
-      if (savedLanguage) {
-        i18n.changeLanguage(savedLanguage)
-      }
+      if (savedLanguage) i18n.changeLanguage(savedLanguage)
     }
     loadLanguage()
   }, [i18n])
 
-  // prepare the assets
   useEffect(() => {
     const loadAssets = async () => {
-      await Asset.loadAsync([require('@/assets/images/splash-bg.png'), require('@/assets/images/marineria_logo.png')])
+      await Asset.loadAsync([
+        require('@/assets/images/splash-bg.png'),
+        require('@/assets/images/marineria_logo_transparent.png'),
+      ])
       setAssetsLoaded(true)
+      // Hide native splash — our animated splash takes over immediately
       await SplashScreen.hideAsync()
     }
     loadAssets()
@@ -49,9 +53,17 @@ export default function RootLayout() {
           <SessionProvider>
             <StatusBar />
             <Slot screenOptions={{ headerShown: false }} />
+            {/* Animated splash sits above everything until session hydration completes */}
+            <SplashOverlay />
           </SessionProvider>
         </SafeAreaProvider>
       </QueryClientProvider>
     </ThemeUIProvider>
   )
+}
+
+// Separate component so it can access SessionProvider's context
+function SplashOverlay() {
+  const { isLoading } = useSession()
+  return <MarineriaSplash isLoading={isLoading} />
 }
