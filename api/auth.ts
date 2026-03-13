@@ -1,5 +1,6 @@
 import { API } from './consts'
 import { TAuthResponse } from '@/api/types/auth'
+import { apiFetchJson } from './utils'
 
 export const signIn = async (username: string, password: string): Promise<TAuthResponse> => {
   const requestHeaders: HeadersInit = {
@@ -10,15 +11,9 @@ export const signIn = async (username: string, password: string): Promise<TAuthR
     password,
   })
 
-  const response = await fetch(API.LOGIN, {
+  return apiFetchJson<TAuthResponse>(API.LOGIN, {
     method: 'POST',
     headers: requestHeaders,
     body: requestBody,
   })
-
-  if (!response.ok) {
-    throw new Error(`Failed to login (${response.status})`)
-  }
-
-  return response.json()
 }
