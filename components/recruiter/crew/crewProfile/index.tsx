@@ -17,7 +17,6 @@ import CrewExperiences from './CrewExperiences'
 import CrewCourses from './CrewCoursesAndCertifications'
 import CrewReferences from './CrewReferences'
 import AboutSection from './AboutSection'
-import CrewPreferences from './CrewPreferences'
 import LanguagesSection from './CrewLanguagesAndEducation'
 import PositionsSection from './CrewPosition'
 import CrewSkills from './CrewSkills'
@@ -48,7 +47,7 @@ const CrewProfile = () => {
     queryKey: ['recruiter-crew-cv', searchId, crewId],
     queryFn: () => getCrewCV(token, crewId as string),
   })
-  const crew = isSuccess ? data : null
+  const crew = isSuccess ? data?.[0] : null
 
   const { mutate: handleContactCrew, isPending } = useMutation({
     mutationFn: () => {

@@ -42,4 +42,6 @@ const RecruiterSearchList: FC = () => {
   )
 }
 
+RecruiterSearchList.displayName = 'RecruiterSearchList'
+
 export default RecruiterSearchList

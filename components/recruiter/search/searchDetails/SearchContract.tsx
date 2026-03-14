@@ -59,21 +59,6 @@ const SearchContract: React.FC<SearchContractProps> = ({ search }) => {
             {search.duration}
           </Text>
         </SubSection>
-
-        <Divider className="my-2" />
-        <VStack className="pl-2">
-          <HStack className="items-start gap-1">
-            <Box className="w-32 shrink-0 flex-row items-center gap-1">
-              <Icon as={Info} size="sm" className="text-warning-600" />
-              <Text size="sm" color="error" bold>
-                {t('expires')}:
-              </Text>
-            </Box>
-            <Text size="sm" color="error" bold className="flex-1">
-              {search.offertExpirationdate}
-            </Text>
-          </HStack>
-        </VStack>
       </VStack>
     </Section>
   )
