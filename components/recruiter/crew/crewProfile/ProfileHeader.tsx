@@ -72,34 +72,28 @@ const ProfileHeader: FC<{ crew: TCrew }> = ({ crew }) => {
         {/* Personal badges */}
         <HStack className="flex-wrap justify-start gap-2">
           <Badge action="muted" variant="outline" className="rounded-md">
-            <BadgeIcon as={IdCard} className="mr-1 text-typography-800" />
             <BadgeText className="text-typography-800">
               {t('citizenship', { ns: 'crew' })}: {crew.passport}
             </BadgeText>
           </Badge>
           {crew.currentPosition && (
             <Badge action="muted" variant="outline" className="rounded-md">
-              <BadgeIcon as={MapPin} className="mr-1 text-typography-800" />
               <BadgeText className="text-typography-800">{crew.currentPosition}</BadgeText>
             </Badge>
           )}
           <Badge action="muted" variant="outline" className="rounded-md">
-            <BadgeIcon as={Heart} className="mr-1 text-typography-800" />
             <BadgeText className="text-typography-800">{crew.maritalStatus}</BadgeText>
           </Badge>
           {age && (
             <Badge action="muted" variant="outline" className="rounded-md">
-              <BadgeIcon as={Cake} className="mr-1 text-typography-800" />
               <BadgeText className="text-typography-800">{`${age} ${t('years', { ns: 'crew' })}`}</BadgeText>
             </Badge>
           )}
           <Badge action="muted" variant="outline" className="rounded-md">
-            <BadgeIcon as={Cigarette} className="mr-1 text-typography-800" />
             <BadgeText className="text-typography-800">{crew.smoker}</BadgeText>
           </Badge>
           {crew.gender && (
             <Badge action="muted" variant="outline" className="rounded-md">
-              <BadgeIcon as={User} className="mr-1 text-typography-800" />
               <BadgeText className="text-typography-800">{crew.gender}</BadgeText>
             </Badge>
           )}

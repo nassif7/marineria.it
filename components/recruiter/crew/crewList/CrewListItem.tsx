@@ -73,26 +73,21 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
         </HStack>
         <HStack className="items-start flex-wrap" space="sm">
           <Badge action="muted" variant="outline" className="rounded-md">
-            <BadgeIcon as={IdCard} className="mr-1 text-typography-800" />
             <BadgeText className="text-typography-800">
               {t('citizenship', { ns: 'crew' })}: {crew.passport}
             </BadgeText>
           </Badge>
           <Badge action="muted" variant="outline" className="rounded-md">
-            <BadgeIcon as={Heart} className="mr-1 text-typography-800" />
             <BadgeText className="text-typography-800">{crew.maritalStatus}</BadgeText>
           </Badge>
           <Badge action="muted" variant="outline" className="rounded-md">
-            <BadgeIcon as={Cake} className="mr-1 text-typography-800" />
             <BadgeText className="text-typography-800">{`${getAgeByYear(crew.birthYear)} ${t('years', { ns: 'crew' })}`}</BadgeText>
           </Badge>
           <Badge action="muted" variant="outline" className="rounded-md">
-            <BadgeIcon as={Cigarette} className="mr-1 text-typography-800" />
             <BadgeText className="text-typography-800">{crew.smoker}</BadgeText>
           </Badge>
           {!crew.calculatedExperience && (
             <Badge action="error" variant="outline" className="rounded-md">
-              <BadgeIcon as={Briefcase} className="mr-1 text-error-900" />
               <BadgeText className="text-error-900">{t('no-experience', { ns: 'crew' })}</BadgeText>
             </Badge>
           )}
@@ -105,7 +100,6 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
           </Badge>
           {!crew.courses && (
             <Badge action="error" variant="outline" className="rounded-md">
-              <BadgeIcon as={Award} className="mr-1 text-error-900" />
               <BadgeText className="text-error-900">{t('no-courses', { ns: 'crew' })}</BadgeText>
             </Badge>
           )}

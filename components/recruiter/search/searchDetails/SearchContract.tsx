@@ -26,12 +26,18 @@ const SearchContract: React.FC<SearchContractProps> = ({ search }) => {
     <Section>
       <SectionHeader title={t('contract-and-compensation', { ns: 'search-screen' })} icon={FileText} />
       <VStack space="xs">
+        <SubSection title={t('contract-type')}>
+          <Text size="sm" semiBold shade={800}>
+            {search.contractDescription}
+          </Text>
+        </SubSection>
         <HStack space="xs">
           <SubSection className="flex-1" title={t('salary')} icon={Euro}>
             <Text size="sm" semiBold shade={800}>
               {search.salary_From} - {search.salary_To}
             </Text>
           </SubSection>
+
           {hasLocation && (
             <SubSection className="flex-1 " title={t('location')} icon={MapPin}>
               <Pressable onPress={handleOpenMap}>
@@ -51,12 +57,6 @@ const SearchContract: React.FC<SearchContractProps> = ({ search }) => {
           <Text size="sm" semiBold shade={800}>
             {isDateString(search.duration) ? `${t('to')}:` : ''}
             {search.duration}
-          </Text>
-        </SubSection>
-
-        <SubSection title={t('contract-type')}>
-          <Text size="sm" semiBold shade={800}>
-            {search.contractDescription}
           </Text>
         </SubSection>
 

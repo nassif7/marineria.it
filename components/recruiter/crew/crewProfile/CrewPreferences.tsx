@@ -49,7 +49,6 @@ const PreferencesSection: FC<{ crew: TCrew }> = ({ crew }) => {
   const { t } = useTranslation('crew')
   return (
     <Section>
-      <SectionHeader title={t('Preferences', { ns: 'crew-screen' })} icon={Heart} />
       <SubSection>
         <HStack className="items-start" space="xs">
           <HStack space="xs" className="items-center w-32 shrink-0">

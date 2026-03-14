@@ -58,7 +58,6 @@ const CrewProfile = () => {
       showToast({
         emphasize: 'success',
         title: t('success', { ns: 'common' }),
-        description: t('contact-crew-success', { ns: 'crew-screen' }),
       })
     },
     onError: (message) => {
@@ -83,7 +82,6 @@ const CrewProfile = () => {
       showToast({
         emphasize: 'success',
         title: t('success', { ns: 'common' }),
-        description: t('remove-crew-success', { ns: 'crew-screen' }),
       })
     },
     onError: () => {
@@ -130,8 +128,7 @@ const CrewProfile = () => {
           <VStack space="xs">
             <ProfileHeader crew={crew} />
             <CrewAvailability crew={crew} />
-            <CrewPreferences crew={crew} />
-            {crew.contacted && <ProfileContact crew={crew} />}
+            {crew.contacted === 'True' && <ProfileContact crew={crew} />}
             <CrewReferences crew={crew} />
             <PositionsSection crew={crew} />
             <LanguagesSection crew={crew} />

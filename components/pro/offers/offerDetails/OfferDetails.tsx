@@ -52,7 +52,6 @@ export default function OfferDetailsScreen() {
       showToast({
         emphasize: 'success',
         title: t('success', { ns: 'common' }),
-        description: t('apply-success', { ns: 'offer' }),
       })
     },
     onError: () => {
