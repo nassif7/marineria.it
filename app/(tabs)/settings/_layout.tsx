@@ -10,7 +10,7 @@ function _layout() {
     auth: { role },
   } = useSession()
 
-  const isPro = role === TUserRole.CREW
+  const isPro = role === TUserRole.PRO
 
   const { t } = useTranslation('screens-labels')
 

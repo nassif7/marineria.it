@@ -27,7 +27,7 @@ export const getCrewList = async (offerId: string, ownerToken: string, language:
 
 export const getCrewCV = async (ownerToken: string, crewId: string, language?: string): Promise<TCrew[]> => {
   const languageCode = getLanguageCode(language)
-  const url = `https://www.comunicazione.it/api/Owneruser/CvUser/${ownerToken}/${crewId}?language=${languageCode}`
+  const url = `${API.CREW_CV}/${ownerToken}/${crewId}?language=${languageCode}`
   return apiFetchJson<TCrew[]>(url)
 }
 
@@ -38,8 +38,7 @@ export const contactCrew = async (
   language?: string
 ): Promise<string> => {
   const languageCode = getLanguageCode(language)
-  console.log('here', ownerToken, crewId, offerId)
-  const url = `https://www.comunicazione.it/api/Owneruser/ContactPro/${ownerToken}/${offerId}/${crewId}?language=${languageCode}`
+  const url = `${API.CONTACT_PRO}/${ownerToken}/${offerId}/${crewId}?language=${languageCode}`
   return apiFetchText(url)
 }
 
@@ -50,6 +49,6 @@ export const removeCrew = async (
   language?: string
 ): Promise<string> => {
   const languageCode = getLanguageCode(language)
-  const url = `https://www.comunicazione.it/api/Owneruser/RejectPRO/${ownerToken}/${offerId}/${crewId}?language=${languageCode}`
+  const url = `${API.REJECT_PRO}/${ownerToken}/${offerId}/${crewId}?language=${languageCode}`
   return apiFetchText(url)
 }

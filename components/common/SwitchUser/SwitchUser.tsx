@@ -37,9 +37,9 @@ const SwitchUser: FC = () => {
   const { activeProfile, switchProfile } = useUser()
   const showErrorToast = useAuthErrorToast()
   const activeRole = activeProfile?.role as TUserRole
-  const proToken = storedAuthTokens[TUserRole.CREW]
+  const proToken = storedAuthTokens[TUserRole.PRO]
   const ownerToken = storedAuthTokens[TUserRole.RECRUITER]
-  const targetRole = useMemo(() => (activeRole === TUserRole.CREW ? TUserRole.RECRUITER : TUserRole.CREW), [activeRole])
+  const targetRole = useMemo(() => (activeRole === TUserRole.PRO ? TUserRole.RECRUITER : TUserRole.PRO), [activeRole])
   const hasBothTokens = proToken && ownerToken
 
   const handleSwitch = async () => {
@@ -62,7 +62,7 @@ const SwitchUser: FC = () => {
   })
 
   const handleClose = () => setModalVisible(false)
-  const label = role == TUserRole.CREW ? t('login-as-recruiter') : t('login-as-crew')
+  const label = role == TUserRole.PRO ? t('login-as-recruiter') : t('login-as-crew')
 
   return (
     <>
@@ -85,7 +85,7 @@ const SwitchUser: FC = () => {
           <ModalBody>
             <AuthenticationForm authenticate={handleSignIn} isLoading={isPending} />
             <Divider className="bg-outline-300 my-4" />
-            <LoginFormLinks isCrew={activeRole === TUserRole.CREW} isRecruiter={activeRole === TUserRole.RECRUITER} />
+            <LoginFormLinks isCrew={activeRole === TUserRole.PRO} isRecruiter={activeRole === TUserRole.RECRUITER} />
           </ModalBody>
         </ModalContent>
       </Modal>

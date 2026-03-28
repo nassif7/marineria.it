@@ -17,7 +17,7 @@ const SessionContext = createContext<SessionContextType>({
   signOut: () => null,
   switchAuth: () => null,
   auth: { role: null, token: null },
-  storedAuthTokens: { [TUserRole.CREW]: null, [TUserRole.RECRUITER]: null },
+  storedAuthTokens: { [TUserRole.PRO]: null, [TUserRole.RECRUITER]: null },
   isLoading: false,
 })
 
@@ -33,7 +33,7 @@ export const useSession = () => {
 
 const SessionProvider = (props: React.PropsWithChildren) => {
   const [storedAuthTokens, setStoredAuthTokens] = useState<TUserAuth>({
-    [TUserRole.CREW]: null,
+    [TUserRole.PRO]: null,
     [TUserRole.RECRUITER]: null,
   })
 
@@ -51,11 +51,11 @@ const SessionProvider = (props: React.PropsWithChildren) => {
     setIsLoading(true)
     try {
       const role = (await SecureStore.getItemAsync('role')) as TUserRole | null
-      const crewToken = await SecureStore.getItemAsync(TUserRole.CREW)
+      const crewToken = await SecureStore.getItemAsync(TUserRole.PRO)
       const recruiterToken = await SecureStore.getItemAsync(TUserRole.RECRUITER)
 
       const tokens = {
-        [TUserRole.CREW]: crewToken,
+        [TUserRole.PRO]: crewToken,
         [TUserRole.RECRUITER]: recruiterToken,
       }
 
@@ -80,7 +80,7 @@ const SessionProvider = (props: React.PropsWithChildren) => {
   }
 
   const unAuthenticate = async (role: TUserRole) => {
-    const otherRole = role === TUserRole.CREW ? TUserRole.RECRUITER : TUserRole.CREW
+    const otherRole = role === TUserRole.PRO ? TUserRole.RECRUITER : TUserRole.PRO
     const otherToken = storedAuthTokens[otherRole]
 
     await SecureStore.deleteItemAsync(role)

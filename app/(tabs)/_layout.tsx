@@ -49,7 +49,7 @@ const AppLayout = () => {
         />
         <Tabs.Screen
           name="pro"
-          redirect={role !== TUserRole.CREW}
+          redirect={role !== TUserRole.PRO}
           options={{
             headerShown: false,
             sceneStyle,

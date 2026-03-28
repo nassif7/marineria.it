@@ -1,5 +1,5 @@
 export enum TUserRole {
-  CREW = 'PRO',
+  PRO = 'PRO',
   RECRUITER = 'ARM',
 }
 export type TAuthResponse = {

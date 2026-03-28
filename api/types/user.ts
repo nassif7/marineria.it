@@ -33,12 +33,12 @@ export type TUser = {
   positionDescription: string
   qlfn: string
   yearofBirth: string
-  gender: true
+  gender: string
   nationality: string
   language1: string
   serialnumberCity: string
   serialnumber: string
-  serialnumberGdm: true
+  serialnumberGdm: string
   serialnumberCategory: string
   serialnumberSkill: string
   serialnumberLicence: string
@@ -48,11 +48,11 @@ export type TUser = {
   courses: string
   notesCourses: string
   boardingpreference: string
-  availability: true
+  availability: string
   availabilityperiod: string
   assignment: string
   smoker: number
-  team: true
+  team: string
   couplewith: string
   card1Couple: string
   salary: string
@@ -60,7 +60,7 @@ export type TUser = {
   lastaccessdate: number
   curriculum: string
   coupleOther: string
-  civilstate: true
+  civilstate: string
   experience: string
   language2: string
   language3: string
@@ -71,7 +71,7 @@ export type TUser = {
   availablefor: string
   numberClick: number
   specVela: number
-  vaxCovid19: true
+  vaxCovid19: string
   lastvaxcovid19date: string
   coursesCode: string
   position: string

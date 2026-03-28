@@ -24,7 +24,7 @@ const UserProfile = () => {
   const { auth } = useSession()
   const { role } = auth
   const { user, isLoading } = useUser()
-  const isRecruiter = role == TUserRole.CREW
+  const isPro = role == TUserRole.PRO
 
   const photoUrl = useMemo(() => `https://www.marineria.it/PROFoto/${user?.namephotoA}.jpg`, [user])
 
@@ -38,7 +38,7 @@ const UserProfile = () => {
             <>
               <Box className="mb-4">
                 <Avatar size="xl">
-                  {role == TUserRole.CREW && user.namephotoA ? (
+                  {role == TUserRole.PRO && user.namephotoA ? (
                     <AvatarImage
                       source={{
                         uri: photoUrl,
@@ -54,16 +54,16 @@ const UserProfile = () => {
                 <Heading className="text-4xl text-center">{user.surname}</Heading>
                 <Text className="text-xl p4 text-center my-6">
                   {role == TUserRole.RECRUITER && t('recruiter-message')}
-                  {role == TUserRole.CREW && t('crew-message')}
+                  {role == TUserRole.PRO && t('crew-message')}
                 </Text>
 
                 <Button
                   variant="solid"
-                  onPress={() => router.navigate(`/(tabs)/${isRecruiter ? 'pro/offers' : 'recruiter/search'}`)}
+                  onPress={() => router.navigate(`/(tabs)/${isPro ? 'pro/offers' : 'recruiter/search'}`)}
                 >
                   <ButtonText className="font-bold">
                     {role == TUserRole.RECRUITER && t('manage-search')}
-                    {role == TUserRole.CREW && t('job-list')}
+                    {role == TUserRole.PRO && t('job-list')}
                   </ButtonText>
                 </Button>
               </Box>

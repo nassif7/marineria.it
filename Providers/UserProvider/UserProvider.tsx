@@ -5,6 +5,7 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { TUserRole, TUser } from '@/api/types'
 import { getProUserProfile, getOwnerUserProfile, setPushNotificationToken } from '@/api'
 import { useSession } from '@/Providers/SessionProvider'
+import { ApiError } from '@/api/utils'
 import { registerForPushNotificationsAsync } from '@/hooks/useNotification'
 
 export type TActiveProfile = {
@@ -36,7 +37,7 @@ const UserProvider = (props: React.PropsWithChildren) => {
   const {
     i18n: { language },
   } = useTranslation()
-  const { auth, storedAuthTokens, switchAuth } = useSession()
+  const { auth, storedAuthTokens, switchAuth, signOut } = useSession()
   const queryClient = useQueryClient()
 
   const { role, token } = auth
@@ -54,6 +55,16 @@ const UserProvider = (props: React.PropsWithChildren) => {
     },
 
     enabled: !!token && !!role,
+    retry: (failureCount, error) => {
+      if (error instanceof ApiError && error.status === 401) return false
+      return failureCount < 3
+    },
+    throwOnError: (error) => {
+      if (error instanceof ApiError && error.status === 401) {
+        signOut(role as TUserRole)
+      }
+      return false
+    },
   })
 
   const switchProfile = async (targetRole: TUserRole) => {
