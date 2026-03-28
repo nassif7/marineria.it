@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getRecruiterActiveSearches } from '@/api'
 import { useAppState } from '@/hooks'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useActiveProfile } from '@/Providers/UserProvider'
 import { Loading, Text } from '@/components/ui'
 import SearchListItem from './SearchListItem'
 import { useQuery } from '@tanstack/react-query'
@@ -15,8 +15,7 @@ const RecruiterSearchList: FC = () => {
     i18n: { language },
   } = useTranslation()
   const state = useAppState()
-  const { activeProfile } = useUser()
-  const { token } = activeProfile as ActiveProfile
+  const { token } = useActiveProfile()
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
     queryKey: ['recruiter-search-list'],

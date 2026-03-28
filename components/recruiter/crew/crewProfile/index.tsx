@@ -5,7 +5,7 @@ import { useLocalSearchParams } from 'expo-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { ScreenContainer } from '@/components/appUI'
 import { getCrewCV, contactCrew, removeCrew } from '@/api'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useActiveProfile } from '@/Providers/UserProvider'
 import { VStack, Loading } from '@/components/ui'
 import { ErrorMessage } from '@/components/appUI'
 import { useStatusToast } from '@/hooks'
@@ -32,10 +32,8 @@ const CrewProfile = () => {
   } = useTranslation()
   const { crewId, searchId } = useLocalSearchParams()
   const queryClient = useQueryClient()
-  const { activeProfile } = useUser()
+  const { token } = useActiveProfile()
   const { showToast } = useStatusToast()
-
-  const { token } = activeProfile as ActiveProfile
 
   const handleScroll = (e: any) => {
     const y = e.nativeEvent.contentOffset.y

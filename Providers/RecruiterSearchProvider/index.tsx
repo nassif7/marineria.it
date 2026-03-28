@@ -4,7 +4,7 @@ import { useQueries } from '@tanstack/react-query'
 import { TRecruiterSearch, TCrewSimple } from '@/api/types'
 import { getRecruiterSearchById, getCrewList } from '@/api'
 import { useTranslation } from 'react-i18next'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useActiveProfile } from '@/Providers/UserProvider'
 
 type TSearchQueryState<T> = {
   data?: T
@@ -53,8 +53,7 @@ const RecruiterSearchProvider = ({ children }: React.PropsWithChildren) => {
   } = useTranslation()
 
   const { searchId } = useLocalSearchParams<{ searchId: string }>()
-  const { activeProfile } = useUser()
-  const { token } = activeProfile as ActiveProfile
+  const { token } = useActiveProfile()
 
   const [searchQuery, crewListQuery] = useQueries({
     queries: [

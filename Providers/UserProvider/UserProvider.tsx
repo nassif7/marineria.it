@@ -33,6 +33,12 @@ const UserContext = createContext<UserContextType>({
 
 export const useUser = () => useContext(UserContext)
 
+export const useActiveProfile = (): TActiveProfile => {
+  const { activeProfile } = useContext(UserContext)
+  if (!activeProfile) throw new Error('useActiveProfile must be used within an authenticated screen')
+  return activeProfile
+}
+
 const UserProvider = (props: React.PropsWithChildren) => {
   const {
     i18n: { language },

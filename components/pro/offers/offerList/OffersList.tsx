@@ -4,7 +4,7 @@ import { Stack } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { getProOffers } from '@/api'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useActiveProfile } from '@/Providers/UserProvider'
 import { Text, Loading, HStack, Box } from '@/components/ui'
 import { List, ScreenContainer, NavBar, ErrorMessage, EmptyList } from '@/components/appUI'
 import OfferListItem from './OfferListItem'
@@ -38,8 +38,7 @@ const JobOfferList: FC = () => {
     t,
     i18n: { language },
   } = useTranslation(['offer-screen'])
-  const { activeProfile } = useUser()
-  const { token } = activeProfile as ActiveProfile
+  const { token } = useActiveProfile()
   const [ownOffers, setOwnOffers] = useState<string>('all')
   const [showFilter, setShowFilter] = useState(false)
 

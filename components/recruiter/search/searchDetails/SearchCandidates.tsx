@@ -4,7 +4,7 @@ import { Users, Info, Search, UserCheck, MapPin } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { SectionHeader, Section, SubSection } from '@/components/appUI'
 import { Linking } from 'react-native'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useActiveProfile } from '@/Providers/UserProvider'
 import { router } from 'expo-router'
 import { TRecruiterSearch } from '@/api/types/search'
 
@@ -18,8 +18,7 @@ const SearchCandidates: React.FC<SearchCandidatesProps> = ({ search }) => {
     t,
     i18n: { language },
   } = useTranslation(['search-screen'])
-  const { activeProfile } = useUser()
-  const { token } = activeProfile as ActiveProfile
+  const { token } = useActiveProfile()
 
   const openSearchByLocation = () => {
     const url = `https://www.marineria.it/${language}/${search.listgeourl}?token=${token}`

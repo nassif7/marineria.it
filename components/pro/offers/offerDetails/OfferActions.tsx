@@ -1,18 +1,58 @@
-// components/offers/OfferActions.tsx
-import React from 'react'
+import React, { useState } from 'react'
 import { Share } from 'react-native'
+import { useLocalSearchParams } from 'expo-router'
 import { useTranslation } from 'react-i18next'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { VStack, Button, ButtonText, ButtonIcon } from '@/components/ui'
 import { Send, Share2, AlertCircle, CheckCircle } from 'lucide-react-native'
 import { TOffer } from '@/api/types'
 import { Section } from '@/components/appUI'
+import { applyToOffer } from '@/api'
+import { useActiveProfile } from '@/Providers/UserProvider'
+import { useStatusToast } from '@/hooks'
+import ApplyModal from './ApplyModal'
+import NotApplicableModal from './NotApplicableModal'
+
 interface OfferActionsProps {
   offer: TOffer
-  onApply: () => void
 }
 
-const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
-  const { t } = useTranslation()
+const OfferActions: React.FC<OfferActionsProps> = ({ offer }) => {
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation()
+  const { token } = useActiveProfile()
+  const { offerId } = useLocalSearchParams<{ offerId: string }>()
+  const queryClient = useQueryClient()
+  const { showToast } = useStatusToast()
+
+  const [showNotApplicable, setShowNotApplicable] = useState(false)
+  const [showApply, setShowApply] = useState(false)
+
+  const { mutate: handleConfirmApply, isPending } = useMutation({
+    mutationFn: () => applyToOffer(token, parseInt(offerId as string), language),
+    onSuccess: () => {
+      showToast({ emphasize: 'success', title: t('success', { ns: 'common' }) })
+    },
+    onError: () => {
+      showToast({ emphasize: 'error', title: 'Error', description: t('unknown-error', { ns: 'common' }) })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['offer', offerId] })
+      queryClient.invalidateQueries({ queryKey: ['offers'] })
+      setShowApply(false)
+    },
+  })
+
+  const handleApply = () => {
+    if (!offer.offerApplicable) {
+      setShowNotApplicable(true)
+    } else if (!offer.alreadyApplied) {
+      setShowApply(true)
+    }
+  }
+
   const handleShare = async () => {
     try {
       await Share.share({
@@ -34,7 +74,6 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
         text: t('already-applied', { ns: 'offer-screen' }),
       }
     }
-
     if (!offer.offerApplicable) {
       return {
         action: 'primary' as const,
@@ -44,7 +83,6 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
         text: t('not-matching-why', { ns: 'offer-screen' }),
       }
     }
-
     return {
       action: 'positive' as const,
       variant: 'solid' as const,
@@ -63,8 +101,8 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
           size="md"
           action={buttonConfig.action}
           variant={buttonConfig.variant}
-          onPress={onApply}
-          isDisabled={buttonConfig.disabled}
+          onPress={handleApply}
+          isDisabled={buttonConfig.disabled || isPending}
           className="rounded-md"
         >
           <ButtonIcon as={buttonConfig.icon} />
@@ -72,10 +110,18 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
         </Button>
 
         <Button size="md" variant="solid" action="secondary" onPress={handleShare} className="rounded-md">
-          <ButtonIcon as={Share2} className=" text-white" />
+          <ButtonIcon as={Share2} className="text-white" />
           <ButtonText className="ml-2 text-white">{t('share-offer', { ns: 'offer-screen' })}</ButtonText>
         </Button>
       </VStack>
+
+      <NotApplicableModal visible={showNotApplicable} onClose={() => setShowNotApplicable(false)} reasons={[]} />
+      <ApplyModal
+        visible={showApply}
+        onClose={() => setShowApply(false)}
+        onConfirm={handleConfirmApply}
+        isSubmitting={isPending}
+      />
     </Section>
   )
 }

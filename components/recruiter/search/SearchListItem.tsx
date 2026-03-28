@@ -4,7 +4,7 @@ import { router } from 'expo-router'
 import * as Linking from 'expo-linking'
 import { Users, MapPin, Briefcase, Search, UserCheck, Banknote, Calendar, FileText } from 'lucide-react-native'
 import { TRecruiterSearch } from '@/api/types'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useActiveProfile } from '@/Providers/UserProvider'
 import { Box, VStack, HStack, Heading, Text, Button, ButtonText, ButtonIcon, Badge, BadgeText } from '@/components/ui'
 import { SubSection, InfoRow } from '@/components/appUI'
 
@@ -17,8 +17,7 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
     t,
     i18n: { language },
   } = useTranslation(['search-screen'])
-  const { activeProfile } = useUser()
-  const { token } = activeProfile as ActiveProfile
+  const { token } = useActiveProfile()
 
   const viewSearch = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}`)
   const viewCrewList = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list`)

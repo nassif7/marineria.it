@@ -3,7 +3,7 @@ import { Linking } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { VStack } from '@/components/ui'
 import { Loading } from '@/components/ui/loading'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useActiveProfile } from '@/Providers/UserProvider'
 import { useTranslation } from 'react-i18next'
 import SearchHeader from './searchDetails/SearchHeader'
 import SearchContract from './searchDetails/SearchContract'
@@ -14,8 +14,7 @@ import { ScreenContainer, ErrorMessage } from '@/components/appUI'
 import { useRecruiterSearch } from '@/Providers/RecruiterSearchProvider'
 
 export default function SearchDetails() {
-  const { activeProfile } = useUser()
-  const { token } = activeProfile as ActiveProfile
+  const { token } = useActiveProfile()
   const {
     i18n: { language },
   } = useTranslation()

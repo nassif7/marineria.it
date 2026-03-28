@@ -4,7 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useQuery } from '@tanstack/react-query'
 import { VStack, Text, HStack, Button, ButtonIcon, ButtonText, View, Heading } from '@/components/ui'
 import { Loading } from '@/components/ui/loading'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useActiveProfile } from '@/Providers/UserProvider'
 import { useTranslation } from 'react-i18next'
 import { getRecruiterSearchById } from '@/api'
 import { ScreenContainer } from '@/components/appUI'
@@ -17,9 +17,7 @@ const CrewListEmptyComponent = () => {
     t,
     i18n: { language },
   } = useTranslation(['crew-screen'])
-  const { activeProfile } = useUser()
-
-  const { token } = activeProfile as ActiveProfile
+  const { token } = useActiveProfile()
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
     queryKey: ['recruiter-search-by-id', searchId, language],

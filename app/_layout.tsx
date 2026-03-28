@@ -13,6 +13,7 @@ import { ThemeUIProvider } from '@/components/ui/gluestack-ui-provider'
 import SessionProvider, { useSession } from '@/Providers/SessionProvider'
 import { Loading } from '@/components/ui'
 import { MarineriaSplash } from '@/components/appUI'
+import ErrorBoundary from '@/components/common/ErrorBoundary'
 
 // Prevent the native splash from auto-hiding
 SplashScreen.preventAutoHideAsync()
@@ -50,9 +51,11 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <SafeAreaProvider>
           <SessionProvider>
-            <StatusBar />
-            <Slot screenOptions={{ headerShown: false }} />
-            <SplashOverlay />
+            <ErrorBoundary>
+              <StatusBar />
+              <Slot screenOptions={{ headerShown: false }} />
+              <SplashOverlay />
+            </ErrorBoundary>
           </SessionProvider>
         </SafeAreaProvider>
       </QueryClientProvider>
