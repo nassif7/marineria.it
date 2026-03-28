@@ -25,6 +25,15 @@ export { Image } from './image'
 export { Input, InputField, InputIcon, InputSlot } from './input'
 export { Link, LinkText } from './link'
 export { Loading } from './loading'
+export {
+  AlertDialog,
+  AlertDialogBackdrop,
+  AlertDialogContent,
+  AlertDialogCloseButton,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogBody,
+} from './alert-dialog'
 export { Modal, ModalBackdrop, ModalContent, ModalCloseButton, ModalHeader, ModalBody, ModalFooter } from './modal'
 export { Pressable } from './pressable'
 export {
