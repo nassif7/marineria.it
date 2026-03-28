@@ -51,15 +51,15 @@ const ContactModalUnpaid: FC<IContactModalUnpaid> = ({ visible, onClose, onCheck
               </VStack>
             </HStack>
           </VStack>
-          <HStack space="sm" className="px-4 pb-10 pt-1">
-            <Button size="md" action="secondary" variant="outline" className="flex-1 rounded-md" onPress={onClose}>
-              <ButtonText className="text-typography-600">{t('close')}</ButtonText>
-            </Button>
+          <VStack space="sm" className="px-4 pb-10 pt-1">
             <Button size="md" action="positive" variant="solid" className="flex-1 rounded-md" onPress={onCheckout}>
               <ButtonIcon as={CreditCard} className=" text-white" />
               <ButtonText>{t('proceed-to-checkout')}</ButtonText>
             </Button>
-          </HStack>
+            <Button size="md" action="secondary" variant="outline" className="flex-1 rounded-md" onPress={onClose}>
+              <ButtonText className="text-typography-600">{t('close')}</ButtonText>
+            </Button>
+          </VStack>
         </ModalBody>
       </ModalContent>
     </Modal>

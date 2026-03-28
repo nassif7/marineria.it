@@ -38,7 +38,9 @@ const ScreenContainer: FC<PropsWithChildren<IScreenContainerProps>> = ({
           scrollEventThrottle={scrollEventThrottle}
           contentContainerStyle={{
             ...flatContentStyle,
-            paddingBottom: insets.bottom + ((flatContentStyle?.paddingBottom as number) || 0),
+            paddingBottom: flatContentStyle?.paddingBottom
+              ? insets.bottom + ((flatContentStyle?.paddingBottom as number) || 0)
+              : undefined,
           }}
         >
           {children}
@@ -48,7 +50,9 @@ const ScreenContainer: FC<PropsWithChildren<IScreenContainerProps>> = ({
           className={`h-full flex-1 pb-5 bg-background-50  ${className} `}
           style={{
             ...flatContentStyle,
-            paddingBottom: insets.bottom + ((flatContentStyle?.paddingBottom as number) || 0),
+            paddingBottom: flatContentStyle?.paddingBottom
+              ? insets.bottom + ((flatContentStyle?.paddingBottom as number) || 0)
+              : undefined,
           }}
         >
           {children}

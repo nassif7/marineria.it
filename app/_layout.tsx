@@ -1,6 +1,5 @@
 import '@/global.css'
 import '@/localization'
-
 import { useEffect, useState } from 'react'
 import { Slot } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -53,7 +52,6 @@ export default function RootLayout() {
           <SessionProvider>
             <StatusBar />
             <Slot screenOptions={{ headerShown: false }} />
-            {/* Animated splash sits above everything until session hydration completes */}
             <SplashOverlay />
           </SessionProvider>
         </SafeAreaProvider>
@@ -65,5 +63,12 @@ export default function RootLayout() {
 // Separate component so it can access SessionProvider's context
 function SplashOverlay() {
   const { isLoading } = useSession()
-  return <MarineriaSplash isLoading={isLoading} />
+  const [minDelayDone, setMinDelayDone] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setMinDelayDone(true), 3000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  return <MarineriaSplash isLoading={isLoading || !minDelayDone} />
 }

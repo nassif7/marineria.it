@@ -26,12 +26,18 @@ const SearchContract: React.FC<SearchContractProps> = ({ search }) => {
     <Section>
       <SectionHeader title={t('contract-and-compensation', { ns: 'search-screen' })} icon={FileText} />
       <VStack space="xs">
+        <SubSection title={t('contract-type')}>
+          <Text size="sm" semiBold shade={800}>
+            {search.contractDescription}
+          </Text>
+        </SubSection>
         <HStack space="xs">
           <SubSection className="flex-1" title={t('salary')} icon={Euro}>
             <Text size="sm" semiBold shade={800}>
               {search.salary_From} - {search.salary_To}
             </Text>
           </SubSection>
+
           {hasLocation && (
             <SubSection className="flex-1 " title={t('location')} icon={MapPin}>
               <Pressable onPress={handleOpenMap}>
@@ -53,27 +59,6 @@ const SearchContract: React.FC<SearchContractProps> = ({ search }) => {
             {search.duration}
           </Text>
         </SubSection>
-
-        <SubSection title={t('contract-type')}>
-          <Text size="sm" semiBold shade={800}>
-            {search.contractDescription}
-          </Text>
-        </SubSection>
-
-        <Divider className="my-2" />
-        <VStack className="pl-2">
-          <HStack className="items-start gap-1">
-            <Box className="w-32 shrink-0 flex-row items-center gap-1">
-              <Icon as={Info} size="sm" className="text-warning-600" />
-              <Text size="sm" color="error" bold>
-                {t('expires')}:
-              </Text>
-            </Box>
-            <Text size="sm" color="error" bold className="flex-1">
-              {search.offertExpirationdate}
-            </Text>
-          </HStack>
-        </VStack>
       </VStack>
     </Section>
   )

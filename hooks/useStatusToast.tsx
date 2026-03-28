@@ -8,8 +8,8 @@ type ToastEmphasis = 'success' | 'error'
 
 interface ShowToastOptions {
   emphasize: ToastEmphasis
-  description: string
-  title?: string
+  description?: string
+  title: string
 }
 
 const useStatusToast = () => {
@@ -25,7 +25,7 @@ const useStatusToast = () => {
     toast.show({
       id: newId.toString(),
       placement: 'top',
-      duration: 3000,
+      duration: 5000,
       containerStyle: { marginTop: 40, marginLeft: 20, marginRight: 20, borderRadius: 8 },
       render: ({ id }) => {
         const uniqueToastId = 'toast-' + id
@@ -38,8 +38,8 @@ const useStatusToast = () => {
           >
             <HStack space="md">
               <VStack space="xs">
-                {title && <ToastTitle className="font-semibold">{title}</ToastTitle>}
-                <ToastDescription size="md">{description}</ToastDescription>
+                <ToastTitle className="font-semibold">{title}</ToastTitle>
+                {description && <ToastDescription size="md">{description}</ToastDescription>}
               </VStack>
             </HStack>
             <HStack className="min-[450px]:gap-3 gap-1">

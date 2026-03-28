@@ -99,11 +99,9 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
         <SubSection title={t('find-crew')} icon={Search}>
           <HStack space="sm">
             <Button variant="solid" action="positive" onPress={openSearchBySkill} className="rounded-md flex-1">
-              <ButtonIcon as={UserCheck} />
               <ButtonText>{t('by-skill')}</ButtonText>
             </Button>
             <Button variant="solid" action="positive" onPress={openSearchByLocation} className="rounded-md flex-1">
-              <ButtonIcon as={MapPin} />
               <ButtonText>{t('by-location')}</ButtonText>
             </Button>
           </HStack>
