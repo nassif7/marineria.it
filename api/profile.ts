@@ -3,18 +3,12 @@ import { TUserRole } from '@/api/types/auth'
 import { TUser } from '@/api/types/user'
 import { apiFetchJson, getLanguageCode } from './utils'
 
-export const getProUserProfile = async (token: string, role: TUserRole, language: string): Promise<TUser[]> => {
-  const userRole = role == TUserRole.RECRUITER ? 'Owneruser' : 'Prouser'
+export const getUserProfile = async (token: string, role: TUserRole, language: string): Promise<TUser> => {
+  const userRole = role === TUserRole.RECRUITER ? 'Owneruser' : 'Prouser'
   const languageCode = getLanguageCode(language)
   const url = `${API.PROFILE}/${userRole}/${token}?lang=${languageCode}`
-  return apiFetchJson<TUser[]>(url)
-}
-
-export const getOwnerUserProfile = async (token: string, role: TUserRole, language: string): Promise<TUser> => {
-  const userRole = role == TUserRole.RECRUITER ? 'Owneruser' : 'Prouser'
-  const languageCode = getLanguageCode(language)
-  const url = `${API.PROFILE}/${userRole}/${token}?lang=${languageCode}`
-  return apiFetchJson<TUser>(url)
+  const data = await apiFetchJson<TUser | TUser[]>(url)
+  return Array.isArray(data) ? data[0] : data
 }
 
 export const setPushNotificationToken = async (token: string, pushToken: string): Promise<void> => {

@@ -1,8 +1,48 @@
-export type TCrew = {
+export type TCrewBase = {
+  contacted: boolean | string
+  company: string
+  address: string
+  city: string
+  email: string
+  url: string
+  passport: string
+  callWhatsapp: string
+  userPhoto: string
+  smoker: string
+  gender: string
+  maritalStatus: string
+  qualificationCode: string
+  licenseCode: string
+  seamansBook: string
+  registration_Number: string
+  registration_City: string
+  registration_Category: string
+  registration_Year: string
+  courses: string
+  mainPosition: string
+  specseling: string
+  pos_deck: string
+  pos_engine: string
+  pos_hotel: string
+  pos_harbour: string
+  pos_special: string
+  ita_yachts_deck: string
+  ita_yachts_engine: string
+  mca_yachts_deck: string
+  mca_deck_rya: string
+  stcw_navy_deck: string
+  stcw_navy_engine: string
+  navigationBook: string
+  availability: string
+  dateAvailability: string
+  lastAccessDate: string
+  salary: string
+  calculatedExperience: string
+}
+
+export type TCrew = TCrewBase & {
   offersReceived: number
   certificateOfCompetence: boolean
-
-  contacted: boolean | string
   iduser: number
   publisched: string
   photoapproved: string
@@ -11,42 +51,17 @@ export type TCrew = {
   name: string
   surname: string
   yearofBirth: string
-  gender: string
-  maritalStatus: string
   nationality: string
-  company: string
-  address: string
-  city: string
   province: string
   zip_code: string
   emailCc: string
-  email: string
-  url: string
   telephone: string
   cellular: string
-  callWhatsapp: string
-  userPhoto: string
-  smoker: string
   currentPosition: string
   lat: string
   lng: string
-  mainPosition: string
-  qualificationCode: string
-  licenseCode: string
-  seamansBook: string
-  registration_Number: string
-  registration_City: string
-  registration_Category: string
-  registration_Year: string
-  navigationBook: string
-  calculatedExperience: string
-  availability: string
-  dateAvailability: string
-  lastAccessDate: string
   registraton_date: string
-  courses: string
   notesCourses: string
-  specseling: string
   referencesNumber: number
   approvedReferences: TCrewReference[]
   experiences: TCrewExperience[]
@@ -57,35 +72,23 @@ export type TCrew = {
   technicalSkills: string
   couplewith: string
   card1Couple: string
-  salary: string
   date_lastchange: string
   educationalLevel: string
   language1: string
   language2: string
   language3: string
   language4: string
-  pos_deck: string
-  pos_engine: string
-  pos_hotel: string
-  pos_harbour: string
-  pos_special: string
   // Certificates of Competence
-  ita_yachts_deck: string
-  ita_yachts_engine: string
-  mca_yachts_deck: string
-  mca_deck_rya: string
-  stcw_navy_deck: string
-  stcw_navy_engine: string
+  mca_yachts_engine: string
   //
   numberClick: number
-  passport: string
   secondaryTasks: string
   namephotoA: string
   namephotoB: string
   namephotoC: string
 }
 
-export type TCrewSimple = {
+export type TCrewSimple = TCrewBase & {
   contacted: boolean
   userId: number
   autoCandidate: boolean
@@ -94,56 +97,18 @@ export type TCrewSimple = {
   insertDate: string
   firstName: string
   lastName: string
-  company: string
-  address: string
-  city: string
   provincia: string
   postalCode: string
-  email: string
-  url: string
   country: string
-  passport: string
   phone: string
   mobile: string
-  callWhatsapp: string
   talkApp: string
-  userPhoto: string
   photoApproved: boolean
   birthYear: string
-  maritalStatus: string
-  smoker: string
-  gender: string
-  qualificationCode: string
-  licenseCode: string
-  seamansBook: string
-  registration_Number: string
-  registration_City: string
-  registration_Category: string
-  registration_Year: string
-  courses: string
-  mainPosition: string
-  specseling: string
-  pos_deck: string
-  pos_engine: string
-  pos_hotel: string
-  pos_harbour: string
-  pos_special: string
-  ita_yachts_deck: string
-  ita_yachts_engine: string
-  mca_yachts_deck: string
   mca_yachts_engine: string
-  mca_deck_rya: string
-  stcw_navy_deck: string
-  stcw_navy_engine: string
-  navigationBook: string
-  availability: string
-  dateAvailability: string
-  lastAccessDate: string
   coupleWith: string
   coupleProfile: string
-  salary: string
   documentStatus: string
-  calculatedExperience: string
   stars: number
   notes: string
   crewlistId: number

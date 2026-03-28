@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store'
 import { useTranslation } from 'react-i18next'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { TUserRole, TUser } from '@/api/types'
-import { getProUserProfile, getOwnerUserProfile, setPushNotificationToken } from '@/api'
+import { getUserProfile, setPushNotificationToken } from '@/api'
 import { useSession } from '@/Providers/SessionProvider'
 import { ApiError } from '@/api/utils'
 import { registerForPushNotificationsAsync } from '@/hooks/useNotification'
@@ -37,23 +37,14 @@ const UserProvider = (props: React.PropsWithChildren) => {
   const {
     i18n: { language },
   } = useTranslation()
-  const { auth, storedAuthTokens, switchAuth, signOut } = useSession()
+  const { auth, switchAuth, signOut } = useSession()
   const queryClient = useQueryClient()
 
   const { role, token } = auth
 
   const { data: user, isLoading } = useQuery({
     queryKey: ['user', token, role, language],
-    queryFn: async () => {
-      const data = await (role === TUserRole.RECRUITER ? getOwnerUserProfile : getProUserProfile)(
-        token as string,
-        role as TUserRole,
-        language
-      )
-
-      return Array.isArray(data) ? data?.[0] : data
-    },
-
+    queryFn: () => getUserProfile(token as string, role as TUserRole, language),
     enabled: !!token && !!role,
     retry: (failureCount, error) => {
       if (error instanceof ApiError && error.status === 401) return false
@@ -68,9 +59,8 @@ const UserProvider = (props: React.PropsWithChildren) => {
   })
 
   const switchProfile = async (targetRole: TUserRole) => {
-    const targetToken = storedAuthTokens[targetRole] as string
     await SecureStore.setItemAsync('role', targetRole)
-    await switchAuth(targetRole)
+    switchAuth(targetRole)
   }
 
   const { mutate: togglePushNotifications, isPending: isTogglingNotifications } = useMutation({
