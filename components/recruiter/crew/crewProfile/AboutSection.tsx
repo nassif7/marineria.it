@@ -1,5 +1,5 @@
 import { FC, memo } from 'react'
-import { Text } from '@/components/ui'
+import { Text } from '@/lib/components/ui'
 import { User } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { SubSection, Section, SectionHeader } from '@/components/appUI'

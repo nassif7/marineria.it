@@ -7,7 +7,7 @@ import { cssInterop } from 'nativewind'
 import { ActivityIndicator, Pressable, Text, View } from 'react-native'
 import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils'
 import { PrimitiveIcon, UIIcon } from '@gluestack-ui/core/icon/creator'
-import { useScreenSize } from '@/hooks/useScreenSize'
+import { useScreenSize } from '@/lib/hooks'
 
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 const smallScreenSizeMap: Record<ButtonSize, ButtonSize> = {

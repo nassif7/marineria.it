@@ -1,7 +1,7 @@
 import { Animated, Keyboard, ImageBackground, Platform, ScrollView, KeyboardAvoidingView, Easing } from 'react-native'
 import { useEffect, useRef } from 'react'
-import { View } from '@/components/ui'
-import { horizontalScale, verticalScale } from '@/utils/metrics'
+import { View } from '@/lib/components/ui'
+import { horizontalScale, verticalScale } from '@/lib/utils/metrics'
 
 const AuthScreen = ({ children }: React.PropsWithChildren) => {
   const logoHeight = useRef(new Animated.Value(verticalScale(110))).current

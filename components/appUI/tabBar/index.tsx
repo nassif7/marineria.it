@@ -1,7 +1,7 @@
 import React from 'react'
 import { Platform } from 'react-native'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
-import { Box, HStack, VStack, Text, Pressable, Icon } from '@/components/ui'
+import { Box, HStack, VStack, Text, Pressable, Icon } from '@/lib/components/ui'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 interface TabBarProps extends BottomTabBarProps {

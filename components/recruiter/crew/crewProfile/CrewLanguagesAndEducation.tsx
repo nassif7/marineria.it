@@ -14,7 +14,7 @@ import {
   Button,
   ButtonText,
   Divider,
-} from '@/components/ui'
+} from '@/lib/components/ui'
 import {
   User,
   Calendar,
@@ -41,7 +41,7 @@ import {
 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { SubSection, Section, SectionHeader } from '@/components/appUI'
-import { getAgeByYear } from '@/utils/dateUtils'
+import { getAgeByYear } from '@/lib/utils/dateUtils'
 import { TCrew } from '@/api/types'
 import { faker } from '@faker-js/faker'
 

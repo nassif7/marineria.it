@@ -20,7 +20,7 @@ import {
   ModalBody,
   ModalFooter,
   ModalCloseButton,
-} from '@/components/ui'
+} from '@/lib/components/ui'
 import { X, Check, ShieldUser, ListCheck, Minus } from 'lucide-react-native'
 import { SubSection, SubSectionHeader } from '@/components/appUI'
 import { useTranslation } from 'react-i18next'

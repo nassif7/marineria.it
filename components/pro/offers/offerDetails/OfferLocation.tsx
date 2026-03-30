@@ -1,7 +1,7 @@
 // components/offers/OfferLocation.tsx
 import React from 'react'
 import { Linking } from 'react-native'
-import { Box, VStack, HStack, Heading, Text, Icon, Pressable } from '@/components/ui'
+import { Box, VStack, HStack, Heading, Text, Icon, Pressable } from '@/lib/components/ui'
 import { MapPin } from 'lucide-react-native'
 import { TOffer } from '@/api/types'
 

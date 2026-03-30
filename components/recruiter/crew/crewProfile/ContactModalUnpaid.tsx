@@ -14,7 +14,7 @@ import {
   ModalBackdrop,
   ModalContent,
   ModalBody,
-} from '@/components/ui'
+} from '@/lib/components/ui'
 import { CreditCard } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 

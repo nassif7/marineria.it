@@ -1,6 +1,6 @@
 // components/offers/OfferContract.tsx
 import { FC, ElementType } from 'react'
-import { HStack, Heading, Icon } from '@/components/ui'
+import { HStack, Heading, Icon } from '@/lib/components/ui'
 
 interface SectionHeaderProps {
   icon?: ElementType

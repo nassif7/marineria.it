@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Link, LinkText, VStack } from '@/components/ui'
+import { Link, LinkText, VStack } from '@/lib/components/ui'
 import { useTranslation } from 'react-i18next'
 
 interface ILoginFormLinksProps {

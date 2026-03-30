@@ -5,7 +5,18 @@ import * as Linking from 'expo-linking'
 import { Users, MapPin, Briefcase, Search, UserCheck, Banknote, Calendar, FileText } from 'lucide-react-native'
 import { TRecruiterSearch } from '@/api/types'
 import { useActiveProfile } from '@/Providers/UserProvider'
-import { Box, VStack, HStack, Heading, Text, Button, ButtonText, ButtonIcon, Badge, BadgeText } from '@/components/ui'
+import {
+  Box,
+  VStack,
+  HStack,
+  Heading,
+  Text,
+  Button,
+  ButtonText,
+  ButtonIcon,
+  Badge,
+  BadgeText,
+} from '@/lib/components/ui'
 import { SubSection, InfoRow } from '@/components/appUI'
 
 interface ISearchListItemProps {

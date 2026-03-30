@@ -16,7 +16,7 @@ import {
   Heading,
   Loading,
   Text,
-} from '@/components/ui'
+} from '@/lib/components/ui'
 import { ScreenContainer } from '@/components/appUI'
 
 const UserProfile = () => {

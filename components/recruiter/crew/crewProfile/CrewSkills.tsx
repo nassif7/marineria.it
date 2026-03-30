@@ -1,5 +1,5 @@
 import { FC, memo } from 'react'
-import { Box, Heading, VStack, HStack, Text, Icon, Badge, BadgeText } from '@/components/ui'
+import { Box, Heading, VStack, HStack, Text, Icon, Badge, BadgeText } from '@/lib/components/ui'
 import { Sparkles, MessageCircle, ClipboardList, Terminal, Zap, Wrench, Code2 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { TCrew, TCrewExperience } from '@/api/types'

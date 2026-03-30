@@ -1,6 +1,6 @@
 // components/offers/OfferContract.tsx
 import { FC, PropsWithChildren, ElementType } from 'react'
-import { Box, HStack, Icon, Text, Pressable, Badge, BadgeText } from '@/components/ui'
+import { Box, HStack, Icon, Text, Pressable, Badge, BadgeText } from '@/lib/components/ui'
 import { ChevronRight } from 'lucide-react-native'
 
 export const SubSectionHeader: FC<{

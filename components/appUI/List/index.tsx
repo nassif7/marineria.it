@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { FlatList, RefreshControl } from 'react-native'
-import { Box, VStack, HStack, Text, Divider } from '@/components/ui'
+import { Box, VStack, HStack, Text, Divider } from '@/lib/components/ui'
 import { ChevronDown } from 'lucide-react-native'
 import {
   Select,
@@ -11,7 +11,7 @@ import {
   SelectBackdrop,
   SelectContent,
   SelectItem,
-} from '@/components/ui/select'
+} from '@/lib/components/ui/select'
 
 type FilterType = {
   value: string

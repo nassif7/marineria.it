@@ -1,5 +1,5 @@
 import { FC, memo } from 'react'
-import { Button, ButtonText, ButtonIcon, ButtonSpinner, VStack } from '@/components/ui'
+import { Button, ButtonText, ButtonIcon, ButtonSpinner, VStack } from '@/lib/components/ui'
 import { UserX, UserCheck } from 'lucide-react-native'
 import Animated, { FadeInDown, FadeOutDown } from 'react-native-reanimated'
 import { useTranslation } from 'react-i18next'

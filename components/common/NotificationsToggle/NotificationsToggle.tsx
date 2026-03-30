@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { ActivityIndicator, View } from 'react-native'
-import { Switch } from '@/components/ui'
+import { Switch } from '@/lib/components/ui'
 
 interface INotificationsToggleProps {
   enabled: boolean

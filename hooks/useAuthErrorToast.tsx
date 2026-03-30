@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useToast, Toast, ToastTitle, ToastDescription, HStack, VStack, Pressable, Icon } from '@/components/ui'
+import { useToast, Toast, ToastTitle, ToastDescription, HStack, VStack, Pressable, Icon } from '@/lib/components/ui'
 import { X } from 'lucide-react-native'
 
 export const useAuthErrorToast = () => {

@@ -12,7 +12,7 @@ import {
   SelectDragIndicator,
   SelectDragIndicatorWrapper,
   SelectItem,
-} from '@/components/ui/select'
+} from '@/lib/components/ui/select'
 
 interface ISwitchLanguageProps {
   language: TLocales

@@ -6,7 +6,7 @@ import '@/localization'
 import { TUserRole } from '@/api/types'
 import UserProvider from '@/Providers/UserProvider'
 import { useSession } from '@/Providers/SessionProvider'
-import { Text, View } from '@/components/ui'
+import { Text, View } from '@/lib/components/ui'
 import { TabBar } from '@/components/appUI'
 
 const AppLayout = () => {

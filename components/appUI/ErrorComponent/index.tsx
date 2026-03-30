@@ -1,8 +1,8 @@
 import { AlertCircle } from 'lucide-react-native'
-import { Center } from '@/components/ui/center'
-import { Icon } from '@/components/ui/icon'
-import { Text } from '@/components/ui/text'
-import { VStack } from '@/components/ui/vstack'
+import { Center } from '@/lib/components/ui/center'
+import { Icon } from '@/lib/components/ui/icon'
+import { Text } from '@/lib/components/ui/text'
+import { VStack } from '@/lib/components/ui/vstack'
 
 interface ErrorMessageProps {
   title?: string

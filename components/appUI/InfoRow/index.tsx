@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { HStack, Text, Icon } from '@/components/ui'
+import { HStack, Text, Icon } from '@/lib/components/ui'
 
 const InfoRow: FC<{ icon: any; label: string; value: string; className?: string }> = ({
   icon,

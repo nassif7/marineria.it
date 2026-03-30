@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { View, Text } from '@/components/ui'
+import { View, Text } from '@/lib/components/ui'
 
 const ListEmptyComponent: FC<{ message: string }> = ({ message }) => {
   return (

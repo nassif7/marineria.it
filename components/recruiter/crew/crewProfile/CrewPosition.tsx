@@ -1,5 +1,5 @@
 import { FC, memo, useMemo } from 'react'
-import { VStack, HStack, Text, Icon, Badge, BadgeText } from '@/components/ui'
+import { VStack, HStack, Text, Icon, Badge, BadgeText } from '@/lib/components/ui'
 import { User, Briefcase, Anchor, Drama } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { SubSection, Section, SectionHeader } from '@/components/appUI'

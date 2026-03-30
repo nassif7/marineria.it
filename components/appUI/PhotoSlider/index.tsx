@@ -1,6 +1,6 @@
 import { FC, useState, useRef, useEffect } from 'react'
 import { TouchableOpacity, Modal, FlatList, useWindowDimensions, View, Image } from 'react-native'
-import { Text, Icon } from '@/components/ui'
+import { Text, Icon } from '@/lib/components/ui'
 import { X } from 'lucide-react-native'
 
 const PhotoSlider: FC<{

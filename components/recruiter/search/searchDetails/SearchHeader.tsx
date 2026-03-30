@@ -1,6 +1,6 @@
 // components/search/SearchHeader.tsx
 import React from 'react'
-import { VStack, HStack, Heading, Text, Divider } from '@/components/ui'
+import { VStack, HStack, Heading, Text, Divider } from '@/lib/components/ui'
 import { useTranslation } from 'react-i18next'
 import { TRecruiterSearch } from '@/api/types'
 import { Section } from '@/components/appUI'

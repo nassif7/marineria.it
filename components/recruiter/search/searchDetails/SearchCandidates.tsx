@@ -1,5 +1,5 @@
 import React from 'react'
-import { VStack, HStack, ButtonText, Button, ButtonIcon, Badge, BadgeText } from '@/components/ui'
+import { VStack, HStack, ButtonText, Button, ButtonIcon, Badge, BadgeText } from '@/lib/components/ui'
 import { Users, Info, Search, UserCheck, MapPin } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { SectionHeader, Section, SubSection } from '@/components/appUI'

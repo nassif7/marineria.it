@@ -13,13 +13,13 @@ import {
   BadgeIcon,
   Button,
   ButtonText,
-} from '@/components/ui'
+} from '@/lib/components/ui'
 import { User, Calendar, MapPin, Award, Heart, Cake, Cigarette, IdCard, Briefcase } from 'lucide-react-native'
 import { TCrewSimple } from '@/api/types'
 import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'
 import { SubSection } from '@/components/appUI'
-import { getAgeByYear } from '@/utils/dateUtils'
+import { getAgeByYear } from '@/lib/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 
 interface ICrewListItem {

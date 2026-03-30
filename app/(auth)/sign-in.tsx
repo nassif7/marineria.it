@@ -4,7 +4,7 @@ import { useSession } from '@/Providers/SessionProvider'
 import AuthenticationForm, { FormDate } from '@/components/common/AuthenticationForm'
 import { useAuthErrorToast } from '@/hooks/useAuthErrorToast'
 import { AuthScreen, LoginFormLinks } from '@/components/appUI'
-import { Divider } from '@/components/ui'
+import { Divider } from '@/lib/components/ui'
 
 const SignIn = () => {
   const { signIn } = useSession()

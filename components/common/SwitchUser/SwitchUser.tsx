@@ -11,7 +11,7 @@ import {
   Heading,
   Icon,
   Divider,
-} from '@/components/ui'
+} from '@/lib/components/ui'
 import { X } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { useMemo } from 'react'

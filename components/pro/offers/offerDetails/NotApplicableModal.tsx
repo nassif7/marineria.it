@@ -16,7 +16,7 @@ import {
   ModalBody,
   ModalFooter,
   ModalCloseButton,
-} from '@/components/ui'
+} from '@/lib/components/ui'
 import { X, AlertCircle } from 'lucide-react-native'
 
 interface NotApplicableModalProps {

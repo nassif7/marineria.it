@@ -1,5 +1,5 @@
 import { FC, memo } from 'react'
-import { HStack, Text, Icon, VStack } from '@/components/ui'
+import { HStack, Text, Icon, VStack } from '@/lib/components/ui'
 import { Clock, Calendar, IdCard, Heart } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { SubSection, Section, SectionHeader } from '@/components/appUI'

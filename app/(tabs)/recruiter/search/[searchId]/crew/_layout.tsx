@@ -2,7 +2,7 @@
 import { Stack } from 'expo-router'
 import { NavBar } from '@/components/appUI'
 import { useTranslation } from 'react-i18next'
-import { Box, Text } from '@/components/ui'
+import { Box, Text } from '@/lib/components/ui'
 import { supportTeam } from '@/api'
 import ContactSupport from '@/components/common/ContactSupport'
 

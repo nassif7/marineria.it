@@ -19,7 +19,7 @@ import {
   ModalBackdrop,
   ModalContent,
   ModalBody,
-} from '@/components/ui'
+} from '@/lib/components/ui'
 import { User, Unlock, FileText, Send, Check, PhoneCall } from 'lucide-react-native'
 import { SubSection } from '@/components/appUI'
 import { TCrew } from '@/api/types'

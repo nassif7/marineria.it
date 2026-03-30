@@ -1,6 +1,6 @@
 import React from 'react'
 import { View } from 'react-native'
-import { Heading, Text, Button, ButtonText } from '@/components/ui'
+import { Heading, Text, Button, ButtonText } from '@/lib/components/ui'
 
 type Props = React.PropsWithChildren
 type State = { hasError: boolean }

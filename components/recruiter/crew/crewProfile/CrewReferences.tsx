@@ -1,6 +1,6 @@
 import { FC, useState, useMemo, memo } from 'react'
 import { TouchableOpacity, Linking } from 'react-native'
-import { Box, VStack, HStack, Text, Icon, Divider, Badge, BadgeText } from '@/components/ui'
+import { Box, VStack, HStack, Text, Icon, Divider, Badge, BadgeText } from '@/lib/components/ui'
 import { Phone, Mail, Star, ChevronDown, ChevronUp } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { SubSection, Section, SectionHeader } from '@/components/appUI'

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import Feather from '@expo/vector-icons/Feather'
 import { useRouter, usePathname } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { Box, Heading, HStack, Pressable, Icon } from '@/components/ui'
+import { Box, Heading, HStack, Pressable, Icon } from '@/lib/components/ui'
 import { ChevronLeft } from 'lucide-react-native'
 
 import type { NativeStackHeaderProps } from '@react-navigation/native-stack'

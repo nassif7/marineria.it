@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { LogOut } from 'lucide-react-native'
-import { Button, ButtonText, ButtonIcon } from '@/components/ui'
+import { Button, ButtonText, ButtonIcon } from '@/lib/components/ui'
 
 interface ISignOutProps {
   buttonLabel: string

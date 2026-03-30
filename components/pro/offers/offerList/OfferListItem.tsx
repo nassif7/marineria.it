@@ -13,14 +13,14 @@ import {
   BadgeIcon,
   BadgeText,
   Pressable,
-} from '@/components/ui'
+} from '@/lib/components/ui'
 import { Eye, Calendar, Euro, CheckCircle, AlertCircle, MapPin } from 'lucide-react-native'
 import { router } from 'expo-router'
 import { TOffer } from '@/api/types'
 import { Linking } from 'react-native'
 import { SubSection, SubSectionHeader } from '@/components/appUI'
 import { useTranslation } from 'react-i18next'
-import { isDateString } from '@/utils'
+import { isDateString } from '@/lib/utils/dateUtils'
 
 interface IOfferListItemProps {
   offer: TOffer

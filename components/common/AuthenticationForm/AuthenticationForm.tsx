@@ -17,7 +17,7 @@ import {
   InputIcon,
   InputSlot,
   VStack,
-} from '@/components/ui'
+} from '@/lib/components/ui'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 

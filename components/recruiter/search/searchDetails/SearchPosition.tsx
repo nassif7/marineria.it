@@ -1,6 +1,6 @@
 // components/search/SearchPosition.tsx
 import React from 'react'
-import { VStack, HStack, Text, Badge, BadgeText } from '@/components/ui'
+import { VStack, HStack, Text, Badge, BadgeText } from '@/lib/components/ui'
 import { Briefcase, Anchor, CheckCircle, FileText, Clipboard } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { SectionHeader, Section, SubSection } from '@/components/appUI'

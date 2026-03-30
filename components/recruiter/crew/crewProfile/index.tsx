@@ -6,7 +6,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { ScreenContainer } from '@/components/appUI'
 import { getCrewCV, contactCrew, removeCrew } from '@/api'
 import { useActiveProfile } from '@/Providers/UserProvider'
-import { VStack, Loading } from '@/components/ui'
+import { VStack, Loading } from '@/lib/components/ui'
 import { ErrorMessage } from '@/components/appUI'
 import { useStatusToast } from '@/hooks'
 

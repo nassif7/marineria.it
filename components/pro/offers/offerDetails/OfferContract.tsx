@@ -1,11 +1,11 @@
 import React from 'react'
 import { FileText, Calendar, Euro, MapPin } from 'lucide-react-native'
 import { TOffer } from '@/api/types'
-import { VStack, HStack, Text, Pressable } from '@/components/ui'
+import { VStack, HStack, Text, Pressable } from '@/lib/components/ui'
 import { SectionHeader, Section, SubSection, SubSectionHeader } from '@/components/appUI'
 import { Linking } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { isDateString } from '@/utils'
+import { isDateString } from '@/lib/utils/dateUtils'
 
 interface OfferContractProps {
   offer: TOffer

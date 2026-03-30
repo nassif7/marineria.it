@@ -3,7 +3,7 @@ import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils'
 import { View, Dimensions, Platform, ViewProps } from 'react-native'
 import { gridStyle, gridItemStyle } from './styles'
 import { cssInterop } from 'nativewind'
-import { useBreakpointValue, getBreakPointValue } from '../../hooks/use-break-point-value'
+import { useBreakpointValue, getBreakPointValue } from '../utils/use-break-point-value'
 
 const { width: DEVICE_WIDTH } = Dimensions.get('window')
 

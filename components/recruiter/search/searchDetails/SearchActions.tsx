@@ -1,6 +1,6 @@
 // components/search/SearchActions.tsx
 import React from 'react'
-import { VStack, Button, ButtonText, ButtonIcon } from '@/components/ui'
+import { VStack, Button, ButtonText, ButtonIcon } from '@/lib/components/ui'
 import { Edit, MessageCircleQuestionMark } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { TRecruiterSearch } from '@/api/types/search'

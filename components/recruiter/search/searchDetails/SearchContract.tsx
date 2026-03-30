@@ -1,11 +1,11 @@
 import React from 'react'
-import { Box, VStack, HStack, Text, Icon, Divider, Pressable } from '@/components/ui'
+import { Box, VStack, HStack, Text, Icon, Divider, Pressable } from '@/lib/components/ui'
 import { FileText, Calendar, Euro, MapPin, Info } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { SectionHeader, Section, SubSection } from '@/components/appUI'
 import { TRecruiterSearch } from '@/api/types'
 import { Linking } from 'react-native'
-import { isDateString } from '@/utils'
+import { isDateString } from '@/lib/utils/dateUtils'
 
 interface SearchContractProps {
   search: TRecruiterSearch

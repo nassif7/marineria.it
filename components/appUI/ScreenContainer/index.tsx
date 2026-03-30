@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from 'react'
-import { View } from '@/components/ui'
+import { View } from '@/lib/components/ui'
 import { ScrollView } from 'react-native'
 import { FlatList, RefreshControl, StyleProp, ViewStyle, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'

@@ -16,7 +16,7 @@ import {
   Box,
   Heading,
   Icon,
-} from '@/components/ui'
+} from '@/lib/components/ui'
 import { MessageCircle, Send, X, HeadphonesIcon } from 'lucide-react-native'
 import { TSupportTeam } from '@/api'
 import { Linking } from 'react-native'

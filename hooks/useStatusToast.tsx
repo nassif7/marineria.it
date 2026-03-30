@@ -1,7 +1,7 @@
 import React from 'react'
-import { useToast, Toast, ToastTitle, ToastDescription } from '@/components/ui/toast'
-import { HStack, VStack, Icon } from '@/components/ui'
-import { Pressable } from '@/components/ui/pressable'
+import { useToast, Toast, ToastTitle, ToastDescription } from '@/lib/components/ui/toast'
+import { HStack, VStack, Icon } from '@/lib/components/ui'
+import { Pressable } from '@/lib/components/ui/pressable'
 import { X } from 'lucide-react-native'
 
 type ToastEmphasis = 'success' | 'error'

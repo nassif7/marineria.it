@@ -1,6 +1,6 @@
 // components/offers/OfferPosition.tsx
 import React from 'react'
-import { VStack, Text } from '@/components/ui'
+import { VStack, Text } from '@/lib/components/ui'
 import { Anchor, Briefcase, CheckCircle, FileText } from 'lucide-react-native'
 import { TOffer } from '@/api/types'
 import { SectionHeader, Section, SubSection, SubSectionHeader } from '@/components/appUI'

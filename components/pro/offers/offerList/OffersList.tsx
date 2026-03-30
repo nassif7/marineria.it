@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { getProOffers } from '@/api'
 import { useActiveProfile } from '@/Providers/UserProvider'
-import { Text, Loading, HStack, Box } from '@/components/ui'
+import { Text, Loading, HStack, Box } from '@/lib/components/ui'
 import { List, ScreenContainer, NavBar, ErrorMessage, EmptyList } from '@/components/appUI'
 import OfferListItem from './OfferListItem'
 
