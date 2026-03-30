@@ -9,7 +9,7 @@ import { TOffer } from '@/api/types'
 import { Section } from '@/lib/components'
 import { applyToOffer } from '@/api'
 import { useActiveProfile } from '@/Providers/UserProvider'
-import { useStatusToast } from '@/hooks'
+import { useCustomToast } from '@/hooks'
 import ApplyModal from './ApplyModal'
 import NotApplicableModal from './NotApplicableModal'
 
@@ -25,7 +25,7 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer }) => {
   const { token } = useActiveProfile()
   const { offerId } = useLocalSearchParams<{ offerId: string }>()
   const queryClient = useQueryClient()
-  const { showToast } = useStatusToast()
+  const { showToast } = useCustomToast()
 
   const [showNotApplicable, setShowNotApplicable] = useState(false)
   const [showApply, setShowApply] = useState(false)

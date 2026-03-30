@@ -38,8 +38,6 @@ const initI18n = async () => {
       'offer',
       'crew',
       'common',
-
-      'login-screen',
     ],
     defaultNS: 'home-screen',
     fallbackNS: ['common', 'offer'],

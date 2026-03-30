@@ -1,9 +1,9 @@
 import { FC, useState, useMemo, memo } from 'react'
 import { TouchableOpacity, Linking } from 'react-native'
-import { Box, VStack, HStack, Text, Icon, Divider, Badge, BadgeText } from '@/lib/components/ui'
+import { Box, VStack, HStack, Text, Icon, Divider } from '@/lib/components/ui'
 import { Phone, Mail, Star, ChevronDown, ChevronUp } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { SubSection, Section, SectionHeader } from '@/lib/components'
+import { SubSection, Section, SectionHeader, ErrorBadge } from '@/lib/components'
 
 import { TCrew, TCrewReference } from '@/api/types'
 
@@ -77,9 +77,7 @@ const ReferencesSection: FC<{ crew: TCrew }> = ({ crew }) => {
     <Section>
       <SectionHeader icon={Star} title={t('references', { ns: 'crew' })} />
       {sorted.length === 0 ? (
-        <Badge action="error" variant="outline" className="rounded-md self-start mb-2">
-          <BadgeText className="text-error-900">{t('no-references', { ns: 'crew-screen' })}</BadgeText>
-        </Badge>
+        <ErrorBadge label={t('no-references', { ns: 'crew-screen' })} className="rounded-md self-start mb-2" />
       ) : (
         <SubSection>
           {sorted.map((ref, i) => (

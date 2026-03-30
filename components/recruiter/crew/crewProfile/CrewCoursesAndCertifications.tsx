@@ -1,8 +1,8 @@
 import { FC, memo } from 'react'
-import { VStack, HStack, Text, Badge, BadgeText } from '@/lib/components/ui'
+import { VStack, HStack, Text } from '@/lib/components/ui'
 import { Book, GraduationCap, Award, BookOpen, BookMarked, ScrollText } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { SubSection, Section, SectionHeader } from '@/lib/components'
+import { SubSection, Section, SectionHeader, ErrorBadge } from '@/lib/components'
 
 import { TCrew } from '@/api/types'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
@@ -20,29 +20,12 @@ const CoursesSection: FC<{ crew: TCrew }> = ({ crew }) => {
 
       <VStack space="xs">
         <HStack className="items-start flex-wrap align-middle" space="sm">
-          {!hasSeamansBook && (
-            <Badge action="error" variant="outline" className="rounded-md self-start ">
-              <BadgeText className="text-error-900">{crew.seamansBook}</BadgeText>
-            </Badge>
-          )}
+          {!hasSeamansBook && <ErrorBadge label={crew.seamansBook} />}
           {!hasCertificateOfCompetence && (
-            <Badge action="error" variant="outline" className="rounded-md self-start ">
-              <BadgeText className="text-error-900">
-                {t('no-certificate-of-competence', { ns: 'crew-screen' })}
-              </BadgeText>
-            </Badge>
+            <ErrorBadge label={t('no-certificate-of-competence', { ns: 'crew-screen' })} />
           )}
-
-          {!crew.courses && (
-            <Badge action="error" variant="outline" className="rounded-md self-start ">
-              <BadgeText className="text-error-900">{t('no-courses', { ns: 'crew' })}</BadgeText>
-            </Badge>
-          )}
-          {!crew.licenseCode && (
-            <Badge action="error" variant="outline" className="rounded-md self-start ">
-              <BadgeText className="text-error-900">{t('no-license', { ns: 'crew' })}</BadgeText>
-            </Badge>
-          )}
+          {!crew.courses && <ErrorBadge label={t('no-courses', { ns: 'crew' })} />}
+          {!crew.licenseCode && <ErrorBadge label={t('no-license', { ns: 'crew' })} />}
         </HStack>
 
         {hasSeamansBook && (

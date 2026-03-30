@@ -18,7 +18,7 @@ import { User, Calendar, MapPin, Award, Heart, Cake, Cigarette, IdCard, Briefcas
 import { TCrewSimple } from '@/api/types'
 import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'
-import { SubSection } from '@/lib/components'
+import { SubSection, ErrorBadge } from '@/lib/components'
 import { getAgeByYear } from '@/lib/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 
@@ -87,9 +87,7 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
             <BadgeText className="text-typography-800">{crew.smoker}</BadgeText>
           </Badge>
           {!crew.calculatedExperience && (
-            <Badge action="error" variant="outline" className="rounded-md">
-              <BadgeText className="text-error-900">{t('no-experience', { ns: 'crew' })}</BadgeText>
-            </Badge>
+            <ErrorBadge label={t('no-experience', { ns: 'crew' })} className="rounded-md" />
           )}
           <Badge action={hasCertificateOfCompetence ? 'success' : 'error'} variant="outline" className="rounded-md">
             <BadgeText className={`text-${hasCertificateOfCompetence ? 'success' : 'error'}-900`}>
@@ -98,11 +96,7 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
               })}
             </BadgeText>
           </Badge>
-          {!crew.courses && (
-            <Badge action="error" variant="outline" className="rounded-md">
-              <BadgeText className="text-error-900">{t('no-courses', { ns: 'crew' })}</BadgeText>
-            </Badge>
-          )}
+          {!crew.courses && <ErrorBadge label={t('no-courses', { ns: 'crew' })} className="rounded-md" />}
         </HStack>
 
         <HStack space="xs">

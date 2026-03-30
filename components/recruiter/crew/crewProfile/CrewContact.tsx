@@ -1,9 +1,9 @@
 import { FC, memo, useMemo } from 'react'
 import { Linking, TouchableOpacity } from 'react-native'
-import { Box, VStack, HStack, Heading, Text, Icon, Badge, BadgeText } from '@/lib/components/ui'
+import { Box, VStack, HStack, Heading, Text, Icon } from '@/lib/components/ui'
 import { MapPin, Phone, Mail, MessageCircle, Contact, Smartphone } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { SubSection, Section, SectionHeader } from '@/lib/components'
+import { SubSection, Section, SectionHeader, ErrorBadge } from '@/lib/components'
 
 import { TCrew } from '@/api/types'
 import { faker } from '@faker-js/faker'
@@ -63,9 +63,7 @@ const ContactSection: FC<{ crew: TCrew }> = ({ crew }) => {
       <SectionHeader title={t('contact-information')} icon={Contact} />
 
       {contacts.length === 0 ? (
-        <Badge action="error" variant="outline" className="rounded-md self-start mb-2">
-          <BadgeText className="text-error-900">{t('no-contacts')}</BadgeText>
-        </Badge>
+        <ErrorBadge label={t('no-contacts')} className="rounded-md self-start mb-2" />
       ) : (
         <>
           <VStack space="xs">

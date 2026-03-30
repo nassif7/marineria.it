@@ -40,7 +40,7 @@ import {
   Euro,
 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { SubSection, Section, SectionHeader } from '@/lib/components'
+import { SubSection, Section, SectionHeader, ErrorBadge } from '@/lib/components'
 
 import { getAgeByYear } from '@/lib/utils/dateUtils'
 import { TCrew } from '@/api/types'
@@ -57,9 +57,7 @@ const LanguagesSection: FC<{ crew: TCrew }> = ({ crew }) => {
       <VStack space="xs">
         <HStack>
           {langs.length === 0 ? (
-            <Badge action="error" variant="outline" className="rounded-md">
-              <BadgeText className="text-typography-800">{t('no-languages', { ns: 'crew' })}</BadgeText>
-            </Badge>
+            <ErrorBadge label={t('no-languages', { ns: 'crew' })} className="rounded-md" />
           ) : (
             <HStack className="flex-wrap gap-2">
               {langs.map((l) => (
@@ -77,11 +75,7 @@ const LanguagesSection: FC<{ crew: TCrew }> = ({ crew }) => {
             </Text>
           </SubSection>
         )}
-        {!crew.educationalLevel && (
-          <Badge action="error" variant="outline" className="rounded-md">
-            <BadgeText className="text-typography-800">{t('no-education', { ns: 'crew' })}</BadgeText>
-          </Badge>
-        )}
+        {!crew.educationalLevel && <ErrorBadge label={t('no-education', { ns: 'crew' })} className="rounded-md" />}
       </VStack>
     </Section>
   )

@@ -10,7 +10,7 @@ import { useActiveProfile } from '@/Providers/UserProvider'
 import { VStack, Loading } from '@/lib/components/ui'
 import { ErrorMessage } from '@/lib/components'
 
-import { useStatusToast } from '@/hooks'
+import { useCustomToast } from '@/hooks'
 
 import ProfileHeader from './ProfileHeader'
 import ProfileContact from './CrewContact'
@@ -35,7 +35,7 @@ const CrewProfile = () => {
   const { crewId, searchId } = useLocalSearchParams()
   const queryClient = useQueryClient()
   const { token } = useActiveProfile()
-  const { showToast } = useStatusToast()
+  const { showToast } = useCustomToast()
 
   const handleScroll = (e: any) => {
     const y = e.nativeEvent.contentOffset.y

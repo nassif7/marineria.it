@@ -1,9 +1,9 @@
 import { FC, memo } from 'react'
-import { Box, Heading, VStack, HStack, Text, Icon, Badge, BadgeText } from '@/lib/components/ui'
+import { Box, Heading, VStack, HStack, Text, Icon } from '@/lib/components/ui'
 import { Sparkles, MessageCircle, ClipboardList, Terminal, Zap, Wrench, Code2 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { TCrew, TCrewExperience } from '@/api/types'
-import { SubSection, Section, SectionHeader, SubSectionHeader } from '@/lib/components'
+import { SubSection, Section, SectionHeader, SubSectionHeader, ErrorBadge } from '@/lib/components'
 
 const CrewSkill = ({
   label,
@@ -27,9 +27,7 @@ const CrewSkill = ({
           </Text>
         </SubSection>
       ) : (
-        <Badge action="error" variant="outline" className="rounded-md self-start">
-          <BadgeText className="text-error-900">{t(noValueLabel, { ns: 'crew' })}</BadgeText>
-        </Badge>
+        <ErrorBadge label={t(noValueLabel, { ns: 'crew' })} />
       )}
     </>
   )
