@@ -3,7 +3,7 @@ import { Stack } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { TUserRole } from '@/api/types'
 import { useSession } from '@/Providers/SessionProvider'
-import { NavBar } from '@/components/appUI'
+import { NavBar } from '@/lib/components'
 
 function _layout() {
   const {

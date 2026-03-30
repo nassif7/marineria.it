@@ -4,7 +4,7 @@ import { VStack, Button, ButtonText, ButtonIcon } from '@/lib/components/ui'
 import { Edit, MessageCircleQuestionMark } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { TRecruiterSearch } from '@/api/types/search'
-import { Section } from '@/components/appUI'
+import { Section } from '@/lib/components'
 
 interface SearchActionsProps {
   onEdit: () => void

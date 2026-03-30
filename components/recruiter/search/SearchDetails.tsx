@@ -10,7 +10,8 @@ import SearchContract from './searchDetails/SearchContract'
 import SearchPosition from './searchDetails/SearchPosition'
 import SearchCandidates from './searchDetails/SearchCandidates'
 import SearchActions from './searchDetails/SearchActions'
-import { ScreenContainer, ErrorMessage } from '@/components/appUI'
+import { ScreenContainer, ErrorMessage } from '@/lib/components'
+
 import { useRecruiterSearch } from '@/Providers/RecruiterSearchProvider'
 
 export default function SearchDetails() {

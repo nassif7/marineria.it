@@ -21,7 +21,7 @@ import { TUserRole } from '@/api/types'
 import { useSession } from '@/Providers/SessionProvider'
 import { useUser } from '@/Providers/UserProvider'
 import { useAuthErrorToast } from '@/hooks/useAuthErrorToast'
-import { LoginFormLinks } from '@/components/appUI'
+import { LoginFormLinks } from '@/lib/components'
 import AuthenticationForm, { FormDate } from '@/components/common/AuthenticationForm'
 
 const SwitchUser: FC = () => {

@@ -10,7 +10,7 @@ import OfferPosition from './OfferPosition'
 import OfferActions from './OfferActions'
 import { useActiveProfile } from '@/Providers/UserProvider'
 import { useTranslation } from 'react-i18next'
-import { ScreenContainer, ErrorMessage } from '@/components/appUI'
+import { ScreenContainer, ErrorMessage } from '@/lib/components'
 
 export default function OfferDetailsScreen() {
   const {

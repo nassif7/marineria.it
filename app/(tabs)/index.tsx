@@ -17,7 +17,7 @@ import {
   Loading,
   Text,
 } from '@/lib/components/ui'
-import { ScreenContainer } from '@/components/appUI'
+import { ScreenContainer } from '@/lib/components'
 
 const UserProfile = () => {
   const { t } = useTranslation(['home-screen'])

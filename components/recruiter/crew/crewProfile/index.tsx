@@ -3,11 +3,13 @@ import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useLocalSearchParams } from 'expo-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { ScreenContainer } from '@/components/appUI'
+import { ScreenContainer } from '@/lib/components'
+
 import { getCrewCV, contactCrew, removeCrew } from '@/api'
 import { useActiveProfile } from '@/Providers/UserProvider'
 import { VStack, Loading } from '@/lib/components/ui'
-import { ErrorMessage } from '@/components/appUI'
+import { ErrorMessage } from '@/lib/components'
+
 import { useStatusToast } from '@/hooks'
 
 import ProfileHeader from './ProfileHeader'

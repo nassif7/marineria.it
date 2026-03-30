@@ -18,7 +18,7 @@ import { Eye, Calendar, Euro, CheckCircle, AlertCircle, MapPin } from 'lucide-re
 import { router } from 'expo-router'
 import { TOffer } from '@/api/types'
 import { Linking } from 'react-native'
-import { SubSection, SubSectionHeader } from '@/components/appUI'
+import { SubSection, SubSectionHeader } from '@/lib/components'
 import { useTranslation } from 'react-i18next'
 import { isDateString } from '@/lib/utils/dateUtils'
 

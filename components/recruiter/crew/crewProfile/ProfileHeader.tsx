@@ -3,11 +3,13 @@ import { TouchableOpacity } from 'react-native'
 import { Box, VStack, HStack, Heading, Text, Icon, Image, Badge, BadgeText, BadgeIcon } from '@/lib/components/ui'
 import { User, MapPin, Heart, Cake, Cigarette, IdCard, Images, Expand } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { Section } from '@/components/appUI'
+import { Section } from '@/lib/components'
+
 import { getAgeByYear } from '@/lib/utils/dateUtils'
 import { TCrew } from '@/api/types'
 import { faker } from '@faker-js/faker'
-import { PhotoSlider } from '@/components/appUI'
+import { PhotoSlider } from '@/lib/components'
+
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 
 const baseUrl = 'https://www.comunicazione.it/PROFoto/'

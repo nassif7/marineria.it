@@ -2,7 +2,8 @@ import { FC, memo } from 'react'
 import { VStack, HStack, Text, Badge, BadgeText } from '@/lib/components/ui'
 import { Book, GraduationCap, Award, BookOpen, BookMarked, ScrollText } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { SubSection, Section, SectionHeader } from '@/components/appUI'
+import { SubSection, Section, SectionHeader } from '@/lib/components'
+
 import { TCrew } from '@/api/types'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 

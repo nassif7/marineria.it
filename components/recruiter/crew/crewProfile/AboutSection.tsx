@@ -2,7 +2,8 @@ import { FC, memo } from 'react'
 import { Text } from '@/lib/components/ui'
 import { User } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { SubSection, Section, SectionHeader } from '@/components/appUI'
+import { SubSection, Section, SectionHeader } from '@/lib/components'
+
 import { TCrew } from '@/api/types'
 
 const AboutSection: FC<{ crew: TCrew }> = ({ crew }) => {

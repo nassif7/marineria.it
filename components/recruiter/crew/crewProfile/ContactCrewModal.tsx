@@ -21,7 +21,7 @@ import {
   ModalBody,
 } from '@/lib/components/ui'
 import { User, Unlock, FileText, Send, Check, PhoneCall } from 'lucide-react-native'
-import { SubSection } from '@/components/appUI'
+import { SubSection } from '@/lib/components'
 import { TCrew } from '@/api/types'
 import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'

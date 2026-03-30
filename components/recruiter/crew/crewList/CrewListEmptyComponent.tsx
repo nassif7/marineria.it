@@ -7,7 +7,8 @@ import { Loading } from '@/lib/components/ui/loading'
 import { useActiveProfile } from '@/Providers/UserProvider'
 import { useTranslation } from 'react-i18next'
 import { getRecruiterSearchById } from '@/api'
-import { ScreenContainer } from '@/components/appUI'
+import { ScreenContainer } from '@/lib/components'
+
 import { UserCheck, MapPin } from 'lucide-react-native'
 
 const CrewListEmptyComponent = () => {

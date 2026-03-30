@@ -22,7 +22,7 @@ import {
   ModalCloseButton,
 } from '@/lib/components/ui'
 import { X, Check, ShieldUser, ListCheck, Minus } from 'lucide-react-native'
-import { SubSection, SubSectionHeader } from '@/components/appUI'
+import { SubSection, SubSectionHeader } from '@/lib/components'
 import { useTranslation } from 'react-i18next'
 import { useUser } from '@/Providers/UserProvider'
 

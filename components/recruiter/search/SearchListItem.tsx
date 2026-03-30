@@ -17,7 +17,7 @@ import {
   Badge,
   BadgeText,
 } from '@/lib/components/ui'
-import { SubSection, InfoRow } from '@/components/appUI'
+import { SubSection, InfoRow } from '@/lib/components'
 
 interface ISearchListItemProps {
   search: TRecruiterSearch

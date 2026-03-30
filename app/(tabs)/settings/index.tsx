@@ -11,7 +11,7 @@ import SwitchLanguage from '@/components/common/SwitchLanguage'
 import NotificationsToggle from '@/components/common/NotificationsToggle'
 import SignOut from '@/components/common/SignOut'
 import SwitchUser from '@/components/common/SwitchUser'
-import { ScreenContainer } from '@/components/appUI'
+import { ScreenContainer } from '@/lib/components'
 
 const Settings = () => {
   const {

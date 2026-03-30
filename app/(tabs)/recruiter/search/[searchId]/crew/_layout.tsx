@@ -1,6 +1,6 @@
 // app/(tabs)/recruiterScreens/offers/[offerid]/crew/_layout.tsx
 import { Stack } from 'expo-router'
-import { NavBar } from '@/components/appUI'
+import { NavBar } from '@/lib/components'
 import { useTranslation } from 'react-i18next'
 import { Box, Text } from '@/lib/components/ui'
 import { supportTeam } from '@/api'

@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getProOffers } from '@/api'
 import { useActiveProfile } from '@/Providers/UserProvider'
 import { Text, Loading, HStack, Box } from '@/lib/components/ui'
-import { List, ScreenContainer, NavBar, ErrorMessage, EmptyList } from '@/components/appUI'
+import { List, ScreenContainer, NavBar, ErrorMessage, EmptyList } from '@/lib/components'
 import OfferListItem from './OfferListItem'
 
 const RightAction = ({

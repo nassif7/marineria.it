@@ -3,7 +3,8 @@ import { TouchableOpacity } from 'react-native'
 import { Box, VStack, HStack, Text, Icon, Divider } from '@/lib/components/ui'
 import { Briefcase, ChevronDown, ChevronUp, Compass } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { SubSection, Section, SectionHeader } from '@/components/appUI'
+import { SubSection, Section, SectionHeader } from '@/lib/components'
+
 import { TCrew, TCrewExperience } from '@/api/types'
 
 const ExperienceItem: FC<{ exp: TCrewExperience; index: number }> = ({ exp, index }) => {

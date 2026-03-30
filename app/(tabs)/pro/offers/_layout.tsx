@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router'
-import { NavBar } from '@/components/appUI'
+import { NavBar } from '@/lib/components'
 import { useTranslation } from 'react-i18next'
 
 export default function OffersLayout() {

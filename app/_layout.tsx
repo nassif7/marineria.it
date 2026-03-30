@@ -12,7 +12,7 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { ThemeUIProvider } from '@/lib/store/ui-provider'
 import SessionProvider, { useSession } from '@/Providers/SessionProvider'
 import { Loading } from '@/lib/components/ui'
-import { MarineriaSplash } from '@/components/appUI'
+import { MarineriaSplash } from '@/lib/components'
 import ErrorBoundary from '@/components/common/ErrorBoundary'
 
 // Prevent the native splash from auto-hiding

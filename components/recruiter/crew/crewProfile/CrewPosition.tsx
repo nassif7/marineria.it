@@ -2,7 +2,8 @@ import { FC, memo, useMemo } from 'react'
 import { VStack, HStack, Text, Icon, Badge, BadgeText } from '@/lib/components/ui'
 import { User, Briefcase, Anchor, Drama } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { SubSection, Section, SectionHeader } from '@/components/appUI'
+import { SubSection, Section, SectionHeader } from '@/lib/components'
+
 import { TCrew } from '@/api/types'
 
 const PositionsSection: FC<{ crew: TCrew }> = ({ crew }) => {

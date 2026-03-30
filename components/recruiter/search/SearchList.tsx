@@ -6,8 +6,9 @@ import { useActiveProfile } from '@/Providers/UserProvider'
 import { Loading, Text } from '@/lib/components/ui'
 import SearchListItem from './SearchListItem'
 import { useQuery } from '@tanstack/react-query'
-import { List, ScreenContainer, EmptyList } from '@/components/appUI'
-import { ErrorMessage } from '@/components/appUI'
+import { List, ScreenContainer, EmptyList } from '@/lib/components'
+
+import { ErrorMessage } from '@/lib/components'
 
 const RecruiterSearchList: FC = () => {
   const {

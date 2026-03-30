@@ -18,7 +18,7 @@ import { User, Calendar, MapPin, Award, Heart, Cake, Cigarette, IdCard, Briefcas
 import { TCrewSimple } from '@/api/types'
 import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'
-import { SubSection } from '@/components/appUI'
+import { SubSection } from '@/lib/components'
 import { getAgeByYear } from '@/lib/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 

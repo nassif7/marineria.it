@@ -7,7 +7,7 @@ import { TUserRole } from '@/api/types'
 import UserProvider from '@/Providers/UserProvider'
 import { useSession } from '@/Providers/SessionProvider'
 import { Text, View } from '@/lib/components/ui'
-import { TabBar } from '@/components/appUI'
+import { TabBar } from '@/lib/components'
 
 const AppLayout = () => {
   const { t } = useTranslation(['screens-labels'])

@@ -3,7 +3,8 @@ import { TouchableOpacity, Linking } from 'react-native'
 import { Box, VStack, HStack, Text, Icon, Divider, Badge, BadgeText } from '@/lib/components/ui'
 import { Phone, Mail, Star, ChevronDown, ChevronUp } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { SubSection, Section, SectionHeader } from '@/components/appUI'
+import { SubSection, Section, SectionHeader } from '@/lib/components'
+
 import { TCrew, TCrewReference } from '@/api/types'
 
 const ReferenceItem: FC<{ reference: TCrewReference; index: number }> = ({ reference, index }) => {

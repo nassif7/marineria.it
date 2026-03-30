@@ -3,7 +3,8 @@ import React from 'react'
 import { VStack, HStack, Text, Badge, BadgeText } from '@/lib/components/ui'
 import { Briefcase, Anchor, CheckCircle, FileText, Clipboard } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { SectionHeader, Section, SubSection } from '@/components/appUI'
+import { SectionHeader, Section, SubSection } from '@/lib/components'
+
 import { TRecruiterSearch } from '@/api/types/search'
 
 interface SearchPositionProps {

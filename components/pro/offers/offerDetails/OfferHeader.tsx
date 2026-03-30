@@ -2,7 +2,7 @@
 import React from 'react'
 import { VStack, HStack, Heading, Text, Divider } from '@/lib/components/ui'
 import { TOffer } from '@/api/types'
-import { Section } from '@/components/appUI'
+import { Section } from '@/lib/components'
 import { useTranslation } from 'react-i18next'
 
 interface IOfferHeaderProps {

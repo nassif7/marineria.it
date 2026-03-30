@@ -3,7 +3,7 @@ import { Box, Heading, VStack, HStack, Text, Icon, Badge, BadgeText } from '@/li
 import { Sparkles, MessageCircle, ClipboardList, Terminal, Zap, Wrench, Code2 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { TCrew, TCrewExperience } from '@/api/types'
-import { SubSection, Section, SectionHeader, SubSectionHeader } from '@/components/appUI'
+import { SubSection, Section, SectionHeader, SubSectionHeader } from '@/lib/components'
 
 const CrewSkill = ({
   label,
