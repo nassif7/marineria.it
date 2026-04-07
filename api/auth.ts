@@ -13,7 +13,7 @@ export interface ICheckEmailResponse {
 export const checkEmail = async (username: string): Promise<ICheckEmailResponse> =>
   apiFetchJson<ICheckEmailResponse>(API.CHECK_EMAIL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', accept: 'text/plain' },
+    headers: { 'Content-Type': 'application/json', accept: 'application/json' },
     body: JSON.stringify({ username }),
   })
 

@@ -1,7 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { router } from 'expo-router'
 import { useMutation } from '@tanstack/react-query'
-// import AuthenticationForm, { FormDate } from '@/components/common/AuthenticationForm'
 import { useAuthErrorToast } from '@/hooks/useAuthErrorToast'
 import { AuthScreen, LoginFormLinks } from '@/components/appUI'
 import {
@@ -24,34 +23,23 @@ import {
   Text,
 } from '@/components/ui'
 import { checkEmail } from '@/api/auth'
+import { useSession } from '@/Providers/SessionProvider/SessionProvider'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const SignIn = () => {
   const showErrorToast = useAuthErrorToast()
+  const { loginWithCode } = useSession()
+
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState('')
   const [showNoAccountDialog, setShowNoAccountDialog] = useState(false)
 
-  const { mutate: loginMutate, isPending: isLoggingIn } = useMutation({
-    mutationFn: async ({ username, code }: { username: string; code: string }) => {
-      const response = await fetch('https://www.comunicazione.it/api/Login/LoginCode', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', accept: '*/*' },
-        body: JSON.stringify({ username, code }),
-      })
-      const text = await response.text()
-      console.log('loginCode status:', response.status)
-      console.log('loginCode body:', text)
-    },
-    onSuccess: () => router.replace('/'),
-    onError: (error) => {
-      console.log('loginCode error:', error)
-      showErrorToast()
-    },
-  })
+  const [step, setStep] = useState<'email' | 'code'>('email')
+  const [code, setCode] = useState('')
+  const [codeError, setCodeError] = useState('')
 
-  const { mutate, isPending: isCheckingEmail } = useMutation({
+  const { mutate: checkEmailMutate, isPending: isCheckingEmail } = useMutation({
     mutationFn: (email: string) => {
       if (!email || !EMAIL_PATTERN.test(email)) {
         setEmailError('Please enter a valid email address')
@@ -60,28 +48,27 @@ const SignIn = () => {
       return checkEmail(email)
     },
     onSuccess: (data) => {
-      console.log('checkEmail response:', JSON.stringify(data, null, 2))
       if (data.result === 1) {
         setShowNoAccountDialog(true)
         return
       }
-      const code = data.codePRO ?? data.codeARM
-      console.log('code to login with:', code)
-      if (code) {
-        console.log('calling loginMutate with:', email, code)
-        loginMutate({ username: email, code })
-      } else {
-        console.log('no code found in response')
-      }
+      setStep('code')
     },
     onError: (error) => {
-      if (error.message !== 'invalid-email') showErrorToast()
+      if ((error as Error).message !== 'invalid-email') showErrorToast()
     },
   })
 
-  const isPending = isCheckingEmail || isLoggingIn
-
-  const handleSubmit = () => mutate(email)
+  const { mutate: loginMutate, isPending: isLoggingIn } = useMutation({
+    mutationFn: async (codeArg: string) => {
+      await loginWithCode(email, codeArg)
+    },
+    onSuccess: () => router.replace('/'),
+    onError: (error) => {
+      console.log('loginWithCode error:', error)
+      showErrorToast()
+    },
+  })
 
   const handleEmailChange = (value: string) => {
     setEmail(value.trimStart())
@@ -94,30 +81,82 @@ const SignIn = () => {
     }
   }
 
+  const prevCodeRef = useRef('')
+
+  const handleCodeChange = (value: string) => {
+    setCode(value)
+    if (codeError) setCodeError('')
+    const trimmed = value.trim()
+    const isPaste = trimmed.length - prevCodeRef.current.trim().length > 1
+    prevCodeRef.current = value
+    if (isPaste || trimmed.length >= 6) {
+      loginMutate(trimmed)
+    }
+  }
+
   return (
     <AuthScreen>
-      {/* <AuthenticationForm authenticate={handleSignIn} isLoading={isPending} /> */}
-      <FormControl isInvalid={!!emailError}>
-        <Input size="xl" className="bg-white" isInvalid={!!emailError}>
-          <InputField
-            className="bg-white"
-            placeholder="Email"
-            value={email}
-            onChangeText={handleEmailChange}
-            onBlur={handleEmailBlur}
-            autoCapitalize="none"
-            keyboardType="email-address"
-          />
-        </Input>
-        <FormControlError>
-          <FormControlErrorText>{emailError}</FormControlErrorText>
-        </FormControlError>
-      </FormControl>
+      {step === 'email' ? (
+        <>
+          <FormControl isInvalid={!!emailError}>
+            <Input size="xl" className="bg-white" isInvalid={!!emailError}>
+              <InputField
+                className="bg-white"
+                placeholder="Email"
+                value={email}
+                onChangeText={handleEmailChange}
+                onBlur={handleEmailBlur}
+                autoCapitalize="none"
+                keyboardType="email-address"
+              />
+            </Input>
+            <FormControlError>
+              <FormControlErrorText>{emailError}</FormControlErrorText>
+            </FormControlError>
+          </FormControl>
 
-      <Button size="xl" className="mt-3" onPress={handleSubmit} isDisabled={isPending}>
-        {isPending && <ButtonSpinner color="white" />}
-        <ButtonText className="text-white">Login</ButtonText>
-      </Button>
+          <Button size="xl" className="mt-3" onPress={() => checkEmailMutate(email)} isDisabled={isCheckingEmail}>
+            {isCheckingEmail && <ButtonSpinner color="white" />}
+            <ButtonText className="text-white">Continue</ButtonText>
+          </Button>
+        </>
+      ) : (
+        <>
+          <Text className="mb-3">A code was sent to {email}. Please enter it below.</Text>
+
+          <FormControl isInvalid={!!codeError}>
+            <Input size="xl" className="bg-white" isInvalid={!!codeError}>
+              <InputField
+                className="bg-white"
+                placeholder="Code"
+                value={code}
+                onChangeText={handleCodeChange}
+                autoCapitalize="characters"
+                autoCorrect={false}
+              />
+            </Input>
+            <FormControlError>
+              <FormControlErrorText>{codeError}</FormControlErrorText>
+            </FormControlError>
+          </FormControl>
+
+          <Button
+            size="xl"
+            className="mt-3"
+            onPress={() => {
+              if (!code.trim()) {
+                setCodeError('Please enter the code')
+                return
+              }
+              loginMutate(code.trim())
+            }}
+            isDisabled={isLoggingIn}
+          >
+            {isLoggingIn && <ButtonSpinner color="white" />}
+            <ButtonText className="text-white">Login</ButtonText>
+          </Button>
+        </>
+      )}
 
       <Divider className="bg-outline-300 my-4" />
       <LoginFormLinks />
