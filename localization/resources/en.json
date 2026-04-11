@@ -40,6 +40,7 @@
     "no-offers": "There are currently no job offers that match your profile!",
     "already-applied": "Already Applied",
     "not-matching-why": "Not matching, why?",
+    "login-to-view-offer": "To view this offer, please log in or register.",
     "not-matching-title": "Not matching! Why?",
     "not-matching-no-reasons": "This offer doesn't match your profile requirements.",
     "apply-for-this-position": "Apply for this position",

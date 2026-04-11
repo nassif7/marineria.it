@@ -25,13 +25,18 @@ import { isDateString } from '@/utils'
 interface IOfferListItemProps {
   offer: TOffer
   hideStatus?: boolean
+  onViewOffer?: () => void
 }
 
-const OfferListItem: FC<IOfferListItemProps> = ({ offer, hideStatus = false }) => {
+const OfferListItem: FC<IOfferListItemProps> = ({ offer, hideStatus = false, onViewOffer }) => {
   const { t } = useTranslation(['offer-screen'])
 
-  const handleViewOffer = (offerId: number) => {
-    router.push(`/pro/offers/${offerId}`)
+  const handleViewOffer = () => {
+    if (onViewOffer) {
+      onViewOffer()
+    } else {
+      router.push(`/pro/offers/${offer.idoffer}`)
+    }
   }
   const handleOpenMap = () => {
     if (offer.latArm && offer.lngArm && offer.latArm !== 0 && offer.lngArm !== 0) {
@@ -101,13 +106,7 @@ const OfferListItem: FC<IOfferListItemProps> = ({ offer, hideStatus = false }) =
             {offer.duration}
           </Text>
         </SubSection>
-        <Button
-          size="md"
-          action="positive"
-          variant="solid"
-          onPress={() => handleViewOffer(offer.idoffer)}
-          className="w-full rounded-md "
-        >
+        <Button size="md" action="positive" variant="solid" onPress={handleViewOffer} className="w-full rounded-md ">
           <ButtonText className="ml-2">{t('view-offer')}</ButtonText>
         </Button>
       </VStack>
