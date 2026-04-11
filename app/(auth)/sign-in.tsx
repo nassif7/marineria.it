@@ -25,10 +25,12 @@ import {
 } from '@/components/ui'
 import { checkEmail } from '@/api/auth'
 import { useSession } from '@/Providers/SessionProvider/SessionProvider'
+import { useTranslation } from 'react-i18next'
 
 const SignIn = () => {
+  const { t } = useTranslation('login-screen')
   const showErrorToast = useAuthErrorToast()
-  const { loginWithCode, signIn } = useSession()
+  const { loginWithCode, signIn, continueAsGuest } = useSession()
 
   const [email, setEmail] = useState('')
   const [showNoAccountDialog, setShowNoAccountDialog] = useState(false)
@@ -128,6 +130,18 @@ const SignIn = () => {
       )}
 
       <Divider className="my-4 bg-outline-300" />
+      <Button
+        size="md"
+        variant="outline"
+        action="secondary"
+        className="w-full mb-4"
+        onPress={() => {
+          continueAsGuest()
+          router.replace('/')
+        }}
+      >
+        <ButtonText>{t('continue-without-login')}</ButtonText>
+      </Button>
       <LoginFormLinks />
 
       <AlertDialog isOpen={showNoAccountDialog} onClose={() => setShowNoAccountDialog(false)}>

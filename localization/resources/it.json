@@ -21,7 +21,8 @@
     "invalid-credentials": "Email o password non corretti",
     "forgot-password": "Password dimenticata?",
     "register-as-crew": "Registrati come equipaggio",
-    "register-as-recruiter": "Registrati come datore di lavoro"
+    "register-as-recruiter": "Registrati come datore di lavoro",
+    "continue-without-login": "Continua senza accedere"
   },
   "home-screen": {
     "welcome": "Welcome",

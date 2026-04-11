@@ -11,7 +11,7 @@ import { TabBar } from '@/components/appUI'
 
 const AppLayout = () => {
   const { t } = useTranslation(['screens-labels'])
-  const { auth, isLoading } = useSession()
+  const { auth, isLoading, isGuest } = useSession()
   const { token, role } = auth
   const insets = useSafeAreaInsets()
 
@@ -19,7 +19,7 @@ const AppLayout = () => {
     return <Text>Loading...</Text>
   }
 
-  if (!token) {
+  if (!token && !isGuest) {
     return <Redirect href="/sign-in" />
   }
 
