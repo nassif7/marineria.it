@@ -3,7 +3,7 @@ import { useLocalSearchParams } from 'expo-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { VStack, Text } from '@/components/ui'
 import { Loading } from '@/components/ui/loading'
-import { getProOfferById, applyToOffer } from '@/api'
+import { getProOfferById, applyToOffer, getWhyCanNotApply } from '@/api'
 import OfferHeader from './OfferHeader'
 import OfferContract from './OfferContract'
 import OfferPosition from './OfferPosition'
@@ -28,6 +28,12 @@ export default function OfferDetailsScreen() {
   const { token } = activeProfile as ActiveProfile
   const [showNotApplicable, setShowNotApplicable] = useState(false)
   const [showApply, setShowApply] = useState(false)
+
+  const { data: whyCanNotApplyReasons = [] } = useQuery({
+    queryKey: ['whyCanNotApply', offerId],
+    queryFn: () => getWhyCanNotApply(parseInt(offerId as string), token, language),
+    enabled: showNotApplicable,
+  })
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
     queryKey: ['offer', offerId],
@@ -94,7 +100,11 @@ export default function OfferDetailsScreen() {
             <OfferPosition offer={offer} />
             <OfferActions offer={offer} onApply={handleApply} />
           </VStack>
-          <NotApplicableModal visible={showNotApplicable} onClose={() => setShowNotApplicable(false)} reasons={[]} />
+          <NotApplicableModal
+            visible={showNotApplicable}
+            onClose={() => setShowNotApplicable(false)}
+            reasons={whyCanNotApplyReasons}
+          />
           <ApplyModal
             visible={showApply}
             onClose={() => setShowApply(false)}
