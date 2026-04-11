@@ -1,11 +1,11 @@
-// import { View, ImageBackground } from 'react-native'
-
 import React, { useMemo } from 'react'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { TUserRole } from '@/api/types'
 import { useSession } from '@/Providers/SessionProvider'
 import { useUser } from '@/Providers/UserProvider'
+import { useQuery } from '@tanstack/react-query'
+import { getPublicOffers } from '@/api'
 import {
   Avatar,
   AvatarFallbackText,
@@ -17,7 +17,36 @@ import {
   Loading,
   Text,
 } from '@/components/ui'
-import { ScreenContainer } from '@/components/appUI'
+import { ErrorMessage, List, EmptyList, ScreenContainer } from '@/components/appUI'
+import OfferListItem from '@/components/pro/offers/offerList/OfferListItem'
+
+const GuestOfferList = () => {
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(['offer-screen'])
+
+  const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
+    queryKey: ['public-offers'],
+    queryFn: () => getPublicOffers(language),
+  })
+
+  return (
+    <ScreenContainer>
+      {(isLoading || isRefetching) && <Loading />}
+      {isSuccess && (
+        <List
+          data={data}
+          isRefetching={isRefetching}
+          onRefresh={refetch}
+          renderItem={({ item }) => <OfferListItem offer={item} hideStatus key={item.reference} />}
+          listEmptyComponent={<EmptyList message={t('no-offers')} />}
+        />
+      )}
+      {isError && <ErrorMessage />}
+    </ScreenContainer>
+  )
+}
 
 const UserProfile = () => {
   const { t } = useTranslation(['home-screen'])
@@ -75,4 +104,9 @@ const UserProfile = () => {
   )
 }
 
-export default UserProfile
+const HomeScreen = () => {
+  const { isGuest } = useSession()
+  return isGuest ? <GuestOfferList /> : <UserProfile />
+}
+
+export default HomeScreen

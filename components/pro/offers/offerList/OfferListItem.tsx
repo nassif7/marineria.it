@@ -24,9 +24,10 @@ import { isDateString } from '@/utils'
 
 interface IOfferListItemProps {
   offer: TOffer
+  hideStatus?: boolean
 }
 
-const OfferListItem: FC<IOfferListItemProps> = ({ offer }) => {
+const OfferListItem: FC<IOfferListItemProps> = ({ offer, hideStatus = false }) => {
   const { t } = useTranslation(['offer-screen'])
 
   const handleViewOffer = (offerId: number) => {
@@ -57,7 +58,7 @@ const OfferListItem: FC<IOfferListItemProps> = ({ offer }) => {
           </Text>
         </HStack>
         {/* Status Badges */}
-        {(offer.alreadyApplied || !offer.offerApplicable) && (
+        {!hideStatus && (offer.alreadyApplied || !offer.offerApplicable) && (
           <HStack className="flex-wrap py-1" space="sm">
             {offer.alreadyApplied && (
               <Badge action="muted" variant="outline" className="rounded-md">
