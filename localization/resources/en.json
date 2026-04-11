@@ -21,7 +21,8 @@
     "invalid-credentials": "Email or password are incorrect",
     "forgot-password": "Forgot password?",
     "register-as-crew": "Register as crew",
-    "register-as-recruiter": "Register as recruiter"
+    "register-as-recruiter": "Register as recruiter",
+    "continue-without-login": "Continue without login"
   },
   "home-screen": {
     "welcome": "Welcome",
@@ -39,6 +40,7 @@
     "no-offers": "There are currently no job offers that match your profile!",
     "already-applied": "Already Applied",
     "not-matching-why": "Not matching, why?",
+    "login-to-view-offer": "To view this offer, please log in or register.",
     "not-matching-title": "Not matching! Why?",
     "not-matching-no-reasons": "This offer doesn't match your profile requirements.",
     "apply-for-this-position": "Apply for this position",
@@ -106,6 +108,7 @@
     "login-as-crew": "Login as crew",
     "login-as-recruiter": "Login as recruiter",
     "logout": "Logout",
+    "login": "Login",
     "edit-profile": "Edit profile",
     "change-password": "Change password"
   },

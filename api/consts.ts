@@ -10,4 +10,5 @@ export const API = {
   CREW_LIST: `${BASE_URL}/api/Owneruser/CrewList`,
   PRO_OFFERS: `${BASE_URL}/api/OffersForProuserApply`,
   WHY_CANT_APPLY: `${BASE_URL}/api/OffersForProuserApply/WhyCanNotApply`,
+  PUBLIC_OFFERS: `${BASE_URL}/api/Offers`,
 }

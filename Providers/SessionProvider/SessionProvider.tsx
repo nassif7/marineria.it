@@ -8,9 +8,11 @@ type SessionContextType = {
   loginWithCode: (username: string, code: string) => Promise<void>
   signOut: (role: TUserRole) => void
   switchAuth: (role: TUserRole) => void
+  continueAsGuest: () => void
   auth: { role: TUserRole | null; token: string | null }
   storedAuthTokens: TUserAuth
   isLoading: boolean
+  isGuest: boolean
 }
 
 const SessionContext = createContext<SessionContextType>({
@@ -18,9 +20,11 @@ const SessionContext = createContext<SessionContextType>({
   loginWithCode: async () => {},
   signOut: () => null,
   switchAuth: () => null,
+  continueAsGuest: () => null,
   auth: { role: null, token: null },
   storedAuthTokens: { [TUserRole.CREW]: null, [TUserRole.RECRUITER]: null },
   isLoading: false,
+  isGuest: false,
 })
 
 export const useSession = () => {
@@ -44,6 +48,7 @@ const SessionProvider = (props: React.PropsWithChildren) => {
     token: null,
   })
   const [isLoading, setIsLoading] = useState(true)
+  const [isGuest, setIsGuest] = useState(false)
 
   useEffect(() => {
     hydrateSession()
@@ -71,7 +76,10 @@ const SessionProvider = (props: React.PropsWithChildren) => {
     }
   }
 
+  const continueAsGuest = () => setIsGuest(true)
+
   const storeAuthData = async (category: TUserRole, token: string) => {
+    setIsGuest(false)
     await Promise.all([SecureStore.setItemAsync(category, token), SecureStore.setItemAsync('role', category)])
     setStoredAuthTokens((prev) => ({ ...prev, [category]: token }))
     setAuth({ role: category, token })
@@ -118,9 +126,11 @@ const SessionProvider = (props: React.PropsWithChildren) => {
         loginWithCode: authenticateWithCode,
         signOut: unAuthenticate,
         switchAuth,
+        continueAsGuest,
         storedAuthTokens,
         auth,
         isLoading,
+        isGuest,
       }}
     >
       {props.children}

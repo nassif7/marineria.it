@@ -24,13 +24,19 @@ import { isDateString } from '@/utils'
 
 interface IOfferListItemProps {
   offer: TOffer
+  hideStatus?: boolean
+  onViewOffer?: () => void
 }
 
-const OfferListItem: FC<IOfferListItemProps> = ({ offer }) => {
+const OfferListItem: FC<IOfferListItemProps> = ({ offer, hideStatus = false, onViewOffer }) => {
   const { t } = useTranslation(['offer-screen'])
 
-  const handleViewOffer = (offerId: number) => {
-    router.push(`/pro/offers/${offerId}`)
+  const handleViewOffer = () => {
+    if (onViewOffer) {
+      onViewOffer()
+    } else {
+      router.push(`/pro/offers/${offer.idoffer}`)
+    }
   }
   const handleOpenMap = () => {
     if (offer.latArm && offer.lngArm && offer.latArm !== 0 && offer.lngArm !== 0) {
@@ -57,7 +63,7 @@ const OfferListItem: FC<IOfferListItemProps> = ({ offer }) => {
           </Text>
         </HStack>
         {/* Status Badges */}
-        {(offer.alreadyApplied || !offer.offerApplicable) && (
+        {!hideStatus && (offer.alreadyApplied || !offer.offerApplicable) && (
           <HStack className="flex-wrap py-1" space="sm">
             {offer.alreadyApplied && (
               <Badge action="muted" variant="outline" className="rounded-md">
@@ -100,13 +106,7 @@ const OfferListItem: FC<IOfferListItemProps> = ({ offer }) => {
             {offer.duration}
           </Text>
         </SubSection>
-        <Button
-          size="md"
-          action="positive"
-          variant="solid"
-          onPress={() => handleViewOffer(offer.idoffer)}
-          className="w-full rounded-md "
-        >
+        <Button size="md" action="positive" variant="solid" onPress={handleViewOffer} className="w-full rounded-md ">
           <ButtonText className="ml-2">{t('view-offer')}</ButtonText>
         </Button>
       </VStack>

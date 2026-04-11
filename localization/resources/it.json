@@ -21,7 +21,8 @@
     "invalid-credentials": "Email o password non corretti",
     "forgot-password": "Password dimenticata?",
     "register-as-crew": "Registrati come equipaggio",
-    "register-as-recruiter": "Registrati come datore di lavoro"
+    "register-as-recruiter": "Registrati come datore di lavoro",
+    "continue-without-login": "Continua senza accedere"
   },
   "home-screen": {
     "welcome": "Welcome",
@@ -39,6 +40,7 @@
     "no-offers": "There are currently no job offers that match your profile!",
     "already-applied": "Candidato",
     "not-matching-why": "Non corrispondente, perche?",
+    "login-to-view-offer": "Per visualizzare questa offerta, accedi o registrati.",
     "not-matching-title": "Non corrispondente! Perché?",
     "not-matching-no-reasons": "Questa offerta non corrisponde ai requisiti del tuo profilo.",
     "apply-for-this-position": "Applica per questa posizione",
@@ -107,6 +109,7 @@
     "login-as-crew": "Accedi come equipaggio",
     "login-as-recruiter": "Accedi come datore di lavoro",
     "logout": "Esci",
+    "login": "Accedi",
     "edit-profile": "Edit profile",
     "change-password": "Change password"
   },

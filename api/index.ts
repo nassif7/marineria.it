@@ -1,5 +1,6 @@
 export * from './auth'
 export * from './pro'
 export * from './profile'
+export * from './public'
 export * from './recruiter'
 export * from './supportTeam'
