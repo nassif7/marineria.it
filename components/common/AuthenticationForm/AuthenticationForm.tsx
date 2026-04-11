@@ -1,4 +1,4 @@
-import React, { useState, FC } from 'react'
+import React, { useState, useRef, FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useForm } from '@tanstack/react-form'
 import { EyeIcon, EyeOffIcon } from 'lucide-react-native'
@@ -7,6 +7,10 @@ import {
   Button,
   ButtonSpinner,
   ButtonText,
+  Checkbox,
+  CheckboxIcon,
+  CheckboxIndicator,
+  CheckboxLabel,
   FormControl,
   FormControlError,
   FormControlErrorText,
@@ -16,6 +20,7 @@ import {
   InputField,
   InputIcon,
   InputSlot,
+  Text,
   VStack,
 } from '@/components/ui'
 
@@ -33,6 +38,7 @@ type SwitchUserRole = {
 
 interface IAuthenticationForm {
   authenticate: (args: FormDate) => void
+  onOtpRequest?: (email: string) => void
   user?: SwitchUserRole
   isLoading?: boolean
   onFocus?: () => void
@@ -100,68 +106,124 @@ const FormField: FC<FormFieldProps> = ({
   )
 }
 
-const AuthenticationForm: FC<IAuthenticationForm> = ({ authenticate, user, isLoading, onFocus, onBlur }) => {
+const AuthenticationForm: FC<IAuthenticationForm> = ({
+  authenticate,
+  onOtpRequest,
+  user,
+  isLoading,
+  onFocus,
+  onBlur,
+}) => {
   const { t } = useTranslation('login-screen')
+  const hasOtpMode = !!onOtpRequest
+
+  const [usePassword, setUsePassword] = useState(false)
+  // Ref needed so onSubmit closure always reads the current mode
+  const usePasswordRef = useRef(false)
+
+  const isPasswordMode = !hasOtpMode || usePassword
 
   const { Field, Subscribe, handleSubmit } = useForm({
     defaultValues: {
       email: user?.email ?? '',
       password: '',
     },
-    onSubmit: ({ value }) => authenticate(value),
+    onSubmit: ({ value }) => {
+      if (usePasswordRef.current || !onOtpRequest) {
+        authenticate(value)
+      } else {
+        onOtpRequest(value.email)
+      }
+    },
   })
-
-  const fields: {
-    name: keyof FormDate
-    placeholder: string
-    type?: 'text' | 'password'
-    autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters'
-    validate: (value: string) => string | undefined
-    helperText?: string
-  }[] = [
-    {
-      name: 'email',
-      placeholder: t('email'),
-      autoCapitalize: 'none',
-      validate: (value) => (!value || !EMAIL_PATTERN.test(value) ? t('invalid-email') : undefined),
-      helperText: t('email-helper-text'),
-    },
-    {
-      name: 'password',
-      placeholder: t('password'),
-      type: 'password',
-      validate: (value) => (!value ? t('invalid-password') : undefined),
-    },
-  ]
 
   return (
     <VStack space="sm">
-      {fields.map(({ name, placeholder, type, autoCapitalize, validate, helperText }) => (
-        <Field key={name} name={name} validators={{ onSubmit: ({ value }) => validate(value) }}>
+      {hasOtpMode && isPasswordMode && (
+        <Text className="mb-1 text-sm text-typography-500">Enter your email and password to sign in.</Text>
+      )}
+
+      <Field
+        name="email"
+        validators={{
+          onSubmit: ({ value }) => (!value || !EMAIL_PATTERN.test(value.trim()) ? t('invalid-email') : undefined),
+        }}
+      >
+        {(field) => (
+          <FormField
+            name="email"
+            value={field.state.value}
+            placeholder={t('email')}
+            onChangeText={(value) => field.handleChange(value.trim())}
+            errors={field.state.meta.errors as string[]}
+            autoCapitalize="none"
+            onFocus={onFocus}
+            onBlur={onBlur}
+            helperText={
+              !hasOtpMode
+                ? t('email-helper-text')
+                : !isPasswordMode
+                  ? 'Enter your email to receive a login code.'
+                  : undefined
+            }
+          />
+        )}
+      </Field>
+
+      {isPasswordMode && (
+        <Field
+          name="password"
+          validators={{
+            onSubmit: ({ value }) => (!value ? t('invalid-password') : undefined),
+          }}
+        >
           {(field) => (
             <FormField
-              name={name}
+              name="password"
               value={field.state.value}
-              placeholder={placeholder}
-              onChangeText={name === 'email' ? (value) => field.handleChange(value.trimStart()) : field.handleChange}
+              placeholder={t('password')}
+              onChangeText={field.handleChange}
               errors={field.state.meta.errors as string[]}
-              type={type}
-              autoCapitalize={autoCapitalize}
+              type="password"
               onFocus={onFocus}
               onBlur={onBlur}
-              helperText={helperText}
             />
           )}
         </Field>
-      ))}
+      )}
 
       <Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
-        {([canSubmit, isSubmitting]) => (
-          <Button onPress={handleSubmit} size="xl" isDisabled={!canSubmit || isSubmitting || isLoading}>
-            {(isSubmitting || isLoading) && <ButtonSpinner color="white" />}
-            <ButtonText className="text-white">{t('login')}</ButtonText>
-          </Button>
-        )}
+        {([canSubmit, isSubmitting]) => {
+          const isBusy = isSubmitting || !!isLoading
+          return (
+            <>
+              <Button onPress={handleSubmit} size="xl" isDisabled={!canSubmit || isBusy}>
+                {isBusy && <ButtonSpinner color="white" />}
+                <ButtonText className="text-white">{isPasswordMode ? t('login') : 'Continue'}</ButtonText>
+              </Button>
+
+              {hasOtpMode && (
+                <Checkbox
+                  size="sm"
+                  className="mt-1"
+                  value="usePassword"
+                  isChecked={usePassword}
+                  isDisabled={isBusy}
+                  onChange={() => {
+                    const next = !usePassword
+                    setUsePassword(next)
+                    usePasswordRef.current = next
+                  }}
+                >
+                  <CheckboxIndicator>
+                    <CheckboxIcon />
+                  </CheckboxIndicator>
+                  <CheckboxLabel>Use password instead</CheckboxLabel>
+                </Checkbox>
+              )}
+            </>
+          )
+        }}
       </Subscribe>
     </VStack>
   )

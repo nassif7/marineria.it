@@ -2,6 +2,8 @@ export const BASE_URL = 'https://www.comunicazione.it'
 
 export const API = {
   LOGIN: `${BASE_URL}/api/login`,
+  CHECK_EMAIL: `${BASE_URL}/api/Login/ChekEmail`,
+  LOGIN_CODE: `${BASE_URL}/api/Login/LoginCode`,
   PROFILE: `${BASE_URL}/api`,
   NOTIFICATION: `${BASE_URL}/api/PushNotification`,
   OWNER_OFFERS: `${BASE_URL}/api/Owneruser/Offers`,

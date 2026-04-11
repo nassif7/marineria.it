@@ -1,10 +1,11 @@
 import { useState, createContext, useContext, useEffect } from 'react'
 import * as SecureStore from 'expo-secure-store'
 import { TUserRole, TUserAuth } from '@/api/types'
-import { signIn } from '@/api/auth'
+import { signIn, loginCode } from '@/api/auth'
 
 type SessionContextType = {
   signIn: (userName: string, password: string) => Promise<void>
+  loginWithCode: (username: string, code: string) => Promise<void>
   signOut: (role: TUserRole) => void
   switchAuth: (role: TUserRole) => void
   auth: { role: TUserRole | null; token: string | null }
@@ -14,6 +15,7 @@ type SessionContextType = {
 
 const SessionContext = createContext<SessionContextType>({
   signIn: async () => {},
+  loginWithCode: async () => {},
   signOut: () => null,
   switchAuth: () => null,
   auth: { role: null, token: null },
@@ -69,14 +71,20 @@ const SessionProvider = (props: React.PropsWithChildren) => {
     }
   }
 
-  const authenticate = async (userName: string, password: string) => {
-    const authData = await signIn(userName, password)
-    const { category, token } = authData
-
+  const storeAuthData = async (category: TUserRole, token: string) => {
     await Promise.all([SecureStore.setItemAsync(category, token), SecureStore.setItemAsync('role', category)])
-
     setStoredAuthTokens((prev) => ({ ...prev, [category]: token }))
     setAuth({ role: category, token })
+  }
+
+  const authenticate = async (userName: string, password: string) => {
+    const { category, token } = await signIn(userName, password)
+    await storeAuthData(category, token)
+  }
+
+  const authenticateWithCode = async (username: string, code: string) => {
+    const { category, token } = await loginCode(username, code)
+    await storeAuthData(category, token)
   }
 
   const unAuthenticate = async (role: TUserRole) => {
@@ -107,6 +115,7 @@ const SessionProvider = (props: React.PropsWithChildren) => {
     <SessionContext.Provider
       value={{
         signIn: authenticate,
+        loginWithCode: authenticateWithCode,
         signOut: unAuthenticate,
         switchAuth,
         storedAuthTokens,

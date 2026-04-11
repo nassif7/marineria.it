@@ -38,7 +38,6 @@ export const contactCrew = async (
   language?: string
 ): Promise<string> => {
   const languageCode = getLanguageCode(language)
-  console.log('here', ownerToken, crewId, offerId)
   const url = `https://www.comunicazione.it/api/Owneruser/ContactPro/${ownerToken}/${offerId}/${crewId}?language=${languageCode}`
   return apiFetchText(url)
 }
