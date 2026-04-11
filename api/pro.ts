@@ -19,3 +19,9 @@ export const applyToOffer = async (proToken: string, offerId: number, language: 
   const url = API.PRO_OFFERS + `/Apply/${offerId}/${proToken}?language=${languageCode}`
   return apiFetchJson(url)
 }
+
+export const getWhyCanNotApply = async (offerId: number, proToken: string, language: string): Promise<string[]> => {
+  const languageCode = getLanguageCode(language)
+  const url = API.WHY_CANT_APPLY + `/${offerId}/${proToken}?Language=${languageCode}`
+  return apiFetchJson<string[]>(url)
+}

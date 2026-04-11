@@ -9,4 +9,5 @@ export const API = {
   OWNER_OFFERS: `${BASE_URL}/api/Owneruser/Offers`,
   CREW_LIST: `${BASE_URL}/api/Owneruser/CrewList`,
   PRO_OFFERS: `${BASE_URL}/api/OffersForProuserApply`,
+  WHY_CANT_APPLY: `${BASE_URL}/api/OffersForProuserApply/WhyCanNotApply`,
 }
