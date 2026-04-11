@@ -1,12 +1,14 @@
 import React from 'react'
 import * as SecureStore from 'expo-secure-store'
+import { Linking } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Globe, Bell } from 'lucide-react-native'
+import { router } from 'expo-router'
 import { TUserRole } from '@/api/types'
 import { TLocales } from '@/localization'
 import { useSession } from '@/Providers/SessionProvider'
 import { useUser } from '@/Providers/UserProvider'
-import { Box, VStack, Heading, HStack, Icon } from '@/components/ui'
+import { Box, VStack, Heading, HStack, Icon, Button, ButtonText, Link, LinkText } from '@/components/ui'
 import SwitchLanguage from '@/components/common/SwitchLanguage'
 import NotificationsToggle from '@/components/common/NotificationsToggle'
 import SignOut from '@/components/common/SignOut'
@@ -21,6 +23,7 @@ const Settings = () => {
   const {
     auth: { role },
     signOut,
+    isGuest,
   } = useSession()
 
   const { user, togglePushNotifications, isTogglingNotifications } = useUser()
@@ -53,29 +56,49 @@ const Settings = () => {
               languageOptions={languageOptions}
             />
           </HStack>
-          <HStack className="justify-between items-center bg-white rounded-md p-3 mb-5 border border-background-300 min-h-[60px] ">
-            <HStack className="items-center" space="sm">
-              <Icon as={Bell} className="text-typography-600" size="md" />
-              <Heading size="sm" className="text-typography-600">
-                {t('notifications')}
-              </Heading>
+
+          {!isGuest && (
+            <HStack className="justify-between items-center bg-white rounded-md p-3 mb-5 border border-background-300 min-h-[60px] ">
+              <HStack className="items-center" space="sm">
+                <Icon as={Bell} className="text-typography-600" size="md" />
+                <Heading size="sm" className="text-typography-600">
+                  {t('notifications')}
+                </Heading>
+              </HStack>
+              <NotificationsToggle
+                enabled={!!pushNotificationToken}
+                handleSetPushNotification={togglePushNotifications}
+                isPending={isTogglingNotifications}
+              />
             </HStack>
-            <NotificationsToggle
-              enabled={!!pushNotificationToken}
-              handleSetPushNotification={togglePushNotifications}
-              isPending={isTogglingNotifications}
-            />
-          </HStack>
+          )}
         </VStack>
-        <Box className="p-6 ">
-          <VStack>
-            <Box className="mb-4">
-              <SwitchUser />
-            </Box>
-            <Box>
-              <SignOut buttonLabel={t('logout')} handleLogout={async () => await signOut(role as TUserRole)} />
-            </Box>
-          </VStack>
+
+        <Box className="p-6">
+          {isGuest ? (
+            <VStack space="md">
+              <Button size="lg" onPress={() => router.replace('/sign-in')}>
+                <ButtonText>{t('login')}</ButtonText>
+              </Button>
+              <VStack space="xs" className="items-center">
+                <Link onPress={() => Linking.openURL('https://www.marineria.it/En/Pro/Reg.aspx')}>
+                  <LinkText>{t('register-as-crew', { ns: 'login-screen' })}</LinkText>
+                </Link>
+                <Link onPress={() => Linking.openURL('https://www.marineria.it/En/Rec/Reg.aspx')}>
+                  <LinkText>{t('register-as-recruiter', { ns: 'login-screen' })}</LinkText>
+                </Link>
+              </VStack>
+            </VStack>
+          ) : (
+            <VStack>
+              <Box className="mb-4">
+                <SwitchUser />
+              </Box>
+              <Box>
+                <SignOut buttonLabel={t('logout')} handleLogout={async () => await signOut(role as TUserRole)} />
+              </Box>
+            </VStack>
+          )}
         </Box>
       </VStack>
     </ScreenContainer>
