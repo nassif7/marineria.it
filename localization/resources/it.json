@@ -39,6 +39,8 @@
     "no-offers": "There are currently no job offers that match your profile!",
     "already-applied": "Candidato",
     "not-matching-why": "Non corrispondente, perche?",
+    "not-matching-title": "Non corrispondente! Perché?",
+    "not-matching-no-reasons": "Questa offerta non corrisponde ai requisiti del tuo profilo.",
     "apply-for-this-position": "Applica per questa posizione",
     "apply": "Applica",
     "share-offer": "Condividi offerta",
