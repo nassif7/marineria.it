@@ -18,6 +18,7 @@ import {
   ModalCloseButton,
 } from '@/components/ui'
 import { X, AlertCircle } from 'lucide-react-native'
+import { useTranslation } from 'react-i18next'
 
 interface NotApplicableModalProps {
   visible: boolean
@@ -26,6 +27,7 @@ interface NotApplicableModalProps {
 }
 
 const NotApplicableModal: React.FC<NotApplicableModalProps> = ({ visible, onClose, reasons }) => {
+  const { t } = useTranslation()
   return (
     <Modal isOpen={visible} onClose={onClose}>
       <ModalBackdrop />
@@ -34,7 +36,7 @@ const NotApplicableModal: React.FC<NotApplicableModalProps> = ({ visible, onClos
           <HStack className="items-center gap-2 flex-1">
             <Icon as={AlertCircle} className="text-warning-600" size="xl" />
             <Heading size="xl" className="text-warning-600">
-              Not matching! Why?
+              {t('not-matching-title', { ns: 'offer-screen' })}
             </Heading>
           </HStack>
           <ModalCloseButton onPress={onClose}>
@@ -53,7 +55,7 @@ const NotApplicableModal: React.FC<NotApplicableModalProps> = ({ visible, onClos
             ) : (
               <Box className="bg-background-50 rounded-lg p-4">
                 <Text className="text-typography-700 text-sm text-center">
-                  This offer doesn't match your profile requirements.
+                  {t('not-matching-no-reasons', { ns: 'offer-screen' })}
                 </Text>
               </Box>
             )}
@@ -62,7 +64,7 @@ const NotApplicableModal: React.FC<NotApplicableModalProps> = ({ visible, onClos
 
         <ModalFooter>
           <Button size="md" variant="outline" action="secondary" onPress={onClose} className="rounded-xl flex-1">
-            <ButtonText>Close</ButtonText>
+            <ButtonText>{t('close', { ns: 'common' })}</ButtonText>
           </Button>
         </ModalFooter>
       </ModalContent>
