@@ -11,10 +11,7 @@ const LoginFormLinks: FC<ILoginFormLinksProps> = ({ isCrew, isRecruiter }) => {
   const { t } = useTranslation('login-screen')
 
   return (
-    <VStack className="rounded-md bg-background-100 flex justify-items-start items-start">
-      <Link href="https://www.marineria.it/En/Forgot_PSW.aspx" className="mb-1">
-        <LinkText>{t('forgot-password')}</LinkText>
-      </Link>
+    <VStack className="flex items-start rounded-md bg-background-100 justify-items-start">
       {!isRecruiter && (
         <Link href="https://www.marineria.it/En/Rec/Reg.aspx" className="mb-1">
           <LinkText>{t('register-as-recruiter')}</LinkText>

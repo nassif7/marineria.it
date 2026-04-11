@@ -1,6 +1,7 @@
-import { FC, useState } from 'react'
+import { FC, useState, useRef } from 'react'
 import {
   Button,
+  ButtonSpinner,
   ButtonText,
   Modal,
   ModalBackdrop,
@@ -11,6 +12,12 @@ import {
   Heading,
   Icon,
   Divider,
+  FormControl,
+  FormControlError,
+  FormControlErrorText,
+  Input,
+  InputField,
+  Text,
 } from '@/components/ui'
 import { X } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
@@ -23,14 +30,22 @@ import { useUser } from '@/Providers/UserProvider'
 import { useAuthErrorToast } from '@/hooks/useAuthErrorToast'
 import { LoginFormLinks } from '@/components/appUI'
 import AuthenticationForm, { FormDate } from '@/components/common/AuthenticationForm'
+import { checkEmail } from '@/api/auth'
 
 const SwitchUser: FC = () => {
   const [modalVisible, setModalVisible] = useState(false)
+  const [step, setStep] = useState<'email' | 'code'>('email')
+  const [email, setEmail] = useState('')
+  const [code, setCode] = useState('')
+  const [codeError, setCodeError] = useState('')
+  const prevCodeRef = useRef('')
+
   const {
     auth: { role },
     switchAuth,
     storedAuthTokens,
     signIn,
+    loginWithCode,
   } = useSession()
   const { t } = useTranslation('settings-screen')
 
@@ -51,7 +66,14 @@ const SwitchUser: FC = () => {
     }
   }
 
-  const { mutate: handleSignIn, isPending } = useMutation({
+  const handleClose = () => {
+    setModalVisible(false)
+    setStep('email')
+    setCode('')
+    setCodeError('')
+  }
+
+  const { mutate: handleSignIn, isPending: isSigningIn } = useMutation({
     mutationFn: ({ email, password }: FormDate) => signIn(email, password),
     onSuccess: async () => {
       await switchProfile?.(targetRole)
@@ -61,7 +83,46 @@ const SwitchUser: FC = () => {
     onSettled: () => setModalVisible(false),
   })
 
-  const handleClose = () => setModalVisible(false)
+  const { mutate: checkEmailMutate, isPending: isCheckingEmail } = useMutation({
+    mutationFn: checkEmail,
+    onSuccess: (data) => {
+      if (data.result === 1) {
+        showErrorToast()
+        return
+      }
+      setStep('code')
+    },
+    onError: () => showErrorToast(),
+  })
+
+  const { mutate: loginWithCodeMutate, isPending: isLoggingInWithCode } = useMutation({
+    mutationFn: async (codeArg: string) => {
+      await loginWithCode(email, codeArg)
+    },
+    onSuccess: async () => {
+      await switchProfile?.(targetRole)
+      router.replace('/')
+    },
+    onError: () => showErrorToast(),
+    onSettled: () => setModalVisible(false),
+  })
+
+  const handleOtpRequest = (emailArg: string) => {
+    setEmail(emailArg)
+    checkEmailMutate(emailArg)
+  }
+
+  const handleCodeChange = (value: string) => {
+    setCode(value)
+    if (codeError) setCodeError('')
+    const trimmed = value.trim()
+    const isPaste = trimmed.length - prevCodeRef.current.trim().length > 1
+    prevCodeRef.current = value
+    if (isPaste || trimmed.length >= 6) {
+      loginWithCodeMutate(trimmed)
+    }
+  }
+
   const label = role == TUserRole.CREW ? t('login-as-recruiter') : t('login-as-crew')
 
   return (
@@ -83,7 +144,50 @@ const SwitchUser: FC = () => {
           </ModalHeader>
 
           <ModalBody>
-            <AuthenticationForm authenticate={handleSignIn} isLoading={isPending} />
+            {step === 'email' ? (
+              <AuthenticationForm
+                authenticate={handleSignIn}
+                onOtpRequest={handleOtpRequest}
+                isLoading={isSigningIn || isCheckingEmail}
+              />
+            ) : (
+              <>
+                <Text className="mb-3">A code was sent to {email}. Please enter it below.</Text>
+
+                <FormControl isInvalid={!!codeError}>
+                  <Input size="xl" className="bg-white" isInvalid={!!codeError}>
+                    <InputField
+                      className="bg-white"
+                      placeholder="Code"
+                      value={code}
+                      onChangeText={handleCodeChange}
+                      autoCapitalize="characters"
+                      autoCorrect={false}
+                    />
+                  </Input>
+                  <FormControlError>
+                    <FormControlErrorText>{codeError}</FormControlErrorText>
+                  </FormControlError>
+                </FormControl>
+
+                <Button
+                  size="xl"
+                  className="mt-3"
+                  onPress={() => {
+                    if (!code.trim()) {
+                      setCodeError('Please enter the code')
+                      return
+                    }
+                    loginWithCodeMutate(code.trim())
+                  }}
+                  isDisabled={isLoggingInWithCode}
+                >
+                  {isLoggingInWithCode && <ButtonSpinner color="white" />}
+                  <ButtonText className="text-white">Login</ButtonText>
+                </Button>
+              </>
+            )}
+
             <Divider className="bg-outline-300 my-4" />
             <LoginFormLinks isCrew={activeRole === TUserRole.CREW} isRecruiter={activeRole === TUserRole.RECRUITER} />
           </ModalBody>

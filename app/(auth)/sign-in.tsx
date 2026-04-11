@@ -3,6 +3,7 @@ import { router } from 'expo-router'
 import { useMutation } from '@tanstack/react-query'
 import { useAuthErrorToast } from '@/hooks/useAuthErrorToast'
 import { AuthScreen, LoginFormLinks } from '@/components/appUI'
+import AuthenticationForm, { FormDate } from '@/components/common/AuthenticationForm'
 import {
   AlertDialog,
   AlertDialogBackdrop,
@@ -25,14 +26,11 @@ import {
 import { checkEmail } from '@/api/auth'
 import { useSession } from '@/Providers/SessionProvider/SessionProvider'
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
 const SignIn = () => {
   const showErrorToast = useAuthErrorToast()
-  const { loginWithCode } = useSession()
+  const { loginWithCode, signIn } = useSession()
 
   const [email, setEmail] = useState('')
-  const [emailError, setEmailError] = useState('')
   const [showNoAccountDialog, setShowNoAccountDialog] = useState(false)
 
   const [step, setStep] = useState<'email' | 'code'>('email')
@@ -40,13 +38,7 @@ const SignIn = () => {
   const [codeError, setCodeError] = useState('')
 
   const { mutate: checkEmailMutate, isPending: isCheckingEmail } = useMutation({
-    mutationFn: (email: string) => {
-      if (!email || !EMAIL_PATTERN.test(email)) {
-        setEmailError('Please enter a valid email address')
-        throw new Error('invalid-email')
-      }
-      return checkEmail(email)
-    },
+    mutationFn: checkEmail,
     onSuccess: (data) => {
       if (data.result === 1) {
         setShowNoAccountDialog(true)
@@ -54,9 +46,7 @@ const SignIn = () => {
       }
       setStep('code')
     },
-    onError: (error) => {
-      if ((error as Error).message !== 'invalid-email') showErrorToast()
-    },
+    onError: () => showErrorToast(),
   })
 
   const { mutate: loginMutate, isPending: isLoggingIn } = useMutation({
@@ -64,22 +54,14 @@ const SignIn = () => {
       await loginWithCode(email, codeArg)
     },
     onSuccess: () => router.replace('/'),
-    onError: (error) => {
-      console.log('loginWithCode error:', error)
-      showErrorToast()
-    },
+    onError: () => showErrorToast(),
   })
 
-  const handleEmailChange = (value: string) => {
-    setEmail(value.trimStart())
-    if (emailError) setEmailError('')
-  }
-
-  const handleEmailBlur = () => {
-    if (email && !EMAIL_PATTERN.test(email)) {
-      setEmailError('Please enter a valid email address')
-    }
-  }
+  const { mutate: passwordLoginMutate, isPending: isPasswordLoggingIn } = useMutation({
+    mutationFn: ({ email, password }: FormDate) => signIn(email, password),
+    onSuccess: () => router.replace('/'),
+    onError: () => showErrorToast(),
+  })
 
   const prevCodeRef = useRef('')
 
@@ -94,32 +76,19 @@ const SignIn = () => {
     }
   }
 
+  const handleOtpRequest = (emailArg: string) => {
+    setEmail(emailArg)
+    checkEmailMutate(emailArg)
+  }
+
   return (
     <AuthScreen>
       {step === 'email' ? (
-        <>
-          <FormControl isInvalid={!!emailError}>
-            <Input size="xl" className="bg-white" isInvalid={!!emailError}>
-              <InputField
-                className="bg-white"
-                placeholder="Email"
-                value={email}
-                onChangeText={handleEmailChange}
-                onBlur={handleEmailBlur}
-                autoCapitalize="none"
-                keyboardType="email-address"
-              />
-            </Input>
-            <FormControlError>
-              <FormControlErrorText>{emailError}</FormControlErrorText>
-            </FormControlError>
-          </FormControl>
-
-          <Button size="xl" className="mt-3" onPress={() => checkEmailMutate(email)} isDisabled={isCheckingEmail}>
-            {isCheckingEmail && <ButtonSpinner color="white" />}
-            <ButtonText className="text-white">Continue</ButtonText>
-          </Button>
-        </>
+        <AuthenticationForm
+          authenticate={passwordLoginMutate}
+          onOtpRequest={handleOtpRequest}
+          isLoading={isCheckingEmail || isPasswordLoggingIn}
+        />
       ) : (
         <>
           <Text className="mb-3">A code was sent to {email}. Please enter it below.</Text>
@@ -158,7 +127,7 @@ const SignIn = () => {
         </>
       )}
 
-      <Divider className="bg-outline-300 my-4" />
+      <Divider className="my-4 bg-outline-300" />
       <LoginFormLinks />
 
       <AlertDialog isOpen={showNoAccountDialog} onClose={() => setShowNoAccountDialog(false)}>
