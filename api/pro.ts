@@ -20,8 +20,15 @@ export const applyToOffer = async (proToken: string, offerId: number, language: 
   return apiFetchJson(url)
 }
 
+type WhyCanNotApplyResponse = {
+  message: string
+  reason: string | string[]
+}
+
 export const getWhyCanNotApply = async (offerId: number, proToken: string, language: string): Promise<string[]> => {
   const languageCode = getLanguageCode(language)
   const url = API.WHY_CANT_APPLY + `/${offerId}/${proToken}?Language=${languageCode}`
-  return apiFetchJson<string[]>(url)
+  console.log('Fetching why can not apply reasons from url:', offerId, proToken, languageCode)
+  const data = await apiFetchJson<WhyCanNotApplyResponse>(url)
+  return Array.isArray(data.reason) ? data.reason : [data.reason]
 }
