@@ -19,7 +19,6 @@ import {
 } from '@/components/ui'
 import { X, AlertCircle } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-
 interface NotApplicableModalProps {
   visible: boolean
   onClose: () => void

@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { VStack, Text } from '@/components/ui'
+import { VStack } from '@/components/ui'
 import { Loading } from '@/components/ui/loading'
 import { getProOfferById, applyToOffer, getWhyCanNotApply } from '@/api'
 import OfferHeader from './OfferHeader'
@@ -28,12 +28,20 @@ export default function OfferDetailsScreen() {
   const { token } = activeProfile as ActiveProfile
   const [showNotApplicable, setShowNotApplicable] = useState(false)
   const [showApply, setShowApply] = useState(false)
+  const [pendingReasons, setPendingReasons] = useState(false)
 
-  const { data: whyCanNotApplyReasons = [] } = useQuery({
+  const { data: whyCanNotApplyReasons, isFetching: isFetchingReasons } = useQuery({
     queryKey: ['whyCanNotApply', offerId],
     queryFn: () => getWhyCanNotApply(parseInt(offerId as string), token, language),
-    enabled: showNotApplicable,
+    enabled: pendingReasons,
   })
+
+  useEffect(() => {
+    if (pendingReasons && !isFetchingReasons && whyCanNotApplyReasons) {
+      setPendingReasons(false)
+      setShowNotApplicable(true)
+    }
+  }, [pendingReasons, isFetchingReasons, whyCanNotApplyReasons])
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
     queryKey: ['offer', offerId],
@@ -44,7 +52,7 @@ export default function OfferDetailsScreen() {
 
   const handleApply = () => {
     if (!offer?.offerApplicable) {
-      setShowNotApplicable(true)
+      setPendingReasons(true)
     } else if (!offer?.alreadyApplied) {
       setShowApply(true)
     }
@@ -100,10 +108,11 @@ export default function OfferDetailsScreen() {
             <OfferPosition offer={offer} />
             <OfferActions offer={offer} onApply={handleApply} />
           </VStack>
+          {pendingReasons && <Loading />}
           <NotApplicableModal
             visible={showNotApplicable}
             onClose={() => setShowNotApplicable(false)}
-            reasons={whyCanNotApplyReasons}
+            reasons={whyCanNotApplyReasons ?? []}
           />
           <ApplyModal
             visible={showApply}
