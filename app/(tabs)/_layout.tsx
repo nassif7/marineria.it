@@ -1,7 +1,7 @@
 import { Redirect, Tabs } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
-import { HomeIcon, Briefcase, Users, Settings } from 'lucide-react-native'
+import { HomeIcon, Briefcase, Users, Settings, Globe } from 'lucide-react-native'
 import '@/localization'
 import { TUserRole } from '@/api/types'
 import UserProvider from '@/Providers/UserProvider'
@@ -65,6 +65,15 @@ const AppLayout = () => {
             sceneStyle,
             title: t('recruitment'),
             tabBarIcon: Users,
+          }}
+        />
+        <Tabs.Screen
+          name="jobs"
+          options={{
+            headerShown: false,
+            sceneStyle,
+            title: t('jobs'),
+            tabBarIcon: Globe,
           }}
         />
         <Tabs.Screen

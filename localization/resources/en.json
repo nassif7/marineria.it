@@ -9,7 +9,9 @@
     "crew-profile": "Crew profile",
     "settings": "Settings",
     "login-as-crew": "Login as crew",
-    "login-as-recruiter": "Login as recruiter"
+    "login-as-recruiter": "Login as recruiter",
+    "jobs": "Jobs",
+    "job-offers": "Job Offers"
   },
   "login-screen": {
     "title": "Login",
@@ -40,7 +42,10 @@
     "recruiter-message": "You are logged in as Recruiter",
     "crew-message": "You are logged in as Crew",
     "manage-search": "Go to your search",
-    "job-list": "Job list"
+    "job-list": "Job list",
+    "guest-welcome": "Find your next maritime job",
+    "guest-subtitle": "Browse hundreds of maritime job offers from top recruiters.",
+    "browse-offers": "Browse Job Offers"
   },
   "offer-screen": {
     "view-offer": "View offer",
@@ -52,6 +57,8 @@
     "already-applied": "Already Applied",
     "not-matching-why": "Not matching, why?",
     "login-to-view-offer": "To view this offer, please log in or register.",
+    "login-to-apply-title": "Apply for this position",
+    "login-to-apply-description": "You need to login or register to apply for this offer.",
     "not-matching-title": "Not matching! Why?",
     "not-matching-no-reasons": "This offer doesn't match your profile requirements.",
     "apply-for-this-position": "Apply for this position",
