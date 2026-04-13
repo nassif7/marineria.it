@@ -22,7 +22,18 @@
     "forgot-password": "Forgot password?",
     "register-as-crew": "Register as crew",
     "register-as-recruiter": "Register as recruiter",
-    "continue-without-login": "Continue without login"
+    "continue-without-login": "Continue without login",
+    "email": "Email",
+    "send-code": "Send code",
+    "otp-description": "Enter your email and we'll send you a one-time login code.",
+    "password-description": "Enter your email and password to sign in.",
+    "sign-in-with-password": "Have a password? Sign in with it instead",
+    "sign-in-with-code": "Prefer a one-time code? Sign in without password",
+    "code-sent": "A code was sent to {{email}}. Please enter it below.",
+    "enter-code": "Please enter the code",
+    "no-account-title": "No account found",
+    "no-account-description": "There is no registered account associated with {{email}}.",
+    "code-placeholder": "Code"
   },
   "home-screen": {
     "welcome": "Welcome",
