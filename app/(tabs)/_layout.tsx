@@ -68,6 +68,15 @@ const AppLayout = () => {
           }}
         />
         <Tabs.Screen
+          name="jobs"
+          options={{
+            headerShown: false,
+            sceneStyle,
+            title: t('offer-list'),
+            tabBarIcon: Briefcase,
+          }}
+        />
+        <Tabs.Screen
           name="settings"
           options={{
             sceneStyle,

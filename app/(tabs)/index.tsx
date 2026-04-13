@@ -1,12 +1,9 @@
-import React, { useMemo, useState } from 'react'
-import { Linking } from 'react-native'
+import React, { useMemo } from 'react'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { TUserRole } from '@/api/types'
 import { useSession } from '@/Providers/SessionProvider'
 import { useUser } from '@/Providers/UserProvider'
-import { useQuery } from '@tanstack/react-query'
-import { getPublicOffers } from '@/api'
 import {
   Avatar,
   AvatarFallbackText,
@@ -17,85 +14,21 @@ import {
   Heading,
   Loading,
   Text,
-  Modal,
-  ModalBackdrop,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalCloseButton,
-  Icon,
-  Link,
-  LinkText,
+  VStack,
 } from '@/components/ui'
-import { X } from 'lucide-react-native'
-import { ErrorMessage, List, EmptyList, ScreenContainer } from '@/components/appUI'
-import OfferListItem from '@/components/pro/offers/offerList/OfferListItem'
+import { ScreenContainer } from '@/components/appUI'
 
-const GuestOfferList = () => {
-  const {
-    t,
-    i18n: { language },
-  } = useTranslation(['offer-screen', 'login-screen', 'common'])
-  const [showLoginModal, setShowLoginModal] = useState(false)
-
-  const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
-    queryKey: ['public-offers'],
-    queryFn: () => getPublicOffers(language),
-  })
-
+const GuestWelcome = () => {
+  const { t } = useTranslation('home-screen')
   return (
-    <ScreenContainer>
-      {(isLoading || isRefetching) && <Loading />}
-      {isSuccess && (
-        <List
-          data={data}
-          isRefetching={isRefetching}
-          onRefresh={refetch}
-          renderItem={({ item }) => (
-            <OfferListItem offer={item} hideStatus key={item.reference} onViewOffer={() => setShowLoginModal(true)} />
-          )}
-          listEmptyComponent={<EmptyList message={t('no-offers')} />}
-        />
-      )}
-      {isError && <ErrorMessage />}
-
-      <Modal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)}>
-        <ModalBackdrop />
-        <ModalContent className="w-full rounded-md mb-0 mt-auto">
-          <ModalHeader className="justify-between items-center">
-            <Heading size="xl">{t('view-offer')}</Heading>
-            <ModalCloseButton onPress={() => setShowLoginModal(false)}>
-              <Icon as={X} className="text-typography-500" size="md" />
-            </ModalCloseButton>
-          </ModalHeader>
-          <ModalBody>
-            <Text className="text-typography-600 text-base">{t('login-to-view-offer', { ns: 'offer-screen' })}</Text>
-          </ModalBody>
-          <ModalFooter>
-            <Box className="w-full gap-3">
-              <Button
-                size="md"
-                className="w-full rounded-xl"
-                onPress={() => {
-                  setShowLoginModal(false)
-                  router.replace('/sign-in')
-                }}
-              >
-                <ButtonText>{t('login', { ns: 'settings-screen' })}</ButtonText>
-              </Button>
-              <Box className="items-center gap-2">
-                <Link onPress={() => Linking.openURL('https://www.marineria.it/En/Pro/Reg.aspx')}>
-                  <LinkText>{t('register-as-crew', { ns: 'login-screen' })}</LinkText>
-                </Link>
-                <Link onPress={() => Linking.openURL('https://www.marineria.it/En/Rec/Reg.aspx')}>
-                  <LinkText>{t('register-as-recruiter', { ns: 'login-screen' })}</LinkText>
-                </Link>
-              </Box>
-            </Box>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+    <ScreenContainer className="justify-center items-center px-6">
+      <VStack space="lg" className="items-center">
+        <Heading className="text-center text-3xl text-primary-600">{t('guest-welcome')}</Heading>
+        <Text className="text-center text-typography-600 text-base">{t('guest-subtitle')}</Text>
+        <Button size="lg" className="w-full mt-4 justify-center" onPress={() => router.navigate('/(tabs)/jobs')}>
+          <ButtonText className="flex-1 text-center">{t('browse-offers')}</ButtonText>
+        </Button>
+      </VStack>
     </ScreenContainer>
   )
 }
@@ -158,7 +91,7 @@ const UserProfile = () => {
 
 const HomeScreen = () => {
   const { isGuest } = useSession()
-  return isGuest ? <GuestOfferList /> : <UserProfile />
+  return isGuest ? <GuestWelcome /> : <UserProfile />
 }
 
 export default HomeScreen
