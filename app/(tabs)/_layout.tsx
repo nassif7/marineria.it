@@ -69,6 +69,7 @@ const AppLayout = () => {
         />
         <Tabs.Screen
           name="jobs"
+          redirect={!isGuest}
           options={{
             headerShown: false,
             sceneStyle,
