@@ -22,7 +22,18 @@
     "forgot-password": "Password dimenticata?",
     "register-as-crew": "Registrati come equipaggio",
     "register-as-recruiter": "Registrati come datore di lavoro",
-    "continue-without-login": "Continua senza accedere"
+    "continue-without-login": "Continua senza accedere",
+    "email": "Email",
+    "send-code": "Invia codice",
+    "otp-description": "Inserisci la tua email e ti invieremo un codice di accesso.",
+    "password-description": "Inserisci email e password per accedere.",
+    "sign-in-with-password": "Hai una password? Accedi con essa",
+    "sign-in-with-code": "Preferisci un codice? Accedi senza password",
+    "code-sent": "Un codice è stato inviato a {{email}}. Inseriscilo qui sotto.",
+    "enter-code": "Inserisci il codice",
+    "no-account-title": "Nessun account trovato",
+    "no-account-description": "Nessun account registrato associato a {{email}}.",
+    "code-placeholder": "Codice"
   },
   "home-screen": {
     "welcome": "Welcome",

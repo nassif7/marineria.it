@@ -1,4 +1,5 @@
-import { FC, useState, useRef } from 'react'
+import { FC, useState, useRef, useEffect } from 'react'
+import { Keyboard, KeyboardEvent, Platform, ScrollView } from 'react-native'
 import {
   Button,
   ButtonSpinner,
@@ -37,6 +38,18 @@ const SwitchUser: FC = () => {
   const [step, setStep] = useState<'email' | 'code'>('email')
   const [email, setEmail] = useState('')
   const [code, setCode] = useState('')
+  const [keyboardHeight, setKeyboardHeight] = useState(0)
+
+  useEffect(() => {
+    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow'
+    const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide'
+    const showSub = Keyboard.addListener(showEvent, (e: KeyboardEvent) => setKeyboardHeight(e.endCoordinates.height))
+    const hideSub = Keyboard.addListener(hideEvent, () => setKeyboardHeight(0))
+    return () => {
+      showSub.remove()
+      hideSub.remove()
+    }
+  }, [])
   const [codeError, setCodeError] = useState('')
   const prevCodeRef = useRef('')
 
@@ -48,6 +61,7 @@ const SwitchUser: FC = () => {
     loginWithCode,
   } = useSession()
   const { t } = useTranslation('settings-screen')
+  const { t: tLogin } = useTranslation('login-screen')
 
   const { activeProfile, switchProfile } = useUser()
   const showErrorToast = useAuthErrorToast()
@@ -131,9 +145,12 @@ const SwitchUser: FC = () => {
         <ButtonText className="text-white">{label}</ButtonText>
       </Button>
 
-      <Modal isOpen={modalVisible} onClose={handleClose} avoidKeyboard>
+      <Modal isOpen={modalVisible} onClose={handleClose}>
         <ModalBackdrop />
-        <ModalContent className="w-full mb-0 mt-auto rounded-t-md overflow-hidden p-4 max-h-[85%]">
+        <ModalContent
+          className="w-full mb-0 mt-auto rounded-t-md overflow-hidden p-4"
+          style={{ marginBottom: keyboardHeight }}
+        >
           <ModalHeader className="justify-between items-center">
             <Heading size="xl" className="text-primary-600 flex-1">
               {label}
@@ -144,52 +161,54 @@ const SwitchUser: FC = () => {
           </ModalHeader>
 
           <ModalBody>
-            {step === 'email' ? (
-              <AuthenticationForm
-                authenticate={handleSignIn}
-                onOtpRequest={handleOtpRequest}
-                isLoading={isSigningIn || isCheckingEmail}
-              />
-            ) : (
-              <>
-                <Text className="mb-3">A code was sent to {email}. Please enter it below.</Text>
+            <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+              {step === 'email' ? (
+                <AuthenticationForm
+                  authenticate={handleSignIn}
+                  onOtpRequest={handleOtpRequest}
+                  isLoading={isSigningIn || isCheckingEmail}
+                />
+              ) : (
+                <>
+                  <Text className="mb-3">{tLogin('code-sent', { email })}</Text>
 
-                <FormControl isInvalid={!!codeError}>
-                  <Input size="xl" className="bg-white" isInvalid={!!codeError}>
-                    <InputField
-                      className="bg-white"
-                      placeholder="Code"
-                      value={code}
-                      onChangeText={handleCodeChange}
-                      autoCapitalize="characters"
-                      autoCorrect={false}
-                    />
-                  </Input>
-                  <FormControlError>
-                    <FormControlErrorText>{codeError}</FormControlErrorText>
-                  </FormControlError>
-                </FormControl>
+                  <FormControl isInvalid={!!codeError}>
+                    <Input size="xl" className="bg-white" isInvalid={!!codeError}>
+                      <InputField
+                        className="bg-white"
+                        placeholder={tLogin('code-placeholder')}
+                        value={code}
+                        onChangeText={handleCodeChange}
+                        autoCapitalize="characters"
+                        autoCorrect={false}
+                      />
+                    </Input>
+                    <FormControlError>
+                      <FormControlErrorText>{codeError}</FormControlErrorText>
+                    </FormControlError>
+                  </FormControl>
 
-                <Button
-                  size="xl"
-                  className="mt-3"
-                  onPress={() => {
-                    if (!code.trim()) {
-                      setCodeError('Please enter the code')
-                      return
-                    }
-                    loginWithCodeMutate(code.trim())
-                  }}
-                  isDisabled={isLoggingInWithCode}
-                >
-                  {isLoggingInWithCode && <ButtonSpinner color="white" />}
-                  <ButtonText className="text-white">Login</ButtonText>
-                </Button>
-              </>
-            )}
+                  <Button
+                    size="xl"
+                    className="mt-3"
+                    onPress={() => {
+                      if (!code.trim()) {
+                        setCodeError(tLogin('enter-code'))
+                        return
+                      }
+                      loginWithCodeMutate(code.trim())
+                    }}
+                    isDisabled={isLoggingInWithCode}
+                  >
+                    {isLoggingInWithCode && <ButtonSpinner color="white" />}
+                    <ButtonText className="text-white">{tLogin('login')}</ButtonText>
+                  </Button>
+                </>
+              )}
 
-            <Divider className="bg-outline-300 my-4" />
-            <LoginFormLinks isCrew={activeRole === TUserRole.CREW} isRecruiter={activeRole === TUserRole.RECRUITER} />
+              <Divider className="bg-outline-300 my-4" />
+              <LoginFormLinks isCrew={activeRole === TUserRole.CREW} isRecruiter={activeRole === TUserRole.RECRUITER} />
+            </ScrollView>
           </ModalBody>
         </ModalContent>
       </Modal>

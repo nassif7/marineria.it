@@ -93,13 +93,13 @@ const SignIn = () => {
         />
       ) : (
         <>
-          <Text className="mb-3">A code was sent to {email}. Please enter it below.</Text>
+          <Text className="mb-3">{t('code-sent', { email })}</Text>
 
           <FormControl isInvalid={!!codeError}>
             <Input size="xl" className="bg-white" isInvalid={!!codeError}>
               <InputField
                 className="bg-white"
-                placeholder="Code"
+                placeholder={t('code-placeholder')}
                 value={code}
                 onChangeText={handleCodeChange}
                 autoCapitalize="characters"
@@ -116,7 +116,7 @@ const SignIn = () => {
             className="mt-3"
             onPress={() => {
               if (!code.trim()) {
-                setCodeError('Please enter the code')
+                setCodeError(t('enter-code'))
                 return
               }
               loginMutate(code.trim())
@@ -124,7 +124,7 @@ const SignIn = () => {
             isDisabled={isLoggingIn}
           >
             {isLoggingIn && <ButtonSpinner color="white" />}
-            <ButtonText className="text-white">Login</ButtonText>
+            <ButtonText className="text-white">{t('login')}</ButtonText>
           </Button>
         </>
       )}
@@ -148,14 +148,14 @@ const SignIn = () => {
         <AlertDialogBackdrop />
         <AlertDialogContent>
           <AlertDialogHeader>
-            <Heading size="md">No account found</Heading>
+            <Heading size="md">{t('no-account-title')}</Heading>
           </AlertDialogHeader>
           <AlertDialogBody>
-            <Text>There is no registered account associated with {email}.</Text>
+            <Text>{t('no-account-description', { email })}</Text>
           </AlertDialogBody>
           <AlertDialogFooter>
             <Button onPress={() => setShowNoAccountDialog(false)}>
-              <ButtonText>OK</ButtonText>
+              <ButtonText>{t('common:confirm')}</ButtonText>
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

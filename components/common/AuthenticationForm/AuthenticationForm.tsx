@@ -7,10 +7,6 @@ import {
   Button,
   ButtonSpinner,
   ButtonText,
-  Checkbox,
-  CheckboxIcon,
-  CheckboxIndicator,
-  CheckboxLabel,
   FormControl,
   FormControlError,
   FormControlErrorText,
@@ -138,10 +134,10 @@ const AuthenticationForm: FC<IAuthenticationForm> = ({
   })
 
   return (
-    <VStack space="sm">
-      {hasOtpMode && isPasswordMode && (
-        <Text className="mb-1 text-sm text-typography-500">Enter your email and password to sign in.</Text>
-      )}
+    <VStack space="md">
+      <Text className="text-base text-typography-900">
+        {isPasswordMode ? t('password-description') : t('otp-description')}
+      </Text>
 
       <Field
         name="email"
@@ -159,13 +155,7 @@ const AuthenticationForm: FC<IAuthenticationForm> = ({
             autoCapitalize="none"
             onFocus={onFocus}
             onBlur={onBlur}
-            helperText={
-              !hasOtpMode
-                ? t('email-helper-text')
-                : !isPasswordMode
-                  ? 'Enter your email to receive a login code.'
-                  : undefined
-            }
+            helperText={!hasOtpMode ? t('email-helper-text') : undefined}
           />
         )}
       </Field>
@@ -196,32 +186,29 @@ const AuthenticationForm: FC<IAuthenticationForm> = ({
         {([canSubmit, isSubmitting]) => {
           const isBusy = isSubmitting || !!isLoading
           return (
-            <>
+            <VStack space="sm">
               <Button onPress={handleSubmit} size="xl" isDisabled={!canSubmit || isBusy}>
                 {isBusy && <ButtonSpinner color="white" />}
-                <ButtonText className="text-white">{isPasswordMode ? t('login') : 'Continue'}</ButtonText>
+                <ButtonText className="text-white">{isPasswordMode ? t('login') : t('send-code')}</ButtonText>
               </Button>
 
               {hasOtpMode && (
-                <Checkbox
+                <Button
+                  variant="link"
                   size="sm"
-                  className="mt-1"
-                  value="usePassword"
-                  isChecked={usePassword}
                   isDisabled={isBusy}
-                  onChange={() => {
+                  onPress={() => {
                     const next = !usePassword
                     setUsePassword(next)
                     usePasswordRef.current = next
                   }}
                 >
-                  <CheckboxIndicator>
-                    <CheckboxIcon />
-                  </CheckboxIndicator>
-                  <CheckboxLabel>Use password instead</CheckboxLabel>
-                </Checkbox>
+                  <ButtonText className="text-primary-600 underline">
+                    {isPasswordMode ? t('sign-in-with-code') : t('sign-in-with-password')}
+                  </ButtonText>
+                </Button>
               )}
-            </>
+            </VStack>
           )
         }}
       </Subscribe>
