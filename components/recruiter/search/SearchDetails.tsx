@@ -1,5 +1,5 @@
 import React from 'react'
-import { Linking } from 'react-native'
+import { useAuthBrowser } from '@/hooks'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { VStack } from '@/components/ui'
 import { Loading } from '@/components/ui/loading'
@@ -15,10 +15,10 @@ import { useRecruiterSearch } from '@/Providers/RecruiterSearchProvider'
 
 export default function SearchDetails() {
   const { activeProfile } = useUser()
-  const { token } = activeProfile as ActiveProfile
   const {
     i18n: { language },
   } = useTranslation()
+  const { openUrl } = useAuthBrowser()
 
   const { searchId } = useLocalSearchParams()
   const router = useRouter()
@@ -27,10 +27,7 @@ export default function SearchDetails() {
     search: { data: search, isLoading, isRefetching, isError, isSuccess, refetch },
   } = useRecruiterSearch()
 
-  const handleEdit = () => {
-    const url = `https://www.marineria.it/${language}/rec/Post.aspx?idofferta=${search?.idoffer}&token=${token}`
-    Linking.openURL(url)
-  }
+  const handleEdit = () => openUrl(`https://www.marineria.it/${language}/rec/Post.aspx?idofferta=${search?.idoffer}`)
 
   const handleViewCandidates = () => {
     router.push(`/recruiter/search/${searchId}/crew/list`)

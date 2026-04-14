@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Linking } from 'react-native'
+import { useAuthBrowser } from '@/hooks'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useQuery } from '@tanstack/react-query'
 import { VStack, Text, HStack, Button, ButtonIcon, ButtonText, View, Heading } from '@/components/ui'
@@ -20,6 +20,7 @@ const CrewListEmptyComponent = () => {
   const { activeProfile } = useUser()
 
   const { token } = activeProfile as ActiveProfile
+  const { openUrl } = useAuthBrowser()
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
     queryKey: ['recruiter-search-by-id', searchId, language],
@@ -27,15 +28,8 @@ const CrewListEmptyComponent = () => {
   })
 
   const search = isSuccess ? (data as any)?.[0] : null
-  const openSearchByLocation = () => {
-    const url = `https://www.marineria.it/${language}/${search.listgeourl}?token=${token}`
-    Linking.openURL(url)
-  }
-
-  const openSearchBySkill = () => {
-    const url = `https://www.marineria.it/${language}/${search.listurl}?token=${token}`
-    Linking.openURL(url)
-  }
+  const openSearchByLocation = () => openUrl(`https://www.marineria.it/${language}/${search.listgeourl}`)
+  const openSearchBySkill = () => openUrl(`https://www.marineria.it/${language}/${search.listurl}`)
 
   return (
     <View className={`h-full flex-1 px-2 pt-20`}>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { ScrollView, Linking } from 'react-native'
+import { ScrollView } from 'react-native'
+import * as WebBrowser from 'expo-web-browser'
 import { useLocalSearchParams, router } from 'expo-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -77,10 +78,10 @@ const PublicOfferDetail = () => {
                 <ButtonText>{t('login', { ns: 'settings-screen' })}</ButtonText>
               </Button>
               <Box className="items-center gap-2">
-                <Link onPress={() => Linking.openURL('https://www.marineria.it/En/Pro/Reg.aspx')}>
+                <Link onPress={() => WebBrowser.openBrowserAsync('https://www.marineria.it/En/Pro/Reg.aspx')}>
                   <LinkText>{t('register-as-crew', { ns: 'login-screen' })}</LinkText>
                 </Link>
-                <Link onPress={() => Linking.openURL('https://www.marineria.it/En/Rec/Reg.aspx')}>
+                <Link onPress={() => WebBrowser.openBrowserAsync('https://www.marineria.it/En/Rec/Reg.aspx')}>
                   <LinkText>{t('register-as-recruiter', { ns: 'login-screen' })}</LinkText>
                 </Link>
               </Box>
