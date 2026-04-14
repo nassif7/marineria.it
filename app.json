@@ -37,8 +37,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#ffffff",
-          "image": "./assets/images/splash.png"
+          "backgroundColor": "#4aafc4"
         }
       ],
       "expo-router",

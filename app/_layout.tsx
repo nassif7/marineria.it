@@ -36,9 +36,9 @@ export default function RootLayout() {
         require('@/assets/images/splash-bg.png'),
         require('@/assets/images/marineria_logo_transparent.png'),
       ])
+      // Set state first so our animated splash is mounted before native splash disappears
       setAssetsLoaded(true)
-      // Hide native splash — our animated splash takes over immediately
-      await SplashScreen.hideAsync()
+      requestAnimationFrame(() => SplashScreen.hideAsync())
     }
     loadAssets()
   }, [])
