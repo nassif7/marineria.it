@@ -1,6 +1,6 @@
 import React from 'react'
 import * as SecureStore from 'expo-secure-store'
-import { Linking } from 'react-native'
+import * as WebBrowser from 'expo-web-browser'
 import { useTranslation } from 'react-i18next'
 import { Globe, Bell } from 'lucide-react-native'
 import { router } from 'expo-router'
@@ -27,6 +27,8 @@ const Settings = () => {
   } = useSession()
 
   const { user, togglePushNotifications, isTogglingNotifications } = useUser()
+  const handleRegisterAsCrew = () => WebBrowser.openBrowserAsync('https://www.marineria.it/En/Pro/Reg.aspx')
+  const handleRegisterAsRecruiter = () => WebBrowser.openBrowserAsync('https://www.marineria.it/En/Rec/Reg.aspx')
   const pushNotificationToken = user?.pushNotificationToken
   const languageOptions = [
     { label: t(TLocales.EN), value: TLocales.EN },
@@ -81,10 +83,10 @@ const Settings = () => {
                 <ButtonText>{t('login')}</ButtonText>
               </Button>
               <VStack space="xs" className="items-center">
-                <Link onPress={() => Linking.openURL('https://www.marineria.it/En/Pro/Reg.aspx')}>
+                <Link onPress={handleRegisterAsCrew}>
                   <LinkText>{t('register-as-crew', { ns: 'login-screen' })}</LinkText>
                 </Link>
-                <Link onPress={() => Linking.openURL('https://www.marineria.it/En/Rec/Reg.aspx')}>
+                <Link onPress={handleRegisterAsRecruiter}>
                   <LinkText>{t('register-as-recruiter', { ns: 'login-screen' })}</LinkText>
                 </Link>
               </VStack>

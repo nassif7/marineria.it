@@ -27,7 +27,7 @@ import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'
 import { useRecruiterSearch } from '@/Providers/RecruiterSearchProvider'
 import ContactModalUnpaid from './ContactModalUnpaid'
-import { Linking } from 'react-native'
+import { useAuthBrowser } from '@/hooks'
 
 interface IContactModal {
   visible: boolean
@@ -50,16 +50,15 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
     { icon: Send, label: t('send-job-offer'), color: 'text-success-600', bg: 'bg-success-50' },
   ]
 
+  const { openUrl } = useAuthBrowser()
+
   const {
     search: { data },
   } = useRecruiterSearch()
   const searchLabel = data?.title
   const isPaid = data?.paid
 
-  const onCheckout = () => {
-    const url = `https://www.marineria.it`
-    Linking.openURL(url)
-  }
+  const onCheckout = () => openUrl('https://www.marineria.it')
 
   if (!isPaid) {
     return <ContactModalUnpaid visible={visible} onClose={onClose} onCheckout={onCheckout} />

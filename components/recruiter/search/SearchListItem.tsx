@@ -1,10 +1,9 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { router } from 'expo-router'
-import * as Linking from 'expo-linking'
+import { useAuthBrowser } from '@/hooks'
 import { Users, MapPin, Briefcase, Search, UserCheck, Banknote, Calendar, FileText } from 'lucide-react-native'
 import { TRecruiterSearch } from '@/api/types'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 import { Box, VStack, HStack, Heading, Text, Button, ButtonText, ButtonIcon, Badge, BadgeText } from '@/components/ui'
 import { SubSection, InfoRow } from '@/components/appUI'
 
@@ -17,21 +16,13 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
     t,
     i18n: { language },
   } = useTranslation(['search-screen'])
-  const { activeProfile } = useUser()
-  const { token } = activeProfile as ActiveProfile
+  const { openUrl } = useAuthBrowser()
 
   const viewSearch = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}`)
   const viewCrewList = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list`)
 
-  const openSearchByLocation = () => {
-    const url = `https://www.marineria.it/${language}/${search.listgeourl}?token=${token}`
-    Linking.openURL(url)
-  }
-
-  const openSearchBySkill = () => {
-    const url = `https://www.marineria.it/${language}/${search.listurl}?token=${token}`
-    Linking.openURL(url)
-  }
+  const openSearchByLocation = () => openUrl(`https://www.marineria.it/${language}/${search.listgeourl}`)
+  const openSearchBySkill = () => openUrl(`https://www.marineria.it/${language}/${search.listurl}`)
 
   const referenceShort = search.reference.includes('_') ? search.reference.split('_')[1] : search.reference
 

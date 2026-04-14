@@ -137,7 +137,13 @@ const SwitchUser: FC = () => {
     }
   }
 
-  const label = role == TUserRole.CREW ? t('login-as-recruiter') : t('login-as-crew')
+  const label = hasBothTokens
+    ? activeRole === TUserRole.CREW
+      ? t('switch-to-recruiter')
+      : t('switch-to-crew')
+    : role === TUserRole.CREW
+      ? t('login-as-recruiter')
+      : t('login-as-crew')
 
   return (
     <>
