@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useAuthBrowser } from '@/hooks'
 import {
   VStack,
   HStack,
@@ -42,6 +43,10 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm, is
 
   const { user } = useUser()
   const userId = user?.iduser
+
+  const { openUrl } = useAuthBrowser()
+
+  const handleReviewProfile = () => openUrl(`https://www.marineria.it/${language}/CV.aspx?idutente=${userId}`)
 
   const handleApply = () => {
     if (consentAccepted) {
@@ -112,7 +117,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm, is
                         {t('confirm-requirements', { ns: 'offer-screen' })}
                       </Text>
                     </HStack>
-                    <Link href={`https://www.marineria.it/${language}/CV.aspx?idutente=${userId}`}>
+                    <Link onPress={handleReviewProfile}>
                       <LinkText className="text-primary-600">
                         {t('review-your-profile', { ns: 'offer-screen' })}
                       </LinkText>
