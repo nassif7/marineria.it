@@ -29,6 +29,9 @@ const Settings = () => {
   const { user, togglePushNotifications, isTogglingNotifications } = useUser()
   const handleRegisterAsCrew = () => WebBrowser.openBrowserAsync('https://www.marineria.it/En/Pro/Reg.aspx')
   const handleRegisterAsRecruiter = () => WebBrowser.openBrowserAsync('https://www.marineria.it/En/Rec/Reg.aspx')
+  const privacyPolicyUrl =
+    language === TLocales.IT ? 'https://www.marineria.it/it/contacts.aspx' : 'https://www.marineria.it/En/Contacts.aspx'
+  const handlePrivacyPolicy = () => WebBrowser.openBrowserAsync(privacyPolicyUrl)
   const pushNotificationToken = user?.pushNotificationToken
   const languageOptions = [
     { label: t(TLocales.EN), value: TLocales.EN },
@@ -76,32 +79,37 @@ const Settings = () => {
           )}
         </VStack>
 
-        <Box className="p-6">
-          {isGuest ? (
-            <VStack space="md">
-              <Button size="lg" onPress={() => router.replace('/sign-in')}>
-                <ButtonText>{t('login')}</ButtonText>
-              </Button>
-              <VStack space="xs" className="items-center">
-                <Link onPress={handleRegisterAsCrew}>
-                  <LinkText>{t('register-as-crew', { ns: 'login-screen' })}</LinkText>
-                </Link>
-                <Link onPress={handleRegisterAsRecruiter}>
-                  <LinkText>{t('register-as-recruiter', { ns: 'login-screen' })}</LinkText>
-                </Link>
+        <VStack>
+          <Box className="p-6">
+            {isGuest ? (
+              <VStack space="md">
+                <Button size="lg" onPress={() => router.replace('/sign-in')}>
+                  <ButtonText>{t('login')}</ButtonText>
+                </Button>
+                <VStack space="xs" className="items-center">
+                  <Link onPress={handleRegisterAsCrew}>
+                    <LinkText>{t('register-as-crew', { ns: 'login-screen' })}</LinkText>
+                  </Link>
+                  <Link onPress={handleRegisterAsRecruiter}>
+                    <LinkText>{t('register-as-recruiter', { ns: 'login-screen' })}</LinkText>
+                  </Link>
+                </VStack>
               </VStack>
-            </VStack>
-          ) : (
-            <VStack>
-              <Box className="mb-4">
-                <SwitchUser />
-              </Box>
-              <Box>
-                <SignOut buttonLabel={t('logout')} handleLogout={async () => await signOut(role as TUserRole)} />
-              </Box>
-            </VStack>
-          )}
-        </Box>
+            ) : (
+              <VStack>
+                <Box className="mb-4">
+                  <SwitchUser />
+                </Box>
+                <Box>
+                  <SignOut buttonLabel={t('logout')} handleLogout={async () => await signOut(role as TUserRole)} />
+                </Box>
+              </VStack>
+            )}
+          </Box>
+          <Link onPress={handlePrivacyPolicy} className="self-start px-6 pb-3">
+            <LinkText className="text-primary-500 text-sm">{t('privacy-policy')}</LinkText>
+          </Link>
+        </VStack>
       </VStack>
     </ScreenContainer>
   )

@@ -131,7 +131,8 @@
     "logout": "Esci",
     "login": "Accedi",
     "edit-profile": "Edit profile",
-    "change-password": "Change password"
+    "change-password": "Cambia password",
+    "privacy-policy": "Privacy Policy"
   },
   "offer": {
     "contract-and-compensation": "Contratto e compensazione",
