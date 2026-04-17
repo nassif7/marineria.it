@@ -1,5 +1,6 @@
 import '@/global.css'
 import '@/localization'
+import * as Sentry from '@sentry/react-native'
 import { useEffect, useState } from 'react'
 import { Slot } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -14,10 +15,15 @@ import SessionProvider, { useSession } from '@/Providers/SessionProvider'
 import { Loading } from '@/components/ui'
 import { MarineriaSplash } from '@/components/appUI'
 
+Sentry.init({
+  dsn: 'https://aa4ffeeb3c4c16a769f69b6847aa0d27@o4511235462201344.ingest.de.sentry.io/4511235474325584',
+  enabled: !__DEV__,
+})
+
 // Prevent the native splash from auto-hiding
 SplashScreen.preventAutoHideAsync()
 
-export default function RootLayout() {
+export default Sentry.wrap(function RootLayout() {
   const [queryClient] = useState(() => new QueryClient())
   const { i18n } = useTranslation()
   const [assetsLoaded, setAssetsLoaded] = useState(false)
@@ -58,7 +64,7 @@ export default function RootLayout() {
       </QueryClientProvider>
     </ThemeUIProvider>
   )
-}
+})
 
 // Separate component so it can access SessionProvider's context
 function SplashOverlay() {
