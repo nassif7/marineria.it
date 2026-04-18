@@ -130,7 +130,8 @@
     "logout": "Logout",
     "login": "Login",
     "edit-profile": "Edit profile",
-    "change-password": "Change password"
+    "change-password": "Change password",
+    "privacy-policy": "Privacy Policy"
   },
   "offer": {
     "contract-and-compensation": "Contract with compensation",
