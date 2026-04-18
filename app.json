@@ -39,7 +39,10 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#4aafc4"
+          "backgroundColor": "#4aafc4",
+          "image": "./assets/images/splash.png",
+          "imageWidth": 200,
+          "resizeMode": "contain"
         }
       ],
       "expo-router",
@@ -64,7 +67,13 @@
       ],
       "expo-localization",
       "expo-web-browser",
-      "@sentry/react-native"
+      [
+        "@sentry/react-native",
+        {
+          "organization": "marineria",
+          "project": "marineria-app"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
