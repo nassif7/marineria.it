@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     zIndex: 999,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#4aafc4',
+    backgroundColor: '#FFF5F0',
   },
   bg: {
     ...StyleSheet.absoluteFillObject,

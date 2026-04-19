@@ -2,6 +2,7 @@ import '@/global.css'
 import '@/localization'
 import * as Sentry from '@sentry/react-native'
 import { useEffect, useState } from 'react'
+import { View } from 'react-native'
 import { Slot } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import * as SecureStore from 'expo-secure-store'
@@ -12,7 +13,6 @@ import { useTranslation } from 'react-i18next'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { ThemeUIProvider } from '@/components/ui/gluestack-ui-provider'
 import SessionProvider, { useSession } from '@/Providers/SessionProvider'
-import { Loading } from '@/components/ui'
 import { MarineriaSplash } from '@/components/appUI'
 
 Sentry.init({
@@ -49,7 +49,7 @@ export default Sentry.wrap(function RootLayout() {
     loadAssets()
   }, [])
 
-  if (!assetsLoaded) return <Loading />
+  if (!assetsLoaded) return <View style={{ flex: 1, backgroundColor: '#FFF5F0' }} />
 
   return (
     <ThemeUIProvider mode="light">
