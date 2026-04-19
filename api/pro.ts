@@ -28,7 +28,6 @@ type WhyCanNotApplyResponse = {
 export const getWhyCanNotApply = async (offerId: number, proToken: string, language: string): Promise<string[]> => {
   const languageCode = getLanguageCode(language)
   const url = API.WHY_CANT_APPLY + `/${offerId}/${proToken}?Language=${languageCode}`
-  console.log('Fetching why can not apply reasons from url:', offerId, proToken, languageCode)
   const data = await apiFetchJson<WhyCanNotApplyResponse>(url)
   return Array.isArray(data.reason) ? data.reason : [data.reason]
 }

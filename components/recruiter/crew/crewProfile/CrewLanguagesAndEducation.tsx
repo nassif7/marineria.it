@@ -43,11 +43,13 @@ import { useTranslation } from 'react-i18next'
 import { SubSection, Section, SectionHeader } from '@/components/appUI'
 import { getAgeByYear } from '@/utils/dateUtils'
 import { TCrew } from '@/api/types'
-import { faker } from '@faker-js/faker'
 
 const LanguagesSection: FC<{ crew: TCrew }> = ({ crew }) => {
   const { t } = useTranslation(['crew-screen', 'crew'])
-  const langs = useMemo(() => [crew.language1, crew.language2, crew.language3, crew.language4].filter(Boolean), [crew])
+  const langs = useMemo(
+    () => [...new Set([crew.language1, crew.language2, crew.language3, crew.language4].filter(Boolean))],
+    [crew]
+  )
 
   return (
     <Section>

@@ -23,8 +23,8 @@ import {
 import { User, Unlock, FileText, Send, Check, PhoneCall } from 'lucide-react-native'
 import { SubSection } from '@/components/appUI'
 import { TCrew } from '@/api/types'
-import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'
+import { getPhotoUrl } from '@/api/consts'
 import { useRecruiterSearch } from '@/Providers/RecruiterSearchProvider'
 import ContactModalUnpaid from './ContactModalUnpaid'
 import { useAuthBrowser } from '@/hooks'
@@ -37,7 +37,7 @@ interface IContactModal {
 }
 
 const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) => {
-  const fakeImage = faker.image.avatar()
+  const photoUrl = crew.userPhoto ? getPhotoUrl(crew.userPhoto) : null
 
   const { t } = useTranslation(['crew-screen'])
 
@@ -75,8 +75,8 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
 
           <VStack className="items-center pt-4 pb-6">
             <Box className="w-16 h-16 rounded-md bg-primary-100 overflow-hidden border-2 border-primary-200 mb-3">
-              {!!crew.userPhoto ? (
-                <RNImage source={{ uri: fakeImage }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+              {!!photoUrl ? (
+                <RNImage source={{ uri: photoUrl }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
               ) : (
                 <Box className="flex-1 items-center justify-center">
                   <Icon as={User} size="xl" className="text-primary-400" />

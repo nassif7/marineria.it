@@ -6,40 +6,40 @@ import { useTranslation } from 'react-i18next'
 import { Section } from '@/components/appUI'
 import { getAgeByYear } from '@/utils/dateUtils'
 import { TCrew } from '@/api/types'
-import { faker } from '@faker-js/faker'
 import { PhotoSlider } from '@/components/appUI'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 
-const baseUrl = 'https://www.comunicazione.it/PROFoto/'
+import { getPhotoUrl } from '@/api/consts'
 
 const ProfileHeader: FC<{ crew: TCrew }> = ({ crew }) => {
   const [photoVisible, setPhotoVisible] = useState(false)
   const { t } = useTranslation(['crew-screen', 'crew'])
 
-  // const photoUrl = useMemo(() => `${baseUrl}${crew?.userPhoto}`, [crew])
-  // const photos = useMemo(
-  //   () => [crew.namephotoA, crew.namephotoB, crew.namephotoC].filter(Boolean).map((name) => `${baseUrl}${name}`),
-  //   [crew]
-  // )
-  // const primaryPhoto = photos[0]
-  // const hasPhotos = photos.length > 0
+  const photos = useMemo(
+    () =>
+      [...new Set([crew.userPhoto, crew.namephotoA, crew.namephotoB, crew.namephotoC].filter(Boolean))].map((name) =>
+        getPhotoUrl(name)
+      ),
+    [crew]
+  )
+  const primaryPhoto = photos[0] ?? null
 
-  const fakerImage1 = useMemo(() => faker.image.personPortrait({ size: 256 }), [crew])
-  const fakerImage2 = useMemo(() => faker.image.personPortrait({ size: 256 }), [crew])
-
-  const photos = useMemo(() => [fakerImage1, fakerImage2], [crew])
   const hasPhotos = photos.length > 0
   const age = getAgeByYear(crew.yearofBirth)
   const { hasCertificateOfCompetence, certificateOfCompetence } = getCertificateOfCompetence(crew)
   const hasSeamansBook = getSeamansBook(crew)
 
   return (
-    <Section className="bg-background-200 mx-0 rounded-none">
+    <Section className="mx-0 rounded-none bg-background-200">
       <VStack space="sm" className="items-center">
-        <TouchableOpacity onPress={() => setPhotoVisible(true)} activeOpacity={fakerImage1 ? 0.75 : 1}>
-          <Box className="w-28 h-28 rounded-md bg-primary-100 items-center justify-center overflow-hidden border border-outline-200">
-            {fakerImage1 ? (
-              <Image source={{ uri: fakerImage1 }} className="w-full h-full" alt="profile" />
+        <TouchableOpacity
+          onPress={() => hasPhotos && setPhotoVisible(true)}
+          activeOpacity={hasPhotos ? 0.75 : 1}
+          disabled={!hasPhotos}
+        >
+          <Box className="items-center justify-center overflow-hidden border rounded-md w-28 h-28 bg-primary-100 border-outline-200">
+            {primaryPhoto ? (
+              <Image source={{ uri: primaryPhoto }} className="w-full h-full" alt="profile" />
             ) : (
               <Icon as={User} size="xl" className="text-primary-400" />
             )}
@@ -49,7 +49,7 @@ const ProfileHeader: FC<{ crew: TCrew }> = ({ crew }) => {
             <Box className="absolute -bottom-1.5 -right-1.5 rounded-full bg-primary-500 items-center justify-center border-2 border-white px-1.5 py-1 flex-row gap-1">
               <Icon as={photos.length > 1 ? Images : Expand} size="xs" className="text-white" />
               {photos.length > 1 && (
-                <Text size="xs" bold className="text-white leading-none">
+                <Text size="xs" bold className="leading-none text-white">
                   {photos.length}
                 </Text>
               )}
@@ -59,7 +59,7 @@ const ProfileHeader: FC<{ crew: TCrew }> = ({ crew }) => {
 
         <PhotoSlider visible={photoVisible} photos={photos} onClose={() => setPhotoVisible(false)} initialIndex={0} />
         <VStack space="xs" className="items-center">
-          <Heading size="md" className="text-primary-600 text-center ">
+          <Heading size="md" className="text-center text-primary-600 ">
             {crew?.contacted === 'True' ? crew.name + ' ' + crew.surname : crew.mainPosition}
           </Heading>
           <HStack space="md">
