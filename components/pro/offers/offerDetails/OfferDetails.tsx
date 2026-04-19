@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { VStack } from '@/components/ui'
 import { Loading } from '@/components/ui/loading'
 import { getProOfferById, applyToOffer, getWhyCanNotApply } from '@/api'
+import { ApiError } from '@/api/utils'
 import OfferHeader from './OfferHeader'
 import OfferContract from './OfferContract'
 import OfferPosition from './OfferPosition'
@@ -68,8 +69,9 @@ export default function OfferDetailsScreen() {
         title: t('success', { ns: 'common' }),
       })
     },
-    onError: () => {
-      showToast({ emphasize: 'error', title: 'Error', description: t('unknown-error', { ns: 'common' }) })
+    onError: (error: unknown) => {
+      const message = error instanceof ApiError && error.title !== 'unknown-error' ? error.title : null
+      showToast({ emphasize: 'error', title: 'Error', description: message ?? t('unknown-error', { ns: 'common' }) })
     },
     onSettled: () => {
       queryClient.invalidateQueries({
