@@ -1,7 +1,7 @@
 import { API } from './consts'
 import { TUserRole } from '@/api/types/auth'
 import { TUser } from '@/api/types/user'
-import { apiFetchJson, getLanguageCode } from './utils'
+import { apiFetchJson, apiFetchText, getLanguageCode } from './utils'
 
 export const getProUserProfile = async (token: string, role: TUserRole, language: string): Promise<TUser[]> => {
   const userRole = role == TUserRole.RECRUITER ? 'Owneruser' : 'Prouser'
@@ -21,7 +21,7 @@ export const setPushNotificationToken = async (token: string, pushToken: string)
   const url = `${API.NOTIFICATION}/SetPushNotificationToken`
   const body = JSON.stringify({ token, pushToken })
 
-  await apiFetchJson<void>(url, {
+  await apiFetchText(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
