@@ -5,7 +5,6 @@ import { MapPin, Phone, Mail, MessageCircle, Contact, Smartphone } from 'lucide-
 import { useTranslation } from 'react-i18next'
 import { SubSection, Section, SectionHeader } from '@/components/appUI'
 import { TCrew } from '@/api/types'
-import { faker } from '@faker-js/faker'
 
 const ContactSection: FC<{ crew: TCrew }> = ({ crew }) => {
   const { t } = useTranslation('crew')

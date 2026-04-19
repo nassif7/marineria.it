@@ -16,8 +16,8 @@ import {
 } from '@/components/ui'
 import { User, Calendar, MapPin, Award, Heart, Cake, Cigarette, IdCard, Briefcase } from 'lucide-react-native'
 import { TCrewSimple } from '@/api/types'
-import { faker } from '@faker-js/faker'
 import { useTranslation } from 'react-i18next'
+import { getPhotoUrl } from '@/api/consts'
 import { SubSection } from '@/components/appUI'
 import { getAgeByYear } from '@/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
@@ -31,8 +31,7 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
 
   const router = useRouter()
   const { searchId } = useLocalSearchParams()
-  const photoUrl = useMemo(() => `https://www.comunicazione.it/PROFoto/${crew?.userPhoto}`, [crew])
-  const fakerImage = useMemo(() => faker.image.personPortrait({ size: 256 }), [crew])
+  const photoUrl = useMemo(() => (crew?.userPhoto ? getPhotoUrl(crew.userPhoto) : null), [crew])
   const handlePress = () => {
     router.push(`/recruiter/search/${searchId}/crew/${crew.userId}`)
   }
@@ -48,7 +47,7 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
           <HStack className="items-start flex-1" space="sm">
             <Box className="w-16 h-16 rounded-md bg-primary-100 items-center justify-center overflow-hidden">
               {crew.userPhoto ? (
-                <Image source={{ uri: fakerImage }} className="w-full h-full" alt="profile" />
+                <Image source={{ uri: photoUrl ?? undefined }} className="w-full h-full" alt="profile" />
               ) : (
                 <Icon as={User} className="white" size="xl" />
               )}

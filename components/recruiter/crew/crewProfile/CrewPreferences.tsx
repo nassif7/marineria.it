@@ -43,7 +43,6 @@ import { useTranslation } from 'react-i18next'
 import { SubSection, Section, SectionHeader } from '@/components/appUI'
 import { getAgeByYear } from '@/utils/dateUtils'
 import { TCrew } from '@/api/types'
-import { faker } from '@faker-js/faker'
 
 const PreferencesSection: FC<{ crew: TCrew }> = ({ crew }) => {
   const { t } = useTranslation('crew')
