@@ -71,7 +71,7 @@ const UserProvider = (props: React.PropsWithChildren) => {
         pushToken && (await setPushNotificationToken(token as string, pushToken))
       }
     },
-    onSuccess: () => {
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['user', token, role] })
     },
   })

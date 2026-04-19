@@ -45,7 +45,7 @@ const Settings = () => {
 
   return (
     <ScreenContainer className="px-2">
-      <VStack className="h-full justify-between py-4">
+      <VStack className="justify-between h-full py-4">
         <VStack space="sm">
           <HStack className="justify-between items-center bg-white rounded-md p-3 mb-5 border border-background-300 min-h-[60px]">
             <HStack className="items-center" space="sm">
@@ -107,7 +107,7 @@ const Settings = () => {
             )}
           </Box>
           <Link onPress={handlePrivacyPolicy} className="self-start px-6 pb-3">
-            <LinkText className="text-primary-500 text-sm">{t('privacy-policy')}</LinkText>
+            <LinkText className="text-sm text-primary-500">{t('privacy-policy')}</LinkText>
           </Link>
         </VStack>
       </VStack>
