@@ -37,7 +37,7 @@ const JobOfferList: FC = () => {
   ]
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
-    queryKey: ['offers'],
+    queryKey: ['offers', ownOffers],
     queryFn: () => getProOffers(token, ownOffers == 'all', language),
   })
 
