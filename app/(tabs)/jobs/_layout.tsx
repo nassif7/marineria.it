@@ -15,8 +15,7 @@ export default function JobsLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: t('job-offers'),
-          headerShown: true,
+          headerShown: false,
         }}
       />
       <Stack.Screen

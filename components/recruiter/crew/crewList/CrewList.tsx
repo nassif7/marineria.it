@@ -1,5 +1,4 @@
 import { FC } from 'react'
-import { ActivityIndicator } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { useTranslation } from 'react-i18next'
@@ -16,15 +15,13 @@ const RightAction = ({ itemsCount, isLoading }: { itemsCount: number; isLoading:
   const { t } = useTranslation()
   return (
     <HStack className="pr-3 items-center" space="xs">
-      <Box className="bg-success-500 rounded-md w-6 h-6 items-center justify-center shrink-0">
-        {isLoading && <ActivityIndicator size={4} color="white" />}
-        {!isLoading && (
+      {!isLoading && (
+        <Box className="bg-success-500 rounded-full px-2 py-0.5 items-center justify-center">
           <Text color="white" bold size="sm">
             {itemsCount}
           </Text>
-        )}
-      </Box>
-
+        </Box>
+      )}
       <ContactSupport title={t('contact-support', { ns: 'common' })} supportTeam={supportTeam} />
     </HStack>
   )

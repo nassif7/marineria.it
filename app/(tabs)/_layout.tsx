@@ -73,7 +73,7 @@ const AppLayout = () => {
           options={{
             headerShown: false,
             sceneStyle,
-            title: t('offer-list'),
+            title: t('offers'),
             tabBarIcon: Briefcase,
           }}
         />

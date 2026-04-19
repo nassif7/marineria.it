@@ -1,5 +1,4 @@
 import { FC, useState } from 'react'
-import { ActivityIndicator } from 'react-native'
 import { Stack } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
@@ -9,26 +8,15 @@ import { Text, Loading, HStack, Box } from '@/components/ui'
 import { List, ScreenContainer, NavBar, ErrorMessage, EmptyList } from '@/components/appUI'
 import OfferListItem from './OfferListItem'
 
-const RightAction = ({
-  itemsCount,
-  isLoading,
-  onAction,
-}: {
-  itemsCount: number
-  isLoading: boolean
-  onAction?: () => void
-}) => {
+const RightAction = ({ itemsCount, isLoading }: { itemsCount: number; isLoading: boolean }) => {
+  if (isLoading) return null
   return (
-    <HStack className="pr-3 items-center" space="xs">
-      <Box className="bg-success-500 rounded-md w-6 h-6 items-center justify-center shrink-0">
-        {isLoading && <ActivityIndicator size={4} color="white" />}
-        {!isLoading && (
-          <Text color="white" bold size="sm">
-            {itemsCount}
-          </Text>
-        )}
+    <HStack className="pr-3 items-center">
+      <Box className="bg-success-500 rounded-full px-2 py-0.5 items-center justify-center">
+        <Text color="white" bold size="sm">
+          {itemsCount}
+        </Text>
       </Box>
-      {/* <Icon as={ListFilter} size="2xl" className="text-typography-400 font-bold" /> */}
     </HStack>
   )
 }
@@ -49,7 +37,7 @@ const JobOfferList: FC = () => {
   ]
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
-    queryKey: ['offers'],
+    queryKey: ['offers', ownOffers],
     queryFn: () => getProOffers(token, ownOffers == 'all', language),
   })
 
@@ -63,7 +51,7 @@ const JobOfferList: FC = () => {
           header: (props) => (
             <NavBar
               {...props}
-              rightAction={<RightAction itemsCount={data?.length || 0} isLoading={isLoading || isRefetching} />}
+              rightAction={<RightAction itemsCount={data?.length ?? 0} isLoading={isLoading || isRefetching} />}
             />
           ),
         }}
