@@ -70,8 +70,8 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
         </SubSection>
         <SubSection icon={Users} title={t('candidates-overview')} onPress={viewCrewList}>
           <HStack className="items-center justify-between mt-2">
-            <Badge action="muted" variant="outline" className="rounded-md">
-              <BadgeText>
+            <Badge action="success" variant="solid" className="rounded-md bg-success-600">
+              <BadgeText className="text-white">
                 {t('candidates')}: {search.countCandidates}
               </BadgeText>
             </Badge>

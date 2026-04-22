@@ -47,14 +47,14 @@ const OfferListItem: FC<IOfferListItemProps> = ({ offer, hideStatus = false, onV
   const hasLocation = offer.positionArm || (offer.latArm !== 0 && offer.lngArm !== 0)
 
   return (
-    <Box key={offer.idoffer} className="bg-white p-4 rounded-md">
+    <Box key={offer.idoffer} className="p-4 bg-white rounded-md">
       <VStack space="xs">
         {/* Title */}
-        <Heading size="lg" className="text-primary-600 leading-tight">
-          {offer.title.trim()}
+        <Heading size="lg" className="leading-tight text-primary-600">
+          {offer.offer.trim()}
         </Heading>
         {/* Reference & Date */}
-        <HStack className="justify-between items-center border-b border-background-200 pb-2">
+        <HStack className="items-center justify-between pb-2 border-b border-background-200">
           <Text size="xs" shade={400}>
             {`[${t('job-reference')}: ${offer.reference.split('_')[1]}]`}
           </Text>
