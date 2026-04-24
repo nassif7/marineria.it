@@ -9,9 +9,10 @@ import { Section } from '@/components/appUI'
 interface OfferActionsProps {
   offer: TOffer
   onApply: () => void
+  canApply?: boolean
 }
 
-const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
+const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply, canApply = true }) => {
   const { t } = useTranslation()
   const handleShare = async () => {
     try {
@@ -59,17 +60,19 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply }) => {
   return (
     <Section>
       <VStack space="xs">
-        <Button
-          size="md"
-          action={buttonConfig.action}
-          variant={buttonConfig.variant}
-          onPress={onApply}
-          isDisabled={buttonConfig.disabled}
-          className="rounded-md"
-        >
-          <ButtonIcon as={buttonConfig.icon} />
-          <ButtonText className="ml-2">{buttonConfig.text}</ButtonText>
-        </Button>
+        {(canApply || offer.alreadyApplied || !offer.offerApplicable) && (
+          <Button
+            size="md"
+            action={buttonConfig.action}
+            variant={buttonConfig.variant}
+            onPress={onApply}
+            isDisabled={buttonConfig.disabled}
+            className="rounded-md"
+          >
+            <ButtonIcon as={buttonConfig.icon} />
+            <ButtonText className="ml-2">{buttonConfig.text}</ButtonText>
+          </Button>
+        )}
 
         <Button size="md" variant="solid" action="secondary" onPress={handleShare} className="rounded-md">
           <ButtonIcon as={Share2} className=" text-white" />

@@ -45,7 +45,9 @@
     "job-list": "Job list",
     "guest-welcome": "Trova il tuo prossimo lavoro marittimo",
     "guest-subtitle": "Sfoglia centinaia di offerte di lavoro marittimo dai migliori recruiter.",
-    "browse-offers": "Esplora le offerte"
+    "browse-offers": "Esplora le offerte",
+    "cv-listed": "Il tuo CV è pubblicato",
+    "cv-not-listed": "Il tuo CV non è ancora pubblicato"
   },
   "offer-screen": {
     "view-offer": "Vedi offerta",

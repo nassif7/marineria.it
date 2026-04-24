@@ -7,7 +7,10 @@ export const getProUserProfile = async (token: string, role: TUserRole, language
   const userRole = role == TUserRole.RECRUITER ? 'Owneruser' : 'Prouser'
   const languageCode = getLanguageCode(language)
   const url = `${API.PROFILE}/${userRole}/${token}?lang=${languageCode}`
-  return apiFetchJson<TUser[]>(url)
+  const data = await apiFetchJson<any>(url)
+  const arr = Array.isArray(data) ? data : [data]
+  // API returns "publisched" (server-side typo), normalize to "published"
+  return arr.map((u) => ({ ...u, published: u.publisched }))
 }
 
 export const getOwnerUserProfile = async (token: string, role: TUserRole, language: string): Promise<TUser> => {

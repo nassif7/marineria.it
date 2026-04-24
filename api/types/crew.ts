@@ -4,7 +4,7 @@ export type TCrew = {
 
   contacted: boolean | string
   iduser: number
-  publisched: string
+  published: string
   photoapproved: string
   pushNotificationToken: string
   userName: string

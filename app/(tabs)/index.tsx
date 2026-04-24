@@ -3,6 +3,7 @@ import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { TUserRole } from '@/api/types'
 import { getPhotoUrl } from '@/api/consts'
+import { parseServerBool } from '@/api/utils'
 import { useSession } from '@/Providers/SessionProvider'
 import { useUser } from '@/Providers/UserProvider'
 import {
@@ -40,6 +41,7 @@ const UserProfile = () => {
   const { role } = auth
   const { user, isLoading } = useUser()
   const isRecruiter = role == TUserRole.CREW
+  const isCvListed = role === TUserRole.CREW && parseServerBool(user?.published)
 
   const photoName = useMemo(() => user?.namephotoA || user?.namephotoB || user?.namephotoC, [user])
   const photoUrl = useMemo(() => (photoName ? getPhotoUrl(photoName) : null), [photoName])
@@ -68,6 +70,13 @@ const UserProfile = () => {
               <Box>
                 <Heading className="text-4xl text-center">{t('welcome')}</Heading>
                 <Heading className="text-4xl text-center">{user.surname}</Heading>
+                {role === TUserRole.CREW && (
+                  <Text
+                    className={`text-base text-center font-semibold mt-2 ${isCvListed ? 'text-success-600' : 'text-error-600'}`}
+                  >
+                    {isCvListed ? t('cv-listed') : t('cv-not-listed')}
+                  </Text>
+                )}
                 <Text className="my-6 text-xl text-center p4">
                   {role == TUserRole.RECRUITER && t('recruiter-message')}
                   {role == TUserRole.CREW && t('crew-message')}

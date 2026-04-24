@@ -13,7 +13,8 @@ interface SearchContractProps {
 
 const SearchContract: React.FC<SearchContractProps> = ({ search }) => {
   const { t } = useTranslation()
-  const hasLocation = search.positionArm || (search.latArm !== 0 && search.lngArm !== 0)
+  const hasCoords = search.latArm !== 0 && search.lngArm !== 0
+  const hasLocation = (search.positionArm && search.positionArm !== 'NA') || hasCoords
 
   const handleOpenMap = () => {
     if (search.latArm && search.lngArm && search.latArm !== 0 && search.lngArm !== 0) {
@@ -40,11 +41,17 @@ const SearchContract: React.FC<SearchContractProps> = ({ search }) => {
 
           {hasLocation && (
             <SubSection className="flex-1 " title={t('location')} icon={MapPin}>
-              <Pressable onPress={handleOpenMap}>
-                <Text color="primary" size="sm" semiBold>
+              {hasCoords ? (
+                <Pressable onPress={handleOpenMap}>
+                  <Text color="primary" size="sm" semiBold>
+                    {search.positionArm}
+                  </Text>
+                </Pressable>
+              ) : (
+                <Text size="sm" semiBold shade={800}>
                   {search.positionArm}
                 </Text>
-              </Pressable>
+              )}
             </SubSection>
           )}
         </HStack>

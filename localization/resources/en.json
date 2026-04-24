@@ -45,7 +45,9 @@
     "job-list": "Job list",
     "guest-welcome": "Find your next maritime job",
     "guest-subtitle": "Browse hundreds of maritime job offers from top recruiters.",
-    "browse-offers": "Browse Job Offers"
+    "browse-offers": "Browse Job Offers",
+    "cv-listed": "Your CV is listed",
+    "cv-not-listed": "Your CV is not yet listed"
   },
   "offer-screen": {
     "view-offer": "View offer",
