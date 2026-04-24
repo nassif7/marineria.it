@@ -1,106 +1,72 @@
 export type TUser = {
+  iduser: number
+  published: string // API field: "publisched" (server-side typo), mapped in profile.ts
+  suspended: string
+  reported: string
+  incomplete: string
+  pushNotificationToken: string
+  userName: string
   name: string
   surname: string
+  yearofBirth: string
+  gender: string
+  maritalStatus: string
+  nationality: string
   company: string
   address: string
   city: string
   province: string
+  zip_code: string
   emailCc: string
   email: string
   url: string
   telephone: string
-  telephone1: string
-  phoneprefix: string
-  landprefix: string
-  whatsAppprefix: string
   cellular: string
-  fax: string
-  skype: string
-  last_access_date: string
-  pushNotificationToken: string
-  iduser: number
-  userTypeIta: string
-  zip_code: string
-  suspended: string
-  passportCode: string
-  consentMarketing: string
+  callWhatsapp: string
   userPhoto: string
-  photoapproved: string
-  talkApp: string
+  smoker: string
   lat: string
   lng: string
-  positionbase: string
-  positionDescription: string
-  qlfn: string
-  yearofBirth: string
-  gender: true
-  nationality: string
-  language1: string
-  serialnumberCity: string
-  serialnumber: string
-  serialnumberGdm: true
-  serialnumberCategory: string
-  serialnumberSkill: string
-  serialnumberLicence: string
-  serialnumberData: string
-  navigationBooklet: number
-  navigationCompleted: number
+  mainPosition: string
+  qualificationCode: string
+  licenseCode: string
+  seamansBook: string
+  registration_Number: string
+  registration_City: string
+  registration_Category: string
+  registration_Year: string
+  navigationBook: string
+  calculatedExperience: string
+  availability: string
+  dateAvailability: string
+  lastAccessDate: string
+  registrationDate: string
   courses: string
   notesCourses: string
-  boardingpreference: string
-  availability: true
-  availabilityperiod: string
-  assignment: string
-  smoker: number
-  team: true
+  specseling: string
   couplewith: string
   card1Couple: string
   salary: string
-  registrationdate: string
-  lastaccessdate: number
-  curriculum: string
-  coupleOther: string
-  civilstate: true
-  experience: string
+  educationalLevel: string
+  language1: string
   language2: string
   language3: string
   language4: string
-  experienceEmbarkations: string
-  preference: string
-  duration: string
-  availablefor: string
+  pos_deck: string
+  pos_engine: string
+  pos_hotel: string
+  pos_harbour: string
+  pos_special: string
+  ita_yachts_deck: string
+  ita_yachts_engine: string
+  mca_yachts_deck: string
+  mca_deck_rya: string
+  stcw_navy_deck: string
+  stcw_navy_engine: string
   numberClick: number
-  specVela: number
-  vaxCovid19: true
-  lastvaxcovid19date: string
-  coursesCode: string
-  position: string
-  posDeck: string
-  posEngine: string
-  posHotel: string
-  posHarbour: string
-  posSpecial: string
-  itaYachtsDeck: string
-  itaYachtsEngine: string
-  mcaYachtsDeck: string
-  mcaYachtsEngine: string
-  mcaDeckRya: string
-  stcwNavyDeck: string
-  stcwNavyEngine: string
-  registrationnumberqualificationcode: string
-  dateavailabilityfrom: number
-  registrationnumberlicensecode: string
   passport: string
   secondaryTasks: string
-  matricola_citta: string
-  matricola: string
-  matricola_GDM: string
-  matricola_categoria: string
-  matricola_patentecode: string
   namephotoA: string
   namephotoB: string
   namephotoC: string
-  idUtente: number
-  zipcode: string
-  registration_date: string
 }

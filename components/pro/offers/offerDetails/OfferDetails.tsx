@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { VStack } from '@/components/ui'
 import { Loading } from '@/components/ui/loading'
 import { getProOfferById, applyToOffer, getWhyCanNotApply } from '@/api'
-import { ApiError } from '@/api/utils'
+import { ApiError, parseServerBool } from '@/api/utils'
 import OfferHeader from './OfferHeader'
 import OfferContract from './OfferContract'
 import OfferPosition from './OfferPosition'
@@ -25,8 +25,9 @@ export default function OfferDetailsScreen() {
   const { showToast } = useStatusToast()
 
   const { offerId } = useLocalSearchParams<{ offerId: string }>()
-  const { activeProfile } = useUser()
+  const { activeProfile, user } = useUser()
   const { token } = activeProfile as ActiveProfile
+  const isCvPublished = parseServerBool(user?.published)
   const [showNotApplicable, setShowNotApplicable] = useState(false)
   const [showApply, setShowApply] = useState(false)
   const [pendingReasons, setPendingReasons] = useState(false)
@@ -108,7 +109,7 @@ export default function OfferDetailsScreen() {
             <OfferHeader offer={offer} />
             <OfferContract offer={offer} />
             <OfferPosition offer={offer} />
-            <OfferActions offer={offer} onApply={handleApply} />
+            <OfferActions offer={offer} onApply={handleApply} canApply={isCvPublished} />
           </VStack>
           {pendingReasons && <Loading />}
           <NotApplicableModal

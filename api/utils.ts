@@ -1,5 +1,12 @@
 import type { ErrorResponse } from './types/errors'
 
+/** Handles the server's string booleans: "True", "False", "1", "0", actual booleans */
+export function parseServerBool(value: unknown): boolean {
+  if (typeof value === 'boolean') return value
+  if (typeof value === 'string') return value.toLowerCase() === 'true' || value === '1'
+  return false
+}
+
 export function getLanguageCode(lang?: string): string {
   return { en: 'ENG', it: 'ITA' }[lang || ''] || 'ENG'
 }

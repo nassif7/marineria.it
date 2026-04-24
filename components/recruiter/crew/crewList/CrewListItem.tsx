@@ -110,11 +110,13 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
               {crew.dateAvailability}
             </Text>
           </SubSection>
-          <SubSection title={t('city', { ns: 'crew' })} icon={MapPin} className="flex-1 ">
-            <Text size="sm" semiBold shade={800}>
-              {crew.city}
-            </Text>
-          </SubSection>
+          {crew.city && crew.city !== 'NA' && (
+            <SubSection title={t('city', { ns: 'crew' })} icon={MapPin} className="flex-1 ">
+              <Text size="sm" semiBold shade={800}>
+                {crew.city}
+              </Text>
+            </SubSection>
+          )}
         </HStack>
 
         {crew.calculatedExperience && (
