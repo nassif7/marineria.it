@@ -18,7 +18,7 @@ export default function SearchDetails() {
   const {
     i18n: { language },
   } = useTranslation()
-  const { openUrl } = useAuthBrowser()
+  const { openUrl, isLoading: isUrlLoading } = useAuthBrowser()
 
   const { searchId } = useLocalSearchParams()
   const router = useRouter()
@@ -57,7 +57,7 @@ export default function SearchDetails() {
           <SearchContract search={search} />
           <SearchPosition search={search} />
           <SearchCandidates search={search} onViewCandidates={handleViewCandidates} />
-          <SearchActions onEdit={handleEdit} />
+          <SearchActions onEdit={handleEdit} isUrlLoading={isUrlLoading} />
         </VStack>
       )}
     </ScreenContainer>

@@ -22,9 +22,10 @@ interface IContactModalUnpaid {
   visible: boolean
   onClose: () => void
   onCheckout: () => void
+  isUrlLoading?: boolean
 }
 
-const ContactModalUnpaid: FC<IContactModalUnpaid> = ({ visible, onClose, onCheckout }) => {
+const ContactModalUnpaid: FC<IContactModalUnpaid> = ({ visible, onClose, onCheckout, isUrlLoading }) => {
   const { t } = useTranslation(['crew-screen'])
 
   return (
@@ -52,7 +53,14 @@ const ContactModalUnpaid: FC<IContactModalUnpaid> = ({ visible, onClose, onCheck
             </HStack>
           </VStack>
           <VStack space="sm" className="px-4 pb-10 pt-1">
-            <Button size="md" action="positive" variant="solid" className="flex-1 rounded-md" onPress={onCheckout}>
+            <Button
+              size="md"
+              action="positive"
+              variant="solid"
+              className="flex-1 rounded-md"
+              onPress={onCheckout}
+              isDisabled={isUrlLoading}
+            >
               <ButtonIcon as={CreditCard} className=" text-white" />
               <ButtonText>{t('proceed-to-checkout')}</ButtonText>
             </Button>

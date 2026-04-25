@@ -17,7 +17,7 @@ const SearchCandidates: React.FC<SearchCandidatesProps> = ({ search }) => {
     t,
     i18n: { language },
   } = useTranslation(['search-screen'])
-  const { openUrl } = useAuthBrowser()
+  const { openUrl, isLoading: isUrlLoading } = useAuthBrowser()
 
   const openSearchByLocation = () => openUrl(`https://www.marineria.it/${language}/${search.listgeourl}`)
   const openSearchBySkill = () => openUrl(`https://www.marineria.it/${language}/${search.listurl}`)
@@ -49,10 +49,22 @@ const SearchCandidates: React.FC<SearchCandidatesProps> = ({ search }) => {
         </SubSection>
         <SubSection title={t('find-crew')} icon={Search}>
           <HStack space="xs">
-            <Button variant="solid" action="positive" onPress={openSearchBySkill} className="rounded-md  flex-1">
+            <Button
+              variant="solid"
+              action="positive"
+              onPress={openSearchBySkill}
+              className="rounded-md  flex-1"
+              isDisabled={isUrlLoading}
+            >
               <ButtonText>{t('by-skill')}</ButtonText>
             </Button>
-            <Button variant="solid" action="positive" onPress={openSearchByLocation} className="rounded-md flex-1">
+            <Button
+              variant="solid"
+              action="positive"
+              onPress={openSearchByLocation}
+              className="rounded-md flex-1"
+              isDisabled={isUrlLoading}
+            >
               <ButtonText>{t('by-location')}</ButtonText>
             </Button>
           </HStack>

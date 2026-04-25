@@ -16,7 +16,7 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
     t,
     i18n: { language },
   } = useTranslation(['search-screen'])
-  const { openUrl } = useAuthBrowser()
+  const { openUrl, isLoading: isUrlLoading } = useAuthBrowser()
 
   const viewSearch = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}`)
   const viewCrewList = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list`)
@@ -89,10 +89,22 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
         </SubSection>
         <SubSection title={t('find-crew')} icon={Search}>
           <HStack space="sm">
-            <Button variant="solid" action="positive" onPress={openSearchBySkill} className="rounded-md flex-1">
+            <Button
+              variant="solid"
+              action="positive"
+              onPress={openSearchBySkill}
+              className="rounded-md flex-1"
+              isDisabled={isUrlLoading}
+            >
               <ButtonText>{t('by-skill')}</ButtonText>
             </Button>
-            <Button variant="solid" action="positive" onPress={openSearchByLocation} className="rounded-md flex-1">
+            <Button
+              variant="solid"
+              action="positive"
+              onPress={openSearchByLocation}
+              className="rounded-md flex-1"
+              isDisabled={isUrlLoading}
+            >
               <ButtonText>{t('by-location')}</ButtonText>
             </Button>
           </HStack>
