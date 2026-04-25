@@ -20,7 +20,7 @@ const CrewListEmptyComponent = () => {
   const { activeProfile } = useUser()
 
   const { token } = activeProfile as ActiveProfile
-  const { openUrl } = useAuthBrowser()
+  const { openUrl, isLoading: isUrlLoading } = useAuthBrowser()
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
     queryKey: ['recruiter-search-by-id', searchId, language],
@@ -36,7 +36,14 @@ const CrewListEmptyComponent = () => {
       <VStack space="sm" className="items-center justify-center w-full">
         <Heading>{t('empty-crew-list')}</Heading>
 
-        <Button variant="solid" action="positive" onPress={openSearchBySkill} className="rounded-md w-full" size="md">
+        <Button
+          variant="solid"
+          action="positive"
+          onPress={openSearchBySkill}
+          className="rounded-md w-full"
+          size="md"
+          isDisabled={isUrlLoading}
+        >
           <ButtonIcon as={UserCheck} />
           <ButtonText>
             {`${t('find-crew', { ns: 'search-screen' })} ${t('by-skill', { ns: 'search-screen' })}`}
@@ -48,6 +55,7 @@ const CrewListEmptyComponent = () => {
           onPress={openSearchByLocation}
           className="rounded-md w-full"
           size="md"
+          isDisabled={isUrlLoading}
         >
           <ButtonIcon as={MapPin} />
           <ButtonText>

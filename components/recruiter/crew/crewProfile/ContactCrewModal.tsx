@@ -50,7 +50,7 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
     { icon: Send, label: t('send-job-offer'), color: 'text-success-600', bg: 'bg-success-50' },
   ]
 
-  const { openUrl } = useAuthBrowser()
+  const { openUrl, isLoading: isUrlLoading } = useAuthBrowser()
 
   const {
     search: { data },
@@ -61,7 +61,9 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
   const onCheckout = () => openUrl('https://www.marineria.it')
 
   if (!isPaid) {
-    return <ContactModalUnpaid visible={visible} onClose={onClose} onCheckout={onCheckout} />
+    return (
+      <ContactModalUnpaid visible={visible} onClose={onClose} onCheckout={onCheckout} isUrlLoading={isUrlLoading} />
+    )
   }
 
   return (

@@ -44,7 +44,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm, is
   const { user } = useUser()
   const userId = user?.iduser
 
-  const { openUrl } = useAuthBrowser()
+  const { openUrl, isLoading: isUrlLoading } = useAuthBrowser()
 
   const handleReviewProfile = () => openUrl(`https://www.marineria.it/${language}/CV.aspx?idutente=${userId}`)
 
@@ -117,7 +117,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm, is
                         {t('confirm-requirements', { ns: 'offer-screen' })}
                       </Text>
                     </HStack>
-                    <Link onPress={handleReviewProfile}>
+                    <Link onPress={handleReviewProfile} isDisabled={isUrlLoading}>
                       <LinkText className="text-primary-600">
                         {t('review-your-profile', { ns: 'offer-screen' })}
                       </LinkText>

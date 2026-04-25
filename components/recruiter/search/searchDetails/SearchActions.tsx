@@ -8,15 +8,23 @@ import { Section } from '@/components/appUI'
 
 interface SearchActionsProps {
   onEdit: () => void
+  isUrlLoading?: boolean
 }
 
-const SearchActions: React.FC<SearchActionsProps> = ({ onEdit }) => {
+const SearchActions: React.FC<SearchActionsProps> = ({ onEdit, isUrlLoading }) => {
   const { t } = useTranslation()
 
   return (
     <Section>
       <VStack space="xs">
-        <Button size="lg" action="primary" variant="outline" onPress={onEdit} className="rounded-md">
+        <Button
+          size="lg"
+          action="primary"
+          variant="outline"
+          onPress={onEdit}
+          className="rounded-md"
+          isDisabled={isUrlLoading}
+        >
           <ButtonIcon as={Edit} />
           <ButtonText className="ml-2">{t('modify-offer')}</ButtonText>
         </Button>
