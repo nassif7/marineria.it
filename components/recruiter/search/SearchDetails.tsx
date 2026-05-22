@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, ScrollView, Pressable, StyleSheet, TouchableOpacity, Linking } from 'react-native'
 import { Stack } from 'expo-router'
-import { Anchor, Sparkles, MapPin, ChevronRight, Edit } from 'lucide-react-native'
+import { Anchor, Sparkles, MapPin, ChevronLeft, ChevronRight, Edit } from 'lucide-react-native'
 import { router } from 'expo-router'
 import { useAuthBrowser } from '@/hooks'
 import { useTranslation } from 'react-i18next'
@@ -59,24 +59,25 @@ export default function SearchDetails() {
 
   return (
     <View style={{ flex: 1, backgroundColor: C.bg }}>
-      <Stack.Screen
-        options={{
-          headerRight: () => (
-            <TouchableOpacity style={sd.editBtn} onPress={handleEdit} disabled={isUrlLoading}>
-              <Edit size={14} color={C.ink2} strokeWidth={2} />
-              <Text style={sd.editBtnText}>{t('modify-offer', { ns: 'offer' })}</Text>
-            </TouchableOpacity>
-          ),
-        }}
-      />
+      <Stack.Screen options={{ headerShown: false }} />
+
+      {/* ── Sticky header ── */}
+      <View style={sd.stickyHeader}>
+        <View style={sd.navRow}>
+          <Pressable style={sd.iconBtn} onPress={() => router.back()}>
+            <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
+          </Pressable>
+          <Text style={sd.navRef}>Ref · {referenceShort}</Text>
+          <TouchableOpacity style={sd.editBtn} onPress={handleEdit} disabled={isUrlLoading}>
+            <Edit size={14} color="#FFF" strokeWidth={2} />
+            <Text style={sd.editBtnText}>{t('modify-offer', { ns: 'offer' })}</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={sd.headerTitle}>{search.offer?.trim() || '—'}</Text>
+        <Text style={sd.heroMeta}>{t('ref-published-date', { ref: referenceShort, date: search.offerdate })}</Text>
+      </View>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={sd.scrollContent}>
-        {/* ── Hero ── */}
-        <View style={sd.hero}>
-          <Text style={sd.heroTitle}>{search.offer?.trim() || '—'}</Text>
-          <Text style={sd.heroMeta}>{t('ref-published-date', { ref: referenceShort, date: search.offerdate })}</Text>
-        </View>
-
         {/* ── Contract & period ── */}
         <View style={sd.card}>
           <SectionLabel>{t('contract-period')}</SectionLabel>
@@ -260,21 +261,35 @@ function FunnelArrow() {
 const sd = StyleSheet.create({
   scrollContent: { paddingBottom: 24 },
 
+  stickyHeader: {
+    backgroundColor: C.bg,
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: C.hair2,
+  },
+  navRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 },
+  iconBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 99,
+    backgroundColor: C.field,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  navRef: { fontSize: 13, fontWeight: '600', color: C.ink3 },
   editBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 7,
     borderRadius: 99,
-    backgroundColor: C.card,
-    borderWidth: 1,
-    borderColor: C.hair,
+    backgroundColor: C.orange,
   },
-  editBtnText: { fontSize: 13, fontWeight: '600', color: C.ink2 },
-
-  hero: { paddingHorizontal: 18, paddingTop: 16, paddingBottom: 12 },
-  heroTitle: { fontSize: 22, fontWeight: '800', color: C.ink, letterSpacing: -0.4, lineHeight: 28, marginBottom: 6 },
+  editBtnText: { fontSize: 13, fontWeight: '600', color: '#FFF' },
+  headerTitle: { fontSize: 22, fontWeight: '800', color: C.ink, letterSpacing: -0.4, lineHeight: 28, marginBottom: 4 },
   heroMeta: { fontSize: 12, color: C.ink4 },
 
   card: {
