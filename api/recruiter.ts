@@ -9,6 +9,19 @@ export const getRecruiterActiveSearches = async (ownerToken: string, language: s
   return apiFetchJson<TRecruiterSearch[]>(url)
 }
 
+export const getRecruiterActiveSearchesPost = async (
+  ownerToken: string,
+  language: string
+): Promise<TRecruiterSearch[]> => {
+  const languageCode = getLanguageCode(language)
+  const data = await apiFetchJson<{ items: TRecruiterSearch[] }>(API.OWNER_OFFERS, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({ userToken: ownerToken, language: languageCode }),
+  })
+  return data.items
+}
+
 export const getRecruiterSearchById = async (
   searchId: string,
   ownerToken: string,

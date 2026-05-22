@@ -33,6 +33,16 @@ export const getOwnerUserProfile = async (token: string, role: TUserRole, langua
   return apiFetchJson<TUser>(url)
 }
 
+export const getOwnerUserProfilePost = async (token: string, language: string): Promise<TUser> => {
+  const languageCode = getLanguageCode(language)
+  const url = `${API.PROFILE}/Owneruser/Owner`
+  return apiFetchJson<TUser>(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({ userToken: token, language: languageCode }),
+  })
+}
+
 export const setPushNotificationToken = async (token: string, pushToken: string): Promise<void> => {
   const url = `${API.NOTIFICATION}/SetPushNotificationToken`
   const body = JSON.stringify({ token, pushToken })
