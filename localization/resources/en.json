@@ -73,7 +73,14 @@
     "agree-to-policy": "I agree to privacy terms and conditions",
     "confirm-availability": "I am available for hire during the time period specified by the advert",
     "confirm-requirements": "I satisfy the requirements",
-    "review-your-profile": "Click here to check your profile"
+    "review-your-profile": "Click here to check your profile",
+    "matching": "Matching",
+    "not-matching": "Not matching",
+    "details": "Details",
+    "offers-count": "{{count}} offers",
+    "filter-all": "All",
+    "filter-matching": "Matching",
+    "why-cant-apply": "Can't apply, why?"
   },
   "search-screen": {
     "search-id": "Search ID",
@@ -157,7 +164,9 @@
     "position-specialty": "Position specialty",
     "expires": "Expires",
     "modify-offer": "Modify offer",
-    "apply-success": "Your profile will be shared with the recruiter!"
+    "apply-success": "Your profile will be shared with the recruiter!",
+    "base": "Base",
+    "salary-per-month": "Salary / month"
   },
   "crew": {
     "availability": "Availability",

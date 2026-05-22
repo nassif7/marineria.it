@@ -28,6 +28,11 @@ const AppLayout = () => {
     paddingTop: insets.top - 12,
   }
 
+  const proSceneStyle = {
+    backgroundColor: '#F6F5F2',
+    paddingTop: insets.top - 12,
+  }
+
   return (
     <UserProvider>
       <Tabs
@@ -52,7 +57,7 @@ const AppLayout = () => {
           redirect={role !== TUserRole.CREW}
           options={{
             headerShown: false,
-            sceneStyle,
+            sceneStyle: proSceneStyle,
             title: t('offers'),
             tabBarIcon: Briefcase,
           }}

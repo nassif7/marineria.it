@@ -18,7 +18,7 @@ import {
   Text,
   VStack,
 } from '@/components/ui'
-import { ScreenContainer } from '@/components/appUI'
+import { ScreenContainer, ErrorMessage } from '@/components/appUI'
 
 const GuestWelcome = () => {
   const { t } = useTranslation('home-screen')
@@ -37,9 +37,9 @@ const GuestWelcome = () => {
 
 const UserProfile = () => {
   const { t } = useTranslation(['home-screen'])
-  const { auth } = useSession()
+  const { auth, signOut } = useSession()
   const { role } = auth
-  const { user, isLoading } = useUser()
+  const { user, isLoading, isError } = useUser()
   const isRecruiter = role == TUserRole.CREW
   const isCvListed = role === TUserRole.CREW && parseServerBool(user?.published)
 
@@ -50,6 +50,13 @@ const UserProfile = () => {
     <ScreenContainer className="items-center justify-center px-2">
       {isLoading ? (
         <Loading />
+      ) : isError ? (
+        <VStack space="md" className="items-center px-6">
+          <ErrorMessage />
+          <Button variant="outline" onPress={() => role && signOut(role)}>
+            <ButtonText>{t('sign-out', { ns: 'common', defaultValue: 'Esci' })}</ButtonText>
+          </Button>
+        </VStack>
       ) : (
         <>
           {user && (

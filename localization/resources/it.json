@@ -73,7 +73,14 @@
     "agree-to-policy": "accetto le clausole di privacy",
     "confirm-availability": "sono disponibile per il periodo dell'imbarco",
     "confirm-requirements": "sono in possesso dei requisiti richiesti",
-    "review-your-profile": "Click se prima desideri controllare il tuo profilo"
+    "review-your-profile": "Click se prima desideri controllare il tuo profilo",
+    "matching": "Corrispondente",
+    "not-matching": "Non corrispondente",
+    "details": "Dettagli",
+    "offers-count": "{{count}} offerte",
+    "filter-all": "Tutte",
+    "filter-matching": "Matching",
+    "why-cant-apply": "Non posso candidarmi, perché?"
   },
   "search-screen": {
     "search-id": "Search ID",
@@ -158,7 +165,9 @@
     "position-specialty": "Specialità posizione",
     "expires": "Scade",
     "modify-offer": "Modifica offerta",
-    "apply-success": "Il tuo profilo sarà condiviso con il reclutatore"
+    "apply-success": "Il tuo profilo sarà condiviso con il reclutatore",
+    "base": "Base",
+    "salary-per-month": "Compenso / mese"
   },
   "crew": {
     "availability": "Disponibilità",

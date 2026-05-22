@@ -4,12 +4,25 @@ import { TUser } from '@/api/types/user'
 import { apiFetchJson, apiFetchText, getLanguageCode } from './utils'
 
 export const getProUserProfile = async (token: string, role: TUserRole, language: string): Promise<TUser[]> => {
+  console.log('Fetching pro user profile with token:', token, role, language)
   const userRole = role == TUserRole.RECRUITER ? 'Owneruser' : 'Prouser'
   const languageCode = getLanguageCode(language)
   const url = `${API.PROFILE}/${userRole}/${token}?lang=${languageCode}`
   const data = await apiFetchJson<any>(url)
   const arr = Array.isArray(data) ? data : [data]
   // API returns "publisched" (server-side typo), normalize to "published"
+  return arr.map((u) => ({ ...u, published: u.publisched }))
+}
+
+export const getProUserProfilePost = async (token: string, language: string): Promise<TUser[]> => {
+  const languageCode = getLanguageCode(language)
+  const url = `${API.PROFILE}/Prouser`
+  const data = await apiFetchJson<any>(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({ userToken: token, language: languageCode }),
+  })
+  const arr = Array.isArray(data) ? data : [data]
   return arr.map((u) => ({ ...u, published: u.publisched }))
 }
 

@@ -28,6 +28,7 @@ type ApiRequestInit = RequestInit
 export async function apiFetchJson<TResponse>(url: string, init?: ApiRequestInit): Promise<TResponse> {
   const response = await fetch(url, init)
 
+  console.log('API Response:', { url, status: response.status, statusText: response.statusText })
   if (!response.ok) {
     const body = await response.text().catch(() => '')
     let message: string | undefined
