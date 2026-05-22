@@ -6,7 +6,8 @@ import { VStack, Text, HStack, Button, ButtonIcon, ButtonText, View, Heading } f
 import { Loading } from '@/components/ui/loading'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 import { useTranslation } from 'react-i18next'
-import { getRecruiterSearchById } from '@/api'
+import { getRecruiterSearchByIdPost } from '@/api'
+// import { getRecruiterSearchById } from '@/api'
 import { ScreenContainer } from '@/components/appUI'
 import { UserCheck, MapPin } from 'lucide-react-native'
 
@@ -24,7 +25,8 @@ const CrewListEmptyComponent = () => {
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
     queryKey: ['recruiter-search-by-id', searchId, language],
-    queryFn: () => getRecruiterSearchById(searchId as string, token, language),
+    // queryFn: () => getRecruiterSearchById(searchId as string, token, language),
+    queryFn: () => getRecruiterSearchByIdPost(searchId as string, token, language),
   })
 
   const search = isSuccess ? (data as any)?.[0] : null

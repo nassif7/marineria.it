@@ -32,6 +32,21 @@ export const getRecruiterSearchById = async (
   return apiFetchJson<TRecruiterSearch[]>(url)
 }
 
+export const getRecruiterSearchByIdPost = async (
+  searchId: string | number,
+  ownerToken: string,
+  language?: string
+): Promise<TRecruiterSearch[]> => {
+  const languageCode = getLanguageCode(language)
+  const url = `${API.OWNER_OFFERS}/${searchId}`
+  const data = await apiFetchJson<{ items: TRecruiterSearch[] }>(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({ userToken: ownerToken, language: languageCode }),
+  })
+  return data.items
+}
+
 export const getCrewList = async (offerId: string, ownerToken: string, language: string): Promise<TCrewSimple[]> => {
   const languageCode = getLanguageCode(language)
   const url = API.CREW_LIST + `/${ownerToken}/${offerId}?language=${languageCode}`
