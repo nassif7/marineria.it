@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { View, Text, Pressable, StyleSheet, TouchableOpacity } from 'react-native'
 import { ChevronRight } from 'lucide-react-native'
 import { router } from 'expo-router'
+import { useTranslation } from 'react-i18next'
 import { TRecruiterSearch } from '@/api/types'
 import { C } from '@/components/pro/tokens'
 
@@ -10,6 +11,7 @@ interface ISearchListItemProps {
 }
 
 const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
+  const { t } = useTranslation(['search-screen', 'offer'])
   const viewSearch = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}`)
   const viewCrewList = (filter: 'all' | 'selected' | 'contacted') =>
     router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list?filter=${filter}`)
@@ -24,9 +26,9 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
       : null
 
   const facts = [
-    salary ? ['Salario', salary] : null,
-    search.boarding ? ['Imbarco', search.boarding.trim()] : null,
-    search.contractDescription ? ['Contratto', search.contractDescription] : null,
+    salary ? [t('salary', { ns: 'offer' }), salary] : null,
+    search.boarding ? [t('boarding', { ns: 'offer' }), search.boarding.trim()] : null,
+    search.contractDescription ? [t('contract-type', { ns: 'offer' }), search.contractDescription] : null,
   ].filter(Boolean) as [string, string][]
 
   return (
@@ -42,7 +44,7 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
         )}
         <View style={si.statusPill}>
           <View style={si.statusDot} />
-          <Text style={si.statusPillText}>Attiva</Text>
+          <Text style={si.statusPillText}>{t('status-active')}</Text>
         </View>
       </View>
 
@@ -72,7 +74,7 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
             <>
               <FunnelStage
                 n={search.countCandidates}
-                label="Nel pool"
+                label={t('in-pool')}
                 color={C.ink}
                 labelColor={C.ink3}
                 onPress={() => viewCrewList('all')}
@@ -80,7 +82,7 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
               <FunnelArrow />
               <FunnelStage
                 n={selected}
-                label="Selezionati"
+                label={t('selected')}
                 color={selected > 0 ? C.orangeText : C.ink4}
                 labelColor={selected > 0 ? C.orangeText : C.ink4}
                 onPress={() => viewCrewList('selected')}
@@ -88,7 +90,7 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
               <FunnelArrow />
               <FunnelStage
                 n={contacted}
-                label="Contattati"
+                label={t('contacted')}
                 color={contacted > 0 ? C.green : C.ink4}
                 labelColor={contacted > 0 ? C.green : C.ink4}
                 onPress={() => viewCrewList('contacted')}
@@ -100,11 +102,9 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
 
       {/* Footer */}
       <View style={si.footer}>
-        <Text style={si.footerRef}>
-          Ref · {referenceShort} · {search.offerdate}
-        </Text>
+        <Text style={si.footerRef}>{t('ref-date', { ref: referenceShort, date: search.offerdate })}</Text>
         <View style={si.manageRow}>
-          <Text style={si.manageText}>Gestisci</Text>
+          <Text style={si.manageText}>{t('manage')}</Text>
           <ChevronRight size={14} color={C.green} strokeWidth={2.2} />
         </View>
       </View>

@@ -11,17 +11,17 @@ import { C } from '@/components/pro/tokens'
 import { useQuery } from '@tanstack/react-query'
 import SearchListItem from './SearchListItem'
 
-const FILTERS = [
-  { key: 'active', label: 'Attive' },
-  { key: 'paused', label: 'In pausa' },
-  { key: 'closed', label: 'Chiuse' },
-] as const
-
 const RecruiterSearchList: FC = () => {
   const {
     t,
     i18n: { language },
   } = useTranslation(['search-screen', 'screens-labels'])
+
+  const FILTERS = [
+    { key: 'active', label: t('filter-active') },
+    { key: 'paused', label: t('filter-paused') },
+    { key: 'closed', label: t('filter-closed') },
+  ] as const
   const state = useAppState()
   const { activeProfile } = useUser()
   const { token } = activeProfile as ActiveProfile
@@ -49,7 +49,7 @@ const RecruiterSearchList: FC = () => {
           {/* In-content header */}
           <View style={sl.header}>
             <View>
-              <Text style={sl.headerCount}>{searches.length} ricerche</Text>
+              <Text style={sl.headerCount}>{t('searches-count', { count: searches.length })}</Text>
               <Text style={sl.headerTitle}>{t('search-list', { ns: 'screens-labels' })}</Text>
             </View>
           </View>
