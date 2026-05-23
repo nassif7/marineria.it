@@ -1,151 +1,311 @@
 import { FC, useMemo } from 'react'
+import { View, Text, Pressable, Image, StyleSheet } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import {
-  Box,
-  VStack,
-  HStack,
-  Heading,
-  Text,
-  Icon,
-  Image,
-  Badge,
-  BadgeText,
-  BadgeIcon,
-  Button,
-  ButtonText,
-} from '@/components/ui'
-import { User, Calendar, MapPin, Award, Heart, Cake, Cigarette, IdCard, Briefcase } from 'lucide-react-native'
+import { Calendar, Briefcase, ChevronRight, Check, AlertTriangle } from 'lucide-react-native'
 import { TCrewSimple } from '@/api/types'
 import { useTranslation } from 'react-i18next'
 import { getPhotoUrl } from '@/api/consts'
-import { SubSection } from '@/components/appUI'
 import { getAgeByYear } from '@/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
+import { C } from '@/components/pro/tokens'
 
 interface ICrewListItem {
   crew: TCrewSimple
 }
 
-const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
-  const { t } = useTranslation(['crew-screen', 'crew'])
+const GREEN_SOFT = '#E8F8EB'
+const GREEN_TEXT = '#0F7A28'
+const WARN_BG = '#FFF7ED'
+const WARN_TEXT = '#C2600A'
+const WARN_BORDER = '#FDDCB5'
 
+const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
+  const { t } = useTranslation(['crew-screen', 'crew', 'search-screen'])
   const router = useRouter()
   const { searchId } = useLocalSearchParams()
-  const photoUrl = useMemo(() => (crew?.userPhoto ? getPhotoUrl(crew.userPhoto) : null), [crew])
-  const handlePress = () => {
-    router.push(`/recruiter/search/${searchId}/crew/${crew.userId}`)
-  }
 
+  const photoUrl = useMemo(() => (crew?.userPhoto ? getPhotoUrl(crew.userPhoto) : null), [crew])
   const hasSeamansBook = getSeamansBook(crew)
   const { hasCertificateOfCompetence } = getCertificateOfCompetence(crew)
+  const age = crew.birthYear ? getAgeByYear(crew.birthYear) : null
+  const isContacted = !!crew.contacted
+
+  const handlePress = () => router.push(`/recruiter/search/${searchId}/crew/${crew.userId}`)
+
+  const initials = (crew.firstName?.[0] ?? '') + (crew.lastName?.[0] ?? '') || (crew.mainPosition?.[0] ?? '?')
 
   return (
-    <Box className="bg-white rounded-md p-4">
-      <VStack space="xs">
-        {/* Header: Photo + Name + Status */}
-        <HStack className="justify-between  pb-2 items-start border-b border-background-200">
-          <HStack className="items-start flex-1" space="sm">
-            <Box className="w-16 h-16 rounded-md bg-primary-100 items-center justify-center overflow-hidden">
-              {crew.userPhoto ? (
-                <Image source={{ uri: photoUrl ?? undefined }} className="w-full h-full" alt="profile" />
-              ) : (
-                <Icon as={User} className="white" size="xl" />
-              )}
-            </Box>
-            {/* Name and Info */}
-            <VStack className="flex-1" space="xs">
-              <HStack className="items-center gap-2 flex-wrap">
-                <Heading size="sm" className="text-primary-600">
-                  {crew.contacted ? crew.firstName + ' ' + crew.lastName : crew.mainPosition}
-                </Heading>
-              </HStack>
-              {crew.contacted && (
-                <Text bold size="sm">
-                  {crew.mainPosition}
-                </Text>
-              )}
-            </VStack>
-          </HStack>
-          <Text bold size="sm">
-            {t('id')}: {crew.userId}
-          </Text>
-        </HStack>
-        <HStack className="items-start flex-wrap" space="sm">
-          <Badge action="muted" variant="outline" className="rounded-md">
-            <BadgeText className="text-typography-800">
-              {t('citizenship', { ns: 'crew' })}: {crew.passport}
-            </BadgeText>
-          </Badge>
-          <Badge action="muted" variant="outline" className="rounded-md">
-            <BadgeText className="text-typography-800">{crew.maritalStatus}</BadgeText>
-          </Badge>
-          <Badge action="muted" variant="outline" className="rounded-md">
-            <BadgeText className="text-typography-800">{`${getAgeByYear(crew.birthYear)} ${t('years', { ns: 'crew' })}`}</BadgeText>
-          </Badge>
-          <Badge action="muted" variant="outline" className="rounded-md">
-            <BadgeText className="text-typography-800">{crew.smoker}</BadgeText>
-          </Badge>
-          {!crew.calculatedExperience && (
-            <Badge action="error" variant="outline" className="rounded-md">
-              <BadgeText className="text-error-900">{t('no-experience', { ns: 'crew' })}</BadgeText>
-            </Badge>
+    <Pressable style={ci.card} onPress={handlePress}>
+      {/* ── Top row: avatar + role + id ── */}
+      <View style={ci.topRow}>
+        <View style={ci.avatar}>
+          {photoUrl ? (
+            <Image source={{ uri: photoUrl }} style={ci.avatarImg} />
+          ) : (
+            <Text style={ci.avatarInitials}>{initials.toUpperCase()}</Text>
           )}
-          <Badge action={hasCertificateOfCompetence ? 'success' : 'error'} variant="outline" className="rounded-md">
-            <BadgeText className={`text-${hasCertificateOfCompetence ? 'success' : 'error'}-900`}>
-              {t(hasCertificateOfCompetence ? 'certificate-of-competence' : 'no-certificate-of-competence', {
-                ns: 'crew-screen',
-              })}
-            </BadgeText>
-          </Badge>
-          {!crew.courses && (
-            <Badge action="error" variant="outline" className="rounded-md">
-              <BadgeText className="text-error-900">{t('no-courses', { ns: 'crew' })}</BadgeText>
-            </Badge>
-          )}
-        </HStack>
+        </View>
 
-        <HStack space="xs">
-          <SubSection title={t('available-from', { ns: 'crew' })} icon={Calendar} className="flex-1 ">
-            <Text size="sm" semiBold shade={800}>
-              {crew.dateAvailability}
+        <View style={ci.topMeta}>
+          <View style={ci.roleRow}>
+            <Text style={ci.roleText} numberOfLines={1}>
+              {crew.mainPosition || '—'}
             </Text>
-          </SubSection>
-          {crew.city && crew.city !== 'NA' && (
-            <SubSection title={t('city', { ns: 'crew' })} icon={MapPin} className="flex-1 ">
-              <Text size="sm" semiBold shade={800}>
-                {crew.city}
-              </Text>
-            </SubSection>
-          )}
-        </HStack>
-
-        {crew.calculatedExperience && (
-          <SubSection title={t('experience', { ns: 'crew' })} icon={Briefcase} className=" min-h-[50px] ">
-            <HStack className="items-center justify-between flex-wrap">
-              <Text size="sm" semiBold shade={800}>
-                {crew.calculatedExperience}
-              </Text>
-
-              <Badge action={hasSeamansBook ? 'success' : 'error'} variant="outline" className="rounded-md">
-                <BadgeText className={`text-${hasSeamansBook ? 'success' : 'error'}-900`}>{crew.seamansBook}</BadgeText>
-              </Badge>
-            </HStack>
-          </SubSection>
-        )}
-        {crew.courses && (
-          <SubSection title={t('courses', { ns: 'crew' })} icon={Award}>
-            <Text size="sm" semiBold shade={800}>
-              {crew.courses}
+          </View>
+          <View style={ci.infoRow}>
+            <Text style={ci.infoText}>
+              {[crew.passport, age ? `${age} ${t('years', { ns: 'crew' })}` : null, crew.gender]
+                .filter(Boolean)
+                .join(' · ')}
             </Text>
-          </SubSection>
+            {isContacted && (
+              <View style={ci.contactedPill}>
+                <Check size={10} color={GREEN_TEXT} strokeWidth={2.8} />
+                <Text style={ci.contactedPillText}>{t('contacted', { ns: 'search-screen' })}</Text>
+              </View>
+            )}
+          </View>
+        </View>
+      </View>
+
+      {/* ── Status pills ── */}
+      <View style={ci.pillsRow}>
+        {hasSeamansBook ? (
+          <View style={[ci.pill, ci.pillGreen]}>
+            <Check size={10} color={GREEN_TEXT} strokeWidth={2.8} />
+            <Text style={[ci.pillText, { color: GREEN_TEXT }]}>{t('seaman-book')}</Text>
+          </View>
+        ) : null}
+
+        {hasCertificateOfCompetence ? (
+          <View style={[ci.pill, ci.pillGreen]}>
+            <Check size={10} color={GREEN_TEXT} strokeWidth={2.8} />
+            <Text style={[ci.pillText, { color: GREEN_TEXT }]}>{t('coc-valid')}</Text>
+          </View>
+        ) : (
+          <View style={[ci.pill, ci.pillWarn]}>
+            <AlertTriangle size={10} color={WARN_TEXT} strokeWidth={2.4} />
+            <Text style={[ci.pillText, { color: WARN_TEXT }]}>{t('no-coc')}</Text>
+          </View>
         )}
 
-        <Button size="md" action="positive" variant="solid" onPress={handlePress}>
-          <ButtonText>{t('view-profile')}</ButtonText>
-        </Button>
-      </VStack>
-    </Box>
+        {crew.courses ? (
+          <View style={[ci.pill, ci.pillNeutral]}>
+            <Text style={[ci.pillText, { color: C.ink2 }]}>
+              {t('courses-count', { count: crew.courses.split(',').length })}
+            </Text>
+          </View>
+        ) : (
+          <View style={[ci.pill, ci.pillWarn]}>
+            <AlertTriangle size={10} color={WARN_TEXT} strokeWidth={2.4} />
+            <Text style={[ci.pillText, { color: WARN_TEXT }]}>{t('no-courses-short')}</Text>
+          </View>
+        )}
+      </View>
+
+      {/* ── Body: availability + experience ── */}
+      {crew.dateAvailability || crew.calculatedExperience ? (
+        <View style={ci.bodyRow}>
+          {crew.dateAvailability ? (
+            <View style={ci.bodyFact}>
+              <Text style={ci.bodyFactLabel}>{t('available-from', { ns: 'crew' })}</Text>
+              <Text style={ci.bodyFactValue}>{crew.dateAvailability}</Text>
+            </View>
+          ) : null}
+          {crew.calculatedExperience ? (
+            <View style={ci.bodyFact}>
+              <Text style={ci.bodyFactLabel}>{t('experience', { ns: 'crew' })}</Text>
+              <Text style={ci.bodyFactValue}>{crew.calculatedExperience}</Text>
+            </View>
+          ) : null}
+        </View>
+      ) : null}
+
+      {/* ── Footer: id + profile link ── */}
+      <View style={ci.footer}>
+        <Text style={ci.idFooterText}>#{crew.userId}</Text>
+        <View style={ci.profileLink}>
+          <Text style={ci.profileLinkText}>{t('view-profile')}</Text>
+          <ChevronRight size={14} color={C.green} strokeWidth={2.2} />
+        </View>
+      </View>
+    </Pressable>
   )
 }
+
+const ci = StyleSheet.create({
+  card: {
+    backgroundColor: C.card,
+    borderRadius: 16,
+    padding: 16,
+    shadowColor: '#0D1B2A',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  topRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 12,
+  },
+  avatar: {
+    width: 56,
+    height: 56,
+    borderRadius: 12,
+    backgroundColor: C.field,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    flexShrink: 0,
+  },
+  avatarImg: {
+    width: '100%',
+    height: '100%',
+  },
+  avatarInitials: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: C.ink3,
+    letterSpacing: -0.5,
+  },
+  topMeta: {
+    flex: 1,
+    minWidth: 0,
+  },
+  roleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+    marginBottom: 6,
+  },
+  roleText: {
+    flex: 1,
+    fontSize: 15,
+    fontWeight: '700',
+    color: C.orangeText,
+    letterSpacing: -0.2,
+  },
+  idText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: C.ink4,
+    fontVariant: ['tabular-nums'],
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  infoText: {
+    fontSize: 12,
+    color: C.ink2,
+  },
+  contactedPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: GREEN_SOFT,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+    borderRadius: 99,
+  },
+  contactedPillText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: GREEN_TEXT,
+  },
+  pillsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+    marginBottom: 12,
+  },
+  pill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+    borderRadius: 99,
+    borderWidth: 1,
+  },
+  pillGreen: {
+    backgroundColor: GREEN_SOFT,
+    borderColor: 'transparent',
+  },
+  pillWarn: {
+    backgroundColor: WARN_BG,
+    borderColor: WARN_BORDER,
+  },
+  pillNeutral: {
+    backgroundColor: C.field,
+    borderColor: C.hair,
+  },
+  pillText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  bodyRow: {
+    flexDirection: 'column',
+    gap: 4,
+    marginBottom: 10,
+  },
+  bodyFact: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  bodyFactLabel: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: C.ink4,
+  },
+  bodyFactValue: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: C.ink,
+  },
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: C.hair2,
+  },
+  footerItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  idFooterText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: C.ink4,
+    fontVariant: ['tabular-nums'],
+  },
+  footerLabel: {
+    fontSize: 12,
+    color: C.ink4,
+  },
+  footerValue: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: C.ink,
+  },
+  profileLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
+  profileLinkText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: C.green,
+  },
+})
 
 export default CrewListItem

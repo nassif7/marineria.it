@@ -66,6 +66,7 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
       )}
 
       {/* Candidates funnel */}
+      <Text style={si.funnelSectionLabel}>{t('candidates-overview')}</Text>
       <View style={si.funnel}>
         {(() => {
           const selected = Math.max(0, search.countCandidates - search.countResidual - search.countContacted)
@@ -74,7 +75,7 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
             <>
               <FunnelStage
                 n={search.countCandidates}
-                label={t('in-pool')}
+                label={t('filter-all')}
                 color={C.ink}
                 labelColor={C.ink3}
                 onPress={() => viewCrewList('all')}
@@ -102,9 +103,9 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
 
       {/* Footer */}
       <View style={si.footer}>
-        <Text style={si.footerRef}>{t('ref-date', { ref: referenceShort, date: search.offerdate })}</Text>
+        <Text style={si.footerRef}>Ref · {referenceShort}</Text>
         <View style={si.manageRow}>
-          <Text style={si.manageText}>{t('manage')}</Text>
+          <Text style={si.manageText}>{t('view-search')}</Text>
           <ChevronRight size={14} color={C.green} strokeWidth={2.2} />
         </View>
       </View>
@@ -223,6 +224,14 @@ const si = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
     color: C.ink,
+  },
+  funnelSectionLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: C.ink4,
+    letterSpacing: 0.4,
+    textTransform: 'uppercase',
+    marginBottom: 6,
   },
   funnel: {
     flexDirection: 'row',
