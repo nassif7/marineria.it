@@ -157,8 +157,9 @@ export default function OfferDetailsScreen() {
     [t('posted', { ns: 'offer' }), offer?.offerdate],
   ]
 
-  const canApply = isCvPublished && !offer?.alreadyApplied && !!offer?.offerApplicable
-  const applyLabel = canApply
+  const isMatching = !!offer?.offerApplicable
+  const canApply = isCvPublished && !offer?.alreadyApplied && isMatching
+  const applyLabel = isMatching
     ? t('apply-for-this-position', { ns: 'offer-screen' })
     : t('not-matching-why', { ns: 'offer-screen' })
 
@@ -259,12 +260,12 @@ export default function OfferDetailsScreen() {
           <Share2 size={20} color={C.ink2} strokeWidth={1.8} />
         </Pressable>
         <Pressable
-          style={[ds.applyBtn, !canApply && ds.applyBtnSecondary]}
+          style={[ds.applyBtn, !isMatching && ds.applyBtnSecondary]}
           onPress={pendingReasons ? undefined : handleApply}
           disabled={pendingReasons}
         >
           {pendingReasons && <ActivityIndicator color="#FFFFFF" style={ds.btnSpinner} />}
-          <Text style={[ds.applyBtnText, !canApply && ds.applyBtnTextSecondary]}>{applyLabel}</Text>
+          <Text style={[ds.applyBtnText, !isMatching && ds.applyBtnTextSecondary]}>{applyLabel}</Text>
         </Pressable>
       </View>
 

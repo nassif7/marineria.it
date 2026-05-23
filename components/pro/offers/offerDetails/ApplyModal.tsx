@@ -1,30 +1,10 @@
 import React, { useState } from 'react'
-import { useAuthBrowser } from '@/hooks'
-import {
-  VStack,
-  HStack,
-  Heading,
-  Text,
-  Button,
-  ButtonText,
-  Icon,
-  Checkbox,
-  CheckboxIndicator,
-  CheckboxIcon,
-  Link,
-  LinkText,
-  ButtonSpinner,
-  Modal,
-  ModalBackdrop,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalCloseButton,
-} from '@/components/ui'
-import { X, Check, ShieldUser, ListCheck, Minus } from 'lucide-react-native'
-import { SubSection, SubSectionHeader } from '@/components/appUI'
+import { Modal, View, Text, Pressable, ScrollView, StyleSheet, ActivityIndicator } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { X, Send, UserRound } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
+import { C } from '@/components/pro/tokens'
+import { useAuthBrowser } from '@/hooks'
 import { useUser } from '@/Providers/UserProvider'
 
 interface ApplyModalProps {
@@ -39,14 +19,12 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm, is
   const {
     t,
     i18n: { language },
-  } = useTranslation()
-
+  } = useTranslation(['offer-screen', 'common'])
+  const { top, bottom } = useSafeAreaInsets()
   const { user } = useUser()
-  const userId = user?.iduser
-
   const { openUrl, isLoading: isUrlLoading } = useAuthBrowser()
 
-  const handleReviewProfile = () => openUrl(`https://www.marineria.it/${language}/CV.aspx?idutente=${userId}`)
+  const handleReviewProfile = () => openUrl(`https://www.marineria.it/${language}/CV.aspx?idutente=${user?.iduser}`)
 
   const handleApply = () => {
     if (consentAccepted) {
@@ -60,96 +38,278 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm, is
     onClose()
   }
 
-  const canApply = consentAccepted
+  const complianceItems = [
+    t('agree-to-policy', { ns: 'offer-screen' }),
+    t('confirm-availability', { ns: 'offer-screen' }),
+    t('confirm-requirements', { ns: 'offer-screen' }),
+  ]
 
   return (
-    <Modal isOpen={visible} onClose={handleClose}>
-      <ModalBackdrop />
-      <ModalContent className="w-full mb-0 mt-auto rounded-t-md overflow-hidden p-4 max-h-[85%]">
-        <ModalHeader className="justify-between items-center">
-          <Heading size="xl" className="text-primary-600 flex-1">
-            Confirm Application
-          </Heading>
-          <ModalCloseButton onPress={handleClose}>
-            <Icon as={X} className="text-typography-500" size="md" />
-          </ModalCloseButton>
-        </ModalHeader>
-        <ModalBody>
-          <VStack className="gap-2">
-            <SubSection className="p-4">
-              <SubSectionHeader icon={ShieldUser} title={t('privacy', { ns: 'offer-screen' })} />
-              <Text size="sm" shade={800}>
-                {t('privacy-policy', { ns: 'offer-screen' })}
-              </Text>
-            </SubSection>
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={handleClose}>
+      <View style={[ms.container, { paddingTop: top }]}>
+        {/* Header */}
+        <View style={ms.header}>
+          <Text style={ms.title}>{t('confirm-application', { ns: 'offer-screen' })}</Text>
+          <Pressable style={ms.closeBtn} onPress={handleClose}>
+            <X size={16} color={C.ink2} strokeWidth={2.5} />
+          </Pressable>
+        </View>
 
-            <SubSection className="p-4 overflow-hidden max-w-full">
-              <SubSectionHeader icon={ListCheck} title={t('compliance', { ns: 'offer-screen' })} />
-              <Checkbox
-                value="consent"
-                isChecked={consentAccepted}
-                onChange={setConsentAccepted}
-                aria-label="Data Processing Consent"
-              >
-                <HStack>
-                  <CheckboxIndicator>
-                    <CheckboxIcon as={Check} />
-                  </CheckboxIndicator>
-                  <VStack className="ml-3 gap-1 text-typography-900 text-sm flex-shrink max-w-[90%]">
-                    <Text size="sm" shade={800}>
-                      {t('i-declare', { ns: 'offer-screen' })}:
-                    </Text>
-                    <HStack className="items-center gap-1">
-                      <Icon as={Minus} size="xs" className="text-typography-800" />
-                      <Text size="sm" shade={800}>
-                        {t('agree-to-policy', { ns: 'offer-screen' })}
-                      </Text>
-                    </HStack>
-                    <HStack className="gap-1">
-                      <Icon as={Minus} size="xs" className="text-typography-800" />
-                      <Text size="sm" shade={800}>
-                        {t('confirm-availability', { ns: 'offer-screen' })}
-                      </Text>
-                    </HStack>
-                    <HStack className="items-center gap-1">
-                      <Icon as={Minus} size="xs" className="text-typography-800" />
-                      <Text size="sm" shade={800}>
-                        {t('confirm-requirements', { ns: 'offer-screen' })}
-                      </Text>
-                    </HStack>
-                    <Link onPress={handleReviewProfile} isDisabled={isUrlLoading}>
-                      <LinkText className="text-primary-600">
-                        {t('review-your-profile', { ns: 'offer-screen' })}
-                      </LinkText>
-                    </Link>
-                  </VStack>
-                </HStack>
-              </Checkbox>
-            </SubSection>
-          </VStack>
-        </ModalBody>
+        {/* Body */}
+        <ScrollView style={ms.body} contentContainerStyle={ms.bodyContent} showsVerticalScrollIndicator={false}>
+          <View style={ms.content}>
+            <Text style={ms.sectionLabel}>{t('privacy', { ns: 'offer-screen' })}</Text>
+            <Text style={ms.bodyText}>{t('privacy-policy', { ns: 'offer-screen' })}</Text>
 
-        <ModalFooter className="gap-3">
-          <Button size="md" variant="outline" action="secondary" onPress={handleClose} className="rounded-md flex-1">
-            <ButtonText>{t('cancel')}</ButtonText>
-          </Button>
+            <View style={ms.divider} />
 
-          <Button
-            size="md"
-            variant="solid"
-            action="positive"
-            onPress={handleApply}
-            isDisabled={!canApply || isSubmitting}
-            className="rounded-md flex-1"
-          >
-            {isSubmitting && <ButtonSpinner color="white" />}
-            <ButtonText>{t('apply', { ns: 'offer-screen' })}</ButtonText>
-          </Button>
-        </ModalFooter>
-      </ModalContent>
+            <Text style={ms.sectionLabel}>{t('compliance', { ns: 'offer-screen' })}</Text>
+            {complianceItems.map((item, i) => (
+              <View key={i} style={ms.itemRow}>
+                <View style={ms.badge}>
+                  <Text style={ms.badgeText}>–</Text>
+                </View>
+                <Text style={ms.itemText}>{item}</Text>
+              </View>
+            ))}
+
+            <View style={ms.divider} />
+
+            <Pressable style={ms.checkRow} onPress={() => setConsentAccepted((v) => !v)}>
+              <View style={[ms.checkbox, consentAccepted && ms.checkboxChecked]}>
+                {consentAccepted && <View style={ms.checkmark} />}
+              </View>
+              <Text style={ms.checkLabel}>{t('agree', { ns: 'offer-screen' })}</Text>
+            </Pressable>
+          </View>
+        </ScrollView>
+
+        {/* Footer — morphs after agreement */}
+        <View style={[ms.footer, { paddingBottom: bottom + 12 }]}>
+          {consentAccepted ? (
+            <View style={ms.actionRow}>
+              <Pressable style={ms.iconBtn} onPress={handleClose}>
+                <X size={18} color="#FFFFFF" strokeWidth={2.2} />
+              </Pressable>
+              <Pressable style={ms.profileIconBtn} onPress={handleReviewProfile} disabled={isUrlLoading}>
+                <UserRound size={18} color="#FFFFFF" strokeWidth={2.2} />
+              </Pressable>
+              <Pressable style={ms.applyBtn} onPress={handleApply} disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <ActivityIndicator color="#FFFFFF" />
+                ) : (
+                  <>
+                    <Send size={17} color="#FFFFFF" strokeWidth={2} />
+                    <Text style={ms.applyText}>{t('apply-for-this-position', { ns: 'offer-screen' })}</Text>
+                  </>
+                )}
+              </Pressable>
+            </View>
+          ) : (
+            <>
+              <Pressable style={ms.profileBtn} onPress={handleReviewProfile} disabled={isUrlLoading}>
+                <Text style={ms.profileBtnText}>{t('review-your-profile', { ns: 'offer-screen' })}</Text>
+              </Pressable>
+              <View style={ms.actionRow}>
+                <Pressable style={ms.cancelBtn} onPress={handleClose}>
+                  <Text style={ms.cancelText}>{t('cancel', { ns: 'common' })}</Text>
+                </Pressable>
+                <Pressable style={[ms.applyBtn, ms.applyBtnDisabled]} disabled>
+                  <Text style={ms.applyText}>{t('apply', { ns: 'offer-screen' })}</Text>
+                </Pressable>
+              </View>
+            </>
+          )}
+        </View>
+      </View>
     </Modal>
   )
 }
+
+const ms = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: C.bg,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: C.hair,
+  },
+  title: {
+    flex: 1,
+    fontSize: 13,
+    fontWeight: '600',
+    color: C.ink4,
+    letterSpacing: 0.2,
+    textTransform: 'uppercase',
+  },
+  closeBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: C.hair2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  body: {
+    flex: 1,
+  },
+  bodyContent: {
+    padding: 20,
+  },
+  content: {
+    gap: 14,
+  },
+  sectionLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.4,
+    color: C.ink3,
+    textTransform: 'uppercase',
+  },
+  bodyText: {
+    fontSize: 15,
+    lineHeight: 23,
+    color: C.ink2,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: C.hair,
+  },
+  itemRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 14,
+  },
+  badge: {
+    width: 26,
+    height: 26,
+    borderRadius: 8,
+    backgroundColor: C.orangeSoft,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    marginTop: 1,
+  },
+  badgeText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: C.orange,
+  },
+  itemText: {
+    flex: 1,
+    fontSize: 15,
+    lineHeight: 23,
+    color: C.ink2,
+  },
+  checkRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  checkbox: {
+    width: 22,
+    height: 22,
+    borderRadius: 6,
+    borderWidth: 1.5,
+    borderColor: C.ink4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  checkboxChecked: {
+    backgroundColor: C.green,
+    borderColor: C.green,
+  },
+  checkmark: {
+    width: 10,
+    height: 6,
+    borderLeftWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: '#FFFFFF',
+    transform: [{ rotate: '-45deg' }, { translateY: -1 }],
+  },
+  checkLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: C.ink,
+  },
+  footer: {
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: C.hair,
+    gap: 10,
+  },
+  profileBtn: {
+    height: 50,
+    borderRadius: 14,
+    backgroundColor: C.orange,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  profileBtnText: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+  actionRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  iconBtn: {
+    width: 50,
+    height: 50,
+    borderRadius: 14,
+    backgroundColor: C.ink,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  profileIconBtn: {
+    width: 50,
+    height: 50,
+    borderRadius: 14,
+    backgroundColor: C.orange,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cancelBtn: {
+    flex: 1,
+    height: 50,
+    borderRadius: 14,
+    backgroundColor: C.ink,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cancelText: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+  applyBtn: {
+    flex: 1,
+    height: 50,
+    borderRadius: 14,
+    backgroundColor: C.green,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  applyBtnDisabled: {
+    opacity: 0.35,
+  },
+  applyText: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+})
 
 export default ApplyModal
 
