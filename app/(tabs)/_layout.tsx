@@ -67,7 +67,7 @@ const AppLayout = () => {
           redirect={role !== TUserRole.RECRUITER}
           options={{
             headerShown: false,
-            sceneStyle,
+            sceneStyle: proSceneStyle,
             title: t('recruitment'),
             tabBarIcon: Users,
           }}

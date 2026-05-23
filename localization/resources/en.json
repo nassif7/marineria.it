@@ -84,7 +84,11 @@
   },
   "search-screen": {
     "search-id": "Search ID",
-    "no-searches": "You have no active searches",
+    "no-searches": "You have no searches",
+    "no-searches-all": "You have no searches",
+    "no-searches-active": "You have no active searches",
+    "no-searches-paused": "You have no paused searches",
+    "no-searches-closed": "You have no closed searches",
     "view-search": "View search",
     "offer": "Offer",
     "candidates-overview": "Candidates overview",

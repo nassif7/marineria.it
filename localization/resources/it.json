@@ -84,7 +84,11 @@
   },
   "search-screen": {
     "search-id": "Search ID",
-    "no-searches": "Non hai ricerche attive",
+    "no-searches": "Non hai ricerche",
+    "no-searches-all": "Non hai ricerche",
+    "no-searches-active": "Non hai ricerche attive",
+    "no-searches-paused": "Non hai ricerche in pausa",
+    "no-searches-closed": "Non hai ricerche chiuse",
     "view-search": "Visualizza ricerca",
     "offer": "Offerte",
     "candidates-overview": "Candidati",

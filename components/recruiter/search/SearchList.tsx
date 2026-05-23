@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { View, Text, ScrollView, Pressable, StyleSheet, RefreshControl } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { getRecruiterActiveSearchesPost } from '@/api'
@@ -17,11 +17,14 @@ const RecruiterSearchList: FC = () => {
     i18n: { language },
   } = useTranslation(['search-screen', 'screens-labels'])
 
-  const FILTERS = [
+  type FilterKey = 'all' | 'active' | 'paused' | 'closed'
+  const FILTERS: { key: FilterKey; label: string }[] = [
+    { key: 'all', label: t('filter-all') },
     { key: 'active', label: t('filter-active') },
     { key: 'paused', label: t('filter-paused') },
     { key: 'closed', label: t('filter-closed') },
-  ] as const
+  ]
+  const [filter, setFilter] = useState<FilterKey>('all')
   const state = useAppState()
   const { activeProfile } = useUser()
   const { token } = activeProfile as ActiveProfile
@@ -33,7 +36,15 @@ const RecruiterSearchList: FC = () => {
     enabled: state === 'active',
   })
 
-  const searches = data ?? []
+  const allSearches = data ?? []
+  const searches = filter === 'all' ? allSearches : allSearches.filter((s) => s.status?.toLowerCase() === filter)
+
+  const counts: Record<FilterKey, number> = {
+    all: allSearches.length,
+    active: allSearches.filter((s) => s.status?.toLowerCase() === 'active').length,
+    paused: allSearches.filter((s) => s.status?.toLowerCase() === 'paused').length,
+    closed: allSearches.filter((s) => s.status?.toLowerCase() === 'closed').length,
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: C.bg }}>
@@ -49,19 +60,27 @@ const RecruiterSearchList: FC = () => {
           {/* In-content header */}
           <View style={sl.header}>
             <View>
-              <Text style={sl.headerCount}>{t('searches-count', { count: searches.length })}</Text>
               <Text style={sl.headerTitle}>{t('search-list', { ns: 'screens-labels' })}</Text>
             </View>
           </View>
 
           {/* Filter chips */}
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={sl.filtersRow}>
-            {FILTERS.map((f, i) => {
-              const isActive = i === 0
+            {FILTERS.map((f) => {
+              const isActive = filter === f.key
               return (
-                <View key={f.key} style={[sl.chip, isActive ? sl.chipActive : sl.chipInactive]}>
+                <Pressable
+                  key={f.key}
+                  onPress={() => setFilter(f.key)}
+                  style={[sl.chip, isActive ? sl.chipActive : sl.chipInactive]}
+                >
                   <Text style={[sl.chipLabel, isActive ? sl.chipLabelActive : sl.chipLabelInactive]}>{f.label}</Text>
-                </View>
+                  <View style={[sl.chipCount, isActive ? sl.chipCountActive : sl.chipCountInactive]}>
+                    <Text style={[sl.chipCountText, isActive ? sl.chipCountTextActive : sl.chipCountTextInactive]}>
+                      {counts[f.key]}
+                    </Text>
+                  </View>
+                </Pressable>
               )
             })}
           </ScrollView>
@@ -69,7 +88,7 @@ const RecruiterSearchList: FC = () => {
           {/* Cards */}
           <View style={sl.list}>
             {searches.length === 0 ? (
-              <EmptyList message={t('no-searches', { ns: 'search-screen' })} />
+              <EmptyList message={t(`no-searches-${filter}`, { ns: 'search-screen' })} />
             ) : (
               searches.map((s) => <SearchListItem key={s.idoffer} search={s} />)
             )}
@@ -82,7 +101,7 @@ const RecruiterSearchList: FC = () => {
 
 const sl = StyleSheet.create({
   scrollContent: {
-    paddingBottom: 100,
+    paddingBottom: 24,
   },
   header: {
     flexDirection: 'row',
@@ -139,6 +158,28 @@ const sl = StyleSheet.create({
   },
   chipLabelInactive: {
     color: C.ink2,
+  },
+  chipCount: {
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 4,
+  },
+  chipCountActive: {
+    backgroundColor: 'rgba(255,255,255,0.18)',
+  },
+  chipCountInactive: {
+    backgroundColor: C.hair2,
+  },
+  chipCountText: {
+    fontSize: 11,
+    fontWeight: '700',
+    opacity: 0.75,
+  },
+  chipCountTextActive: {
+    color: '#FFFFFF',
+  },
+  chipCountTextInactive: {
+    color: C.ink3,
   },
   list: {
     paddingHorizontal: 16,
