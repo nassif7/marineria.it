@@ -83,7 +83,6 @@ const JobOfferList: FC = () => {
           {/* In-content header */}
           <View style={ls.header}>
             <View>
-              <Text style={ls.headerCount}>{t('offers-count', { ns: 'offer-screen', count: counts.all })}</Text>
               <Text style={ls.headerTitle}>{t('offer-list', { ns: 'screens-labels' })}</Text>
             </View>
           </View>
@@ -127,7 +126,7 @@ const JobOfferList: FC = () => {
 
 const ls = StyleSheet.create({
   scrollContent: {
-    paddingBottom: 100,
+    paddingBottom: 24,
   },
   header: {
     flexDirection: 'row',
