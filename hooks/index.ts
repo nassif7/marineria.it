@@ -1,4 +1,5 @@
 export { default as useAppState } from './useAppState'
+export { useSavedOffers } from './useSavedOffers'
 export { default as useAuthBrowser } from './useAuthBrowser'
 export { default as useNotification } from './useNotification'
 export { default as useAuthErrorToast } from './useAuthErrorToast'

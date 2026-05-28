@@ -8,7 +8,7 @@ import { getProOfferById, getProOfferByIdPost, applyToOffer, getWhyCanNotApplyPo
 import { ApiError, parseServerBool } from '@/api/utils'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
 import { useTranslation } from 'react-i18next'
-import { useStatusToast } from '@/hooks'
+import { useStatusToast, useSavedOffers } from '@/hooks'
 import { Loading } from '@/components/ui'
 import { ErrorMessage, ScreenContainer } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
@@ -56,7 +56,8 @@ export default function OfferDetailsScreen() {
   const { activeProfile, user } = useUser()
   const { token } = activeProfile as ActiveProfile
   const isCvPublished = parseServerBool(user?.published)
-  const [isSaved, setIsSaved] = useState(false)
+  const { isSaved: checkSaved, toggleSaved } = useSavedOffers()
+  const isSaved = offerId ? checkSaved(offerId) : false
   const [showNotApplicable, setShowNotApplicable] = useState(false)
   const [showApply, setShowApply] = useState(false)
   const [pendingReasons, setPendingReasons] = useState(false)
@@ -177,7 +178,7 @@ export default function OfferDetailsScreen() {
           <Text style={ds.refText}>
             {t('job-reference', { ns: 'offer' })} · {ref}
           </Text>
-          <Pressable onPress={() => setIsSaved((s) => !s)}>
+          <Pressable onPress={() => toggleSaved(offerId)}>
             <Bookmark
               size={20}
               color={isSaved ? C.orange : C.ink2}
@@ -248,7 +249,7 @@ export default function OfferDetailsScreen() {
 
       {/* ── Fixed action bar ── */}
       <View style={ds.actionBar}>
-        <Pressable style={[ds.secondaryBtn, isSaved && ds.secondaryBtnSaved]} onPress={() => setIsSaved((s) => !s)}>
+        <Pressable style={[ds.secondaryBtn, isSaved && ds.secondaryBtnSaved]} onPress={() => toggleSaved(offerId)}>
           <Bookmark
             size={20}
             color={isSaved ? C.orange : C.ink2}

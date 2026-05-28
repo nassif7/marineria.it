@@ -82,6 +82,8 @@
     "offers-count": "{{count}} offerte",
     "filter-all": "Tutte",
     "filter-matching": "Matching",
+    "filter-saved": "Salvati",
+    "no-saved-offers": "Non hai ancora salvato nessuna offerta",
     "why-cant-apply": "Non posso candidarmi, perché?"
   },
   "search-screen": {

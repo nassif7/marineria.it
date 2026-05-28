@@ -5,12 +5,13 @@ import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { getAllOffersPost, getOffersForApplyPost } from '@/api'
 import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useSavedOffers } from '@/hooks'
 import { Loading } from '@/components/ui'
 import { ErrorMessage, EmptyList } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
 import OfferListItem from './OfferListItem'
 
-type FilterKey = 'all' | 'matching'
+type FilterKey = 'all' | 'matching' | 'saved'
 
 const JobOfferList: FC = () => {
   const {
@@ -21,10 +22,12 @@ const JobOfferList: FC = () => {
   const FILTERS: { key: FilterKey; label: string }[] = [
     { key: 'all', label: t('filter-all', { ns: 'offer-screen' }) },
     { key: 'matching', label: t('filter-matching', { ns: 'offer-screen' }) },
+    { key: 'saved', label: t('filter-saved', { ns: 'offer-screen' }) },
   ]
   const { activeProfile } = useUser()
   const { token } = activeProfile as ActiveProfile
-  const [filter, setFilter] = useState<FilterKey>('all')
+  const [filter, setFilter] = useState<FilterKey>('matching')
+  const { savedIds } = useSavedOffers()
 
   // const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
   //   queryKey: ['offers', ownOffers],
@@ -56,15 +59,20 @@ const JobOfferList: FC = () => {
   const isLoading = isLoadingAll || isLoadingMatching
   const isError = isErrorAll || isErrorMatching
   const isRefetching = isRefetchingAll || isRefetchingMatching
-  const data = (filter === 'all' ? allOffersData : matchingOffersData) ?? []
   const refetch = () => {
     refetchAll()
     refetchMatching()
   }
 
+  const allOffers = allOffersData ?? []
+  const matchingOffers = matchingOffersData ?? []
+  const savedOffers = allOffers.filter((o) => savedIds.includes(String(o.idoffer)))
+  const data = filter === 'all' ? allOffers : filter === 'matching' ? matchingOffers : savedOffers
+
   const counts: Record<FilterKey, number> = {
-    all: allOffersData?.length ?? 0,
-    matching: matchingOffersData?.length ?? 0,
+    all: allOffers.length,
+    matching: matchingOffers.length,
+    saved: savedOffers.length,
   }
 
   return (
@@ -113,7 +121,7 @@ const JobOfferList: FC = () => {
           {/* Card list */}
           <View style={ls.list}>
             {data.length === 0 ? (
-              <EmptyList message={t('no-offers')} />
+              <EmptyList message={t(filter === 'saved' ? 'no-saved-offers' : 'no-offers', { ns: 'offer-screen' })} />
             ) : (
               data.map((offer) => <OfferListItem key={offer.reference} offer={offer} />)
             )}
