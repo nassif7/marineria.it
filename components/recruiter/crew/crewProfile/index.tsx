@@ -16,6 +16,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import {
   ChevronLeft,
+  ChevronDown,
+  ChevronUp,
   Calendar,
   Briefcase,
   DollarSign,
@@ -38,6 +40,7 @@ import { Loading } from '@/components/ui'
 import { ApiError } from '@/api/utils'
 import { C } from '@/components/pro/tokens'
 import ContactCrewModal from './ContactCrewModal'
+import { TCrewExperience, TCrewReference } from '@/api/types'
 
 const GREEN_SOFT = '#E8F8EB'
 const GREEN_TEXT = '#0F7A28'
@@ -235,6 +238,10 @@ const cp = StyleSheet.create({
   expRole: { fontSize: 14, fontWeight: '700', color: C.ink },
   expDates: { fontSize: 11, fontWeight: '500', color: C.ink4, fontVariant: ['tabular-nums'] },
   expMeta: { fontSize: 12, color: C.ink3, marginTop: 2 },
+  accordionRow: { paddingVertical: 12 },
+  accordionHeader: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
+  accordionBody: { marginTop: 8 },
+  accordionBodyText: { fontSize: 13, lineHeight: 20, color: C.ink2 },
   aboutText: { fontSize: 14, lineHeight: 22, color: C.ink2, fontStyle: 'italic', marginBottom: 8 },
   emptyState: {
     flexDirection: 'row',
@@ -314,6 +321,75 @@ const cp = StyleSheet.create({
   },
   contactBtnText: { fontSize: 15, fontWeight: '700', color: '#FFF', letterSpacing: 0.2 },
 })
+
+const ExperienceItem: FC<{ exp: TCrewExperience; index: number }> = ({ exp, index }) => {
+  const [open, setOpen] = useState(false)
+  return (
+    <Pressable onPress={() => setOpen((v) => !v)} style={[cp.accordionRow, index > 0 && cp.expRowBorder]}>
+      <View style={cp.accordionHeader}>
+        <View style={{ flex: 1, marginRight: 8 }}>
+          <Text style={cp.expRole} numberOfLines={open ? undefined : 1}>
+            {exp.typeofemployment || '—'}
+          </Text>
+          {exp.boatcompany || exp.employer ? (
+            <Text style={cp.expMeta} numberOfLines={1}>
+              {[exp.boatcompany, exp.employer].filter(Boolean).join(' · ')}
+            </Text>
+          ) : null}
+        </View>
+        <View style={{ alignItems: 'flex-end', gap: 4 }}>
+          <Text style={cp.expDates}>{[exp.fromDate, exp.toDate].filter(Boolean).join(' – ')}</Text>
+          {open ? (
+            <ChevronUp size={14} color={C.ink4} strokeWidth={2} />
+          ) : (
+            <ChevronDown size={14} color={C.ink4} strokeWidth={2} />
+          )}
+        </View>
+      </View>
+      {open && exp.typeofassignment ? (
+        <Text style={[cp.accordionBody, cp.accordionBodyText]}>{exp.typeofassignment}</Text>
+      ) : null}
+    </Pressable>
+  )
+}
+
+const ReferenceItem: FC<{ ref: TCrewReference; index: number }> = ({ ref, index }) => {
+  const [open, setOpen] = useState(false)
+  const hasDetail = !!(ref.telephone || ref.email || ref.notes)
+  return (
+    <Pressable onPress={() => hasDetail && setOpen((v) => !v)} style={[cp.accordionRow, index > 0 && cp.refRowBorder]}>
+      <View style={cp.accordionHeader}>
+        <View style={{ flex: 1, marginRight: 8 }}>
+          <Text style={cp.refRole} numberOfLines={1}>
+            {ref.positionreferent}
+          </Text>
+          {ref.company_name || ref.yacht ? (
+            <Text style={cp.refMeta} numberOfLines={1}>
+              {[ref.company_name, ref.yacht].filter(Boolean).join(' · ')}
+            </Text>
+          ) : null}
+        </View>
+        <View style={{ alignItems: 'flex-end', gap: 4 }}>
+          {ref.yearreference ? <Text style={cp.expDates}>{ref.yearreference}</Text> : null}
+          {hasDetail ? (
+            open ? (
+              <ChevronUp size={14} color={C.ink4} strokeWidth={2} />
+            ) : (
+              <ChevronDown size={14} color={C.ink4} strokeWidth={2} />
+            )
+          ) : null}
+        </View>
+      </View>
+      {open && (
+        <View style={cp.accordionBody}>
+          {ref.telephone ? <Text style={cp.refMeta}>📞 {ref.telephone}</Text> : null}
+          {ref.email ? <Text style={cp.refMeta}>✉ {ref.email}</Text> : null}
+          {ref.notes ? <Text style={[cp.refMeta, { marginTop: 4 }]}>{ref.notes}</Text> : null}
+        </View>
+      )}
+    </Pressable>
+  )
+}
 
 const SectionCard: FC<{ title: string; children: ReactNode }> = ({ title, children }) => (
   <View style={cp.sectionCard}>
@@ -472,13 +548,13 @@ const CrewProfile = () => {
         <Pressable style={cp.iconBtn} onPress={() => router.back()}>
           <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
         </Pressable>
-        <Text style={cp.navTitle}>{t('crew-profile', { ns: 'screens-labels' })}</Text>
+        <Text style={cp.navTitle}>CV #{crew.iduser}</Text>
         <View style={{ width: 36 }} />
       </View>
 
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingBottom: 140 }}
+        contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
       >
@@ -639,26 +715,21 @@ const CrewProfile = () => {
         )}
 
         {/* Experiences */}
-        {(crew.experiences?.length ?? 0) > 0 && (
-          <SectionCard title={t('seaman-book')}>
-            {crew.experiences.map((e, i) => (
-              <View key={e.idesperienza} style={[cp.expRow, i > 0 && cp.expRowBorder]}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: 2,
-                  }}
-                >
-                  <Text style={cp.expRole}>{e.typeofassignment || e.typeofemployment || '—'}</Text>
-                  <Text style={cp.expDates}>{[e.fromDate, e.toDate].filter(Boolean).join(' – ')}</Text>
-                </View>
-                <Text style={cp.expMeta}>{[e.boatcompany, e.employer].filter(Boolean).join(' · ')}</Text>
-              </View>
-            ))}
-          </SectionCard>
-        )}
+        <SectionCard title={t('experience', { ns: 'crew' })}>
+          {(crew.experiences?.length ?? 0) === 0 ? (
+            <View style={cp.emptyState}>
+              <Info size={14} color={C.ink3} strokeWidth={1.8} />
+              <Text style={cp.emptyStateText}>{t('no-experience', { ns: 'crew' })}</Text>
+            </View>
+          ) : (
+            [...crew.experiences]
+              .sort((a, b) => {
+                const parse = (d: string) => new Date(d?.split('/').reverse().join('-') ?? '').getTime()
+                return parse(b.toDate) - parse(a.toDate)
+              })
+              .map((e, i) => <ExperienceItem key={e.idesperienza} exp={e} index={i} />)
+          )}
+        </SectionCard>
 
         {/* Skills */}
         {(crew.relationalSkills || crew.organizationalSkills || crew.technicalSkills || crew.professionalSkills) && (
@@ -694,13 +765,7 @@ const CrewProfile = () => {
               <Text style={cp.emptyStateText}>{t('no-references')}</Text>
             </View>
           ) : (
-            crew.approvedReferences.map((ref, i) => (
-              <View key={ref.idReference} style={[cp.refRow, i > 0 && cp.refRowBorder]}>
-                <Text style={cp.refRole}>{ref.positionreferent}</Text>
-                <Text style={cp.refMeta}>{[ref.company_name, ref.yacht].filter(Boolean).join(' · ')}</Text>
-                {ref.yearreference ? <Text style={cp.refYear}>{ref.yearreference}</Text> : null}
-              </View>
-            ))
+            crew.approvedReferences.map((ref, i) => <ReferenceItem key={ref.idReference} ref={ref} index={i} />)
           )}
         </SectionCard>
 

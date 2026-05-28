@@ -45,6 +45,7 @@ const CrewList: FC = () => {
 
   const allCrew = data ?? []
   const referenceShort = search?.reference?.includes('_') ? search.reference.split('_')[1] : search?.reference
+  const residual = search?.countResidual ?? Math.max(0, 30 - allCrew.length)
 
   const tabs: { key: FilterKey; label: string; count: number }[] = [
     { key: 'all', label: t('filter-all'), count: allCrew.length },
@@ -82,8 +83,13 @@ const CrewList: FC = () => {
         >
           {/* Header: count + title */}
           <View style={cl.header}>
-            <Text style={cl.headerCount}>{t('crew-count', { count: allCrew.length })}</Text>
-            <Text style={cl.headerTitle}>{t('crew-list', { ns: 'screens-labels' })}</Text>
+            <View style={cl.headerTitleRow}>
+              <Text style={cl.headerTitle}>{t('crew-list', { ns: 'screens-labels' })}</Text>
+              <View style={cl.residualBadge}>
+                <Text style={cl.residualBadgeText}>{t('filter-residual')} </Text>
+                <Text style={[cl.residualBadgeText, { fontWeight: '700' }]}>{residual}</Text>
+              </View>
+            </View>
           </View>
 
           {/* Filter chips */}
@@ -93,7 +99,7 @@ const CrewList: FC = () => {
               return (
                 <Pressable
                   key={tab.key}
-                  style={[cl.chip, active ? cl.chipActive : cl.chipInactive, i < tabs.length - 1 && { marginRight: 8 }]}
+                  style={[cl.chip, active ? cl.chipActive : cl.chipInactive, { marginRight: 8 }]}
                   onPress={() => setActiveFilter(tab.key)}
                 >
                   <Text style={[cl.chipLabel, active ? cl.chipLabelActive : cl.chipLabelInactive]}>{tab.label}</Text>
@@ -115,8 +121,6 @@ const CrewList: FC = () => {
               filtered.map((c) => <CrewListItem key={c.userId} crew={c} />)
             )}
           </View>
-
-          <View style={{ height: 100 }} />
         </ScrollView>
       )}
     </View>
@@ -201,6 +205,26 @@ const cl = StyleSheet.create({
   list: {
     paddingHorizontal: 16,
     gap: 12,
+  },
+  headerTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  residualBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+    backgroundColor: '#FFF5F0',
+    borderWidth: 1,
+    borderColor: '#F4A27A',
+  },
+  residualBadgeText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#C85E2A',
   },
 })
 
