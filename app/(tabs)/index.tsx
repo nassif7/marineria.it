@@ -5,7 +5,7 @@ import { TUserRole } from '@/api/types'
 import { getPhotoUrl } from '@/api/consts'
 import { parseServerBool } from '@/api/utils'
 import { useSession } from '@/Providers/SessionProvider'
-import { useUser } from '@/Providers/UserProvider'
+import { useCrew } from '@/Providers/CrewProvider'
 import {
   Avatar,
   AvatarFallbackText,
@@ -40,7 +40,8 @@ const UserProfile = () => {
   const { t } = useTranslation(['home-screen'])
   const { auth, signOut } = useSession()
   const { role } = auth
-  const { user, isLoading, isError } = useUser()
+  const { crew: user, isLoading } = useCrew()
+  const isError = false
   const isRecruiter = role == TUserRole.CREW
   const isCvListed = role === TUserRole.CREW && parseServerBool(user?.published)
 

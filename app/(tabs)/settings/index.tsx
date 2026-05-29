@@ -7,7 +7,7 @@ import { router } from 'expo-router'
 import { TUserRole } from '@/api/types'
 import { TLocales } from '@/localization'
 import { useSession } from '@/Providers/SessionProvider'
-import { useUser } from '@/Providers/UserProvider'
+import { useProfile } from '@/hooks'
 import { Box, VStack, Heading, HStack, Icon, Button, ButtonText, Link, LinkText } from '@/components/ui'
 import SwitchLanguage from '@/components/common/SwitchLanguage'
 import NotificationsToggle from '@/components/common/NotificationsToggle'
@@ -26,13 +26,12 @@ const Settings = () => {
     isGuest,
   } = useSession()
 
-  const { user, togglePushNotifications, isTogglingNotifications } = useUser()
+  const { pushNotificationToken, togglePushNotifications, isTogglingNotifications } = useProfile()
   const handleRegisterAsCrew = () => WebBrowser.openBrowserAsync('https://www.marineria.it/En/Pro/Reg.aspx')
   const handleRegisterAsRecruiter = () => WebBrowser.openBrowserAsync('https://www.marineria.it/En/Rec/Reg.aspx')
   const privacyPolicyUrl =
     language === TLocales.IT ? 'https://www.marineria.it/it/contacts.aspx' : 'https://www.marineria.it/En/Contacts.aspx'
   const handlePrivacyPolicy = () => WebBrowser.openBrowserAsync(privacyPolicyUrl)
-  const pushNotificationToken = user?.pushNotificationToken
   const languageOptions = [
     { label: t(TLocales.EN), value: TLocales.EN },
     { label: t(TLocales.IT), value: TLocales.IT },

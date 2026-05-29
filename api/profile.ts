@@ -2,6 +2,7 @@ import { API } from './consts'
 import { TUserRole } from '@/api/types/auth'
 import { TUser } from '@/api/types/user'
 import { TRecruiterUser } from '@/api/types/recruiterUser'
+import { TCrewUser } from '@/api/types/crewUser'
 import { apiFetchJson, apiFetchText, getLanguageCode } from './utils'
 
 export const getProUserProfile = async (token: string, role: TUserRole, language: string): Promise<TUser[]> => {
@@ -74,6 +75,24 @@ export const getRecruiterUserProfilePost = async (token: string, language: strin
     lastAccessDate: u.last_access_date ?? u.lastAccessDate ?? '',
     registrationDate: u.registration_date ?? u.registrationDate ?? '',
   }
+}
+
+export const getCrewUserProfilePost = async (token: string, language: string): Promise<TCrewUser> => {
+  const languageCode = getLanguageCode(language)
+  const url = `${API.PROFILE}/Prouser`
+  const raw = await apiFetchJson<any>(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({ userToken: token, language: languageCode }),
+  })
+  const arr = Array.isArray(raw) ? raw : [raw]
+  const u = arr[0] ?? {}
+  return {
+    ...u,
+    published: u.publisched ?? u.published ?? '',
+    lastAccessDate: u.lastAccessDate ?? u.last_access_date ?? '',
+    registrationDate: u.registrationDate ?? u.registration_date ?? u.registraton_date ?? '',
+  } as TCrewUser
 }
 
 export const setPushNotificationToken = async (token: string, pushToken: string): Promise<void> => {

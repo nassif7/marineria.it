@@ -4,7 +4,7 @@ import { Stack } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { getAllOffersPost, getOffersForApplyPost } from '@/api'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useCrew } from '@/Providers/CrewProvider'
 import { useSavedOffers } from '@/hooks'
 import { Loading } from '@/components/ui'
 import { ErrorMessage, EmptyList } from '@/components/appUI'
@@ -24,8 +24,7 @@ const JobOfferList: FC = () => {
     { key: 'matching', label: t('filter-matching', { ns: 'offer-screen' }) },
     { key: 'saved', label: t('filter-saved', { ns: 'offer-screen' }) },
   ]
-  const { activeProfile } = useUser()
-  const { token } = activeProfile as ActiveProfile
+  const { token } = useCrew()
   const [filter, setFilter] = useState<FilterKey>('matching')
   const { savedIds } = useSavedOffers()
 

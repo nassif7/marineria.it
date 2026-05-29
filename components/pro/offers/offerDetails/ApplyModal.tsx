@@ -5,7 +5,7 @@ import { X, Send, UserRound } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { C } from '@/components/pro/tokens'
 import { useAuthBrowser } from '@/hooks'
-import { useUser } from '@/Providers/UserProvider'
+import { useCrew } from '@/Providers/CrewProvider'
 
 interface ApplyModalProps {
   visible: boolean
@@ -21,7 +21,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm, is
     i18n: { language },
   } = useTranslation(['offer-screen', 'common'])
   const { top, bottom } = useSafeAreaInsets()
-  const { user } = useUser()
+  const { crew: user } = useCrew()
   const { openUrl, isLoading: isUrlLoading } = useAuthBrowser()
 
   const handleReviewProfile = () => openUrl(`https://www.marineria.it/${language}/CV.aspx?idutente=${user?.iduser}`)

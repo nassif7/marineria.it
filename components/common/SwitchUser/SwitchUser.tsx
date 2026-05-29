@@ -27,7 +27,6 @@ import { router } from 'expo-router'
 import { useMutation } from '@tanstack/react-query'
 import { TUserRole } from '@/api/types'
 import { useSession } from '@/Providers/SessionProvider'
-import { useUser } from '@/Providers/UserProvider'
 import { useAuthErrorToast } from '@/hooks/useAuthErrorToast'
 import { LoginFormLinks } from '@/components/appUI'
 import AuthenticationForm, { FormDate } from '@/components/common/AuthenticationForm'
@@ -63,9 +62,8 @@ const SwitchUser: FC = () => {
   const { t } = useTranslation('settings-screen')
   const { t: tLogin } = useTranslation('login-screen')
 
-  const { activeProfile, switchProfile } = useUser()
   const showErrorToast = useAuthErrorToast()
-  const activeRole = activeProfile?.role as TUserRole
+  const activeRole = role as TUserRole
   const proToken = storedAuthTokens[TUserRole.CREW]
   const ownerToken = storedAuthTokens[TUserRole.RECRUITER]
   const targetRole = useMemo(() => (activeRole === TUserRole.CREW ? TUserRole.RECRUITER : TUserRole.CREW), [activeRole])
@@ -90,7 +88,7 @@ const SwitchUser: FC = () => {
   const { mutate: handleSignIn, isPending: isSigningIn } = useMutation({
     mutationFn: ({ email, password }: FormDate) => signIn(email, password),
     onSuccess: async () => {
-      await switchProfile?.(targetRole)
+      await switchAuth(targetRole)
       router.replace('/')
     },
     onError: showErrorToast,
@@ -114,7 +112,7 @@ const SwitchUser: FC = () => {
       await loginWithCode(email, codeArg)
     },
     onSuccess: async () => {
-      await switchProfile?.(targetRole)
+      await switchAuth(targetRole)
       router.replace('/')
     },
     onError: () => showErrorToast(),

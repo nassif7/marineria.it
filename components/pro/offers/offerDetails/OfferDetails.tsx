@@ -6,7 +6,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { ChevronLeft, Bookmark, Share2, Anchor, CheckCircle, FileText } from 'lucide-react-native'
 import { getProOfferById, getProOfferByIdPost, applyToOffer, getWhyCanNotApplyPost } from '@/api'
 import { ApiError, parseServerBool } from '@/api/utils'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useCrew } from '@/Providers/CrewProvider'
 import { useTranslation } from 'react-i18next'
 import { useStatusToast, useSavedOffers } from '@/hooks'
 import { Loading } from '@/components/ui'
@@ -53,8 +53,7 @@ export default function OfferDetailsScreen() {
   const { showToast } = useStatusToast()
 
   const { offerId } = useLocalSearchParams<{ offerId: string }>()
-  const { activeProfile, user } = useUser()
-  const { token } = activeProfile as ActiveProfile
+  const { token, crew: user } = useCrew()
   const isCvPublished = parseServerBool(user?.published)
   const { isSaved: checkSaved, toggleSaved } = useSavedOffers()
   const isSaved = offerId ? checkSaved(offerId) : false
