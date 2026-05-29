@@ -29,7 +29,7 @@ import {
   Info,
   AlertCircle,
 } from 'lucide-react-native'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { useStatusToast } from '@/hooks'
 // import { getCrewCV, contactCrew, removeCrew } from '@/api'
 import { getCrewCvPost, contactCrew, removeCrew } from '@/api'
@@ -415,9 +415,8 @@ const CrewProfile = () => {
   const { crewId, searchId } = useLocalSearchParams()
   const router = useRouter()
   const queryClient = useQueryClient()
-  const { activeProfile } = useUser()
+  const { token } = useRecruiter()
   const { showToast } = useStatusToast()
-  const { token } = activeProfile as ActiveProfile
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data, error } = useQuery({
     queryKey: ['recruiter-crew-cv', searchId, crewId, language],

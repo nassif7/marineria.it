@@ -12,11 +12,9 @@ import {
   Linking,
 } from 'react-native'
 import { useRouter } from 'expo-router'
-import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Headphones, ChevronRight, Briefcase, Users, Globe, Mail, Phone, Sparkles } from 'lucide-react-native'
-import { useUser } from '@/Providers/UserProvider'
-import { getRecruiterActiveSearchesPost, getRecruiterUserProfilePost } from '@/api'
+import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { C } from '@/components/pro/tokens'
 import { Loading } from '@/components/ui'
 
@@ -97,43 +95,9 @@ const ContactRow: FC<{
 // ── Main screen ─────────────────────────────────────────────
 
 const RecruiterProfile: FC = () => {
-  const {
-    t,
-    i18n: { language },
-  } = useTranslation('home-screen')
+  const { t } = useTranslation('home-screen')
   const router = useRouter()
-  const { activeProfile } = useUser()
-  const token = (activeProfile as any)?.token
-
-  const {
-    data: user,
-    isLoading: userLoading,
-    isRefetching: userRefetching,
-    refetch: refetchUser,
-  } = useQuery({
-    queryKey: ['recruiter-user-profile', token, language],
-    queryFn: () => getRecruiterUserProfilePost(token, language),
-    enabled: !!token,
-  })
-
-  console.log(user)
-
-  const {
-    data: searches = [],
-    isLoading: searchesLoading,
-    isRefetching: searchesRefetching,
-    refetch: refetchSearches,
-  } = useQuery({
-    queryKey: ['recruiter-searches-home', token, language],
-    queryFn: () => getRecruiterActiveSearchesPost(token, language),
-    enabled: !!token,
-  })
-
-  const refetch = () => {
-    refetchUser()
-    refetchSearches()
-  }
-  const isRefetching = userRefetching || searchesRefetching
+  const { recruiter: user, searches, isLoading, isRefetching, refetch } = useRecruiter()
 
   const totalCandidates = searches.reduce((sum, s) => sum + (s.countCandidates ?? 0), 0)
   const totalContacted = searches.reduce((sum, s) => sum + (s.countContacted ?? 0), 0)
@@ -171,7 +135,7 @@ const RecruiterProfile: FC = () => {
 
   const initials = user ? `${user.name?.[0] ?? ''}${user.surname?.[0] ?? ''}`.toUpperCase() : '?'
 
-  if (userLoading || searchesLoading) {
+  if (isLoading) {
     return (
       <View style={{ flex: 1, backgroundColor: C.bg }}>
         <Loading />

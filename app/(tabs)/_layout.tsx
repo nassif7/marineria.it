@@ -5,6 +5,7 @@ import { HomeIcon, Briefcase, Users, Settings } from 'lucide-react-native'
 import '@/localization'
 import { TUserRole } from '@/api/types'
 import UserProvider from '@/Providers/UserProvider'
+import RecruiterProvider from '@/Providers/RecruiterProvider'
 import { useSession } from '@/Providers/SessionProvider'
 import { Text, View } from '@/components/ui'
 import { TabBar } from '@/components/appUI'
@@ -33,67 +34,71 @@ const AppLayout = () => {
     paddingTop: insets.top - 12,
   }
 
-  return (
-    <UserProvider>
-      <Tabs
-        screenOptions={{
-          tabBarStyle: {
-            display: 'none',
-          },
+  const tabs = (
+    <Tabs
+      screenOptions={{
+        tabBarStyle: {
+          display: 'none',
+        },
+      }}
+      tabBar={(props) => <TabBar {...props} />}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          sceneStyle: proSceneStyle,
+          headerShown: false,
+          title: 'Home',
+          tabBarIcon: HomeIcon,
         }}
-        tabBar={(props) => <TabBar {...props} />}
-      >
-        <Tabs.Screen
-          name="index"
-          options={{
-            sceneStyle: proSceneStyle,
-            headerShown: false,
-            title: 'Home',
-            tabBarIcon: HomeIcon,
-          }}
-        />
-        <Tabs.Screen
-          name="pro"
-          redirect={role !== TUserRole.CREW}
-          options={{
-            headerShown: false,
-            sceneStyle: proSceneStyle,
-            title: t('offers'),
-            tabBarIcon: Briefcase,
-          }}
-        />
-        <Tabs.Screen
-          name="recruiter"
-          redirect={role !== TUserRole.RECRUITER}
-          options={{
-            headerShown: false,
-            sceneStyle: proSceneStyle,
-            title: t('recruitment'),
-            tabBarIcon: Users,
-          }}
-        />
-        <Tabs.Screen
-          name="jobs"
-          redirect={!isGuest}
-          options={{
-            headerShown: false,
-            sceneStyle,
-            title: t('offers'),
-            tabBarIcon: Briefcase,
-          }}
-        />
-        <Tabs.Screen
-          name="settings"
-          options={{
-            sceneStyle,
-            headerShown: false,
-            title: t('settings'),
-            tabBarIcon: Settings,
-          }}
-        />
-      </Tabs>
-    </UserProvider>
+      />
+      <Tabs.Screen
+        name="pro"
+        redirect={role !== TUserRole.CREW}
+        options={{
+          headerShown: false,
+          sceneStyle: proSceneStyle,
+          title: t('offers'),
+          tabBarIcon: Briefcase,
+        }}
+      />
+      <Tabs.Screen
+        name="recruiter"
+        redirect={role !== TUserRole.RECRUITER}
+        options={{
+          headerShown: false,
+          sceneStyle: proSceneStyle,
+          title: t('recruitment'),
+          tabBarIcon: Users,
+        }}
+      />
+      <Tabs.Screen
+        name="jobs"
+        redirect={!isGuest}
+        options={{
+          headerShown: false,
+          sceneStyle,
+          title: t('offers'),
+          tabBarIcon: Briefcase,
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          sceneStyle,
+          headerShown: false,
+          title: t('settings'),
+          tabBarIcon: Settings,
+        }}
+      />
+    </Tabs>
   )
+
+  if (role === TUserRole.RECRUITER) {
+    return <RecruiterProvider>{tabs}</RecruiterProvider>
+  }
+
+  return <UserProvider>{tabs}</UserProvider>
 }
 
 export default AppLayout

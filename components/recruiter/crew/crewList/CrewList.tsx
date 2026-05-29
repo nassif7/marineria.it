@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { ChevronLeft } from 'lucide-react-native'
 // import { getCrewList } from '@/api'
 import { getCrewListPost } from '@/api'
-import { useUser } from '@/Providers/UserProvider'
+import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { useRecruiterSearch } from '@/Providers/RecruiterSearchProvider'
 import { Loading } from '@/components/ui'
 import { ErrorMessage, EmptyList } from '@/components/appUI'
@@ -29,8 +29,7 @@ const CrewList: FC = () => {
 
   const router = useRouter()
   const { searchId, filter: filterParam } = useLocalSearchParams<{ searchId: string; filter?: string }>()
-  const { activeProfile } = useUser()
-  const { token } = activeProfile as any
+  const { token } = useRecruiter()
   const {
     search: { data: search },
   } = useRecruiterSearch()

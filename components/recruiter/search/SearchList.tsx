@@ -3,7 +3,7 @@ import { View, Text, ScrollView, StyleSheet, RefreshControl } from 'react-native
 import { useTranslation } from 'react-i18next'
 import { getRecruiterActiveSearchesPost } from '@/api'
 import { useAppState } from '@/hooks'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { Loading } from '@/components/ui'
 import { EmptyList, ErrorMessage } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
@@ -17,8 +17,7 @@ const RecruiterSearchList: FC = () => {
   } = useTranslation(['search-screen', 'screens-labels'])
 
   const state = useAppState()
-  const { activeProfile } = useUser()
-  const { token } = activeProfile as ActiveProfile
+  const { token } = useRecruiter()
 
   const { isLoading, isError, isRefetching, refetch, data } = useQuery({
     queryKey: ['recruiter-search-list', token, language],

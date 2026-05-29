@@ -5,7 +5,7 @@ import { TRecruiterSearch, TCrewSimple } from '@/api/types'
 import { getRecruiterSearchByIdPost, getCrewList } from '@/api'
 // import { getRecruiterSearchById, getCrewList } from '@/api'
 import { useTranslation } from 'react-i18next'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useSession } from '@/Providers/SessionProvider'
 
 type TSearchQueryState<T> = {
   data?: T
@@ -54,8 +54,8 @@ const RecruiterSearchProvider = ({ children }: React.PropsWithChildren) => {
   } = useTranslation()
 
   const { searchId } = useLocalSearchParams<{ searchId: string }>()
-  const { activeProfile } = useUser()
-  const { token } = activeProfile as ActiveProfile
+  const { auth } = useSession()
+  const token = auth.token ?? ''
 
   const [searchQuery, crewListQuery] = useQueries({
     queries: [
