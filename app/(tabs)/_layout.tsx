@@ -46,10 +46,10 @@ const AppLayout = () => {
         <Tabs.Screen
           name="index"
           options={{
-            sceneStyle,
+            sceneStyle: proSceneStyle,
+            headerShown: false,
             title: 'Home',
             tabBarIcon: HomeIcon,
-            header: (props) => <View className="min-h-[50px]  bg-white"></View>,
           }}
         />
         <Tabs.Screen

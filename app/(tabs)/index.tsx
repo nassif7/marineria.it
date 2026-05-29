@@ -19,6 +19,7 @@ import {
   VStack,
 } from '@/components/ui'
 import { ScreenContainer, ErrorMessage } from '@/components/appUI'
+import RecruiterProfile from '@/components/recruiter/profile/RecruiterProfile'
 
 const GuestWelcome = () => {
   const { t } = useTranslation('home-screen')
@@ -108,8 +109,10 @@ const UserProfile = () => {
 }
 
 const HomeScreen = () => {
-  const { isGuest } = useSession()
-  return isGuest ? <GuestWelcome /> : <UserProfile />
+  const { isGuest, auth } = useSession()
+  if (isGuest) return <GuestWelcome />
+  if (auth.role === TUserRole.RECRUITER) return <RecruiterProfile />
+  return <UserProfile />
 }
 
 export default HomeScreen

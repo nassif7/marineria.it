@@ -47,7 +47,30 @@
     "guest-subtitle": "Browse hundreds of maritime job offers from top recruiters.",
     "browse-offers": "Browse Job Offers",
     "cv-listed": "Your CV is listed",
-    "cv-not-listed": "Your CV is not yet listed"
+    "cv-not-listed": "Your CV is not yet listed",
+    "recruiter-profile": {
+      "title": "Your profile",
+      "stat-searches": "Searches",
+      "stat-crew": "Crew",
+      "stat-residual": "Residual",
+      "banner-candidates": "{{count}} new candidates",
+      "banner-sub-one": "For \"{{search}}\"",
+      "banner-sub-many": "For \"{{search}}\" and {{count}} more searches",
+      "section-activity": "Your activity",
+      "action-searches": "Your searches",
+      "action-searches-sub": "{{count}} active",
+      "action-saved": "Saved candidates",
+      "action-saved-sub": "{{count}} recently contacted",
+      "action-company": "Company profile",
+      "action-company-sub": "Visible to candidates",
+      "section-contacts": "Contacts",
+      "label-email": "Email",
+      "label-mobile": "Mobile number",
+      "label-phone2": "Phone number 2",
+      "label-website": "Website",
+      "registered-on": "Registered on {{date}}",
+      "last-access": "Last access {{date}}"
+    }
   },
   "offer-screen": {
     "view-offer": "View offer",

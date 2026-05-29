@@ -47,7 +47,30 @@
     "guest-subtitle": "Sfoglia centinaia di offerte di lavoro marittimo dai migliori recruiter.",
     "browse-offers": "Esplora le offerte",
     "cv-listed": "Il tuo CV è pubblicato",
-    "cv-not-listed": "Il tuo CV non è ancora pubblicato"
+    "cv-not-listed": "Il tuo CV non è ancora pubblicato",
+    "recruiter-profile": {
+      "title": "Il tuo profilo",
+      "stat-searches": "Ricerche",
+      "stat-crew": "Crew",
+      "stat-residual": "Residuale",
+      "banner-candidates": "{{count}} nuovi candidati",
+      "banner-sub-one": "Per \"{{search}}\"",
+      "banner-sub-many": "Per \"{{search}}\" e altre {{count}} ricerche",
+      "section-activity": "Le tue attività",
+      "action-searches": "Le tue ricerche",
+      "action-searches-sub": "{{count}} attive",
+      "action-saved": "Candidati salvati",
+      "action-saved-sub": "{{count}} contattati di recente",
+      "action-company": "Profilo aziendale",
+      "action-company-sub": "Visibile ai candidati",
+      "section-contacts": "Contatti",
+      "label-email": "Email",
+      "label-mobile": "Numero di cellulare",
+      "label-phone2": "Numero di telefono 2",
+      "label-website": "Sito web",
+      "registered-on": "Iscritto il {{date}}",
+      "last-access": "Ultimo accesso {{date}}"
+    }
   },
   "offer-screen": {
     "view-offer": "Vedi offerta",
