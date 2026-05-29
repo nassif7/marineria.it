@@ -3,13 +3,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useSession } from '@/Providers/SessionProvider'
 import { getCrewUserProfilePost, setPushNotificationToken } from '@/api'
-import { TCrewUser } from '@/api/types'
+import { getCrewNotifications } from '@/api/pro'
+import { TCrewUser, TNotification } from '@/api/types'
 import { registerForPushNotificationsAsync } from '@/hooks/useNotification'
 import { useSavedOffers } from '@/hooks/useSavedOffers'
 
 type TCrewContext = {
   token: string
   crew?: TCrewUser
+  notifications: TNotification[]
   isLoading: boolean
   isRefetching: boolean
   isTogglingNotifications: boolean
@@ -23,6 +25,7 @@ type TCrewContext = {
 const CrewContext = createContext<TCrewContext>({
   token: '',
   crew: undefined,
+  notifications: [],
   isLoading: false,
   isRefetching: false,
   isTogglingNotifications: false,
@@ -46,12 +49,22 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
 
   const {
     data: crew,
-    isLoading,
-    isRefetching,
-    refetch,
+    isLoading: crewLoading,
+    isRefetching: crewRefetching,
+    refetch: refetchCrew,
   } = useQuery({
     queryKey: ['crew-profile', token, language],
     queryFn: () => getCrewUserProfilePost(token, language),
+    enabled: !!token,
+  })
+
+  const {
+    data: notifications = [],
+    isRefetching: notifRefetching,
+    refetch: refetchNotif,
+  } = useQuery({
+    queryKey: ['crew-notifications', token],
+    queryFn: () => getCrewNotifications(token),
     enabled: !!token,
   })
 
@@ -72,10 +85,14 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
       value={{
         token,
         crew,
-        isLoading,
-        isRefetching,
+        notifications,
+        isLoading: crewLoading,
+        isRefetching: crewRefetching || notifRefetching,
         isTogglingNotifications,
-        refetch,
+        refetch: () => {
+          refetchCrew()
+          refetchNotif()
+        },
         togglePushNotifications,
         savedOfferIds,
         isSavedOffer,

@@ -85,13 +85,15 @@ export const getCrewUserProfilePost = async (token: string, language: string): P
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
     body: JSON.stringify({ userToken: token, language: languageCode }),
   })
-  const arr = Array.isArray(raw) ? raw : [raw]
-  const u = arr[0] ?? {}
+  const items = raw?.items
+  const u = items ? (Array.isArray(items) ? items[0] : items) : ((Array.isArray(raw) ? raw[0] : raw) ?? {})
+
   return {
     ...u,
     published: u.publisched ?? u.published ?? '',
     lastAccessDate: u.lastAccessDate ?? u.last_access_date ?? '',
-    registrationDate: u.registrationDate ?? u.registration_date ?? u.registraton_date ?? '',
+    registraton_date: u.registraton_date ?? u.registration_date ?? u.registrationDate ?? '',
+    registrationDate: u.registraton_date ?? u.registration_date ?? u.registrationDate ?? '',
   } as TCrewUser
 }
 

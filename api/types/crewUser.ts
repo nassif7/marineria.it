@@ -1,3 +1,12 @@
+export type TNotification = {
+  category: string
+  title: string
+  message: string
+  idoffer: number
+  iduser: number
+  link: string
+}
+
 export type TCrewUser = {
   iduser: number
   published: string
@@ -27,6 +36,7 @@ export type TCrewUser = {
   dateAvailability: string
   lastAccessDate: string
   registrationDate: string
+  registraton_date: string
   seamansBook: string
   navigationBook: string
   courses: string

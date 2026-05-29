@@ -1,5 +1,5 @@
 import { API } from './consts'
-import { TOffer } from './types'
+import { TOffer, TNotification } from './types'
 import { apiFetchJson, getLanguageCode } from './utils'
 
 export const getProOffers = async (proToken: string, allOffers?: boolean, language?: string): Promise<TOffer[]> => {
@@ -70,4 +70,17 @@ export const getWhyCanNotApplyPost = async (offerId: number, proToken: string, l
     body: JSON.stringify({ userToken: proToken, language: languageCode }),
   })
   return Array.isArray(data.reason) ? data.reason : [data.reason]
+}
+
+export const getCrewNotifications = async (token: string): Promise<TNotification[]> => {
+  try {
+    const data = await apiFetchJson<TNotification[] | TNotification>(`${API.NOTIFICATION}/GetNotifications`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({ token }),
+    })
+    return Array.isArray(data) ? data : data ? [data] : []
+  } catch {
+    return []
+  }
 }

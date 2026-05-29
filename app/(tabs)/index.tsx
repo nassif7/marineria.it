@@ -20,6 +20,7 @@ import {
 } from '@/components/ui'
 import { ScreenContainer, ErrorMessage } from '@/components/appUI'
 import RecruiterProfile from '@/components/recruiter/profile/RecruiterProfile'
+import CrewProfile from '@/components/crew/profile/CrewProfile'
 
 const GuestWelcome = () => {
   const { t } = useTranslation('home-screen')
@@ -113,6 +114,7 @@ const HomeScreen = () => {
   const { isGuest, auth } = useSession()
   if (isGuest) return <GuestWelcome />
   if (auth.role === TUserRole.RECRUITER) return <RecruiterProfile />
+  if (auth.role === TUserRole.CREW) return <CrewProfile />
   return <UserProfile />
 }
 
