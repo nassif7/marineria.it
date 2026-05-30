@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, ScrollView, Pressable, StyleSheet, TouchableOpacity, Linking } from 'react-native'
 import { Stack } from 'expo-router'
 import { Anchor, Sparkles, MapPin, ChevronLeft, ChevronRight, Edit } from 'lucide-react-native'
 import { router } from 'expo-router'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { consumeFromHome } from '@/utils/fromHomeNav'
 import { useAuthBrowser } from '@/hooks'
 import { useTranslation } from 'react-i18next'
 import { useRecruiterSearch } from '@/Providers/RecruiterSearchProvider'
@@ -14,11 +16,13 @@ import HtmlText from '@/components/pro/HtmlText'
 const isVal = (s?: string | null): s is string => !!s && s.trim() !== '' && s.trim().toUpperCase() !== 'NA'
 
 export default function SearchDetails() {
+  const [cameFromHome] = useState(consumeFromHome)
   const {
     t,
     i18n: { language },
   } = useTranslation(['search-screen', 'offer'])
   const { openUrl, isLoading: isUrlLoading } = useAuthBrowser()
+  const { bottom: bottomInset } = useSafeAreaInsets()
   const {
     search: { data: search, isLoading, isRefetching, isError, isSuccess },
   } = useRecruiterSearch()
@@ -34,7 +38,7 @@ export default function SearchDetails() {
         : `${search.salary_From} – ${search.salary_To}`
       : null
 
-  const selected = Math.max(0, search.countCandidates - search.countResidual - search.countContacted)
+  const selected = Math.max(0, search.countCandidates - search.countContacted)
   const hasCoords = search.latArm !== 0 && search.lngArm !== 0
   const hasLocation = isVal(search.positionArm) || hasCoords
 
@@ -42,7 +46,7 @@ export default function SearchDetails() {
 
   const handleEdit = () => openUrl(`https://www.marineria.it/${language}/rec/Post.aspx?idofferta=${search.idoffer}`)
 
-  const viewCrewList = (filter?: 'all' | 'selected' | 'contacted') =>
+  const viewCrewList = (filter?: 'all' | 'selected' | 'contacted' | 'residual') =>
     router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list${filter ? `?filter=${filter}` : ''}`)
 
   const openBySkill = () => openUrl(`https://www.marineria.it/${language}/${search.listurl}`)
@@ -64,7 +68,10 @@ export default function SearchDetails() {
       {/* ── Sticky header ── */}
       <View style={sd.stickyHeader}>
         <View style={sd.navRow}>
-          <Pressable style={sd.iconBtn} onPress={() => router.back()}>
+          <Pressable
+            style={sd.iconBtn}
+            onPress={() => (cameFromHome ? router.navigate('/(tabs)' as any) : router.back())}
+          >
             <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
           </Pressable>
           <Text style={sd.navRef}>Ref · {referenceShort}</Text>
@@ -154,14 +161,6 @@ export default function SearchDetails() {
 
           <View style={sd.funnel}>
             <FunnelStage
-              n={search.countCandidates}
-              label={t('in-pool')}
-              color={C.ink}
-              labelColor={C.ink3}
-              onPress={() => viewCrewList('all')}
-            />
-            <FunnelArrow />
-            <FunnelStage
               n={selected}
               label={t('selected')}
               color={selected > 0 ? C.orangeText : C.ink4}
@@ -175,6 +174,14 @@ export default function SearchDetails() {
               color={search.countContacted > 0 ? C.green : C.ink4}
               labelColor={search.countContacted > 0 ? C.green : C.ink4}
               onPress={() => viewCrewList('contacted')}
+            />
+            <FunnelArrow />
+            <FunnelStage
+              n={search.countResidual}
+              label={t('residual')}
+              color={C.ink4}
+              labelColor={C.ink4}
+              onPress={() => viewCrewList('residual')}
             />
           </View>
 
@@ -195,7 +202,7 @@ export default function SearchDetails() {
       </ScrollView>
 
       {/* ── Bottom action bar ── */}
-      <View style={sd.bottomBar}>
+      <View style={[sd.bottomBar, { paddingBottom: Math.max(12, bottomInset) }]}>
         <TouchableOpacity style={sd.viewCandidatesBtn} onPress={() => viewCrewList()}>
           <Text style={sd.viewCandidatesBtnText}>{t('view-candidates-count', { count: search.countCandidates })}</Text>
         </TouchableOpacity>

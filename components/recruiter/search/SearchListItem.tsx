@@ -13,7 +13,7 @@ interface ISearchListItemProps {
 const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
   const { t } = useTranslation(['search-screen', 'offer'])
   const viewSearch = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}`)
-  const viewCrewList = (filter: 'all' | 'selected' | 'contacted') =>
+  const viewCrewList = (filter: 'all' | 'selected' | 'contacted' | 'residual') =>
     router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list?filter=${filter}`)
 
   const referenceShort = search.reference.includes('_') ? search.reference.split('_')[1] : search.reference
@@ -42,9 +42,11 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
         ) : (
           <View />
         )}
-        <View style={si.statusPill}>
-          <View style={si.statusDot} />
-          <Text style={si.statusPillText}>{t('status-active')}</Text>
+        <View style={[si.statusPill, search.offerPublished && si.statusPillUnpublished]}>
+          <View style={[si.statusDot, search.offerPublished && si.statusDotUnpublished]} />
+          <Text style={[si.statusPillText, search.offerPublished && si.statusPillTextUnpublished]}>
+            {search.offerPublished ? t('status-not-published') : t('status-published')}
+          </Text>
         </View>
       </View>
 
@@ -69,18 +71,11 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
       <Text style={si.funnelSectionLabel}>{t('candidates-overview')}</Text>
       <View style={si.funnel}>
         {(() => {
-          const selected = Math.max(0, search.countCandidates - search.countResidual - search.countContacted)
+          const selected = Math.max(0, search.countCandidates - search.countContacted)
           const contacted = search.countContacted
+          const residual = search.countResidual
           return (
             <>
-              <FunnelStage
-                n={search.countCandidates}
-                label={t('filter-all')}
-                color={C.ink}
-                labelColor={C.ink3}
-                onPress={() => viewCrewList('all')}
-              />
-              <FunnelArrow />
               <FunnelStage
                 n={selected}
                 label={t('selected')}
@@ -95,6 +90,14 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
                 color={contacted > 0 ? C.green : C.ink4}
                 labelColor={contacted > 0 ? C.green : C.ink4}
                 onPress={() => viewCrewList('contacted')}
+              />
+              <FunnelArrow />
+              <FunnelStage
+                n={residual}
+                label={t('residual')}
+                color={C.ink4}
+                labelColor={C.ink4}
+                onPress={() => viewCrewList('residual')}
               />
             </>
           )
@@ -190,6 +193,15 @@ const si = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     color: '#0F7A28',
+  },
+  statusPillUnpublished: {
+    backgroundColor: '#F2F2F2',
+  },
+  statusDotUnpublished: {
+    backgroundColor: C.ink4,
+  },
+  statusPillTextUnpublished: {
+    color: C.ink3,
   },
   title: {
     fontSize: 17,

@@ -422,7 +422,6 @@ const CrewProfile = () => {
     queryKey: ['recruiter-crew-cv', searchId, crewId, language],
     // queryFn: () => getCrewCV(token, crewId as string),
     queryFn: () => {
-      console.log('[CrewProfile] token:', token, '| crewId:', crewId, '| searchId:', searchId)
       return getCrewCvPost(crewId as string, token, language)
     },
   })

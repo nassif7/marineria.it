@@ -1,18 +1,8 @@
-import { FC } from 'react'
-import {
-  View,
-  Text,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  RefreshControl,
-  ActionSheetIOS,
-  Alert,
-  Platform,
-  Linking,
-} from 'react-native'
+import { FC, useCallback } from 'react'
+import { View, Text, Pressable, ScrollView, StyleSheet, RefreshControl } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
+import { setFromHome } from '@/utils/fromHomeNav'
 import { Headphones, ChevronRight, Briefcase, Users, Globe, Mail, Phone, Sparkles } from 'lucide-react-native'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { C } from '@/components/pro/tokens'
@@ -99,39 +89,22 @@ const RecruiterProfile: FC = () => {
   const router = useRouter()
   const { recruiter: user, searches, isLoading, isRefetching, refetch } = useRecruiter()
 
-  const totalCandidates = searches.reduce((sum, s) => sum + (s.countCandidates ?? 0), 0)
-  const totalContacted = searches.reduce((sum, s) => sum + (s.countContacted ?? 0), 0)
-  const uncontacted = totalCandidates - totalContacted
-  const bannerSub =
-    searches.length === 1
-      ? t('recruiter-profile.banner-sub-one', { search: searches[0]?.mainPosition })
-      : searches.length > 1
-        ? t('recruiter-profile.banner-sub-many', { search: searches[0]?.mainPosition, count: searches.length - 1 })
-        : ''
+  const goToRecruiter = useCallback(
+    (searchId: number, target: 'detail' | 'crew-list') => {
+      setFromHome()
+      if (target === 'crew-list') {
+        router.push(`/(tabs)/recruiter/search/${searchId}/crew/list` as any)
+      } else {
+        router.push(`/(tabs)/recruiter/search/${searchId}` as any)
+      }
+    },
+    [router]
+  )
+
+  const searchesWithNew = searches.filter((s) => s.countCandidates - s.countContacted > 0)
 
   const waNumber = user?.whatsapp?.replace(/^https?:\/\/wa\.me\//, '') ?? ''
   const isSameAsWa = !!user?.cellular && !!waNumber && user.cellular === waNumber
-
-  const handleMobilePress = () => {
-    if (!user?.cellular) return
-    if (!isSameAsWa) {
-      Linking.openURL(`tel:${user.cellular}`)
-      return
-    }
-    const options = ['Cancel', 'Call', 'WhatsApp']
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions({ options, cancelButtonIndex: 0 }, (i) => {
-        if (i === 1) Linking.openURL(`tel:${user.cellular}`)
-        if (i === 2) Linking.openURL(user.whatsapp!)
-      })
-    } else {
-      Alert.alert('', user.cellular, [
-        { text: 'Call', onPress: () => Linking.openURL(`tel:${user.cellular}`) },
-        { text: 'WhatsApp', onPress: () => Linking.openURL(user.whatsapp!) },
-        { text: 'Cancel', style: 'cancel' },
-      ])
-    }
-  }
 
   const initials = user ? `${user.name?.[0] ?? ''}${user.surname?.[0] ?? ''}`.toUpperCase() : '?'
 
@@ -193,22 +166,22 @@ const RecruiterProfile: FC = () => {
           </View>
         </View>
 
-        {/* New candidates banner */}
-        {uncontacted > 0 && (
-          <Pressable
-            style={s.banner}
-            onPress={() => router.push(`/(tabs)/recruiter/search/${searches[0]?.idoffer}/crew/list`)}
-          >
-            <View style={s.bannerIcon}>
-              <Sparkles size={20} color="#fff" strokeWidth={2} />
-            </View>
-            <View style={{ flex: 1, minWidth: 0 }}>
-              <Text style={s.bannerTitle}>{t('recruiter-profile.banner-candidates', { count: uncontacted })}</Text>
-              {bannerSub ? <Text style={s.bannerSub}>{bannerSub}</Text> : null}
-            </View>
-            <ChevronRight size={18} color="#fff" strokeWidth={2.4} />
-          </Pressable>
-        )}
+        {/* New candidates banners — one per search */}
+        {searchesWithNew.map((search) => {
+          const count = search.countCandidates - search.countContacted
+          return (
+            <Pressable key={search.idoffer} style={s.banner} onPress={() => goToRecruiter(search.idoffer, 'crew-list')}>
+              <View style={s.bannerIcon}>
+                <Sparkles size={20} color="#fff" strokeWidth={2} />
+              </View>
+              <View style={{ flex: 1, minWidth: 0 }}>
+                <Text style={s.bannerTitle}>{t('recruiter-profile.banner-candidates', { count })}</Text>
+                <Text style={s.bannerSub}>{search.title || search.mainPosition}</Text>
+              </View>
+              <ChevronRight size={18} color="#fff" strokeWidth={2.4} />
+            </Pressable>
+          )
+        })}
 
         {/* Searches list */}
         <Text style={s.sectionEyebrow}>{t('recruiter-profile.section-activity')}</Text>
@@ -221,7 +194,7 @@ const RecruiterProfile: FC = () => {
               sub={`${search.countCandidates} crew · ${search.countContacted} contattati`}
               accent
               last={i === searches.length - 1}
-              onPress={() => router.push(`/(tabs)/recruiter/search/${search.idoffer}`)}
+              onPress={() => goToRecruiter(search.idoffer, 'detail')}
             />
           ))}
         </View>
@@ -235,7 +208,6 @@ const RecruiterProfile: FC = () => {
             label={t('recruiter-profile.label-mobile')}
             value={user?.cellular || '—'}
             tag={isSameAsWa ? 'WhatsApp' : undefined}
-            onPress={handleMobilePress}
           />
           <ContactRow icon="phone" label={t('recruiter-profile.label-phone2')} value="—" />
           <ContactRow icon="globe" label={t('recruiter-profile.label-website')} value={user?.url || '—'} last />

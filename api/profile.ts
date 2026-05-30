@@ -6,7 +6,6 @@ import { TCrewUser } from '@/api/types/crewUser'
 import { apiFetchJson, apiFetchText, getLanguageCode } from './utils'
 
 export const getProUserProfile = async (token: string, role: TUserRole, language: string): Promise<TUser[]> => {
-  console.log('Fetching pro user profile with token:', token, role, language)
   const userRole = role == TUserRole.RECRUITER ? 'Owneruser' : 'Prouser'
   const languageCode = getLanguageCode(language)
   const url = `${API.PROFILE}/${userRole}/${token}?lang=${languageCode}`

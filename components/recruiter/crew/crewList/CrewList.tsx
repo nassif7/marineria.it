@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { ChevronLeft } from 'lucide-react-native'
+import { consumeFromHome } from '@/utils/fromHomeNav'
 // import { getCrewList } from '@/api'
 import { getCrewListPost } from '@/api'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
@@ -22,6 +23,7 @@ const mapUrlFilter = (f?: string): FilterKey => {
 }
 
 const CrewList: FC = () => {
+  const [cameFromHome] = useState(consumeFromHome)
   const {
     t,
     i18n: { language },
@@ -37,8 +39,7 @@ const CrewList: FC = () => {
   const [activeFilter, setActiveFilter] = useState<FilterKey>(mapUrlFilter(filterParam))
 
   const { isLoading, isError, isRefetching, refetch, data } = useQuery({
-    queryKey: ['recruiter-crew-list', searchId, language],
-    // queryFn: () => getCrewList(searchId as string, token, language),
+    queryKey: ['recruiter-crew-list-post', searchId, language],
     queryFn: () => getCrewListPost(searchId as string, token, language),
   })
 
@@ -64,7 +65,10 @@ const CrewList: FC = () => {
 
       {/* ── Nav bar ── */}
       <View style={cl.navRow}>
-        <Pressable style={cl.iconBtn} onPress={() => router.back()}>
+        <Pressable
+          style={cl.iconBtn}
+          onPress={() => (cameFromHome ? router.navigate('/(tabs)' as any) : router.back())}
+        >
           <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
         </Pressable>
         <Text style={cl.navRef}>{referenceShort ? `Ref · ${referenceShort}` : ''}</Text>

@@ -35,7 +35,6 @@ const useAuthBrowser = () => {
           })
           if (response.ok) {
             const { tmpCode } = await response.json()
-            console.log('[useAuthBrowser] tempCode:', tmpCode)
             const separator = url.includes('?') ? '&' : '?'
             finalUrl = `${url}${separator}tmpCode=${encodeURIComponent(tmpCode)}`
           }
@@ -43,7 +42,6 @@ const useAuthBrowser = () => {
           // fall back to opening without tempCode
         }
       }
-      console.log('[useAuthBrowser] opening url:', finalUrl)
       await WebBrowser.openBrowserAsync(finalUrl)
     } finally {
       setIsLoading(false)

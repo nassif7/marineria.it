@@ -170,6 +170,8 @@
     "filter-paused": "In pausa",
     "filter-closed": "Chiuse",
     "status-active": "Attiva",
+    "status-published": "Pubblicata",
+    "status-not-published": "Non pubblicata",
     "filter-all": "Tutti",
     "in-pool": "Nel pool",
     "selected": "Selezionati",
