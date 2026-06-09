@@ -1,19 +1,31 @@
 import React from 'react'
 import * as SecureStore from 'expo-secure-store'
 import * as WebBrowser from 'expo-web-browser'
+import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Globe, Bell } from 'lucide-react-native'
+import {
+  Globe,
+  Bell,
+  Users,
+  Settings2,
+  FileText,
+  Shield,
+  Headphones,
+  Star,
+  LogOut,
+  ChevronRight,
+} from 'lucide-react-native'
 import { router } from 'expo-router'
 import { TUserRole } from '@/api/types'
 import { TLocales } from '@/localization'
 import { useSession } from '@/Providers/SessionProvider'
 import { useProfile } from '@/hooks'
-import { Box, VStack, Heading, HStack, Icon, Button, ButtonText, Link, LinkText } from '@/components/ui'
+import { C } from '@/components/pro/tokens'
+import { supportTeam } from '@/api'
 import SwitchLanguage from '@/components/common/SwitchLanguage'
 import NotificationsToggle from '@/components/common/NotificationsToggle'
-import SignOut from '@/components/common/SignOut'
 import SwitchUser from '@/components/common/SwitchUser'
-import { ScreenContainer } from '@/components/appUI'
+import ContactSupport from '@/components/common/ContactSupport'
 
 const Settings = () => {
   const {
@@ -25,94 +37,258 @@ const Settings = () => {
     signOut,
     isGuest,
   } = useSession()
-
   const { pushNotificationToken, togglePushNotifications, isTogglingNotifications } = useProfile()
-  const handleRegisterAsCrew = () => WebBrowser.openBrowserAsync('https://www.marineria.it/En/Pro/Reg.aspx')
-  const handleRegisterAsRecruiter = () => WebBrowser.openBrowserAsync('https://www.marineria.it/En/Rec/Reg.aspx')
+  const isRecruiter = role === TUserRole.RECRUITER
+
   const privacyPolicyUrl =
     language === TLocales.IT ? 'https://www.marineria.it/it/contacts.aspx' : 'https://www.marineria.it/En/Contacts.aspx'
-  const handlePrivacyPolicy = () => WebBrowser.openBrowserAsync(privacyPolicyUrl)
+
   const languageOptions = [
-    { label: t(TLocales.EN), value: TLocales.EN },
-    { label: t(TLocales.IT), value: TLocales.IT },
+    { label: t('en', { ns: 'common' }), value: TLocales.EN },
+    { label: t('it', { ns: 'common' }), value: TLocales.IT },
   ]
 
   const handleLanguageChange = async (v: string) => {
-    changeLanguage(v.toLocaleLowerCase())
-    await SecureStore.setItemAsync('language', v.toLocaleLowerCase())
+    changeLanguage(v.toLowerCase())
+    await SecureStore.setItemAsync('language', v.toLowerCase())
   }
 
+  const currentLanguageLabel = language === TLocales.IT ? t('it', { ns: 'common' }) : t('en', { ns: 'common' })
+
   return (
-    <ScreenContainer className="px-2">
-      <VStack className="justify-between h-full py-4">
-        <VStack space="sm">
-          <HStack className="justify-between items-center bg-white rounded-md p-3 mb-5 border border-background-300 min-h-[60px]">
-            <HStack className="items-center" space="sm">
-              <Icon as={Globe} className="text-typography-600" size="md" />
-              <Heading size="sm" className="text-typography-600">
-                {t('change-language')}
-              </Heading>
-            </HStack>
-            <SwitchLanguage
-              language={language as TLocales}
-              onLanguageChange={handleLanguageChange}
-              initialLabel={t(language)}
-              languageOptions={languageOptions}
+    <ScrollView style={s.root} contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
+      {/* ── PREFERENCES ─────────────────────────────── */}
+      <Text style={s.sectionLabel}>{t('preferences')}</Text>
+      <View style={s.card}>
+        {/* Language */}
+        <View style={[s.row, !isGuest && s.rowBorder]}>
+          <View style={s.rowIcon}>
+            <Globe size={18} color={C.ink3} strokeWidth={1.8} />
+          </View>
+          <Text style={[s.rowTitle, s.rowFlex]}>{t('language')}</Text>
+          <SwitchLanguage
+            language={language as TLocales}
+            onLanguageChange={handleLanguageChange}
+            initialLabel={currentLanguageLabel}
+            languageOptions={languageOptions}
+          />
+        </View>
+
+        {/* Push notifications — logged in only */}
+        {!isGuest && (
+          <View style={s.row}>
+            <View style={s.rowIcon}>
+              <Bell size={18} color={C.ink3} strokeWidth={1.8} />
+            </View>
+            <View style={s.rowFlex}>
+              <Text style={s.rowTitle}>{t('push-notifications')}</Text>
+              <Text style={s.rowSub}>{t('push-notifications-sub')}</Text>
+            </View>
+            <NotificationsToggle
+              enabled={!!pushNotificationToken}
+              handleSetPushNotification={togglePushNotifications}
+              isPending={isTogglingNotifications}
             />
-          </HStack>
+          </View>
+        )}
+      </View>
 
-          {!isGuest && (
-            <HStack className="justify-between items-center bg-white rounded-md p-3 mb-5 border border-background-300 min-h-[60px] ">
-              <HStack className="items-center" space="sm">
-                <Icon as={Bell} className="text-typography-600" size="md" />
-                <Heading size="sm" className="text-typography-600">
-                  {t('notifications')}
-                </Heading>
-              </HStack>
-              <NotificationsToggle
-                enabled={!!pushNotificationToken}
-                handleSetPushNotification={togglePushNotifications}
-                isPending={isTogglingNotifications}
-              />
-            </HStack>
+      {/* ── ACCOUNT ──────────────────────────────────── */}
+      <Text style={s.sectionLabel}>{t('account')}</Text>
+      <View style={s.card}>
+        {isGuest ? (
+          <Pressable style={s.row} onPress={() => router.replace('/sign-in')}>
+            <View style={[s.rowIcon, s.rowIconAccent]}>
+              <Users size={18} color={C.orange} strokeWidth={1.8} />
+            </View>
+            <Text style={[s.rowTitle, s.rowFlex]}>{t('login')}</Text>
+            <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
+          </Pressable>
+        ) : (
+          <>
+            {/* Switch profile */}
+            <SwitchUser
+              renderTrigger={({ onPress }) => (
+                <Pressable style={[s.row, s.rowBorder]} onPress={onPress}>
+                  <View style={[s.rowIcon, s.rowIconAccent]}>
+                    <Users size={18} color={C.orange} strokeWidth={1.8} />
+                  </View>
+                  <View style={s.rowFlex}>
+                    <Text style={s.rowTitle}>{t('switch-profile')}</Text>
+                    <Text style={s.rowSub}>{isRecruiter ? t('currently-recruiter') : t('currently-crew')}</Text>
+                  </View>
+                  <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
+                </Pressable>
+              )}
+            />
+
+            {/* Security & password */}
+            <Pressable
+              style={[s.row, s.rowBorder]}
+              onPress={() =>
+                WebBrowser.openBrowserAsync(
+                  language === TLocales.IT
+                    ? 'https://www.marineria.it/it/ChangePassword.aspx'
+                    : 'https://www.marineria.it/En/ChangePassword.aspx'
+                )
+              }
+            >
+              <View style={s.rowIcon}>
+                <Settings2 size={18} color={C.ink3} strokeWidth={1.8} />
+              </View>
+              <Text style={[s.rowTitle, s.rowFlex]}>{t('security-password')}</Text>
+              <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
+            </Pressable>
+
+            {/* Terms of service */}
+            <Pressable
+              style={[s.row, s.rowBorder]}
+              onPress={() =>
+                WebBrowser.openBrowserAsync(
+                  language === TLocales.IT
+                    ? 'https://www.marineria.it/it/contacts.aspx'
+                    : 'https://www.marineria.it/En/contacts.aspx'
+                )
+              }
+            >
+              <View style={s.rowIcon}>
+                <FileText size={18} color={C.ink3} strokeWidth={1.8} />
+              </View>
+              <Text style={[s.rowTitle, s.rowFlex]}>{t('terms-of-service')}</Text>
+              <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
+            </Pressable>
+
+            {/* Privacy */}
+            <Pressable style={[s.row, s.rowBorder]} onPress={() => WebBrowser.openBrowserAsync(privacyPolicyUrl)}>
+              <View style={s.rowIcon}>
+                <Shield size={18} color={C.ink3} strokeWidth={1.8} />
+              </View>
+              <Text style={[s.rowTitle, s.rowFlex]}>{t('privacy')}</Text>
+              <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
+            </Pressable>
+
+            {/* Sign out */}
+            <Pressable style={s.row} onPress={() => signOut(role as TUserRole)}>
+              <View style={[s.rowIcon, s.rowIconDanger]}>
+                <LogOut size={18} color="#DC2626" strokeWidth={1.8} />
+              </View>
+              <Text style={[s.rowTitle, s.rowTitleDanger, s.rowFlex]}>{t('sign-out')}</Text>
+            </Pressable>
+          </>
+        )}
+      </View>
+
+      {/* ── SUPPORT ──────────────────────────────────── */}
+      <Text style={s.sectionLabel}>{t('support')}</Text>
+      <View style={s.card}>
+        <ContactSupport
+          title={t('contact-support')}
+          supportTeam={supportTeam}
+          renderTrigger={({ onPress }) => (
+            <Pressable style={[s.row, s.rowBorder]} onPress={onPress}>
+              <View style={s.rowIcon}>
+                <Headphones size={18} color={C.ink3} strokeWidth={1.8} />
+              </View>
+              <Text style={[s.rowTitle, s.rowFlex]}>{t('contact-support')}</Text>
+              <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
+            </Pressable>
           )}
-        </VStack>
+        />
+        <Pressable style={s.row}>
+          <View style={s.rowIcon}>
+            <Star size={18} color={C.ink3} strokeWidth={1.8} />
+          </View>
+          <Text style={[s.rowTitle, s.rowFlex]}>{t('leave-feedback')}</Text>
+          <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
+        </Pressable>
+      </View>
 
-        <VStack>
-          <Box className="p-6">
-            {isGuest ? (
-              <VStack space="md">
-                <Button size="lg" onPress={() => router.replace('/sign-in')}>
-                  <ButtonText>{t('login')}</ButtonText>
-                </Button>
-                <VStack space="xs" className="items-center">
-                  <Link onPress={handleRegisterAsCrew}>
-                    <LinkText>{t('register-as-crew', { ns: 'login-screen' })}</LinkText>
-                  </Link>
-                  <Link onPress={handleRegisterAsRecruiter}>
-                    <LinkText>{t('register-as-recruiter', { ns: 'login-screen' })}</LinkText>
-                  </Link>
-                </VStack>
-              </VStack>
-            ) : (
-              <VStack>
-                <Box className="mb-4">
-                  <SwitchUser />
-                </Box>
-                <Box>
-                  <SignOut buttonLabel={t('logout')} handleLogout={async () => await signOut(role as TUserRole)} />
-                </Box>
-              </VStack>
-            )}
-          </Box>
-          <Link onPress={handlePrivacyPolicy} className="self-start px-6 pb-3">
-            <LinkText className="text-sm text-primary-500">{t('privacy-policy')}</LinkText>
-          </Link>
-        </VStack>
-      </VStack>
-    </ScreenContainer>
+      <Text style={s.version}>{t('version', { version: '2.4.1' })}</Text>
+    </ScrollView>
   )
 }
+
+const s = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: C.bg,
+  },
+  content: {
+    paddingBottom: 40,
+  },
+  sectionLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.6,
+    color: C.ink3,
+    textTransform: 'uppercase',
+    marginTop: 20,
+    marginBottom: 8,
+    marginHorizontal: 20,
+  },
+  card: {
+    marginHorizontal: 16,
+    backgroundColor: C.card,
+    borderRadius: 16,
+    shadowColor: '#0D1B2A',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
+    overflow: 'hidden',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+  },
+  rowBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: C.hair2,
+  },
+  rowFlex: {
+    flex: 1,
+    minWidth: 0,
+  },
+  rowIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: C.field,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  rowIconAccent: {
+    backgroundColor: C.orangeSoft,
+  },
+  rowIconDanger: {
+    backgroundColor: '#FEF2F2',
+  },
+  rowTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: C.ink,
+    letterSpacing: -0.1,
+  },
+  rowTitleDanger: {
+    color: '#DC2626',
+  },
+  rowSub: {
+    fontSize: 12,
+    color: C.ink3,
+    marginTop: 1,
+  },
+  version: {
+    textAlign: 'center',
+    fontSize: 11,
+    color: C.ink4,
+    letterSpacing: 0.2,
+    marginTop: 20,
+  },
+})
 
 export default Settings
 

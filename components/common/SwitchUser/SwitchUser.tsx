@@ -32,7 +32,11 @@ import { LoginFormLinks } from '@/components/appUI'
 import AuthenticationForm, { FormDate } from '@/components/common/AuthenticationForm'
 import { checkEmail } from '@/api/auth'
 
-const SwitchUser: FC = () => {
+interface SwitchUserProps {
+  renderTrigger?: (props: { onPress: () => void }) => React.ReactNode
+}
+
+const SwitchUser: FC<SwitchUserProps> = ({ renderTrigger }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [step, setStep] = useState<'email' | 'code'>('email')
   const [email, setEmail] = useState('')
@@ -145,9 +149,13 @@ const SwitchUser: FC = () => {
 
   return (
     <>
-      <Button onPress={handleSwitch}>
-        <ButtonText className="text-white">{label}</ButtonText>
-      </Button>
+      {renderTrigger ? (
+        renderTrigger({ onPress: handleSwitch })
+      ) : (
+        <Button onPress={handleSwitch}>
+          <ButtonText className="text-white">{label}</ButtonText>
+        </Button>
+      )}
 
       <Modal isOpen={modalVisible} onClose={handleClose}>
         <ModalBackdrop />

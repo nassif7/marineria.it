@@ -26,6 +26,7 @@ type IContactSupportProps = {
   title: string
   supportTeam: TSupportTeam[]
   isTextTrigger?: boolean
+  renderTrigger?: (props: { onPress: () => void }) => React.ReactNode
 }
 
 function SupportMemberCard({ member }: { member: TSupportTeam }) {
@@ -124,15 +125,18 @@ export const ContactSupportTextTrigger: FC<{ onPress: () => void }> = ({ onPress
   )
 }
 
-const ContactSupport: FC<IContactSupportProps> = ({ title, supportTeam, isTextTrigger }) => {
+const ContactSupport: FC<IContactSupportProps> = ({ title, supportTeam, isTextTrigger, renderTrigger }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const open = () => setIsOpen(true)
 
   return (
     <>
-      {isTextTrigger ? (
-        <ContactSupportTextTrigger onPress={() => setIsOpen(true)} />
+      {renderTrigger ? (
+        renderTrigger({ onPress: open })
+      ) : isTextTrigger ? (
+        <ContactSupportTextTrigger onPress={open} />
       ) : (
-        <ContactSupportIconTrigger onPress={() => setIsOpen(true)} />
+        <ContactSupportIconTrigger onPress={open} />
       )}
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
