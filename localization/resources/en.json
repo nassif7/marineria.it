@@ -35,7 +35,15 @@
     "enter-code": "Please enter the code",
     "no-account-title": "No account found",
     "no-account-description": "There is no registered account associated with {{email}}.",
-    "code-placeholder": "Code"
+    "code-placeholder": "Code",
+    "sheet-title": "Sign in to your account",
+    "tagline": "Work on board, simply.",
+    "register-as": "Register as",
+    "crew-label": "Crew",
+    "recruiter-label": "Recruiter",
+    "or": "or",
+    "sign-in-with-password-short": "Have a password? Sign in",
+    "password": "Password"
   },
   "home-screen": {
     "welcome": "Welcome",

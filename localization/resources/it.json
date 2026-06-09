@@ -35,7 +35,15 @@
     "enter-code": "Inserisci il codice",
     "no-account-title": "Nessun account trovato",
     "no-account-description": "Nessun account registrato associato a {{email}}.",
-    "code-placeholder": "Codice"
+    "code-placeholder": "Codice",
+    "sheet-title": "Accedi al tuo account",
+    "tagline": "Lavoro a bordo, semplice.",
+    "register-as": "Registrati come",
+    "crew-label": "Crew",
+    "recruiter-label": "Recruiter",
+    "or": "oppure",
+    "sign-in-with-password-short": "Hai una password? Accedi",
+    "password": "Password"
   },
   "home-screen": {
     "welcome": "Welcome",
