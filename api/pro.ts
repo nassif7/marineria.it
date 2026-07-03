@@ -26,8 +26,11 @@ export const getProOfferById = async (offerId: string, proToken: string, languag
 
 export const applyToOffer = async (proToken: string, offerId: number, language: string): Promise<any> => {
   const languageCode = getLanguageCode(language)
-  const url = API.PRO_OFFERS + `/Apply/${offerId}/${proToken}?language=${languageCode}`
-  return apiFetchJson(url)
+  return apiFetchJson(API.PRO_OFFERS + `/Apply/${offerId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({ userToken: proToken, language: languageCode }),
+  })
 }
 
 export const getAllOffersPost = async (token: string, language?: string): Promise<TOffer[]> => {
