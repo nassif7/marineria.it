@@ -188,7 +188,7 @@ const cl = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 14,
     paddingVertical: 8,
-    borderRadius: 99,
+    borderRadius: 10,
   },
   chipActive: { backgroundColor: C.ink },
   chipInactive: { backgroundColor: C.card, borderWidth: 1, borderColor: C.hair },

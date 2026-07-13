@@ -167,7 +167,7 @@ const ls = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 99,
+    borderRadius: 10,
   },
   chipActive: {
     backgroundColor: C.ink,

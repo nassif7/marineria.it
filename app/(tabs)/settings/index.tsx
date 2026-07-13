@@ -61,8 +61,8 @@ const Settings = () => {
       <View style={s.card}>
         {/* Language */}
         <View style={[s.row, !isGuest && s.rowBorder]}>
-          <View style={s.rowIcon}>
-            <Globe size={18} color={C.ink3} strokeWidth={1.8} />
+          <View style={[s.rowIcon, s.rowIconAccent]}>
+            <Globe size={18} color={C.orange} strokeWidth={1.8} />
           </View>
           <Text style={[s.rowTitle, s.rowFlex]}>{t('language')}</Text>
           <SwitchLanguage
@@ -75,8 +75,8 @@ const Settings = () => {
         {/* Push notifications — logged in only */}
         {!isGuest && (
           <View style={s.row}>
-            <View style={s.rowIcon}>
-              <Bell size={18} color={C.ink3} strokeWidth={1.8} />
+            <View style={[s.rowIcon, s.rowIconAccent]}>
+              <Bell size={18} color={C.orange} strokeWidth={1.8} />
             </View>
             <View style={s.rowFlex}>
               <Text style={s.rowTitle}>{t('push-notifications')}</Text>
@@ -131,8 +131,8 @@ const Settings = () => {
                 )
               }
             >
-              <View style={s.rowIcon}>
-                <Settings2 size={18} color={C.ink3} strokeWidth={1.8} />
+              <View style={[s.rowIcon, s.rowIconAccent]}>
+                <Settings2 size={18} color={C.orange} strokeWidth={1.8} />
               </View>
               <Text style={[s.rowTitle, s.rowFlex]}>{t('security-password')}</Text>
               <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
@@ -149,8 +149,8 @@ const Settings = () => {
                 )
               }
             >
-              <View style={s.rowIcon}>
-                <FileText size={18} color={C.ink3} strokeWidth={1.8} />
+              <View style={[s.rowIcon, s.rowIconAccent]}>
+                <FileText size={18} color={C.orange} strokeWidth={1.8} />
               </View>
               <Text style={[s.rowTitle, s.rowFlex]}>{t('terms-of-service')}</Text>
               <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
@@ -158,8 +158,8 @@ const Settings = () => {
 
             {/* Privacy */}
             <Pressable style={[s.row, s.rowBorder]} onPress={() => WebBrowser.openBrowserAsync(privacyPolicyUrl)}>
-              <View style={s.rowIcon}>
-                <Shield size={18} color={C.ink3} strokeWidth={1.8} />
+              <View style={[s.rowIcon, s.rowIconAccent]}>
+                <Shield size={18} color={C.orange} strokeWidth={1.8} />
               </View>
               <Text style={[s.rowTitle, s.rowFlex]}>{t('privacy')}</Text>
               <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
@@ -186,8 +186,8 @@ const Settings = () => {
             supportTeam={supportTeam}
             renderTrigger={({ onPress }) => (
               <Pressable style={[s.row, s.rowBorder]} onPress={onPress}>
-                <View style={s.rowIcon}>
-                  <Headphones size={18} color={C.ink3} strokeWidth={1.8} />
+                <View style={[s.rowIcon, s.rowIconAccent]}>
+                  <Headphones size={18} color={C.orange} strokeWidth={1.8} />
                 </View>
                 <Text style={[s.rowTitle, s.rowFlex]}>{t('contact-support')}</Text>
                 <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
@@ -196,8 +196,8 @@ const Settings = () => {
           />
         )}
         <Pressable style={s.row}>
-          <View style={s.rowIcon}>
-            <Star size={18} color={C.ink3} strokeWidth={1.8} />
+          <View style={[s.rowIcon, s.rowIconAccent]}>
+            <Star size={18} color={C.orange} strokeWidth={1.8} />
           </View>
           <Text style={[s.rowTitle, s.rowFlex]}>{t('leave-feedback')}</Text>
           <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
