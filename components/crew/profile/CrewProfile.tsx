@@ -1,17 +1,7 @@
 import { FC, useMemo, useState } from 'react'
 import { View, Text, Pressable, ScrollView, StyleSheet, Image, RefreshControl } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import {
-  Edit2,
-  Headphones,
-  ChevronRight,
-  Check,
-  AlertTriangle,
-  Users,
-  FileText,
-  Calendar,
-  Bell,
-} from 'lucide-react-native'
+import { Edit2, ChevronRight, Check, AlertTriangle, Users, FileText, Calendar, Bell } from 'lucide-react-native'
 import { useCrew } from '@/Providers/CrewProvider'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
@@ -208,11 +198,7 @@ const CrewProfile: FC = () => {
   return (
     <View style={{ flex: 1, backgroundColor: C.bg }}>
       {/* Top bar */}
-      <View style={s.topBar}>
-        <Pressable style={s.iconBtn}>
-          <Headphones size={18} color={C.ink2} strokeWidth={1.8} />
-        </Pressable>
-      </View>
+      <View style={s.topBar} />
 
       <ScrollView
         style={{ flex: 1 }}
@@ -261,9 +247,7 @@ const CrewProfile: FC = () => {
           <View style={s.meterRow}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 }}>
               <Text style={s.meterLabel}>{t('crew-profile.completion', { pct })}</Text>
-              <Pressable>
-                <Text style={s.meterMissing}>{t('crew-profile.missing-fields', { count: missing })}</Text>
-              </Pressable>
+              <Text style={s.meterMissing}>{t('crew-profile.missing-fields', { count: missing })}</Text>
             </View>
             <View style={s.meterTrack}>
               <View style={[s.meterFill, { width: `${pct}%` as any }]} />
@@ -391,20 +375,8 @@ const CrewProfile: FC = () => {
 
 const s = StyleSheet.create({
   topBar: {
-    paddingHorizontal: 18,
     paddingTop: 12,
     paddingBottom: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  iconBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: C.field,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   scrollContent: { paddingBottom: 32 },
   rowCard: {

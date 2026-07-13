@@ -85,7 +85,7 @@
       "available-from": "Disponibile dal {{date}}",
       "not-available": "Non disponibile",
       "completion": "Profilo completo al {{pct}}%",
-      "missing-fields": "{{count}} campi mancanti →",
+      "missing-fields": "{{count}} campi mancanti",
       "stat-views": "Visualizzazioni",
       "stat-experience": "Esperienza",
       "stat-references": "Referenze",
