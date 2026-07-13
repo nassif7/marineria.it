@@ -15,7 +15,7 @@ type TCrewContext = {
   isLoading: boolean
   isRefetching: boolean
   isTogglingNotifications: boolean
-  refetch: () => void
+  refetch: () => Promise<unknown>
   togglePushNotifications: () => void
   savedOfferIds: string[]
   isSavedOffer: (id: string | number) => boolean
@@ -29,7 +29,7 @@ const CrewContext = createContext<TCrewContext>({
   isLoading: false,
   isRefetching: false,
   isTogglingNotifications: false,
-  refetch: () => {},
+  refetch: () => Promise.resolve(),
   togglePushNotifications: () => {},
   savedOfferIds: [],
   isSavedOffer: () => false,
@@ -118,10 +118,7 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
         isLoading: crewLoading,
         isRefetching: crewRefetching || notifRefetching,
         isTogglingNotifications,
-        refetch: () => {
-          refetchCrew()
-          refetchNotif()
-        },
+        refetch: () => Promise.all([refetchCrew(), refetchNotif()]),
         togglePushNotifications,
         savedOfferIds,
         isSavedOffer,

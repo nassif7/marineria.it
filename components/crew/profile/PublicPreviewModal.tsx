@@ -1,5 +1,5 @@
 import { FC, useState, ReactNode } from 'react'
-import { Modal, View, Text, Pressable, ScrollView, StyleSheet, Image, RefreshControl } from 'react-native'
+import { Modal, View, Text, Pressable, ScrollView, StyleSheet, Image } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -22,9 +22,10 @@ import { ApiError } from '@/api/utils'
 import { TCrewExperience, TCrewReference } from '@/api/types'
 import { getAgeByYear } from '@/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
-import { Loading } from '@/components/ui'
+import { Loading, RefreshControl } from '@/components/ui'
 import { C } from '@/components/pro/tokens'
 import { useCrew } from '@/Providers/CrewProvider'
+import { useManualRefresh } from '@/hooks'
 
 const GREEN_SOFT = '#E8F8EB'
 const GREEN_TEXT = '#0F7A28'
@@ -131,11 +132,12 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
   const { crew: homeCrew } = useCrew()
   const userId = homeCrew?.iduser
 
-  const { isLoading, isSuccess, isError, isRefetching, refetch, data, error } = useQuery({
+  const { isLoading, isSuccess, isError, refetch, data, error } = useQuery({
     queryKey: ['crew-public-cv', userId, language],
     queryFn: () => getCrewPublicCv(userId as number, language),
     enabled: visible && !!userId,
   })
+  const { refreshing, onRefresh } = useManualRefresh(refetch)
   const crew = isSuccess ? data : null
 
   const photoUrl = crew?.userPhoto ? getPhotoUrl(crew.userPhoto) : null
@@ -199,7 +201,7 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
             style={{ flex: 1 }}
             contentContainerStyle={{ paddingBottom: bottom + 24 }}
             showsVerticalScrollIndicator={false}
-            refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           >
             {/* Hero card */}
             <View style={pv.card}>

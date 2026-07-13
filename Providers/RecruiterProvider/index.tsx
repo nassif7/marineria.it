@@ -13,7 +13,7 @@ type TRecruiterContext = {
   isLoading: boolean
   isRefetching: boolean
   isTogglingNotifications: boolean
-  refetch: () => void
+  refetch: () => Promise<unknown>
   togglePushNotifications: () => void
 }
 
@@ -24,7 +24,7 @@ const RecruiterContext = createContext<TRecruiterContext>({
   isLoading: false,
   isRefetching: false,
   isTogglingNotifications: false,
-  refetch: () => {},
+  refetch: () => Promise.resolve(),
   togglePushNotifications: () => {},
 })
 
@@ -81,10 +81,7 @@ const RecruiterProvider = ({ children }: React.PropsWithChildren) => {
         isLoading: recruiterLoading || searchesLoading,
         isRefetching: recruiterRefetching || searchesRefetching,
         isTogglingNotifications,
-        refetch: () => {
-          refetchRecruiter()
-          refetchSearches()
-        },
+        refetch: () => Promise.all([refetchRecruiter(), refetchSearches()]),
         togglePushNotifications,
       }}
     >

@@ -1,5 +1,5 @@
 import { FC, useMemo, useState } from 'react'
-import { View, Text, Pressable, ScrollView, StyleSheet, Image, RefreshControl } from 'react-native'
+import { View, Text, Pressable, ScrollView, StyleSheet, Image } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Edit2, ChevronRight, Check, AlertTriangle, Users, FileText, Calendar, Bell } from 'lucide-react-native'
 import { useCrew } from '@/Providers/CrewProvider'
@@ -7,7 +7,8 @@ import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 import { C } from '@/components/pro/tokens'
-import { Loading } from '@/components/ui'
+import { Loading, RefreshControl } from '@/components/ui'
+import { useManualRefresh } from '@/hooks'
 import PublicPreviewModal from './PublicPreviewModal'
 import NotificationsModal from './NotificationsModal'
 
@@ -158,7 +159,8 @@ const ActionRow: FC<{
 
 const CrewProfile: FC = () => {
   const { t } = useTranslation('home-screen')
-  const { crew, notifications, isLoading, isRefetching, refetch } = useCrew()
+  const { crew, notifications, isLoading, refetch } = useCrew()
+  const { refreshing, onRefresh } = useManualRefresh(refetch)
   const [previewVisible, setPreviewVisible] = useState(false)
   const [notificationsVisible, setNotificationsVisible] = useState(false)
 
@@ -212,7 +214,7 @@ const CrewProfile: FC = () => {
         style={{ flex: 1 }}
         contentContainerStyle={s.scrollContent}
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         {/* Identity hero card */}
         <View style={s.rowCard}>

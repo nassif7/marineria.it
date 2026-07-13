@@ -7,6 +7,7 @@ import { Loading, Box, HStack, Text } from '@/components/ui'
 import { ErrorMessage, List, EmptyList, ScreenContainer, NavBar } from '@/components/appUI'
 import OfferListItem from '@/components/pro/offers/offerList/OfferListItem'
 import { TOffer } from '@/api/types'
+import { useManualRefresh } from '@/hooks'
 
 const RightAction = ({ itemsCount, isLoading }: { itemsCount: number; isLoading: boolean }) => {
   if (isLoading) return null
@@ -31,6 +32,7 @@ const JobsScreen = () => {
     queryKey: ['public-offers'],
     queryFn: () => getPublicOffers(language),
   })
+  const { refreshing, onRefresh } = useManualRefresh(refetch)
 
   const handleViewOffer = (offer: TOffer) => {
     router.push(`/(tabs)/jobs/${offer.idoffer}`)
@@ -56,8 +58,8 @@ const JobsScreen = () => {
         {isSuccess && (
           <List
             data={data}
-            isRefetching={isRefetching}
-            onRefresh={refetch}
+            isRefetching={refreshing}
+            onRefresh={onRefresh}
             renderItem={({ item }) => (
               <OfferListItem offer={item} hideStatus key={item.reference} onViewOffer={() => handleViewOffer(item)} />
             )}

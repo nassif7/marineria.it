@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from 'react'
-import { View } from '@/components/ui'
+import { View, RefreshControl } from '@/components/ui'
 import { ScrollView } from 'react-native'
-import { FlatList, RefreshControl, StyleProp, ViewStyle, StyleSheet } from 'react-native'
+import { FlatList, StyleProp, ViewStyle, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 interface IScreenContainerProps {

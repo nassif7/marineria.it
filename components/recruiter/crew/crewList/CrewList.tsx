@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import { View, Text, Pressable, ScrollView, StyleSheet, RefreshControl } from 'react-native'
+import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
@@ -9,9 +9,10 @@ import { consumeFromHome } from '@/utils/fromHomeNav'
 import { getCrewListPost } from '@/api'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { useRecruiterSearch } from '@/Providers/RecruiterSearchProvider'
-import { Loading } from '@/components/ui'
+import { Loading, RefreshControl } from '@/components/ui'
 import { ErrorMessage, EmptyList } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
+import { useManualRefresh } from '@/hooks'
 import CrewListItem from './CrewListItem'
 
 type FilterKey = 'all' | 'to-contact' | 'contacted'
@@ -38,10 +39,11 @@ const CrewList: FC = () => {
 
   const [activeFilter, setActiveFilter] = useState<FilterKey>(mapUrlFilter(filterParam))
 
-  const { isLoading, isError, isRefetching, refetch, data } = useQuery({
+  const { isLoading, isError, refetch, data } = useQuery({
     queryKey: ['recruiter-crew-list-post', searchId, language],
     queryFn: () => getCrewListPost(searchId as string, token, language),
   })
+  const { refreshing, onRefresh } = useManualRefresh(refetch)
 
   const allCrew = data ?? []
   const referenceShort = search?.reference?.includes('_') ? search.reference.split('_')[1] : search?.reference
@@ -82,7 +84,7 @@ const CrewList: FC = () => {
         <ScrollView
           style={{ flex: 1 }}
           contentContainerStyle={cl.scrollContent}
-          refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
           {/* Header: count + title */}
           <View style={cl.header}>

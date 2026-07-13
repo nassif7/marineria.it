@@ -1,12 +1,12 @@
 import { FC, useState } from 'react'
-import { View, Text, ScrollView, Pressable, StyleSheet, RefreshControl } from 'react-native'
+import { View, Text, ScrollView, Pressable, StyleSheet } from 'react-native'
 import { Stack } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { getAllOffersPost, getOffersForApplyPost } from '@/api'
 import { useCrew } from '@/Providers/CrewProvider'
-import { useSavedOffers } from '@/hooks'
-import { Loading } from '@/components/ui'
+import { useSavedOffers, useManualRefresh } from '@/hooks'
+import { Loading, RefreshControl } from '@/components/ui'
 import { ErrorMessage, EmptyList } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
 import OfferListItem from './OfferListItem'
@@ -36,7 +36,6 @@ const JobOfferList: FC = () => {
   const {
     isLoading: isLoadingAll,
     isError: isErrorAll,
-    isRefetching: isRefetchingAll,
     refetch: refetchAll,
     data: allOffersData,
   } = useQuery({
@@ -47,7 +46,6 @@ const JobOfferList: FC = () => {
   const {
     isLoading: isLoadingMatching,
     isError: isErrorMatching,
-    isRefetching: isRefetchingMatching,
     refetch: refetchMatching,
     data: matchingOffersData,
   } = useQuery({
@@ -57,11 +55,8 @@ const JobOfferList: FC = () => {
 
   const isLoading = isLoadingAll || isLoadingMatching
   const isError = isErrorAll || isErrorMatching
-  const isRefetching = isRefetchingAll || isRefetchingMatching
-  const refetch = () => {
-    refetchAll()
-    refetchMatching()
-  }
+  const refetch = () => Promise.all([refetchAll(), refetchMatching()])
+  const { refreshing, onRefresh } = useManualRefresh(refetch)
 
   const allOffers = allOffersData ?? []
   const matchingOffers = matchingOffersData ?? []
@@ -85,7 +80,7 @@ const JobOfferList: FC = () => {
         <ScrollView
           style={{ flex: 1 }}
           contentContainerStyle={ls.scrollContent}
-          refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
           {/* In-content header */}
           <View style={ls.header}>

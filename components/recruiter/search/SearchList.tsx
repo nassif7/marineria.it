@@ -1,10 +1,10 @@
 import { FC } from 'react'
-import { View, Text, ScrollView, StyleSheet, RefreshControl } from 'react-native'
+import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { getRecruiterActiveSearchesPost } from '@/api'
-import { useAppState } from '@/hooks'
+import { useAppState, useManualRefresh } from '@/hooks'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
-import { Loading } from '@/components/ui'
+import { Loading, RefreshControl } from '@/components/ui'
 import { EmptyList, ErrorMessage } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
 import { useQuery } from '@tanstack/react-query'
@@ -19,11 +19,12 @@ const RecruiterSearchList: FC = () => {
   const state = useAppState()
   const { token } = useRecruiter()
 
-  const { isLoading, isError, isRefetching, refetch, data } = useQuery({
+  const { isLoading, isError, refetch, data } = useQuery({
     queryKey: ['recruiter-search-list', token, language],
     queryFn: () => getRecruiterActiveSearchesPost(token, language),
     enabled: state === 'active',
   })
+  const { refreshing, onRefresh } = useManualRefresh(refetch)
 
   const searches = data ?? []
 
@@ -36,7 +37,7 @@ const RecruiterSearchList: FC = () => {
         <ScrollView
           style={{ flex: 1 }}
           contentContainerStyle={sl.scrollContent}
-          refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
           <View style={sl.header}>
             <Text style={sl.headerTitle}>{t('search-list', { ns: 'screens-labels' })}</Text>

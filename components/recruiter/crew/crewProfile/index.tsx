@@ -1,16 +1,5 @@
 import { useState, FC, ReactNode } from 'react'
-import {
-  View,
-  Text,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Image,
-  ActionSheetIOS,
-  Platform,
-  Alert,
-  RefreshControl,
-} from 'react-native'
+import { View, Text, Pressable, ScrollView, StyleSheet, Image, ActionSheetIOS, Platform, Alert } from 'react-native'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -30,13 +19,13 @@ import {
   AlertCircle,
 } from 'lucide-react-native'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
-import { useStatusToast } from '@/hooks'
+import { useStatusToast, useManualRefresh } from '@/hooks'
 // import { getCrewCV, contactCrew, removeCrew } from '@/api'
 import { getCrewCvPost, contactCrew, removeCrew } from '@/api'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
-import { Loading } from '@/components/ui'
+import { Loading, RefreshControl } from '@/components/ui'
 import { ApiError } from '@/api/utils'
 import { C } from '@/components/pro/tokens'
 import ContactCrewModal from './ContactCrewModal'
@@ -418,7 +407,7 @@ const CrewProfile = () => {
   const { token } = useRecruiter()
   const { showToast } = useStatusToast()
 
-  const { isLoading, isSuccess, isError, isRefetching, refetch, data, error } = useQuery({
+  const { isLoading, isSuccess, isError, refetch, data, error } = useQuery({
     queryKey: ['recruiter-crew-cv', searchId, crewId, language],
     // queryFn: () => getCrewCV(token, crewId as string),
     queryFn: () => {
@@ -426,6 +415,7 @@ const CrewProfile = () => {
     },
   })
   const crew = isSuccess ? data?.[0] : null
+  const { refreshing, onRefresh } = useManualRefresh(refetch)
 
   const { mutate: handleContactCrew, isPending } = useMutation({
     mutationFn: () => contactCrew(token, crewId as string, searchId as string, language),
@@ -554,7 +544,7 @@ const CrewProfile = () => {
         style={{ flex: 1 }}
         contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         {/* Hero card */}
         <View style={cp.card}>

@@ -1,12 +1,13 @@
 import { FC, useCallback } from 'react'
-import { View, Text, Pressable, ScrollView, StyleSheet, RefreshControl } from 'react-native'
+import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { setFromHome } from '@/utils/fromHomeNav'
 import { Headphones, ChevronRight, Briefcase, Users, Globe, Mail, Phone, Sparkles } from 'lucide-react-native'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { C } from '@/components/pro/tokens'
-import { Loading } from '@/components/ui'
+import { Loading, RefreshControl } from '@/components/ui'
+import { useManualRefresh } from '@/hooks'
 
 const MONTHS = [
   'January',
@@ -87,7 +88,8 @@ const ContactRow: FC<{
 const RecruiterProfile: FC = () => {
   const { t } = useTranslation('home-screen')
   const router = useRouter()
-  const { recruiter: user, searches, isLoading, isRefetching, refetch } = useRecruiter()
+  const { recruiter: user, searches, isLoading, refetch } = useRecruiter()
+  const { refreshing, onRefresh } = useManualRefresh(refetch)
 
   const goToRecruiter = useCallback(
     (searchId: number, target: 'detail' | 'crew-list') => {
@@ -130,7 +132,7 @@ const RecruiterProfile: FC = () => {
         style={{ flex: 1 }}
         contentContainerStyle={s.scrollContent}
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         {/* Identity card */}
         <View style={s.rowCard}>
