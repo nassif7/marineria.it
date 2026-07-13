@@ -39,6 +39,7 @@ const Settings = () => {
   } = useSession()
   const { pushNotificationToken, togglePushNotifications, isTogglingNotifications } = useProfile()
   const isRecruiter = role === TUserRole.RECRUITER
+  const isCrew = role === TUserRole.CREW
 
   const privacyPolicyUrl =
     language === TLocales.IT ? 'https://www.marineria.it/it/contacts.aspx' : 'https://www.marineria.it/En/Contacts.aspx'
@@ -52,8 +53,6 @@ const Settings = () => {
     changeLanguage(v.toLowerCase())
     await SecureStore.setItemAsync('language', v.toLowerCase())
   }
-
-  const currentLanguageLabel = language === TLocales.IT ? t('it', { ns: 'common' }) : t('en', { ns: 'common' })
 
   return (
     <ScrollView style={s.root} contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
@@ -69,7 +68,6 @@ const Settings = () => {
           <SwitchLanguage
             language={language as TLocales}
             onLanguageChange={handleLanguageChange}
-            initialLabel={currentLanguageLabel}
             languageOptions={languageOptions}
           />
         </View>
@@ -181,19 +179,22 @@ const Settings = () => {
       {/* ── SUPPORT ──────────────────────────────────── */}
       <Text style={s.sectionLabel}>{t('support')}</Text>
       <View style={s.card}>
-        <ContactSupport
-          title={t('contact-support')}
-          supportTeam={supportTeam}
-          renderTrigger={({ onPress }) => (
-            <Pressable style={[s.row, s.rowBorder]} onPress={onPress}>
-              <View style={s.rowIcon}>
-                <Headphones size={18} color={C.ink3} strokeWidth={1.8} />
-              </View>
-              <Text style={[s.rowTitle, s.rowFlex]}>{t('contact-support')}</Text>
-              <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
-            </Pressable>
-          )}
-        />
+        {/* Crew/pro users don't have a support plan yet — hide the entry without removing it */}
+        {!isCrew && (
+          <ContactSupport
+            title={t('contact-support')}
+            supportTeam={supportTeam}
+            renderTrigger={({ onPress }) => (
+              <Pressable style={[s.row, s.rowBorder]} onPress={onPress}>
+                <View style={s.rowIcon}>
+                  <Headphones size={18} color={C.ink3} strokeWidth={1.8} />
+                </View>
+                <Text style={[s.rowTitle, s.rowFlex]}>{t('contact-support')}</Text>
+                <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
+              </Pressable>
+            )}
+          />
+        )}
         <Pressable style={s.row}>
           <View style={s.rowIcon}>
             <Star size={18} color={C.ink3} strokeWidth={1.8} />

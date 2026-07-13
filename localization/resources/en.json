@@ -115,6 +115,7 @@
       "no-notifications": "No notifications",
       "notifications-count_one": "{{count}} notification",
       "notifications-count_other": "{{count}} notifications",
+      "notifications-title": "Notifications",
       "registered-on": "Registered on {{date}}",
       "last-access": "Last access {{date}}"
     }
@@ -261,6 +262,7 @@
     "leave-feedback": "Leave feedback",
     "version": "Marineria.it · version {{version}}",
     "change-language": "Change language",
+    "switch-language-to": "Switch to {{language}}",
     "notifications": "Notifications",
     "login-as-crew": "Login as crew",
     "login-as-recruiter": "Login as recruiter",

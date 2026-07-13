@@ -9,6 +9,7 @@ import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 import { C } from '@/components/pro/tokens'
 import { Loading } from '@/components/ui'
 import PublicPreviewModal from './PublicPreviewModal'
+import NotificationsModal from './NotificationsModal'
 
 const GREEN_SOFT = '#E8F8EB'
 const GREEN_TEXT = '#0F7A28'
@@ -159,6 +160,7 @@ const CrewProfile: FC = () => {
   const { t } = useTranslation('home-screen')
   const { crew, notifications, isLoading, isRefetching, refetch } = useCrew()
   const [previewVisible, setPreviewVisible] = useState(false)
+  const [notificationsVisible, setNotificationsVisible] = useState(false)
 
   const age = crew?.yearofBirth ? getAgeByYear(crew.yearofBirth) : null
   const photoUrl = crew?.userPhoto ? getPhotoUrl(crew.userPhoto) : null
@@ -180,6 +182,7 @@ const CrewProfile: FC = () => {
     [crew]
   )
   const { pct, missing } = useMemo(() => (crew ? calcCompletion(crew as any) : { pct: 0, missing: 0 }), [crew])
+  const hasNotifications = notifications.some((n) => n.title || n.message)
 
   const isAvailable = !!(
     crew?.availability &&
@@ -198,7 +201,12 @@ const CrewProfile: FC = () => {
   return (
     <View style={{ flex: 1, backgroundColor: C.bg }}>
       {/* Top bar */}
-      <View style={s.topBar} />
+      <View style={s.topBar}>
+        <Pressable style={s.iconBtn} onPress={() => setNotificationsVisible(true)}>
+          <Bell size={18} color={C.ink2} strokeWidth={1.8} />
+          {hasNotifications && <View style={s.notifDot} />}
+        </Pressable>
+      </View>
 
       <ScrollView
         style={{ flex: 1 }}
@@ -277,8 +285,9 @@ const CrewProfile: FC = () => {
         {(() => {
           const real = notifications.filter((n) => n.title || n.message)
           const hasNotifs = real.length > 0
+          const Banner = hasNotifs ? Pressable : View
           return (
-            <View style={s.notifBanner}>
+            <Banner style={s.notifBanner} onPress={hasNotifs ? () => setNotificationsVisible(true) : undefined}>
               <View style={s.notifIcon}>
                 <Bell size={18} color="#fff" strokeWidth={2} />
               </View>
@@ -293,7 +302,7 @@ const CrewProfile: FC = () => {
                 )}
               </View>
               {hasNotifs && <ChevronRight size={18} color="#fff" strokeWidth={2.4} />}
-            </View>
+            </Banner>
           )
         })()}
 
@@ -369,14 +378,39 @@ const CrewProfile: FC = () => {
       </ScrollView>
 
       <PublicPreviewModal visible={previewVisible} onClose={() => setPreviewVisible(false)} />
+      <NotificationsModal visible={notificationsVisible} onClose={() => setNotificationsVisible(false)} />
     </View>
   )
 }
 
 const s = StyleSheet.create({
   topBar: {
+    paddingHorizontal: 18,
     paddingTop: 12,
     paddingBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  iconBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: C.field,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  notifDot: {
+    position: 'absolute',
+    top: 7,
+    right: 7,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: C.orange,
+    borderWidth: 1.5,
+    borderColor: C.field,
   },
   scrollContent: { paddingBottom: 32 },
   rowCard: {

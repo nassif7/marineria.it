@@ -115,6 +115,7 @@
       "no-notifications": "Nessuna notifica",
       "notifications-count_one": "{{count}} notifica",
       "notifications-count_other": "{{count}} notifiche",
+      "notifications-title": "Notifiche",
       "registered-on": "Iscritta il {{date}}",
       "last-access": "Ultimo accesso {{date}}"
     }
@@ -262,6 +263,7 @@
     "leave-feedback": "Lascia un feedback",
     "version": "Marineria.it · versione {{version}}",
     "change-language": "Cambia lingua",
+    "switch-language-to": "Passa a {{language}}",
     "notifications": "Notifiche",
     "login-as-crew": "Accedi come equipaggio",
     "login-as-recruiter": "Accedi come datore di lavoro",
