@@ -111,6 +111,7 @@
       "action-docs-sub": "{{count}} corsi caricati",
       "action-availability": "Disponibilità",
       "action-availability-sub": "Dal {{date}}",
+      "coming-soon": "Prossimamente",
       "no-notifications": "Nessuna notifica",
       "notifications-count_one": "{{count}} notifica",
       "notifications-count_other": "{{count}} notifiche",

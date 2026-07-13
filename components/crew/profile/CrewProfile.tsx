@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC, useMemo, useState } from 'react'
 import { View, Text, Pressable, ScrollView, StyleSheet, Image, RefreshControl } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import {
@@ -18,6 +18,7 @@ import { getAgeByYear } from '@/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 import { C } from '@/components/pro/tokens'
 import { Loading } from '@/components/ui'
+import PublicPreviewModal from './PublicPreviewModal'
 
 const GREEN_SOFT = '#E8F8EB'
 const GREEN_TEXT = '#0F7A28'
@@ -134,25 +135,40 @@ const ActionRow: FC<{
   sub?: string
   accent?: boolean
   last?: boolean
+  disabled?: boolean
   onPress?: () => void
-}> = ({ icon: Icon, title, sub, accent, last, onPress }) => (
-  <Pressable style={[s.actionRow, last && s.actionRowLast]} onPress={onPress}>
-    <View style={[s.actionIcon, accent && s.actionIconAccent]}>
-      <Icon size={18} color={accent ? C.orange : C.ink2} strokeWidth={1.8} />
-    </View>
-    <View style={{ flex: 1, minWidth: 0 }}>
-      <Text style={s.actionTitle}>{title}</Text>
-      {sub ? <Text style={s.actionSub}>{sub}</Text> : null}
-    </View>
-    <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
-  </Pressable>
-)
+}> = ({ icon: Icon, title, sub, accent, last, disabled, onPress }) => {
+  const { t } = useTranslation('home-screen')
+  return (
+    <Pressable
+      style={[s.actionRow, last && s.actionRowLast, disabled && s.actionRowDisabled]}
+      onPress={onPress}
+      disabled={disabled}
+    >
+      <View style={[s.actionIcon, accent && !disabled && s.actionIconAccent]}>
+        <Icon size={18} color={disabled ? C.ink4 : accent ? C.orange : C.ink2} strokeWidth={1.8} />
+      </View>
+      <View style={{ flex: 1, minWidth: 0 }}>
+        <Text style={s.actionTitle}>{title}</Text>
+        {sub ? <Text style={s.actionSub}>{sub}</Text> : null}
+      </View>
+      {disabled ? (
+        <View style={s.comingSoonBadge}>
+          <Text style={s.comingSoonText}>{t('crew-profile.coming-soon')}</Text>
+        </View>
+      ) : (
+        <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
+      )}
+    </Pressable>
+  )
+}
 
 // ── Main screen ─────────────────────────────────────────────
 
 const CrewProfile: FC = () => {
   const { t } = useTranslation('home-screen')
   const { crew, notifications, isLoading, isRefetching, refetch } = useCrew()
+  const [previewVisible, setPreviewVisible] = useState(false)
 
   const age = crew?.yearofBirth ? getAgeByYear(crew.yearofBirth) : null
   const photoUrl = crew?.userPhoto ? getPhotoUrl(crew.userPhoto) : null
@@ -324,16 +340,23 @@ const CrewProfile: FC = () => {
         <Text style={s.eyebrow}>{t('crew-profile.section-profile')}</Text>
         <View style={s.rowCard}>
           <ActionRow
+            icon={Users}
+            title={t('crew-profile.action-preview')}
+            sub={t('crew-profile.action-preview-sub')}
+            onPress={() => setPreviewVisible(true)}
+          />
+          <ActionRow
             icon={Edit2}
             title={t('crew-profile.action-edit')}
             sub={t('crew-profile.action-edit-sub', { count: missing })}
             accent
+            disabled
           />
-          <ActionRow icon={Users} title={t('crew-profile.action-preview')} sub={t('crew-profile.action-preview-sub')} />
           <ActionRow
             icon={FileText}
             title={t('crew-profile.action-docs')}
             sub={t('crew-profile.action-docs-sub', { count: coursesList.length })}
+            disabled
           />
           <ActionRow
             icon={Calendar}
@@ -343,6 +366,7 @@ const CrewProfile: FC = () => {
                 ? t('crew-profile.action-availability-sub', { date: crew.dateAvailability })
                 : availabilityLabel
             }
+            disabled
             last
           />
         </View>
@@ -359,6 +383,8 @@ const CrewProfile: FC = () => {
           </Text>
         ) : null}
       </ScrollView>
+
+      <PublicPreviewModal visible={previewVisible} onClose={() => setPreviewVisible(false)} />
     </View>
   )
 }
@@ -497,6 +523,7 @@ const s = StyleSheet.create({
     borderBottomColor: C.hair2,
   },
   actionRowLast: { borderBottomWidth: 0 },
+  actionRowDisabled: { opacity: 0.45 },
   actionIcon: {
     width: 36,
     height: 36,
@@ -509,6 +536,14 @@ const s = StyleSheet.create({
   actionIconAccent: { backgroundColor: C.orangeSoft },
   actionTitle: { fontSize: 15, fontWeight: '600', color: C.ink, letterSpacing: -0.1 },
   actionSub: { fontSize: 12, color: C.ink3, marginTop: 1 },
+  comingSoonBadge: {
+    flexShrink: 0,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 99,
+    backgroundColor: C.orangeSoft,
+  },
+  comingSoonText: { fontSize: 10, fontWeight: '700', color: C.orangeText, letterSpacing: 0.2 },
   footerMeta: {
     textAlign: 'center',
     fontSize: 11,

@@ -111,6 +111,7 @@
       "action-docs-sub": "{{count}} courses uploaded",
       "action-availability": "Availability",
       "action-availability-sub": "From {{date}}",
+      "coming-soon": "Coming soon",
       "no-notifications": "No notifications",
       "notifications-count_one": "{{count}} notification",
       "notifications-count_other": "{{count}} notifications",
