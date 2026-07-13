@@ -95,8 +95,9 @@ const JobOfferList: FC = () => {
           </View>
 
           {/* Filter chips */}
+          {/* "saved" filter hidden until the API supports it — kept in FILTERS/counts/data above, just not rendered */}
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={ls.filtersRow}>
-            {FILTERS.map((f) => {
+            {FILTERS.filter((f) => f.key !== 'saved').map((f) => {
               const isActive = filter === f.key
               return (
                 <Pressable

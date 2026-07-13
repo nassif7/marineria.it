@@ -19,6 +19,9 @@ import ApplyModal from './ApplyModal'
 const MATCH_BG = '#E8F5EE'
 const MATCH_TEXT = '#1B7F4E'
 
+// Saved-offers API isn't ready yet — hide the save/bookmark controls without removing the logic.
+const SHOW_SAVE_OFFER = false
+
 // ─── Shared atoms ─────────────────────────────────────────────
 
 function MatchChip({ matching, label }: { matching: boolean; label: string }) {
@@ -177,14 +180,18 @@ export default function OfferDetailsScreen() {
           <Text style={ds.refText}>
             {t('job-reference', { ns: 'offer' })} · {ref}
           </Text>
-          <Pressable onPress={() => toggleSaved(offerId)}>
-            <Bookmark
-              size={20}
-              color={isSaved ? C.orange : C.ink2}
-              strokeWidth={1.8}
-              fill={isSaved ? C.orange : 'none'}
-            />
-          </Pressable>
+          {SHOW_SAVE_OFFER ? (
+            <Pressable onPress={() => toggleSaved(offerId)}>
+              <Bookmark
+                size={20}
+                color={isSaved ? C.orange : C.ink2}
+                strokeWidth={1.8}
+                fill={isSaved ? C.orange : 'none'}
+              />
+            </Pressable>
+          ) : (
+            <View style={{ width: 20 }} />
+          )}
         </View>
 
         {/* Chips */}
@@ -248,14 +255,16 @@ export default function OfferDetailsScreen() {
 
       {/* ── Fixed action bar ── */}
       <View style={ds.actionBar}>
-        <Pressable style={[ds.secondaryBtn, isSaved && ds.secondaryBtnSaved]} onPress={() => toggleSaved(offerId)}>
-          <Bookmark
-            size={20}
-            color={isSaved ? C.orange : C.ink2}
-            strokeWidth={1.8}
-            fill={isSaved ? C.orange : 'none'}
-          />
-        </Pressable>
+        {SHOW_SAVE_OFFER && (
+          <Pressable style={[ds.secondaryBtn, isSaved && ds.secondaryBtnSaved]} onPress={() => toggleSaved(offerId)}>
+            <Bookmark
+              size={20}
+              color={isSaved ? C.orange : C.ink2}
+              strokeWidth={1.8}
+              fill={isSaved ? C.orange : 'none'}
+            />
+          </Pressable>
+        )}
         <Pressable style={ds.secondaryBtn} onPress={handleShare}>
           <Share2 size={20} color={C.ink2} strokeWidth={1.8} />
         </Pressable>

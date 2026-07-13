@@ -4,8 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { X, Send, UserRound } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
 import { C } from '@/components/pro/tokens'
-import { useAuthBrowser } from '@/hooks'
-import { useCrew } from '@/Providers/CrewProvider'
+import PublicPreviewModal from '@/components/crew/profile/PublicPreviewModal'
 
 interface ApplyModalProps {
   visible: boolean
@@ -16,15 +15,11 @@ interface ApplyModalProps {
 
 const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm, isSubmitting }) => {
   const [consentAccepted, setConsentAccepted] = useState(false)
-  const {
-    t,
-    i18n: { language },
-  } = useTranslation(['offer-screen', 'common'])
+  const [previewVisible, setPreviewVisible] = useState(false)
+  const { t } = useTranslation(['offer-screen', 'common'])
   const { top, bottom } = useSafeAreaInsets()
-  const { crew: user } = useCrew()
-  const { openUrl, isLoading: isUrlLoading } = useAuthBrowser()
 
-  const handleReviewProfile = () => openUrl(`https://www.marineria.it/${language}/CV.aspx?idutente=${user?.iduser}`)
+  const handleReviewProfile = () => setPreviewVisible(true)
 
   const handleApply = () => {
     if (consentAccepted) {
@@ -45,84 +40,88 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ visible, onClose, onConfirm, is
   ]
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={handleClose}>
-      <View style={[ms.container, { paddingTop: top }]}>
-        {/* Header */}
-        <View style={ms.header}>
-          <Text style={ms.title}>{t('confirm-application', { ns: 'offer-screen' })}</Text>
-          <Pressable style={ms.closeBtn} onPress={handleClose}>
-            <X size={16} color={C.ink2} strokeWidth={2.5} />
-          </Pressable>
-        </View>
-
-        {/* Body */}
-        <ScrollView style={ms.body} contentContainerStyle={ms.bodyContent} showsVerticalScrollIndicator={false}>
-          <View style={ms.content}>
-            <Text style={ms.sectionLabel}>{t('privacy', { ns: 'offer-screen' })}</Text>
-            <Text style={ms.bodyText}>{t('privacy-policy', { ns: 'offer-screen' })}</Text>
-
-            <View style={ms.divider} />
-
-            <Text style={ms.sectionLabel}>{t('compliance', { ns: 'offer-screen' })}</Text>
-            {complianceItems.map((item, i) => (
-              <View key={i} style={ms.itemRow}>
-                <View style={ms.badge}>
-                  <Text style={ms.badgeText}>–</Text>
-                </View>
-                <Text style={ms.itemText}>{item}</Text>
-              </View>
-            ))}
-
-            <View style={ms.divider} />
-
-            <Pressable style={ms.checkRow} onPress={() => setConsentAccepted((v) => !v)}>
-              <View style={[ms.checkbox, consentAccepted && ms.checkboxChecked]}>
-                {consentAccepted && <View style={ms.checkmark} />}
-              </View>
-              <Text style={ms.checkLabel}>{t('agree', { ns: 'offer-screen' })}</Text>
+    <>
+      <Modal visible={visible && !previewVisible} transparent animationType="slide" onRequestClose={handleClose}>
+        <View style={[ms.container, { paddingTop: top }]}>
+          {/* Header */}
+          <View style={ms.header}>
+            <Text style={ms.title}>{t('confirm-application', { ns: 'offer-screen' })}</Text>
+            <Pressable style={ms.closeBtn} onPress={handleClose}>
+              <X size={16} color={C.ink2} strokeWidth={2.5} />
             </Pressable>
           </View>
-        </ScrollView>
 
-        {/* Footer — morphs after agreement */}
-        <View style={[ms.footer, { paddingBottom: bottom + 12 }]}>
-          {consentAccepted ? (
-            <View style={ms.actionRow}>
-              <Pressable style={ms.iconBtn} onPress={handleClose}>
-                <X size={18} color="#FFFFFF" strokeWidth={2.2} />
-              </Pressable>
-              <Pressable style={ms.profileIconBtn} onPress={handleReviewProfile} disabled={isUrlLoading}>
-                <UserRound size={18} color="#FFFFFF" strokeWidth={2.2} />
-              </Pressable>
-              <Pressable style={ms.applyBtn} onPress={handleApply} disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <ActivityIndicator color="#FFFFFF" />
-                ) : (
-                  <>
-                    <Send size={17} color="#FFFFFF" strokeWidth={2} />
-                    <Text style={ms.applyText}>{t('apply-for-this-position', { ns: 'offer-screen' })}</Text>
-                  </>
-                )}
+          {/* Body */}
+          <ScrollView style={ms.body} contentContainerStyle={ms.bodyContent} showsVerticalScrollIndicator={false}>
+            <View style={ms.content}>
+              <Text style={ms.sectionLabel}>{t('privacy', { ns: 'offer-screen' })}</Text>
+              <Text style={ms.bodyText}>{t('privacy-policy', { ns: 'offer-screen' })}</Text>
+
+              <View style={ms.divider} />
+
+              <Text style={ms.sectionLabel}>{t('compliance', { ns: 'offer-screen' })}</Text>
+              {complianceItems.map((item, i) => (
+                <View key={i} style={ms.itemRow}>
+                  <View style={ms.badge}>
+                    <Text style={ms.badgeText}>–</Text>
+                  </View>
+                  <Text style={ms.itemText}>{item}</Text>
+                </View>
+              ))}
+
+              <View style={ms.divider} />
+
+              <Pressable style={ms.checkRow} onPress={() => setConsentAccepted((v) => !v)}>
+                <View style={[ms.checkbox, consentAccepted && ms.checkboxChecked]}>
+                  {consentAccepted && <View style={ms.checkmark} />}
+                </View>
+                <Text style={ms.checkLabel}>{t('agree', { ns: 'offer-screen' })}</Text>
               </Pressable>
             </View>
-          ) : (
-            <>
-              <Pressable style={ms.profileBtn} onPress={handleReviewProfile} disabled={isUrlLoading}>
-                <Text style={ms.profileBtnText}>{t('review-your-profile', { ns: 'offer-screen' })}</Text>
-              </Pressable>
+          </ScrollView>
+
+          {/* Footer — morphs after agreement */}
+          <View style={[ms.footer, { paddingBottom: bottom + 12 }]}>
+            {consentAccepted ? (
               <View style={ms.actionRow}>
-                <Pressable style={ms.cancelBtn} onPress={handleClose}>
-                  <Text style={ms.cancelText}>{t('cancel', { ns: 'common' })}</Text>
+                <Pressable style={ms.iconBtn} onPress={handleClose}>
+                  <X size={18} color="#FFFFFF" strokeWidth={2.2} />
                 </Pressable>
-                <Pressable style={[ms.applyBtn, ms.applyBtnDisabled]} disabled>
-                  <Text style={ms.applyText}>{t('apply', { ns: 'offer-screen' })}</Text>
+                <Pressable style={ms.profileIconBtn} onPress={handleReviewProfile}>
+                  <UserRound size={18} color="#FFFFFF" strokeWidth={2.2} />
+                </Pressable>
+                <Pressable style={ms.applyBtn} onPress={handleApply} disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <ActivityIndicator color="#FFFFFF" />
+                  ) : (
+                    <>
+                      <Send size={17} color="#FFFFFF" strokeWidth={2} />
+                      <Text style={ms.applyText}>{t('apply-for-this-position', { ns: 'offer-screen' })}</Text>
+                    </>
+                  )}
                 </Pressable>
               </View>
-            </>
-          )}
+            ) : (
+              <>
+                <Pressable style={ms.profileBtn} onPress={handleReviewProfile}>
+                  <Text style={ms.profileBtnText}>{t('review-your-profile', { ns: 'offer-screen' })}</Text>
+                </Pressable>
+                <View style={ms.actionRow}>
+                  <Pressable style={ms.cancelBtn} onPress={handleClose}>
+                    <Text style={ms.cancelText}>{t('cancel', { ns: 'common' })}</Text>
+                  </Pressable>
+                  <Pressable style={[ms.applyBtn, ms.applyBtnDisabled]} disabled>
+                    <Text style={ms.applyText}>{t('apply', { ns: 'offer-screen' })}</Text>
+                  </Pressable>
+                </View>
+              </>
+            )}
+          </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+
+      <PublicPreviewModal visible={previewVisible} onClose={() => setPreviewVisible(false)} />
+    </>
   )
 }
 
