@@ -73,13 +73,17 @@ export const getCrewCV = async (ownerToken: string, crewId: string, language?: s
   return apiFetchJson<TCrew[]>(url)
 }
 
-export const getCrewCvPost = async (crewId: string, ownerToken: string, language?: string): Promise<TCrew[]> => {
+export const getCrewCvPost = async (crewId: string, ownerToken: string, language?: string): Promise<TCrew> => {
   const languageCode = getLanguageCode(language)
-  return apiFetchJson<TCrew[]>(`${BASE_URL}/api/Owneruser/CvUser/${crewId}`, {
+  const url = `${BASE_URL}/api/Owneruser/CvUser/${crewId}`
+  const body = { userToken: ownerToken, language: languageCode }
+  // The endpoint inconsistently returns either a bare TCrew object or a single-item TCrew[] array.
+  const data = await apiFetchJson<TCrew | TCrew[]>(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
-    body: JSON.stringify({ userToken: ownerToken, language: languageCode }),
+    body: JSON.stringify(body),
   })
+  return Array.isArray(data) ? data[0] : data
 }
 
 export const contactCrew = async (

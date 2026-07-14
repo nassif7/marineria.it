@@ -513,7 +513,7 @@ const CrewProfile = () => {
       return getCrewCvPost(crewId as string, token, language)
     },
   })
-  const crew = isSuccess ? data?.[0] : null
+  const crew = isSuccess ? data : null
   const { refreshing, onRefresh } = useManualRefresh(refetch)
 
   const { mutate: handleContactCrew, isPending } = useMutation({
