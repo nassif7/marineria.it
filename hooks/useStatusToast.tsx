@@ -1,6 +1,6 @@
 import React from 'react'
 import { useToast, Toast, ToastTitle, ToastDescription } from '@/components/ui/toast'
-import { HStack, VStack, Icon } from '@/components/ui'
+import { HStack, VStack } from '@/components/ui'
 import { Pressable } from '@/components/ui/pressable'
 import { X } from 'lucide-react-native'
 
@@ -44,8 +44,8 @@ const useStatusToast = () => {
               </VStack>
             </HStack>
             <HStack className="min-[450px]:gap-3 gap-1">
-              <Pressable onPress={() => toast.close(id)}>
-                <Icon as={X} />
+              <Pressable onPress={() => toast.close(id)} hitSlop={10} style={{ padding: 2 }}>
+                <X size={18} color="#FFFFFF" strokeWidth={2.4} />
               </Pressable>
             </HStack>
           </Toast>

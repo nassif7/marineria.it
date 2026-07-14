@@ -226,6 +226,7 @@
     "certificate-of-competence": "Certificate of Competence (CoC)",
     "no-certificate-of-competence": "No Certificate of Competence",
     "contact-crew": "Contact this candidate",
+    "already-contacted": "Already contacted",
     "remove-crew": "Remove from crew list",
     "unlock-contact-information": "Unlock contact information",
     "receive-cv": "Get his CV via email in PDF format",

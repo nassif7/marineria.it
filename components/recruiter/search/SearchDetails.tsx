@@ -76,7 +76,9 @@ export default function SearchDetails() {
           >
             <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
           </Pressable>
-          <Text style={sd.navRef}>Ref · {referenceShort}</Text>
+          <Text style={sd.navRef} pointerEvents="none">
+            Ref · {referenceShort}
+          </Text>
           <View style={sd.navRightGroup}>
             <TouchableOpacity style={sd.editBtn} onPress={handleEdit} disabled={isUrlLoading}>
               <Edit size={14} color="#FFF" strokeWidth={2} />

@@ -132,7 +132,8 @@ export default function OfferDetailsScreen() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['offer', offerId] })
-      queryClient.invalidateQueries({ queryKey: ['offers'] })
+      queryClient.invalidateQueries({ queryKey: ['offers-all'] })
+      queryClient.invalidateQueries({ queryKey: ['offers-matching'] })
       setShowApply(false)
     },
   })

@@ -32,6 +32,7 @@ import {
   Info,
   AlertCircle,
   Headphones,
+  Send,
 } from 'lucide-react-native'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { useStatusToast, useManualRefresh } from '@/hooks'
@@ -531,7 +532,7 @@ const CrewProfile = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['recruiter-crew-cv', searchId, crewId] })
-      queryClient.invalidateQueries({ queryKey: ['recruiter-crew-list', searchId] })
+      queryClient.invalidateQueries({ queryKey: ['recruiter-crew-list-post', searchId] })
       setContactModalVisible(false)
     },
   })
@@ -551,7 +552,7 @@ const CrewProfile = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['recruiter-crew-cv', searchId, crewId] })
-      queryClient.invalidateQueries({ queryKey: ['recruiter-crew-list', searchId] })
+      queryClient.invalidateQueries({ queryKey: ['recruiter-crew-list-post', searchId] })
       router.back()
     },
   })
@@ -756,6 +757,14 @@ const CrewProfile = () => {
 
           {/* Status pills */}
           <View style={cp.pillsRow}>
+            {isContacted && (
+              <View style={cp.pillOrange}>
+                <Send size={10} color={ORANGE_TEXT} strokeWidth={2.4} />
+                <Text style={[cp.pillText, { color: ORANGE_TEXT }]}>
+                  {t('already-contacted', { ns: 'crew-screen' })}
+                </Text>
+              </View>
+            )}
             {hasSeamansBook && (
               <View style={[cp.pill, cp.pillGreen]}>
                 <Check size={10} color={GREEN_TEXT} strokeWidth={2.8} />
@@ -952,11 +961,13 @@ const CrewProfile = () => {
           <Trash2 size={18} color="#DC2626" strokeWidth={1.8} />
         </Pressable>
         <Pressable
-          style={[cp.contactBtn, isActionLoading && { opacity: 0.6 }]}
+          style={[cp.contactBtn, (isActionLoading || isContacted) && { opacity: 0.6 }]}
           onPress={() => setContactModalVisible(true)}
-          disabled={isActionLoading}
+          disabled={isActionLoading || isContacted}
         >
-          <Text style={cp.contactBtnText}>{t('contact-crew')}</Text>
+          <Text style={cp.contactBtnText}>
+            {isContacted ? t('already-contacted', { ns: 'crew-screen' }) : t('contact-crew')}
+          </Text>
         </Pressable>
       </View>
 
