@@ -3,16 +3,17 @@ import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native'
 import { useQuery } from '@tanstack/react-query'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { ChevronLeft } from 'lucide-react-native'
+import { ChevronLeft, Headphones } from 'lucide-react-native'
 import { consumeFromHome } from '@/utils/fromHomeNav'
 // import { getCrewList } from '@/api'
-import { getCrewListPost } from '@/api'
+import { getCrewListPost, supportTeam } from '@/api'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { useRecruiterSearch } from '@/Providers/RecruiterSearchProvider'
 import { Loading, RefreshControl } from '@/components/ui'
 import { ErrorMessage, EmptyList } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
 import { useManualRefresh } from '@/hooks'
+import ContactSupport from '@/components/common/ContactSupport'
 import CrewListItem from './CrewListItem'
 
 type FilterKey = 'all' | 'to-contact' | 'contacted'
@@ -74,7 +75,15 @@ const CrewList: FC = () => {
           <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
         </Pressable>
         <Text style={cl.navRef}>{referenceShort ? `Ref · ${referenceShort}` : ''}</Text>
-        <View style={{ width: 36 }} />
+        <ContactSupport
+          title={t('contact-support', { ns: 'settings-screen' })}
+          supportTeam={supportTeam}
+          renderTrigger={({ onPress }) => (
+            <Pressable style={cl.iconBtn} onPress={onPress}>
+              <Headphones size={18} color={C.ink2} strokeWidth={1.8} />
+            </Pressable>
+          )}
+        />
       </View>
 
       {isLoading && <Loading />}

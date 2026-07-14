@@ -35,9 +35,9 @@ const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
     <Pressable style={si.card} onPress={viewSearch}>
       {/* Top row: vessel chip + status */}
       <View style={si.topRow}>
-        {search.jobOffer ? (
+        {search.mainPosition ? (
           <View style={si.positionChip}>
-            <Text style={si.positionChipText}>{search.jobOffer}</Text>
+            <Text style={si.positionChipText}>{search.mainPosition}</Text>
           </View>
         ) : (
           <View />

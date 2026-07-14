@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, ScrollView, Pressable, StyleSheet, TouchableOpacity, Linking } from 'react-native'
 import { Stack } from 'expo-router'
-import { Anchor, Sparkles, MapPin, ChevronLeft, ChevronRight, Edit } from 'lucide-react-native'
+import { Anchor, Sparkles, MapPin, ChevronLeft, ChevronRight, Edit, Headphones } from 'lucide-react-native'
 import { router } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { consumeFromHome } from '@/utils/fromHomeNav'
@@ -12,6 +12,8 @@ import { Loading } from '@/components/ui'
 import { ErrorMessage } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
 import HtmlText from '@/components/pro/HtmlText'
+import { supportTeam } from '@/api'
+import ContactSupport from '@/components/common/ContactSupport'
 
 const isVal = (s?: string | null): s is string => !!s && s.trim() !== '' && s.trim().toUpperCase() !== 'NA'
 
@@ -75,10 +77,21 @@ export default function SearchDetails() {
             <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
           </Pressable>
           <Text style={sd.navRef}>Ref · {referenceShort}</Text>
-          <TouchableOpacity style={sd.editBtn} onPress={handleEdit} disabled={isUrlLoading}>
-            <Edit size={14} color="#FFF" strokeWidth={2} />
-            <Text style={sd.editBtnText}>{t('modify-offer', { ns: 'offer' })}</Text>
-          </TouchableOpacity>
+          <View style={sd.navRightGroup}>
+            <TouchableOpacity style={sd.editBtn} onPress={handleEdit} disabled={isUrlLoading}>
+              <Edit size={14} color="#FFF" strokeWidth={2} />
+              <Text style={sd.editBtnText}>{t('modify-offer', { ns: 'offer' })}</Text>
+            </TouchableOpacity>
+            <ContactSupport
+              title={t('contact-support', { ns: 'settings-screen' })}
+              supportTeam={supportTeam}
+              renderTrigger={({ onPress }) => (
+                <Pressable style={sd.iconBtn} onPress={onPress}>
+                  <Headphones size={18} color={C.ink2} strokeWidth={1.8} />
+                </Pressable>
+              )}
+            />
+          </View>
         </View>
         <Text style={sd.headerTitle}>{search.offer?.trim() || '—'}</Text>
         <Text style={sd.heroMeta}>{t('ref-published-date', { ref: referenceShort, date: search.offerdate })}</Text>
@@ -277,6 +290,7 @@ const sd = StyleSheet.create({
     borderBottomColor: C.hair2,
   },
   navRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 },
+  navRightGroup: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   iconBtn: {
     width: 36,
     height: 36,

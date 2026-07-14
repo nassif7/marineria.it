@@ -133,6 +133,10 @@ const RecruiterProfile: FC = () => {
     <View style={{ flex: 1, backgroundColor: C.bg }}>
       {/* Top bar */}
       <View style={s.topBar}>
+        <Pressable style={s.iconBtn} onPress={() => setNotificationsVisible(true)}>
+          <Bell size={18} color={C.ink2} strokeWidth={1.8} />
+          {hasNotifications && <View style={s.notifDot} />}
+        </Pressable>
         <ContactSupport
           title={t('contact-support', { ns: 'settings-screen' })}
           supportTeam={supportTeam}
@@ -142,10 +146,6 @@ const RecruiterProfile: FC = () => {
             </Pressable>
           )}
         />
-        <Pressable style={s.iconBtn} onPress={() => setNotificationsVisible(true)}>
-          <Bell size={18} color={C.ink2} strokeWidth={1.8} />
-          {hasNotifications && <View style={s.notifDot} />}
-        </Pressable>
       </View>
 
       <ScrollView

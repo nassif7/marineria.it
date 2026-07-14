@@ -17,17 +17,19 @@ import {
   Phone,
   Info,
   AlertCircle,
+  Headphones,
 } from 'lucide-react-native'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { useStatusToast, useManualRefresh } from '@/hooks'
 // import { getCrewCV, contactCrew, removeCrew } from '@/api'
-import { getCrewCvPost, contactCrew, removeCrew } from '@/api'
+import { getCrewCvPost, contactCrew, removeCrew, supportTeam } from '@/api'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 import { Loading, RefreshControl } from '@/components/ui'
 import { ApiError } from '@/api/utils'
 import { C } from '@/components/pro/tokens'
+import ContactSupport from '@/components/common/ContactSupport'
 import ContactCrewModal from './ContactCrewModal'
 import { TCrewExperience, TCrewReference } from '@/api/types'
 
@@ -485,7 +487,15 @@ const CrewProfile = () => {
           <Pressable style={cp.iconBtn} onPress={() => router.back()}>
             <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
           </Pressable>
-          <View style={{ width: 36 }} />
+          <ContactSupport
+            title={t('contact-support', { ns: 'settings-screen' })}
+            supportTeam={supportTeam}
+            renderTrigger={({ onPress }) => (
+              <Pressable style={cp.iconBtn} onPress={onPress}>
+                <Headphones size={18} color={C.ink2} strokeWidth={1.8} />
+              </Pressable>
+            )}
+          />
         </View>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32, gap: 16 }}>
           <AlertCircle size={40} color="#EF4444" strokeWidth={1.6} />
@@ -537,7 +547,15 @@ const CrewProfile = () => {
           <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
         </Pressable>
         <Text style={cp.navTitle}>CV #{crew.iduser}</Text>
-        <View style={{ width: 36 }} />
+        <ContactSupport
+          title={t('contact-support', { ns: 'settings-screen' })}
+          supportTeam={supportTeam}
+          renderTrigger={({ onPress }) => (
+            <Pressable style={cp.iconBtn} onPress={onPress}>
+              <Headphones size={18} color={C.ink2} strokeWidth={1.8} />
+            </Pressable>
+          )}
+        />
       </View>
 
       <ScrollView
