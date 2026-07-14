@@ -15,6 +15,7 @@ import {
   AlertTriangle,
   MoreHorizontal,
   Phone,
+  Mail,
   Info,
   AlertCircle,
   Headphones,
@@ -27,9 +28,10 @@ import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 import { Loading, RefreshControl } from '@/components/ui'
-import { ApiError } from '@/api/utils'
+import { ApiError, parseServerBool } from '@/api/utils'
 import { C } from '@/components/pro/tokens'
 import ContactSupport from '@/components/common/ContactSupport'
+import { PhotoSlider } from '@/components/appUI'
 import ContactCrewModal from './ContactCrewModal'
 import { TCrewExperience, TCrewReference } from '@/api/types'
 
@@ -249,6 +251,32 @@ const cp = StyleSheet.create({
   refRole: { fontSize: 14, fontWeight: '700', color: C.ink, marginBottom: 2 },
   refMeta: { fontSize: 12, color: C.ink3 },
   refYear: { fontSize: 11, color: C.ink4, marginTop: 2 },
+  refDetailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 6,
+  },
+  refDetailIcon: {
+    width: 26,
+    height: 26,
+    borderRadius: 8,
+    backgroundColor: C.orangeSoft,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  refDetailText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: C.ink,
+  },
+  refNotes: {
+    fontSize: 13,
+    lineHeight: 19,
+    color: C.ink2,
+    marginTop: 8,
+  },
   contactRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -344,9 +372,14 @@ const ExperienceItem: FC<{ exp: TCrewExperience; index: number }> = ({ exp, inde
   )
 }
 
-const ReferenceItem: FC<{ ref: TCrewReference; index: number }> = ({ ref, index }) => {
+const ReferenceItem: FC<{ ref: TCrewReference; index: number; isContacted: boolean }> = ({
+  ref,
+  index,
+  isContacted,
+}) => {
   const [open, setOpen] = useState(false)
-  const hasDetail = !!(ref.telephone || ref.email || ref.notes)
+  const hasContactDetail = isContacted && !!(ref.telephone || ref.email)
+  const hasDetail = hasContactDetail || !!ref.notes
   return (
     <Pressable onPress={() => hasDetail && setOpen((v) => !v)} style={[cp.accordionRow, index > 0 && cp.refRowBorder]}>
       <View style={cp.accordionHeader}>
@@ -373,9 +406,23 @@ const ReferenceItem: FC<{ ref: TCrewReference; index: number }> = ({ ref, index 
       </View>
       {open && (
         <View style={cp.accordionBody}>
-          {ref.telephone ? <Text style={cp.refMeta}>📞 {ref.telephone}</Text> : null}
-          {ref.email ? <Text style={cp.refMeta}>✉ {ref.email}</Text> : null}
-          {ref.notes ? <Text style={[cp.refMeta, { marginTop: 4 }]}>{ref.notes}</Text> : null}
+          {hasContactDetail && ref.telephone ? (
+            <View style={cp.refDetailRow}>
+              <View style={cp.refDetailIcon}>
+                <Phone size={13} color={C.orange} strokeWidth={1.8} />
+              </View>
+              <Text style={cp.refDetailText}>{ref.telephone}</Text>
+            </View>
+          ) : null}
+          {hasContactDetail && ref.email ? (
+            <View style={cp.refDetailRow}>
+              <View style={cp.refDetailIcon}>
+                <Mail size={13} color={C.orange} strokeWidth={1.8} />
+              </View>
+              <Text style={cp.refDetailText}>{ref.email}</Text>
+            </View>
+          ) : null}
+          {ref.notes ? <Text style={cp.refNotes}>{ref.notes}</Text> : null}
         </View>
       )}
     </Pressable>
@@ -398,6 +445,8 @@ const FieldRow: FC<{ label: string; value?: string | null; bold?: boolean }> = (
 
 const CrewProfile = () => {
   const [contactModalVisible, setContactModalVisible] = useState(false)
+  const [photoSliderVisible, setPhotoSliderVisible] = useState(false)
+  const [photoSliderIndex, setPhotoSliderIndex] = useState(0)
   const {
     i18n: { language },
     t,
@@ -509,9 +558,12 @@ const CrewProfile = () => {
 
   if (!crew) return null
 
-  const isContacted = crew.contacted === 'True' || crew.contacted === true
+  const isContacted = parseServerBool(crew.contacted)
   const photoUrl = crew.userPhoto ? getPhotoUrl(crew.userPhoto) : null
-  const photoCount = [crew.userPhoto, crew.namephotoA, crew.namephotoB, crew.namephotoC].filter(Boolean).length
+  const photos = [crew.userPhoto, crew.namephotoA, crew.namephotoB, crew.namephotoC]
+    .filter((p): p is string => !!p)
+    .map((p) => getPhotoUrl(p))
+  const photoCount = photos.length
   const age = crew.yearofBirth ? getAgeByYear(crew.yearofBirth) : null
   const { hasCertificateOfCompetence } = getCertificateOfCompetence(crew)
   const hasSeamansBook = getSeamansBook(crew)
@@ -567,7 +619,14 @@ const CrewProfile = () => {
         {/* Hero card */}
         <View style={cp.card}>
           <View style={{ flexDirection: 'row', gap: 14, alignItems: 'flex-start', marginBottom: 14 }}>
-            <View style={{ position: 'relative' }}>
+            <Pressable
+              style={{ position: 'relative' }}
+              disabled={photoCount === 0}
+              onPress={() => {
+                setPhotoSliderIndex(0)
+                setPhotoSliderVisible(true)
+              }}
+            >
               <View style={cp.avatar}>
                 {photoUrl ? (
                   <Image source={{ uri: photoUrl }} style={cp.avatarImg} />
@@ -580,7 +639,7 @@ const CrewProfile = () => {
                   <Text style={cp.photoBadgeText}>{photoCount}</Text>
                 </View>
               )}
-            </View>
+            </Pressable>
 
             <View style={{ flex: 1, minWidth: 0 }}>
               <Text style={cp.heroRole} numberOfLines={2}>
@@ -694,8 +753,8 @@ const CrewProfile = () => {
               <>
                 <Text style={cp.fieldLabel}>{t('languages', { ns: 'crew' })}</Text>
                 <View style={cp.tagsRow}>
-                  {languages.map((l) => (
-                    <View key={l} style={[cp.pill, cp.pillNeutral]}>
+                  {languages.map((l, i) => (
+                    <View key={`${l}-${i}`} style={[cp.pill, cp.pillNeutral]}>
                       <Text style={[cp.pillText, { color: C.ink2 }]}>{l}</Text>
                     </View>
                   ))}
@@ -709,8 +768,8 @@ const CrewProfile = () => {
               <>
                 <Text style={cp.fieldLabel}>{t('corses-and-certificates')}</Text>
                 <View style={cp.tagsRow}>
-                  {coursesList.map((c) => (
-                    <View key={c} style={cp.pillOrange}>
+                  {coursesList.map((c, i) => (
+                    <View key={`${c}-${i}`} style={cp.pillOrange}>
                       <Text style={[cp.pillText, { color: ORANGE_TEXT }]}>{c}</Text>
                     </View>
                   ))}
@@ -771,7 +830,9 @@ const CrewProfile = () => {
               <Text style={cp.emptyStateText}>{t('no-references')}</Text>
             </View>
           ) : (
-            crew.approvedReferences.map((ref, i) => <ReferenceItem key={ref.idReference} ref={ref} index={i} />)
+            crew.approvedReferences.map((ref, i) => (
+              <ReferenceItem key={ref.idReference} ref={ref} index={i} isContacted={isContacted} />
+            ))
           )}
         </SectionCard>
 
@@ -819,6 +880,12 @@ const CrewProfile = () => {
         crew={crew}
         onClose={() => setContactModalVisible(false)}
         onConfirm={handleContactCrew}
+      />
+      <PhotoSlider
+        visible={photoSliderVisible}
+        photos={photos}
+        initialIndex={photoSliderIndex}
+        onClose={() => setPhotoSliderVisible(false)}
       />
     </View>
   )

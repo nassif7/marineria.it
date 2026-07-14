@@ -223,7 +223,7 @@ const cl = StyleSheet.create({
   headerTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    justifyContent: 'space-between',
   },
   residualBadge: {
     flexDirection: 'row',

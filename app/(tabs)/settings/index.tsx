@@ -3,16 +3,29 @@ import * as SecureStore from 'expo-secure-store'
 import * as WebBrowser from 'expo-web-browser'
 import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Globe, Bell, Users, Settings2, FileText, Shield, Star, LogOut, ChevronRight } from 'lucide-react-native'
+import {
+  Globe,
+  Bell,
+  Users,
+  Settings2,
+  FileText,
+  Shield,
+  Headphones,
+  Star,
+  LogOut,
+  ChevronRight,
+} from 'lucide-react-native'
 import { router } from 'expo-router'
 import { TUserRole } from '@/api/types'
 import { TLocales } from '@/localization'
 import { useSession } from '@/Providers/SessionProvider'
 import { useProfile } from '@/hooks'
+import { supportTeam } from '@/api'
 import { C } from '@/components/pro/tokens'
 import SwitchLanguage from '@/components/common/SwitchLanguage'
 import NotificationsToggle from '@/components/common/NotificationsToggle'
 import SwitchUser from '@/components/common/SwitchUser'
+import ContactSupport from '@/components/common/ContactSupport'
 
 const Settings = () => {
   const {
@@ -170,6 +183,22 @@ const Settings = () => {
       {/* ── SUPPORT ──────────────────────────────────── */}
       <Text style={s.sectionLabel}>{t('support')}</Text>
       <View style={s.card}>
+        {/* Contact support — recruiters only, they're the paying users */}
+        {isRecruiter && (
+          <ContactSupport
+            title={t('contact-support')}
+            supportTeam={supportTeam}
+            renderTrigger={({ onPress }) => (
+              <Pressable style={[s.row, s.rowBorder]} onPress={onPress}>
+                <View style={[s.rowIcon, s.rowIconAccent]}>
+                  <Headphones size={18} color={C.orange} strokeWidth={1.8} />
+                </View>
+                <Text style={[s.rowTitle, s.rowFlex]}>{t('contact-support')}</Text>
+                <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
+              </Pressable>
+            )}
+          />
+        )}
         <Pressable style={s.row}>
           <View style={[s.rowIcon, s.rowIconAccent]}>
             <Star size={18} color={C.orange} strokeWidth={1.8} />

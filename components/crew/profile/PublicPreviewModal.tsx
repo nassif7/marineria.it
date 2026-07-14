@@ -332,8 +332,8 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
                   <>
                     <Text style={pv.fieldLabel}>{t('languages', { ns: 'crew' })}</Text>
                     <View style={pv.tagsRow}>
-                      {languages.map((l) => (
-                        <View key={l} style={[pv.pill, pv.pillNeutral]}>
+                      {languages.map((l, i) => (
+                        <View key={`${l}-${i}`} style={[pv.pill, pv.pillNeutral]}>
                           <Text style={[pv.pillText, { color: C.ink2 }]}>{l}</Text>
                         </View>
                       ))}
@@ -347,8 +347,8 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
                   <>
                     <Text style={pv.fieldLabel}>{t('corses-and-certificates', { ns: 'crew-screen' })}</Text>
                     <View style={pv.tagsRow}>
-                      {coursesList.map((c) => (
-                        <View key={c} style={pv.pillOrange}>
+                      {coursesList.map((c, i) => (
+                        <View key={`${c}-${i}`} style={pv.pillOrange}>
                           <Text style={[pv.pillText, { color: ORANGE_TEXT }]}>{c}</Text>
                         </View>
                       ))}

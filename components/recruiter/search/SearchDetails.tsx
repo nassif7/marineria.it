@@ -80,7 +80,7 @@ export default function SearchDetails() {
           <View style={sd.navRightGroup}>
             <TouchableOpacity style={sd.editBtn} onPress={handleEdit} disabled={isUrlLoading}>
               <Edit size={14} color="#FFF" strokeWidth={2} />
-              <Text style={sd.editBtnText}>{t('modify-offer', { ns: 'offer' })}</Text>
+              <Text style={sd.editBtnText}>{t('modify', { ns: 'offer' })}</Text>
             </TouchableOpacity>
             <ContactSupport
               title={t('contact-support', { ns: 'settings-screen' })}
@@ -289,7 +289,13 @@ const sd = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: C.hair2,
   },
-  navRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 },
+  navRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 14,
+    position: 'relative',
+  },
   navRightGroup: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   iconBtn: {
     width: 36,
@@ -299,14 +305,22 @@ const sd = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  navRef: { fontSize: 13, fontWeight: '600', color: C.ink3 },
+  navRef: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    fontSize: 13,
+    fontWeight: '600',
+    color: C.ink3,
+  },
   editBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
     paddingHorizontal: 12,
     paddingVertical: 7,
-    borderRadius: 99,
+    borderRadius: 10,
     backgroundColor: C.orange,
   },
   editBtnText: { fontSize: 13, fontWeight: '600', color: '#FFF' },
@@ -384,7 +398,10 @@ const sd = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
+    backgroundColor: C.field,
+    borderRadius: 10,
     paddingVertical: 14,
+    paddingHorizontal: 14,
     marginBottom: 16,
   },
   funnelStage: { flex: 1, alignItems: 'center' },
