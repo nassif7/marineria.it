@@ -115,7 +115,12 @@ export default function OfferDetailsScreen() {
   const { mutate: handleConfirmApply, isPending } = useMutation({
     mutationFn: () => applyToOffer(token, parseInt(offerId as string), language),
     onSuccess: () => {
-      showToast({ emphasize: 'success', title: t('success', { ns: 'common' }) })
+      showToast({
+        emphasize: 'success',
+        title: t('success', { ns: 'common' }),
+        description: t('apply-success', { ns: 'offer' }),
+        duration: 8000,
+      })
     },
     onError: (error: unknown) => {
       const message = error instanceof ApiError && error.title !== 'unknown-error' ? error.title : null
@@ -161,10 +166,13 @@ export default function OfferDetailsScreen() {
   ]
 
   const isMatching = !!offer?.offerApplicable
-  const canApply = isCvPublished && !offer?.alreadyApplied && isMatching
-  const applyLabel = isMatching
-    ? t('apply-for-this-position', { ns: 'offer-screen' })
-    : t('not-matching-why', { ns: 'offer-screen' })
+  const alreadyApplied = !!offer?.alreadyApplied
+  const canApply = isCvPublished && !alreadyApplied && isMatching
+  const applyLabel = alreadyApplied
+    ? t('already-applied', { ns: 'offer-screen' })
+    : isMatching
+      ? t('apply-for-this-position', { ns: 'offer-screen' })
+      : t('not-matching-why', { ns: 'offer-screen' })
 
   return (
     <View style={{ flex: 1, backgroundColor: C.bg }}>
@@ -269,9 +277,13 @@ export default function OfferDetailsScreen() {
           <Share2 size={20} color={C.ink2} strokeWidth={1.8} />
         </Pressable>
         <Pressable
-          style={[ds.applyBtn, !isMatching && ds.applyBtnSecondary]}
-          onPress={pendingReasons ? undefined : handleApply}
-          disabled={pendingReasons}
+          style={[
+            ds.applyBtn,
+            !isMatching && !alreadyApplied && ds.applyBtnSecondary,
+            alreadyApplied && ds.applyBtnDisabled,
+          ]}
+          onPress={pendingReasons || alreadyApplied ? undefined : handleApply}
+          disabled={pendingReasons || alreadyApplied}
         >
           {pendingReasons && <ActivityIndicator color="#FFFFFF" style={ds.btnSpinner} />}
           <Text style={[ds.applyBtnText, !isMatching && ds.applyBtnTextSecondary]}>{applyLabel}</Text>
@@ -464,6 +476,11 @@ const ds = StyleSheet.create({
   applyBtnSecondary: {
     backgroundColor: C.orange,
     shadowColor: C.orange,
+  },
+  applyBtnDisabled: {
+    backgroundColor: C.ink4,
+    shadowOpacity: 0,
+    elevation: 0,
   },
   applyBtnText: {
     fontSize: 15,

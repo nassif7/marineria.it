@@ -1,6 +1,6 @@
 import { FC, memo } from 'react'
 import { View, Text, Pressable, StyleSheet } from 'react-native'
-import { ChevronRight, CheckCircle, AlertCircle } from 'lucide-react-native'
+import { ChevronRight, CheckCircle, AlertCircle, Send } from 'lucide-react-native'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { TOffer } from '@/api/types'
@@ -18,6 +18,15 @@ function MatchChip({ matching, label }: { matching: boolean; label: string }) {
         <AlertCircle size={11} color={C.orangeText} strokeWidth={2.4} />
       )}
       <Text style={[cs.matchText, { color: matching ? MATCH_TEXT : C.orangeText }]}>{label}</Text>
+    </View>
+  )
+}
+
+function AppliedBadge({ label }: { label: string }) {
+  return (
+    <View style={cs.appliedChip}>
+      <Send size={11} color={C.orange} strokeWidth={2.4} />
+      <Text style={cs.appliedText}>{label}</Text>
     </View>
   )
 }
@@ -87,9 +96,12 @@ const OfferListItem: FC<Props> = ({ offer, hideStatus = false, onViewOffer }) =>
       </View>
 
       <View style={cs.footer}>
-        <Text style={cs.ref}>
-          {t('job-reference', { ns: 'offer' })} · {ref}
-        </Text>
+        <View style={cs.footerLeft}>
+          <Text style={cs.ref}>
+            {t('job-reference', { ns: 'offer' })} · {ref}
+          </Text>
+          {offer.alreadyApplied && <AppliedBadge label={t('already-applied', { ns: 'offer-screen' })} />}
+        </View>
         <View style={cs.detailsLink}>
           <Text style={cs.detailsText}>{t('details', { ns: 'offer-screen' })}</Text>
           <ChevronRight size={14} color={C.green} strokeWidth={2.4} />
@@ -129,6 +141,21 @@ const cs = StyleSheet.create({
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 0.3,
+    color: C.orangeText,
+  },
+  appliedChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingLeft: 7,
+    paddingRight: 9,
+    paddingVertical: 4,
+    borderRadius: 10,
+    backgroundColor: C.orangeSoft,
+  },
+  appliedText: {
+    fontSize: 12,
+    fontWeight: '600',
     color: C.orangeText,
   },
   matchChip: {
@@ -182,6 +209,12 @@ const cs = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  footerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    flexShrink: 1,
   },
   ref: {
     fontSize: 12,

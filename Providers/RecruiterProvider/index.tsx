@@ -63,11 +63,7 @@ const RecruiterProvider = ({ children }: React.PropsWithChildren) => {
     enabled: !!token,
   })
 
-  const {
-    data: notifications = [],
-    isRefetching: notifRefetching,
-    refetch: refetchNotif,
-  } = useNotifications(token, false)
+  const { data: notifications = [], isRefetching: notifRefetching, refetch: refetchNotif } = useNotifications(token)
 
   const { mutate: togglePushNotifications, isPending: isTogglingNotifications } = useMutation({
     mutationFn: async () => {
