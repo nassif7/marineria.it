@@ -1,16 +1,5 @@
 import { useState, FC, ReactNode } from 'react'
-import {
-  View,
-  Text,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Image,
-  ActionSheetIOS,
-  Platform,
-  Alert,
-  Share,
-} from 'react-native'
+import { View, Text, Pressable, ScrollView, StyleSheet, Image, ActionSheetIOS, Platform, Alert } from 'react-native'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -25,7 +14,6 @@ import {
   Check,
   AlertTriangle,
   Trash2,
-  Share2,
   Phone,
   Mail,
   Info,
@@ -534,16 +522,6 @@ const CrewProfile = () => {
     }
   }
 
-  const handleShare = async () => {
-    if (!crew) return
-    try {
-      await Share.share({
-        message: [crew.mainPosition, `CV #${crew.iduser}`].filter(Boolean).join('\n'),
-        title: crew.mainPosition || `CV #${crew.iduser}`,
-      })
-    } catch {}
-  }
-
   if (isLoading) {
     return (
       <View style={{ flex: 1, backgroundColor: C.bg }}>
@@ -890,13 +868,6 @@ const CrewProfile = () => {
           disabled={isActionLoading}
         >
           <Trash2 size={18} color="#DC2626" strokeWidth={1.8} />
-        </Pressable>
-        <Pressable
-          style={[cp.smallBtn, isActionLoading && { opacity: 0.5 }]}
-          onPress={handleShare}
-          disabled={isActionLoading}
-        >
-          <Share2 size={18} color={C.ink2} strokeWidth={1.8} />
         </Pressable>
         <Pressable
           style={[cp.contactBtn, isActionLoading && { opacity: 0.6 }]}
