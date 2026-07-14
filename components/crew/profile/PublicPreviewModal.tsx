@@ -9,7 +9,7 @@ import {
   ChevronUp,
   Calendar,
   Briefcase,
-  DollarSign,
+  Euro,
   Clock,
   Check,
   AlertTriangle,
@@ -284,7 +284,7 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
                 [
                   { Icon: Calendar, label: t('available-from', { ns: 'crew' }), value: crew.dateAvailability },
                   { Icon: Briefcase, label: t('experience', { ns: 'crew' }), value: crew.calculatedExperience },
-                  { Icon: DollarSign, label: t('salary', { ns: 'offer' }), value: crew.salary },
+                  { Icon: Euro, label: t('salary', { ns: 'offer' }), value: crew.salary },
                   { Icon: Clock, label: t('last-seen', { ns: 'crew' }), value: crew.lastAccessDate },
                 ] as const
               ).map(({ Icon, label, value }, i) => (

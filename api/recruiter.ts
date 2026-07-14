@@ -75,12 +75,11 @@ export const getCrewCV = async (ownerToken: string, crewId: string, language?: s
 
 export const getCrewCvPost = async (crewId: string, ownerToken: string, language?: string): Promise<TCrew[]> => {
   const languageCode = getLanguageCode(language)
-  const data = await apiFetchJson<TCrew>(`${BASE_URL}/api/Owneruser/CvUser/${crewId}`, {
+  return apiFetchJson<TCrew[]>(`${BASE_URL}/api/Owneruser/CvUser/${crewId}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
     body: JSON.stringify({ userToken: ownerToken, language: languageCode }),
   })
-  return [data]
 }
 
 export const contactCrew = async (
@@ -90,8 +89,12 @@ export const contactCrew = async (
   language?: string
 ): Promise<string> => {
   const languageCode = getLanguageCode(language)
-  const url = `https://www.comunicazione.it/api/Owneruser/ContactPro/${ownerToken}/${offerId}/${crewId}?language=${languageCode}`
-  return apiFetchText(url)
+  const url = `${BASE_URL}/api/Owneruser/ContactPro/${offerId}/${crewId}`
+  return apiFetchText(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({ userToken: ownerToken, language: languageCode }),
+  })
 }
 
 export const removeCrew = async (
@@ -101,6 +104,10 @@ export const removeCrew = async (
   language?: string
 ): Promise<string> => {
   const languageCode = getLanguageCode(language)
-  const url = `https://www.comunicazione.it/api/Owneruser/RejectPRO/${ownerToken}/${offerId}/${crewId}?language=${languageCode}`
-  return apiFetchText(url)
+  const url = `${BASE_URL}/api/Owneruser/RejectPRO/${offerId}/${crewId}`
+  return apiFetchText(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({ userToken: ownerToken, language: languageCode }),
+  })
 }

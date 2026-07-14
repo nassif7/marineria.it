@@ -10,13 +10,14 @@ interface ShowToastOptions {
   emphasize: ToastEmphasis
   description?: string
   title: string
+  duration?: number
 }
 
 const useStatusToast = () => {
   const toast = useToast()
   const [toastId, setToastId] = React.useState(0)
 
-  const showToast = ({ emphasize, description, title }: ShowToastOptions) => {
+  const showToast = ({ emphasize, description, title, duration = 5000 }: ShowToastOptions) => {
     if (toast.isActive(toastId.toString())) return
 
     const newId = Math.random()
@@ -25,7 +26,7 @@ const useStatusToast = () => {
     toast.show({
       id: newId.toString(),
       placement: 'top',
-      duration: 5000,
+      duration,
       containerStyle: { marginTop: 40, marginLeft: 20, marginRight: 20, borderRadius: 8 },
       render: ({ id }) => {
         const uniqueToastId = 'toast-' + id

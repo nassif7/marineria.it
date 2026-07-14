@@ -1,5 +1,16 @@
 import { useState, FC, ReactNode } from 'react'
-import { View, Text, Pressable, ScrollView, StyleSheet, Image, ActionSheetIOS, Platform, Alert } from 'react-native'
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Image,
+  ActionSheetIOS,
+  Platform,
+  Alert,
+  Linking,
+} from 'react-native'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -9,13 +20,15 @@ import {
   ChevronUp,
   Calendar,
   Briefcase,
-  DollarSign,
+  Euro,
   Clock,
   Check,
   AlertTriangle,
   Trash2,
   Phone,
   Mail,
+  MessageCircle,
+  ChevronRight,
   Info,
   AlertCircle,
   Headphones,
@@ -280,20 +293,30 @@ const cp = StyleSheet.create({
   contactRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
+    gap: 12,
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: C.hair2,
-    gap: 12,
+  },
+  contactRowLast: { borderBottomWidth: 0 },
+  contactIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    backgroundColor: C.orangeSoft,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
   },
   contactLabel: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '600',
     color: C.ink4,
-    width: 80,
     textTransform: 'uppercase',
     letterSpacing: 0.3,
+    marginBottom: 1,
   },
-  contactValue: { flex: 1, fontSize: 14, fontWeight: '500', color: C.ink },
+  contactValue: { fontSize: 14, fontWeight: '600', color: C.ink },
   actionBar: {
     position: 'absolute',
     left: 0,
@@ -447,6 +470,27 @@ const FieldRow: FC<{ label: string; value?: string | null; bold?: boolean }> = (
   </View>
 )
 
+const ContactInfoRow: FC<{ icon: FC<any>; label: string; value: string; onPress: () => void; last?: boolean }> = ({
+  icon: Icon,
+  label,
+  value,
+  onPress,
+  last,
+}) => (
+  <Pressable style={[cp.contactRow, last && cp.contactRowLast]} onPress={onPress}>
+    <View style={cp.contactIcon}>
+      <Icon size={16} color={C.orange} strokeWidth={1.8} />
+    </View>
+    <View style={{ flex: 1, minWidth: 0 }}>
+      <Text style={cp.contactLabel}>{label}</Text>
+      <Text style={cp.contactValue} numberOfLines={1}>
+        {value}
+      </Text>
+    </View>
+    <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
+  </Pressable>
+)
+
 const CrewProfile = () => {
   const [contactModalVisible, setContactModalVisible] = useState(false)
   const [photoSliderVisible, setPhotoSliderVisible] = useState(false)
@@ -475,7 +519,12 @@ const CrewProfile = () => {
   const { mutate: handleContactCrew, isPending } = useMutation({
     mutationFn: () => contactCrew(token, crewId as string, searchId as string, language),
     onSuccess: () => {
-      showToast({ emphasize: 'success', title: t('success', { ns: 'common' }) })
+      showToast({
+        emphasize: 'success',
+        title: t('success', { ns: 'common' }),
+        description: t('contact-crew-success', { ns: 'crew-screen' }),
+        duration: 8000,
+      })
     },
     onError: () => {
       showToast({ emphasize: 'error', title: 'Error', description: t('contact-crew-error', { ns: 'crew-screen' }) })
@@ -490,7 +539,12 @@ const CrewProfile = () => {
   const { mutate: handleRemoveCrew, isPending: isPendingRemove } = useMutation({
     mutationFn: () => removeCrew(token, crewId as string, searchId as string, language),
     onSuccess: () => {
-      showToast({ emphasize: 'success', title: t('success', { ns: 'common' }) })
+      showToast({
+        emphasize: 'success',
+        title: t('success', { ns: 'common' }),
+        description: t('remove-crew-success', { ns: 'crew-screen' }),
+        duration: 8000,
+      })
     },
     onError: () => {
       showToast({ emphasize: 'error', title: 'Error', description: t('remove-crew-error', { ns: 'crew-screen' }) })
@@ -503,6 +557,13 @@ const CrewProfile = () => {
   })
 
   const isActionLoading = isPending || isPendingRemove
+
+  const handleOpenContact = (url: string) => {
+    // Note: Linking.canOpenURL() unreliably returns false for mailto:/tel: on iOS unless the
+    // scheme is declared in LSApplicationQueriesSchemes, so we call openURL directly and just
+    // swallow the rejection it throws when there's genuinely no app to handle it.
+    Linking.openURL(url).catch(() => {})
+  }
 
   const handleRemovePress = () => {
     const removeLabel = t('remove-crew', { ns: 'crew-screen' })
@@ -592,6 +653,30 @@ const CrewProfile = () => {
         .map((c) => c.trim())
         .filter(Boolean)
     : []
+
+  // The backend sometimes returns a full wa.me URL here instead of a bare number — strip it for display.
+  const waNumber = crew.callWhatsapp?.replace(/^https?:\/\/wa\.me\//i, '') ?? ''
+
+  const contactEntries = [
+    {
+      icon: Mail,
+      label: t('email', { ns: 'crew' }),
+      value: crew.email || crew.emailCc,
+      href: (v: string) => `mailto:${v}`,
+    },
+    {
+      icon: Phone,
+      label: t('cellular', { ns: 'crew' }),
+      value: crew.cellular,
+      href: (v: string) => `tel:${v.replace(/\s/g, '')}`,
+    },
+    {
+      icon: MessageCircle,
+      label: t('whatsapp', { ns: 'crew' }),
+      value: waNumber,
+      href: (v: string) => `https://wa.me/${v.replace(/\D/g, '')}`,
+    },
+  ].filter((entry): entry is typeof entry & { value: string } => !!entry.value)
 
   return (
     <View style={{ flex: 1, backgroundColor: C.bg }}>
@@ -703,13 +788,29 @@ const CrewProfile = () => {
           </View>
         </View>
 
+        {/* Contact info — visible only when contacted */}
+        {isContacted && contactEntries.length > 0 && (
+          <SectionCard title={t('contact-information', { ns: 'crew' })}>
+            {contactEntries.map((entry, i) => (
+              <ContactInfoRow
+                key={entry.label}
+                icon={entry.icon}
+                label={entry.label}
+                value={entry.value}
+                onPress={() => handleOpenContact(entry.href(entry.value))}
+                last={i === contactEntries.length - 1}
+              />
+            ))}
+          </SectionCard>
+        )}
+
         {/* Quad facts grid */}
         <View style={cp.quadGrid}>
           {(
             [
               { Icon: Calendar, label: t('available-from', { ns: 'crew' }), value: crew.dateAvailability },
               { Icon: Briefcase, label: t('experience', { ns: 'crew' }), value: crew.calculatedExperience },
-              { Icon: DollarSign, label: t('salary', { ns: 'offer' }), value: crew.salary },
+              { Icon: Euro, label: t('salary', { ns: 'offer' }), value: crew.salary },
               { Icon: Clock, label: t('last-seen', { ns: 'crew' }), value: crew.lastAccessDate },
             ] as const
           ).map(({ Icon, label, value }, i) => (
@@ -839,25 +940,6 @@ const CrewProfile = () => {
             ))
           )}
         </SectionCard>
-
-        {/* Contact info — visible only when contacted */}
-        {isContacted && (
-          <SectionCard title={t('contact-information', { ns: 'crew' })}>
-            {[
-              { label: t('email', { ns: 'crew' }), value: crew.email || crew.emailCc },
-              { label: t('phone', { ns: 'crew' }), value: crew.telephone },
-              { label: t('cellular', { ns: 'crew' }), value: crew.cellular },
-              { label: t('whatsapp', { ns: 'crew' }), value: crew.callWhatsapp },
-            ]
-              .filter(({ value }) => !!value)
-              .map(({ label, value }) => (
-                <View key={label} style={cp.contactRow}>
-                  <Text style={cp.contactLabel}>{label}</Text>
-                  <Text style={cp.contactValue}>{value}</Text>
-                </View>
-              ))}
-          </SectionCard>
-        )}
       </ScrollView>
 
       {/* Bottom action bar */}
@@ -883,6 +965,7 @@ const CrewProfile = () => {
         crew={crew}
         onClose={() => setContactModalVisible(false)}
         onConfirm={handleContactCrew}
+        isSubmitting={isPending}
       />
       <PhotoSlider
         visible={photoSliderVisible}

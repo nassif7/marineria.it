@@ -1,5 +1,5 @@
 import { FC, memo, useState } from 'react'
-import { Modal, View, Text, Pressable, ScrollView, Image, StyleSheet } from 'react-native'
+import { Modal, View, Text, Pressable, ScrollView, Image, ActivityIndicator, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { X, User, Unlock, FileText, Send, Check, PhoneCall } from 'lucide-react-native'
 import { TCrew } from '@/api/types'
@@ -15,9 +15,10 @@ interface IContactModal {
   crew: TCrew
   onClose: () => void
   onConfirm: () => void
+  isSubmitting?: boolean
 }
 
-const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) => {
+const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm, isSubmitting }) => {
   const photoUrl = crew.userPhoto ? getPhotoUrl(crew.userPhoto) : null
   const { t } = useTranslation(['crew-screen'])
   const { top, bottom } = useSafeAreaInsets()
@@ -106,16 +107,22 @@ const ContactModal: FC<IContactModal> = ({ visible, crew, onClose, onConfirm }) 
         </ScrollView>
 
         <View style={[cc.footer, { paddingBottom: bottom + 12 }]}>
-          <Pressable style={cc.closeAction} onPress={onClose}>
+          <Pressable style={cc.closeAction} onPress={onClose} disabled={isSubmitting}>
             <Text style={cc.closeActionText}>{t('close')}</Text>
           </Pressable>
           <Pressable
-            style={[cc.contactBtn, !isConfirmed && { opacity: 0.4 }]}
+            style={[cc.contactBtn, (!isConfirmed || isSubmitting) && { opacity: 0.4 }]}
             onPress={onConfirm}
-            disabled={!isConfirmed}
+            disabled={!isConfirmed || isSubmitting}
           >
-            <PhoneCall size={17} color="#FFFFFF" strokeWidth={2} />
-            <Text style={cc.contactBtnText}>{t('contact', { ns: 'crew-screen' })}</Text>
+            {isSubmitting ? (
+              <ActivityIndicator color="#FFFFFF" />
+            ) : (
+              <>
+                <PhoneCall size={17} color="#FFFFFF" strokeWidth={2} />
+                <Text style={cc.contactBtnText}>{t('contact', { ns: 'crew-screen' })}</Text>
+              </>
+            )}
           </Pressable>
         </View>
       </View>

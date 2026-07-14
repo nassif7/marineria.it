@@ -279,7 +279,7 @@ function FunnelArrow() {
 // ── Styles ───────────────────────────────────────────────────
 
 const sd = StyleSheet.create({
-  scrollContent: { paddingBottom: 24 },
+  scrollContent: { paddingTop: 16, paddingBottom: 24 },
 
   stickyHeader: {
     backgroundColor: C.bg,
