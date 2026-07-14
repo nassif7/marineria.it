@@ -24,6 +24,7 @@ import { getAgeByYear } from '@/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
 import { Loading, RefreshControl } from '@/components/ui'
 import { C } from '@/components/pro/tokens'
+import HtmlText from '@/components/pro/HtmlText'
 import { useCrew } from '@/Providers/CrewProvider'
 import { useManualRefresh } from '@/hooks'
 
@@ -60,7 +61,7 @@ const ExperienceItem: FC<{ exp: TCrewExperience; index: number }> = ({ exp, inde
         </View>
       </View>
       {open && exp.typeofassignment ? (
-        <Text style={[pv.accordionBody, pv.accordionBodyText]}>{exp.typeofassignment}</Text>
+        <HtmlText style={{ ...pv.accordionBody, ...pv.accordionBodyText }}>{exp.typeofassignment}</HtmlText>
       ) : null}
     </Pressable>
   )
@@ -400,7 +401,7 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
             {/* About */}
             {crew.curriculum ? (
               <SectionCard title={t('about', { ns: 'crew' })}>
-                <Text style={pv.aboutText}>&ldquo;{crew.curriculum}&rdquo;</Text>
+                <HtmlText style={pv.aboutText}>{`“${crew.curriculum}”`}</HtmlText>
               </SectionCard>
             ) : null}
 

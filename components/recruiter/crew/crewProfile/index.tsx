@@ -46,6 +46,7 @@ import { ApiError, parseServerBool } from '@/api/utils'
 import { C } from '@/components/pro/tokens'
 import ContactSupport from '@/components/common/ContactSupport'
 import { PhotoSlider } from '@/components/appUI'
+import HtmlText from '@/components/pro/HtmlText'
 import ContactCrewModal from './ContactCrewModal'
 import { TCrewExperience, TCrewReference } from '@/api/types'
 
@@ -394,7 +395,7 @@ const ExperienceItem: FC<{ exp: TCrewExperience; index: number }> = ({ exp, inde
         </View>
       </View>
       {open && exp.typeofassignment ? (
-        <Text style={[cp.accordionBody, cp.accordionBodyText]}>{exp.typeofassignment}</Text>
+        <HtmlText style={{ ...cp.accordionBody, ...cp.accordionBodyText }}>{exp.typeofassignment}</HtmlText>
       ) : null}
     </Pressable>
   )
@@ -932,7 +933,7 @@ const CrewProfile = () => {
         {/* About */}
         {crew.curriculum ? (
           <SectionCard title={t('about', { ns: 'crew' })}>
-            <Text style={cp.aboutText}>"{crew.curriculum}"</Text>
+            <HtmlText style={cp.aboutText}>{`"${crew.curriculum}"`}</HtmlText>
           </SectionCard>
         ) : null}
 
