@@ -1,26 +1,10 @@
 import React, { FC, useState } from 'react'
-import {
-  Modal,
-  ModalBackdrop,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
-  Pressable,
-  VStack,
-  HStack,
-  Text,
-  Avatar,
-  AvatarImage,
-  AvatarFallbackText,
-  Box,
-  Heading,
-  Icon,
-} from '@/components/ui'
-import { MessageCircle, Send, X, HeadphonesIcon } from 'lucide-react-native'
-import { TSupportTeam } from '@/api'
-import { Linking } from 'react-native'
+import { Modal, View, Text, Pressable, ScrollView, Image, Linking, StyleSheet } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
+import { X, Headphones, Mail, Phone, MessageCircle, Send } from 'lucide-react-native'
+import { TSupportTeam } from '@/api'
+import { C } from '@/components/pro/tokens'
 
 type IContactSupportProps = {
   title: string
@@ -29,105 +13,109 @@ type IContactSupportProps = {
   renderTrigger?: (props: { onPress: () => void }) => React.ReactNode
 }
 
-function SupportMemberCard({ member }: { member: TSupportTeam }) {
+const GREEN_TEXT = '#0F7A28'
+const GREEN_SOFT = '#E8F8EB'
+
+const ContactRow: FC<{ icon: FC<any>; label: string; value: string; onPress: () => void; last?: boolean }> = ({
+  icon: Icon,
+  label,
+  value,
+  onPress,
+  last,
+}) => (
+  <Pressable style={[cs.contactRow, last && cs.contactRowLast]} onPress={onPress}>
+    <View style={cs.contactIcon}>
+      <Icon size={16} color={C.orange} strokeWidth={1.8} />
+    </View>
+    <View style={{ flex: 1, minWidth: 0 }}>
+      <Text style={cs.contactLabel}>{label}</Text>
+      <Text style={cs.contactValue} numberOfLines={1}>
+        {value}
+      </Text>
+    </View>
+  </Pressable>
+)
+
+const SupportMemberCard: FC<{ member: TSupportTeam }> = ({ member }) => {
+  const { t } = useTranslation('common')
   const fullName = `${member.firstName} ${member.lastName}`
   const initials = `${member.firstName[0]}${member.lastName[0]}`.toUpperCase()
 
-  const handleWhatsApp = () => {
-    const url = `https://wa.me/${member.whatsApp.replace(/\D/g, '')}`
-    Linking.openURL(url)
-  }
-
-  const handleTelegram = () => {
-    if (!member.telegram) return
-    const url = `https://t.me/${member.telegram.replace('@', '')}`
-    Linking.openURL(url)
-  }
-
-  const handleEmail = () => {
-    const url = `mailto:${member.email}`
-    Linking.openURL(url)
-  }
-
   return (
-    <HStack className="items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
-      {/* Avatar + Info */}
-      <HStack className="items-center gap-3 flex-1">
-        <Box className="relative">
-          <Avatar size="md" className="rounded-full">
-            {member.photoUrl ? (
-              <AvatarImage source={{ uri: member.photoUrl }} />
-            ) : (
-              <AvatarFallbackText className="text-white text-sm font-bold">{initials}</AvatarFallbackText>
-            )}
-          </Avatar>
-          {/* Online dot */}
-          <Box
-            className={`absolute bottom-0 right-0 w-3 h-3 bg-${member.isOnline ? 'success' : 'secondary'}-500 rounded-full border-2 border-white dark:border-gray-900`}
-          />
-        </Box>
-
-        <VStack className="gap-0.5 flex-1">
-          <Text className="text-sm font-semibold text-gray-900 dark:text-gray-50" numberOfLines={1}>
-            {fullName}
-          </Text>
-          <Pressable onPress={handleEmail}>
-            <Text className="text-xs text-gray-500 dark:text-gray-400" numberOfLines={1}>
-              {member.email}
+    <View style={cs.card}>
+      <View style={cs.memberRow}>
+        <View style={cs.avatar}>
+          {member.photoUrl ? (
+            <Image source={{ uri: member.photoUrl }} style={cs.avatarImg} />
+          ) : (
+            <Text style={cs.avatarInitials}>{initials}</Text>
+          )}
+        </View>
+        <View style={{ flex: 1, minWidth: 0 }}>
+          <Text style={cs.memberName}>{fullName}</Text>
+          {member.position ? <Text style={cs.memberPosition}>{member.position}</Text> : null}
+          <View style={[cs.statusPill, member.isOnline ? cs.statusPillOnline : cs.statusPillOffline]}>
+            <View style={[cs.statusDot, { backgroundColor: member.isOnline ? GREEN_TEXT : C.ink4 }]} />
+            <Text style={[cs.statusText, { color: member.isOnline ? GREEN_TEXT : C.ink4 }]}>
+              {member.isOnline ? t('online', { defaultValue: 'Online' }) : t('offline', { defaultValue: 'Offline' })}
             </Text>
-          </Pressable>
-        </VStack>
-      </HStack>
+          </View>
+        </View>
+      </View>
 
-      {/* Action Buttons */}
-      <HStack className="gap-2 ml-2">
-        {/* WhatsApp */}
-        <Pressable
-          onPress={member.isOnline ? handleWhatsApp : undefined}
-          className={`w-9 h-9 bg-${member.isOnline ? 'success' : 'secondary'}-100  rounded-full items-center justify-center active:opacity-70`}
-        >
-          <Icon as={MessageCircle} size="sm" className={`text-${member.isOnline ? 'success' : 'secondary'}-600`} />
-        </Pressable>
+      <View style={cs.divider} />
 
-        {/* Telegram */}
-        {member.telegram && (
-          <Pressable
-            onPress={member.isOnline ? handleTelegram : undefined}
-            className="w-9 h-9 bg-blue-100  rounded-full items-center justify-center active:opacity-70"
-          >
-            <Icon as={Send} size="sm" className="text-blue-600" />
-          </Pressable>
-        )}
-      </HStack>
-    </HStack>
+      <ContactRow
+        icon={Mail}
+        label={t('email')}
+        value={member.email}
+        onPress={() => Linking.openURL(`mailto:${member.email}`)}
+      />
+      <ContactRow
+        icon={Phone}
+        label={t('phone', { defaultValue: 'Phone' })}
+        value={member.phoneNumber}
+        onPress={() => Linking.openURL(`tel:${member.phoneNumber.replace(/\s/g, '')}`)}
+      />
+      <ContactRow
+        icon={MessageCircle}
+        label="WhatsApp"
+        value={member.whatsApp}
+        onPress={() => Linking.openURL(`https://wa.me/${member.whatsApp.replace(/\D/g, '')}`)}
+      />
+      {member.telegram ? (
+        <ContactRow
+          icon={Send}
+          label="Telegram"
+          value={member.telegram}
+          onPress={() => Linking.openURL(`https://t.me/${member.telegram!.replace('@', '')}`)}
+          last
+        />
+      ) : null}
+    </View>
   )
 }
 
-export const ContactSupportIconTrigger: FC<{ onPress: () => void }> = ({ onPress }) => {
-  return (
-    <Pressable
-      onPress={onPress}
-      className="w-10 h-10 rounded-full items-center justify-center bg-gray-100 dark:bg-gray-800 active:opacity-70"
-    >
-      <Icon as={HeadphonesIcon} size="md" className="text-primary-600 dark:text-gray-200" />
-    </Pressable>
-  )
-}
+export const ContactSupportIconTrigger: FC<{ onPress: () => void }> = ({ onPress }) => (
+  <Pressable style={cs.iconTrigger} onPress={onPress}>
+    <Headphones size={18} color={C.ink2} strokeWidth={1.8} />
+  </Pressable>
+)
 
 export const ContactSupportTextTrigger: FC<{ onPress: () => void }> = ({ onPress }) => {
   const { t } = useTranslation('common')
   return (
     <Pressable onPress={onPress}>
-      <Text size="md" bold className="text-primary-600 underline">
-        {t('contact-support', { ns: 'common' })}
-      </Text>
+      <Text style={cs.textTrigger}>{t('contact-support')}</Text>
     </Pressable>
   )
 }
 
 const ContactSupport: FC<IContactSupportProps> = ({ title, supportTeam, isTextTrigger, renderTrigger }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const { top, bottom } = useSafeAreaInsets()
   const open = () => setIsOpen(true)
+  const close = () => setIsOpen(false)
 
   return (
     <>
@@ -139,46 +127,189 @@ const ContactSupport: FC<IContactSupportProps> = ({ title, supportTeam, isTextTr
         <ContactSupportIconTrigger onPress={open} />
       )}
 
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} size="full">
-        <ModalBackdrop />
-        <ModalContent className="rounded-t-md dark:bg-gray-900 w-full mb-0 mt-auto">
-          {/* Header */}
-          <ModalHeader className="border-b-0 pb-0 pt-2 px-2">
-            <HStack className="items-center gap-2 flex-1">
-              <Box className="w-8 h-8 bg-gray-100 rounded-full items-center justify-center">
-                <Icon as={HeadphonesIcon} size="xs" className="text-orange-500" />
-              </Box>
-              <Heading size="sm" className="text-gray-900 dark:text-gray-50 font-bold">
-                {title}
-              </Heading>
-            </HStack>
+      <Modal visible={isOpen} transparent animationType="slide" onRequestClose={close}>
+        <View style={[cs.container, { paddingTop: top }]}>
+          <View style={cs.header}>
+            <Text style={cs.headerTitle}>{title}</Text>
+            <Pressable style={cs.closeBtn} onPress={close}>
+              <X size={16} color={C.ink2} strokeWidth={2.5} />
+            </Pressable>
+          </View>
 
-            <ModalCloseButton>
-              <Box className="w-8 h-8 bg-gray-100 dark:bg-gray-800 rounded-full items-center justify-center">
-                <Icon as={X} size="xs" className="text-gray-600 dark:text-gray-300" />
-              </Box>
-            </ModalCloseButton>
-          </ModalHeader>
-          {/* Online status */}
-          {/* <HStack className="px-5 pt-2 pb-1 items-center gap-2">
-            <Box className="w-2 h-2 bg-green-500 rounded-full" />
-            <Text className="text-xs text-gray-500 dark:text-gray-400">
-              {supportTeam.length} member{supportTeam.length !== 1 ? 's' : ''} online
-            </Text>
-          </HStack> */}
-          {/* Body */}
-          <ModalBody className="px-2 pb-2 pt-2">
-            <VStack className="gap-2">
-              {supportTeam.map((member, index) => (
-                <SupportMemberCard key={index} member={member} />
-              ))}
-            </VStack>
-          </ModalBody>
-        </ModalContent>
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ paddingBottom: bottom + 24 }}
+            showsVerticalScrollIndicator={false}
+          >
+            {supportTeam.map((member, index) => (
+              <SupportMemberCard key={index} member={member} />
+            ))}
+          </ScrollView>
+        </View>
       </Modal>
     </>
   )
 }
+
+const cs = StyleSheet.create({
+  iconTrigger: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: C.field,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textTrigger: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: C.orange,
+    textDecorationLine: 'underline',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: C.bg,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: C.hair,
+  },
+  headerTitle: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: '800',
+    color: C.ink,
+    letterSpacing: -0.3,
+  },
+  closeBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: C.hair2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  card: {
+    marginHorizontal: 16,
+    marginTop: 16,
+    backgroundColor: C.card,
+    borderRadius: 16,
+    paddingTop: 18,
+    paddingBottom: 6,
+    shadowColor: '#0D1B2A',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  memberRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    paddingHorizontal: 18,
+  },
+  avatar: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    backgroundColor: C.orangeSoft,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    flexShrink: 0,
+  },
+  avatarImg: {
+    width: '100%',
+    height: '100%',
+  },
+  avatarInitials: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: C.orange,
+    letterSpacing: -0.5,
+  },
+  memberName: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: C.ink,
+    letterSpacing: -0.2,
+  },
+  memberPosition: {
+    fontSize: 13,
+    color: C.ink3,
+    marginTop: 1,
+  },
+  statusPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    alignSelf: 'flex-start',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 99,
+    marginTop: 6,
+  },
+  statusPillOnline: {
+    backgroundColor: GREEN_SOFT,
+  },
+  statusPillOffline: {
+    backgroundColor: C.field,
+  },
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+  },
+  statusText: {
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: C.hair2,
+    marginTop: 16,
+    marginHorizontal: 18,
+  },
+  contactRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    paddingHorizontal: 18,
+    paddingVertical: 13,
+    borderBottomWidth: 1,
+    borderBottomColor: C.hair2,
+  },
+  contactRowLast: {
+    borderBottomWidth: 0,
+  },
+  contactIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    backgroundColor: C.orangeSoft,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  contactLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    letterSpacing: 0.3,
+    color: C.ink4,
+    textTransform: 'uppercase',
+    marginBottom: 1,
+  },
+  contactValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: C.ink,
+  },
+})
 
 export default ContactSupport
 

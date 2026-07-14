@@ -1,13 +1,17 @@
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useState } from 'react'
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { setFromHome } from '@/utils/fromHomeNav'
-import { Headphones, ChevronRight, Briefcase, Users, Globe, Mail, Phone, Sparkles } from 'lucide-react-native'
+import { Bell, Headphones, ChevronRight, Briefcase, Users, Globe, Mail, Phone } from 'lucide-react-native'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
+import { TNotification } from '@/api/types'
+import { supportTeam } from '@/api'
 import { C } from '@/components/pro/tokens'
 import { Loading, RefreshControl } from '@/components/ui'
 import { useManualRefresh } from '@/hooks'
+import ContactSupport from '@/components/common/ContactSupport'
+import RecruiterNotificationsModal from './RecruiterNotificationsModal'
 
 const MONTHS = [
   'January',
@@ -88,8 +92,9 @@ const ContactRow: FC<{
 const RecruiterProfile: FC = () => {
   const { t } = useTranslation('home-screen')
   const router = useRouter()
-  const { recruiter: user, searches, isLoading, refetch } = useRecruiter()
+  const { recruiter: user, searches, notifications, isLoading, refetch } = useRecruiter()
   const { refreshing, onRefresh } = useManualRefresh(refetch)
+  const [notificationsVisible, setNotificationsVisible] = useState(false)
 
   const goToRecruiter = useCallback(
     (searchId: number, target: 'detail' | 'crew-list') => {
@@ -103,7 +108,13 @@ const RecruiterProfile: FC = () => {
     [router]
   )
 
-  const searchesWithNew = searches.filter((s) => s.countCandidates - s.countContacted > 0)
+  const realNotifications = notifications.filter((n) => n.title || n.message)
+  const hasNotifications = realNotifications.length > 0
+
+  const handleSelectNotification = (notification: TNotification) => {
+    setNotificationsVisible(false)
+    if (notification.idoffer) goToRecruiter(notification.idoffer, 'crew-list')
+  }
 
   const waNumber = user?.whatsapp?.replace(/^https?:\/\/wa\.me\//, '') ?? ''
   const isSameAsWa = !!user?.cellular && !!waNumber && user.cellular === waNumber
@@ -122,9 +133,18 @@ const RecruiterProfile: FC = () => {
     <View style={{ flex: 1, backgroundColor: C.bg }}>
       {/* Top bar */}
       <View style={s.topBar}>
-        <View />
-        <Pressable style={s.iconBtn}>
-          <Headphones size={18} color={C.ink2} strokeWidth={1.8} />
+        <ContactSupport
+          title={t('contact-support', { ns: 'settings-screen' })}
+          supportTeam={supportTeam}
+          renderTrigger={({ onPress }) => (
+            <Pressable style={s.iconBtn} onPress={onPress}>
+              <Headphones size={18} color={C.ink2} strokeWidth={1.8} />
+            </Pressable>
+          )}
+        />
+        <Pressable style={s.iconBtn} onPress={() => setNotificationsVisible(true)}>
+          <Bell size={18} color={C.ink2} strokeWidth={1.8} />
+          {hasNotifications && <View style={s.notifDot} />}
         </Pressable>
       </View>
 
@@ -168,22 +188,21 @@ const RecruiterProfile: FC = () => {
           </View>
         </View>
 
-        {/* New candidates banners — one per search */}
-        {searchesWithNew.map((search) => {
-          const count = search.countCandidates - search.countContacted
-          return (
-            <Pressable key={search.idoffer} style={s.banner} onPress={() => goToRecruiter(search.idoffer, 'crew-list')}>
-              <View style={s.bannerIcon}>
-                <Sparkles size={20} color="#fff" strokeWidth={2} />
-              </View>
-              <View style={{ flex: 1, minWidth: 0 }}>
-                <Text style={s.bannerTitle}>{t('recruiter-profile.banner-candidates', { count })}</Text>
-                <Text style={s.bannerSub}>{search.title || search.mainPosition}</Text>
-              </View>
-              <ChevronRight size={18} color="#fff" strokeWidth={2.4} />
-            </Pressable>
-          )
-        })}
+        {/* Notifications banner */}
+        {hasNotifications && (
+          <Pressable style={s.banner} onPress={() => setNotificationsVisible(true)}>
+            <View style={s.bannerIcon}>
+              <Bell size={20} color="#fff" strokeWidth={2} />
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text style={s.bannerTitle}>
+                {t('recruiter-profile.notifications-count', { count: realNotifications.length })}
+              </Text>
+              {realNotifications[0].title ? <Text style={s.bannerSub}>{realNotifications[0].title}</Text> : null}
+            </View>
+            <ChevronRight size={18} color="#fff" strokeWidth={2.4} />
+          </Pressable>
+        )}
 
         {/* Searches list */}
         <Text style={s.sectionEyebrow}>{t('recruiter-profile.section-activity')}</Text>
@@ -211,7 +230,6 @@ const RecruiterProfile: FC = () => {
             value={user?.cellular || '—'}
             tag={isSameAsWa ? 'WhatsApp' : undefined}
           />
-          <ContactRow icon="phone" label={t('recruiter-profile.label-phone2')} value="—" />
           <ContactRow icon="globe" label={t('recruiter-profile.label-website')} value={user?.url || '—'} last />
         </View>
 
@@ -228,6 +246,13 @@ const RecruiterProfile: FC = () => {
           </Text>
         ) : null}
       </ScrollView>
+
+      <RecruiterNotificationsModal
+        visible={notificationsVisible}
+        onClose={() => setNotificationsVisible(false)}
+        notifications={notifications}
+        onSelect={handleSelectNotification}
+      />
     </View>
   )
 }
@@ -239,7 +264,7 @@ const s = StyleSheet.create({
     paddingBottom: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
   },
   topBarTitle: {
     fontSize: 22,
@@ -254,6 +279,18 @@ const s = StyleSheet.create({
     backgroundColor: C.field,
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'relative',
+  },
+  notifDot: {
+    position: 'absolute',
+    top: 7,
+    right: 7,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: C.orange,
+    borderWidth: 1.5,
+    borderColor: C.field,
   },
   scrollContent: {
     paddingBottom: 32,

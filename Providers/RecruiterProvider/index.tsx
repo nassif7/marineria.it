@@ -3,13 +3,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useSession } from '@/Providers/SessionProvider'
 import { getRecruiterUserProfilePost, getRecruiterActiveSearchesPost, setPushNotificationToken } from '@/api'
-import { TRecruiterUser, TRecruiterSearch } from '@/api/types'
+import { TRecruiterUser, TRecruiterSearch, TNotification } from '@/api/types'
 import { registerForPushNotificationsAsync } from '@/hooks/useNotification'
+import { useNotifications } from '@/hooks/useNotifications'
 
 type TRecruiterContext = {
   token: string
   recruiter?: TRecruiterUser
   searches: TRecruiterSearch[]
+  notifications: TNotification[]
   isLoading: boolean
   isRefetching: boolean
   isTogglingNotifications: boolean
@@ -21,6 +23,7 @@ const RecruiterContext = createContext<TRecruiterContext>({
   token: '',
   recruiter: undefined,
   searches: [],
+  notifications: [],
   isLoading: false,
   isRefetching: false,
   isTogglingNotifications: false,
@@ -60,6 +63,12 @@ const RecruiterProvider = ({ children }: React.PropsWithChildren) => {
     enabled: !!token,
   })
 
+  const {
+    data: notifications = [],
+    isRefetching: notifRefetching,
+    refetch: refetchNotif,
+  } = useNotifications(token, false)
+
   const { mutate: togglePushNotifications, isPending: isTogglingNotifications } = useMutation({
     mutationFn: async () => {
       if (recruiter?.pushNotificationToken) {
@@ -78,10 +87,11 @@ const RecruiterProvider = ({ children }: React.PropsWithChildren) => {
         token,
         recruiter,
         searches,
+        notifications,
         isLoading: recruiterLoading || searchesLoading,
-        isRefetching: recruiterRefetching || searchesRefetching,
+        isRefetching: recruiterRefetching || searchesRefetching || notifRefetching,
         isTogglingNotifications,
-        refetch: () => Promise.all([refetchRecruiter(), refetchSearches()]),
+        refetch: () => Promise.all([refetchRecruiter(), refetchSearches(), refetchNotif()]),
         togglePushNotifications,
       }}
     >
