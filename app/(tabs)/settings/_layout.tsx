@@ -1,28 +1,18 @@
 import React from 'react'
 import { Stack } from 'expo-router'
-import { useTranslation } from 'react-i18next'
-import { TUserRole } from '@/api/types'
-import { useSession } from '@/Providers/SessionProvider'
 import { NavBar } from '@/components/appUI'
+import { C } from '@/components/pro/tokens'
 
 function _layout() {
-  const {
-    auth: { role },
-  } = useSession()
-
-  const isPro = role === TUserRole.CREW
-
-  const { t } = useTranslation('screens-labels')
-
   return (
     <Stack
       screenOptions={{
         headerShown: false,
         header: (props) => <NavBar {...props} />,
-        contentStyle: { backgroundColor: 'white' },
+        contentStyle: { backgroundColor: C.bg },
       }}
     >
-      <Stack.Screen name="index" options={{ title: t('settings'), headerShown: true }} />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
     </Stack>
   )
 }

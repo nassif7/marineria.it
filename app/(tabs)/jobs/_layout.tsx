@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router'
 import { NavBar } from '@/components/appUI'
 import { useTranslation } from 'react-i18next'
+import { C } from '@/components/pro/tokens'
 
 export default function JobsLayout() {
   const { t } = useTranslation('screens-labels')
@@ -9,7 +10,7 @@ export default function JobsLayout() {
       screenOptions={{
         headerShown: false,
         header: (props) => <NavBar {...props} />,
-        contentStyle: { backgroundColor: 'white' },
+        contentStyle: { backgroundColor: C.bg },
       }}
     >
       <Stack.Screen

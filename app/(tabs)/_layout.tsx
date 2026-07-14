@@ -24,11 +24,6 @@ const AppLayout = () => {
     return <Redirect href="/sign-in" />
   }
 
-  const sceneStyle = {
-    backgroundColor: 'white',
-    paddingTop: insets.top - 12,
-  }
-
   const proSceneStyle = {
     backgroundColor: '#F6F5F2',
     paddingTop: insets.top - 12,
@@ -77,7 +72,7 @@ const AppLayout = () => {
         redirect={!isGuest}
         options={{
           headerShown: false,
-          sceneStyle,
+          sceneStyle: proSceneStyle,
           title: t('offers'),
           tabBarIcon: Briefcase,
         }}
@@ -85,7 +80,7 @@ const AppLayout = () => {
       <Tabs.Screen
         name="settings"
         options={{
-          sceneStyle,
+          sceneStyle: proSceneStyle,
           headerShown: false,
           title: t('settings'),
           tabBarIcon: Settings,

@@ -1,26 +1,14 @@
-import { router } from 'expo-router'
-import { Stack } from 'expo-router'
+import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import { router, Stack } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { getPublicOffers } from '@/api'
-import { Loading, Box, HStack, Text } from '@/components/ui'
-import { ErrorMessage, List, EmptyList, ScreenContainer, NavBar } from '@/components/appUI'
-import OfferListItem from '@/components/pro/offers/offerList/OfferListItem'
 import { TOffer } from '@/api/types'
+import { Loading, RefreshControl } from '@/components/ui'
+import { ErrorMessage, EmptyList } from '@/components/appUI'
+import { C } from '@/components/pro/tokens'
 import { useManualRefresh } from '@/hooks'
-
-const RightAction = ({ itemsCount, isLoading }: { itemsCount: number; isLoading: boolean }) => {
-  if (isLoading) return null
-  return (
-    <HStack className="pr-3 items-center">
-      <Box className="bg-success-500 rounded-full px-2 py-0.5 items-center justify-center">
-        <Text color="white" bold size="sm">
-          {itemsCount}
-        </Text>
-      </Box>
-    </HStack>
-  )
-}
+import OfferListItem from '@/components/pro/offers/offerList/OfferListItem'
 
 const JobsScreen = () => {
   const {
@@ -28,48 +16,77 @@ const JobsScreen = () => {
     i18n: { language },
   } = useTranslation(['offer-screen', 'screens-labels'])
 
-  const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
-    queryKey: ['public-offers'],
+  const { isLoading, isError, refetch, data } = useQuery({
+    queryKey: ['public-offers', language],
     queryFn: () => getPublicOffers(language),
   })
   const { refreshing, onRefresh } = useManualRefresh(refetch)
+  const offers = data ?? []
 
   const handleViewOffer = (offer: TOffer) => {
     router.push(`/(tabs)/jobs/${offer.idoffer}`)
   }
 
   return (
-    <>
-      <Stack.Screen
-        options={{
-          headerShown: true,
-          title: t('offers'),
-          contentStyle: { backgroundColor: 'white' },
-          header: (props) => (
-            <NavBar
-              {...props}
-              rightAction={<RightAction itemsCount={data?.length ?? 0} isLoading={isLoading || isRefetching} />}
-            />
-          ),
-        }}
-      />
-      <ScreenContainer>
-        {(isLoading || isRefetching) && <Loading />}
-        {isSuccess && (
-          <List
-            data={data}
-            isRefetching={refreshing}
-            onRefresh={onRefresh}
-            renderItem={({ item }) => (
-              <OfferListItem offer={item} hideStatus key={item.reference} onViewOffer={() => handleViewOffer(item)} />
+    <View style={{ flex: 1, backgroundColor: C.bg }}>
+      <Stack.Screen options={{ headerShown: false }} />
+
+      {isLoading && <Loading />}
+      {!isLoading && isError && <ErrorMessage />}
+
+      {!isLoading && !isError && (
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={ls.scrollContent}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        >
+          <View style={ls.header}>
+            <Text style={ls.headerTitle}>{t('offer-list', { ns: 'screens-labels' })}</Text>
+          </View>
+
+          <View style={ls.list}>
+            {offers.length === 0 ? (
+              <EmptyList message={t('no-offers', { ns: 'offer-screen' })} />
+            ) : (
+              offers.map((offer) => (
+                <OfferListItem
+                  key={offer.reference}
+                  offer={offer}
+                  hideStatus
+                  onViewOffer={() => handleViewOffer(offer)}
+                />
+              ))
             )}
-            listEmptyComponent={<EmptyList message={t('no-offers')} />}
-          />
-        )}
-        {isError && <ErrorMessage />}
-      </ScreenContainer>
-    </>
+          </View>
+        </ScrollView>
+      )}
+    </View>
   )
 }
+
+const ls = StyleSheet.create({
+  scrollContent: {
+    paddingBottom: 24,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 12,
+  },
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: C.ink,
+    letterSpacing: -0.6,
+    lineHeight: 30,
+  },
+  list: {
+    paddingHorizontal: 16,
+    gap: 12,
+  },
+})
 
 export default JobsScreen

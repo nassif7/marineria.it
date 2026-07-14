@@ -12,6 +12,7 @@ export type TOffer = {
   requirements: string
   title: string
   offer: string
+  offerEng: string
   offerdate: string
   offertExpirationdate: string
   descriptionOffer: string

@@ -3,29 +3,16 @@ import * as SecureStore from 'expo-secure-store'
 import * as WebBrowser from 'expo-web-browser'
 import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import {
-  Globe,
-  Bell,
-  Users,
-  Settings2,
-  FileText,
-  Shield,
-  Headphones,
-  Star,
-  LogOut,
-  ChevronRight,
-} from 'lucide-react-native'
+import { Globe, Bell, Users, Settings2, FileText, Shield, Star, LogOut, ChevronRight } from 'lucide-react-native'
 import { router } from 'expo-router'
 import { TUserRole } from '@/api/types'
 import { TLocales } from '@/localization'
 import { useSession } from '@/Providers/SessionProvider'
 import { useProfile } from '@/hooks'
 import { C } from '@/components/pro/tokens'
-import { supportTeam } from '@/api'
 import SwitchLanguage from '@/components/common/SwitchLanguage'
 import NotificationsToggle from '@/components/common/NotificationsToggle'
 import SwitchUser from '@/components/common/SwitchUser'
-import ContactSupport from '@/components/common/ContactSupport'
 
 const Settings = () => {
   const {
@@ -39,7 +26,6 @@ const Settings = () => {
   } = useSession()
   const { pushNotificationToken, togglePushNotifications, isTogglingNotifications } = useProfile()
   const isRecruiter = role === TUserRole.RECRUITER
-  const isCrew = role === TUserRole.CREW
 
   const privacyPolicyUrl =
     language === TLocales.IT ? 'https://www.marineria.it/it/contacts.aspx' : 'https://www.marineria.it/En/Contacts.aspx'
@@ -56,6 +42,11 @@ const Settings = () => {
 
   return (
     <ScrollView style={s.root} contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
+      {/* In-content header */}
+      <View style={s.header}>
+        <Text style={s.headerTitle}>{t('title')}</Text>
+      </View>
+
       {/* ── PREFERENCES ─────────────────────────────── */}
       <Text style={s.sectionLabel}>{t('preferences')}</Text>
       <View style={s.card}>
@@ -179,22 +170,6 @@ const Settings = () => {
       {/* ── SUPPORT ──────────────────────────────────── */}
       <Text style={s.sectionLabel}>{t('support')}</Text>
       <View style={s.card}>
-        {/* Crew/pro users don't have a support plan yet — hide the entry without removing it */}
-        {!isCrew && (
-          <ContactSupport
-            title={t('contact-support')}
-            supportTeam={supportTeam}
-            renderTrigger={({ onPress }) => (
-              <Pressable style={[s.row, s.rowBorder]} onPress={onPress}>
-                <View style={[s.rowIcon, s.rowIconAccent]}>
-                  <Headphones size={18} color={C.orange} strokeWidth={1.8} />
-                </View>
-                <Text style={[s.rowTitle, s.rowFlex]}>{t('contact-support')}</Text>
-                <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
-              </Pressable>
-            )}
-          />
-        )}
         <Pressable style={s.row}>
           <View style={[s.rowIcon, s.rowIconAccent]}>
             <Star size={18} color={C.orange} strokeWidth={1.8} />
@@ -216,6 +191,18 @@ const s = StyleSheet.create({
   },
   content: {
     paddingBottom: 40,
+  },
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 0,
+  },
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: C.ink,
+    letterSpacing: -0.6,
+    lineHeight: 30,
   },
   sectionLabel: {
     fontSize: 12,
