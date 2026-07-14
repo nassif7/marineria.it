@@ -181,7 +181,7 @@ const si = StyleSheet.create({
     backgroundColor: '#E8F8EB',
     paddingHorizontal: 9,
     paddingVertical: 4,
-    borderRadius: 99,
+    borderRadius: 10,
   },
   statusDot: {
     width: 6,

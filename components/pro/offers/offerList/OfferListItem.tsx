@@ -138,7 +138,7 @@ const cs = StyleSheet.create({
     paddingLeft: 7,
     paddingRight: 9,
     paddingVertical: 4,
-    borderRadius: 99,
+    borderRadius: 10,
   },
   matchText: {
     fontSize: 12,

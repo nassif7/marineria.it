@@ -345,7 +345,7 @@ const s = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 99,
+    borderRadius: 10,
     backgroundColor: C.orangeSoft,
   },
   recruiterPillText: {
@@ -507,7 +507,7 @@ const s = StyleSheet.create({
   whatsappPill: {
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 99,
+    borderRadius: 10,
     backgroundColor: '#E6F5EA',
   },
   whatsappPillText: {

@@ -251,7 +251,7 @@ const cs = StyleSheet.create({
     alignSelf: 'flex-start',
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 99,
+    borderRadius: 10,
     marginTop: 6,
   },
   statusPillOnline: {

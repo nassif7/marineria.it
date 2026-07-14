@@ -185,7 +185,7 @@ const gw = StyleSheet.create({
   comingSoonBadge: {
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 99,
+    borderRadius: 10,
     backgroundColor: C.orangeSoft,
   },
   comingSoonText: {

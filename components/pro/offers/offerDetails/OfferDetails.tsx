@@ -347,7 +347,7 @@ const ds = StyleSheet.create({
   matchChip: {
     paddingHorizontal: 9,
     paddingVertical: 4,
-    borderRadius: 99,
+    borderRadius: 10,
   },
   matchText: {
     fontSize: 12,

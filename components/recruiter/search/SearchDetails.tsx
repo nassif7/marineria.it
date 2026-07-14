@@ -389,7 +389,7 @@ const sd = StyleSheet.create({
   bodyText: { fontSize: 14, lineHeight: 22, color: C.ink2, marginBottom: 4 },
 
   pillsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  infoPill: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 99, borderWidth: 1, borderColor: C.hair },
+  infoPill: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, borderWidth: 1, borderColor: C.hair },
   infoPillText: { fontSize: 12, fontWeight: '600', color: C.ink2 },
 
   candidatesHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 },

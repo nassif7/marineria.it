@@ -1,5 +1,16 @@
 import { useState, FC, ReactNode } from 'react'
-import { View, Text, Pressable, ScrollView, StyleSheet, Image, ActionSheetIOS, Platform, Alert } from 'react-native'
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Image,
+  ActionSheetIOS,
+  Platform,
+  Alert,
+  Share,
+} from 'react-native'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +24,8 @@ import {
   Clock,
   Check,
   AlertTriangle,
-  MoreHorizontal,
+  Trash2,
+  Share2,
   Phone,
   Mail,
   Info,
@@ -102,7 +114,7 @@ const cp = StyleSheet.create({
     bottom: -4,
     paddingHorizontal: 7,
     paddingVertical: 3,
-    borderRadius: 99,
+    borderRadius: 10,
     backgroundColor: C.orange,
     alignItems: 'center',
     justifyContent: 'center',
@@ -152,7 +164,7 @@ const cp = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 9,
     paddingVertical: 4,
-    borderRadius: 99,
+    borderRadius: 10,
     borderWidth: 1,
   },
   pillGreen: { backgroundColor: GREEN_SOFT, borderColor: 'transparent' },
@@ -164,7 +176,7 @@ const cp = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 9,
     paddingVertical: 4,
-    borderRadius: 99,
+    borderRadius: 10,
     backgroundColor: ORANGE_BG,
     borderWidth: 1,
     borderColor: 'transparent',
@@ -313,7 +325,7 @@ const cp = StyleSheet.create({
     shadowRadius: 12,
     elevation: 12,
   },
-  moreBtn: {
+  smallBtn: {
     width: 48,
     height: 48,
     borderRadius: 12,
@@ -322,6 +334,10 @@ const cp = StyleSheet.create({
     backgroundColor: C.card,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  removeBtn: {
+    backgroundColor: '#FEF2F2',
+    borderColor: '#FECACA',
   },
   contactBtn: {
     flex: 1,
@@ -500,7 +516,7 @@ const CrewProfile = () => {
 
   const isActionLoading = isPending || isPendingRemove
 
-  const handleMoreOptions = () => {
+  const handleRemovePress = () => {
     const removeLabel = t('remove-crew', { ns: 'crew-screen' })
     const cancelLabel = t('cancel', { ns: 'common' })
     if (Platform.OS === 'ios') {
@@ -516,6 +532,16 @@ const CrewProfile = () => {
         { text: cancelLabel, style: 'cancel' },
       ])
     }
+  }
+
+  const handleShare = async () => {
+    if (!crew) return
+    try {
+      await Share.share({
+        message: [crew.mainPosition, `CV #${crew.iduser}`].filter(Boolean).join('\n'),
+        title: crew.mainPosition || `CV #${crew.iduser}`,
+      })
+    } catch {}
   }
 
   if (isLoading) {
@@ -859,18 +885,24 @@ const CrewProfile = () => {
       {/* Bottom action bar */}
       <View style={cp.actionBar}>
         <Pressable
-          style={[cp.moreBtn, isActionLoading && { opacity: 0.5 }]}
-          onPress={handleMoreOptions}
+          style={[cp.smallBtn, cp.removeBtn, isActionLoading && { opacity: 0.5 }]}
+          onPress={handleRemovePress}
           disabled={isActionLoading}
         >
-          <MoreHorizontal size={20} color={C.ink2} strokeWidth={1.8} />
+          <Trash2 size={18} color="#DC2626" strokeWidth={1.8} />
+        </Pressable>
+        <Pressable
+          style={[cp.smallBtn, isActionLoading && { opacity: 0.5 }]}
+          onPress={handleShare}
+          disabled={isActionLoading}
+        >
+          <Share2 size={18} color={C.ink2} strokeWidth={1.8} />
         </Pressable>
         <Pressable
           style={[cp.contactBtn, isActionLoading && { opacity: 0.6 }]}
           onPress={() => setContactModalVisible(true)}
           disabled={isActionLoading}
         >
-          <Phone size={18} color="#FFF" strokeWidth={2} />
           <Text style={cp.contactBtnText}>{t('contact-crew')}</Text>
         </Pressable>
       </View>

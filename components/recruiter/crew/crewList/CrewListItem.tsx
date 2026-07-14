@@ -210,7 +210,7 @@ const ci = StyleSheet.create({
     backgroundColor: GREEN_SOFT,
     paddingHorizontal: 7,
     paddingVertical: 3,
-    borderRadius: 99,
+    borderRadius: 10,
   },
   contactedPillText: {
     fontSize: 11,
@@ -229,7 +229,7 @@ const ci = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 9,
     paddingVertical: 4,
-    borderRadius: 99,
+    borderRadius: 10,
     borderWidth: 1,
   },
   pillGreen: {
