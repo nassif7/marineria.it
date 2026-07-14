@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, View, Text, Pressable, StyleSheet } from 'react-native'
+import { Modal, View, Text, Pressable, ScrollView, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import * as WebBrowser from 'expo-web-browser'
 import { router } from 'expo-router'
@@ -14,7 +14,7 @@ interface LoginToApplyModalProps {
 
 const LoginToApplyModal: React.FC<LoginToApplyModalProps> = ({ visible, onClose }) => {
   const { t } = useTranslation(['offer-screen', 'login-screen', 'settings-screen'])
-  const { bottom } = useSafeAreaInsets()
+  const { top, bottom } = useSafeAreaInsets()
 
   const handleLogin = () => {
     onClose()
@@ -23,16 +23,19 @@ const LoginToApplyModal: React.FC<LoginToApplyModalProps> = ({ visible, onClose 
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <View style={ms.backdrop}>
-        <Pressable style={StyleSheet.absoluteFill} onPress={onClose} />
-        <View style={[ms.sheet, { paddingBottom: bottom + 20 }]}>
-          <View style={ms.header}>
-            <Text style={ms.title}>{t('login-to-apply-title', { ns: 'offer-screen' })}</Text>
-            <Pressable style={ms.closeBtn} onPress={onClose}>
-              <X size={16} color={C.ink2} strokeWidth={2.5} />
-            </Pressable>
-          </View>
+      <View style={[ms.container, { paddingTop: top }]}>
+        <View style={ms.header}>
+          <Text style={ms.headerTitle}>{t('login-to-apply-title', { ns: 'offer-screen' })}</Text>
+          <Pressable style={ms.closeBtn} onPress={onClose}>
+            <X size={16} color={C.ink2} strokeWidth={2.5} />
+          </Pressable>
+        </View>
 
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{ padding: 20, paddingBottom: bottom + 24 }}
+          showsVerticalScrollIndicator={false}
+        >
           <Text style={ms.description}>{t('login-to-apply-description', { ns: 'offer-screen' })}</Text>
 
           <Pressable style={ms.loginBtn} onPress={handleLogin}>
@@ -54,37 +57,32 @@ const LoginToApplyModal: React.FC<LoginToApplyModalProps> = ({ visible, onClose 
               <Text style={ms.registerLinkText}>{t('register-as-recruiter', { ns: 'login-screen' })}</Text>
             </Pressable>
           </View>
-        </View>
+        </ScrollView>
       </View>
     </Modal>
   )
 }
 
 const ms = StyleSheet.create({
-  backdrop: {
+  container: {
     flex: 1,
-    backgroundColor: 'rgba(13,27,42,0.4)',
-    justifyContent: 'flex-end',
-  },
-  sheet: {
     backgroundColor: C.bg,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    paddingHorizontal: 20,
-    paddingTop: 20,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    marginBottom: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: C.hair,
   },
-  title: {
+  headerTitle: {
     flex: 1,
-    fontSize: 18,
-    fontWeight: '800',
+    fontSize: 17,
+    fontWeight: '700',
     color: C.ink,
-    letterSpacing: -0.3,
+    letterSpacing: -0.2,
   },
   closeBtn: {
     width: 32,

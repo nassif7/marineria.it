@@ -181,10 +181,10 @@ const cs = StyleSheet.create({
   },
   headerTitle: {
     flex: 1,
-    fontSize: 18,
-    fontWeight: '800',
+    fontSize: 17,
+    fontWeight: '700',
     color: C.ink,
-    letterSpacing: -0.3,
+    letterSpacing: -0.2,
   },
   closeBtn: {
     width: 32,

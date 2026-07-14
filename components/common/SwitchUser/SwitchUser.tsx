@@ -1,17 +1,10 @@
 import { FC, useState, useRef, useEffect } from 'react'
-import { Keyboard, KeyboardEvent, Platform, ScrollView } from 'react-native'
+import { Keyboard, KeyboardEvent, Platform, Modal, View, Pressable, ScrollView, StyleSheet } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import {
   Button,
   ButtonSpinner,
   ButtonText,
-  Modal,
-  ModalBackdrop,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
-  Heading,
-  Icon,
   Divider,
   FormControl,
   FormControlError,
@@ -31,6 +24,7 @@ import { useAuthErrorToast } from '@/hooks/useAuthErrorToast'
 import { LoginFormLinks } from '@/components/appUI'
 import AuthenticationForm, { FormDate } from '@/components/common/AuthenticationForm'
 import { checkEmail } from '@/api/auth'
+import { C } from '@/components/pro/tokens'
 
 interface SwitchUserProps {
   renderTrigger?: (props: { onPress: () => void }) => React.ReactNode
@@ -42,6 +36,7 @@ const SwitchUser: FC<SwitchUserProps> = ({ renderTrigger }) => {
   const [email, setEmail] = useState('')
   const [code, setCode] = useState('')
   const [keyboardHeight, setKeyboardHeight] = useState(0)
+  const { top, bottom } = useSafeAreaInsets()
 
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow'
@@ -157,76 +152,104 @@ const SwitchUser: FC<SwitchUserProps> = ({ renderTrigger }) => {
         </Button>
       )}
 
-      <Modal isOpen={modalVisible} onClose={handleClose}>
-        <ModalBackdrop />
-        <ModalContent
-          className="w-full mb-0 mt-auto rounded-t-md overflow-hidden p-4"
-          style={{ marginBottom: keyboardHeight }}
-        >
-          <ModalHeader className="justify-between items-center">
-            <Heading size="xl" className="text-primary-600 flex-1">
-              {label}
-            </Heading>
-            <ModalCloseButton onPress={handleClose}>
-              <Icon as={X} className="text-typography-500" size="md" />
-            </ModalCloseButton>
-          </ModalHeader>
+      <Modal visible={modalVisible} transparent animationType="slide" onRequestClose={handleClose}>
+        <View style={[su.container, { paddingTop: top, paddingBottom: keyboardHeight }]}>
+          <View style={su.header}>
+            <Text style={su.headerTitle}>{label}</Text>
+            <Pressable style={su.closeBtn} onPress={handleClose}>
+              <X size={16} color={C.ink2} strokeWidth={2.5} />
+            </Pressable>
+          </View>
 
-          <ModalBody>
-            <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-              {step === 'email' ? (
-                <AuthenticationForm
-                  authenticate={handleSignIn}
-                  onOtpRequest={handleOtpRequest}
-                  isLoading={isSigningIn || isCheckingEmail}
-                />
-              ) : (
-                <>
-                  <Text className="mb-3">{tLogin('code-sent', { email })}</Text>
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ padding: 20, paddingBottom: bottom + 24 }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            {step === 'email' ? (
+              <AuthenticationForm
+                authenticate={handleSignIn}
+                onOtpRequest={handleOtpRequest}
+                isLoading={isSigningIn || isCheckingEmail}
+              />
+            ) : (
+              <>
+                <Text className="mb-3">{tLogin('code-sent', { email })}</Text>
 
-                  <FormControl isInvalid={!!codeError}>
-                    <Input size="xl" className="bg-white" isInvalid={!!codeError}>
-                      <InputField
-                        className="bg-white"
-                        placeholder={tLogin('code-placeholder')}
-                        value={code}
-                        onChangeText={handleCodeChange}
-                        autoCapitalize="characters"
-                        autoCorrect={false}
-                      />
-                    </Input>
-                    <FormControlError>
-                      <FormControlErrorText>{codeError}</FormControlErrorText>
-                    </FormControlError>
-                  </FormControl>
+                <FormControl isInvalid={!!codeError}>
+                  <Input size="xl" className="bg-white" isInvalid={!!codeError}>
+                    <InputField
+                      className="bg-white"
+                      placeholder={tLogin('code-placeholder')}
+                      value={code}
+                      onChangeText={handleCodeChange}
+                      autoCapitalize="characters"
+                      autoCorrect={false}
+                    />
+                  </Input>
+                  <FormControlError>
+                    <FormControlErrorText>{codeError}</FormControlErrorText>
+                  </FormControlError>
+                </FormControl>
 
-                  <Button
-                    size="xl"
-                    className="mt-3"
-                    onPress={() => {
-                      if (!code.trim()) {
-                        setCodeError(tLogin('enter-code'))
-                        return
-                      }
-                      loginWithCodeMutate(code.trim())
-                    }}
-                    isDisabled={isLoggingInWithCode}
-                  >
-                    {isLoggingInWithCode && <ButtonSpinner color="white" />}
-                    <ButtonText className="text-white">{tLogin('login')}</ButtonText>
-                  </Button>
-                </>
-              )}
+                <Button
+                  size="xl"
+                  className="mt-3"
+                  onPress={() => {
+                    if (!code.trim()) {
+                      setCodeError(tLogin('enter-code'))
+                      return
+                    }
+                    loginWithCodeMutate(code.trim())
+                  }}
+                  isDisabled={isLoggingInWithCode}
+                >
+                  {isLoggingInWithCode && <ButtonSpinner color="white" />}
+                  <ButtonText className="text-white">{tLogin('login')}</ButtonText>
+                </Button>
+              </>
+            )}
 
-              <Divider className="bg-outline-300 my-4" />
-              <LoginFormLinks isCrew={activeRole === TUserRole.CREW} isRecruiter={activeRole === TUserRole.RECRUITER} />
-            </ScrollView>
-          </ModalBody>
-        </ModalContent>
+            <Divider className="bg-outline-300 my-4" />
+            <LoginFormLinks isCrew={activeRole === TUserRole.CREW} isRecruiter={activeRole === TUserRole.RECRUITER} />
+          </ScrollView>
+        </View>
       </Modal>
     </>
   )
 }
+
+const su = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: C.bg,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: C.hair,
+  },
+  headerTitle: {
+    flex: 1,
+    fontSize: 17,
+    fontWeight: '700',
+    color: C.ink,
+    letterSpacing: -0.2,
+  },
+  closeBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: C.hair2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
 
 export default SwitchUser
 

@@ -141,11 +141,10 @@ const ms = StyleSheet.create({
   },
   title: {
     flex: 1,
-    fontSize: 13,
-    fontWeight: '600',
-    color: C.ink4,
-    letterSpacing: 0.2,
-    textTransform: 'uppercase',
+    fontSize: 17,
+    fontWeight: '700',
+    color: C.ink,
+    letterSpacing: -0.2,
   },
   closeBtn: {
     width: 32,
