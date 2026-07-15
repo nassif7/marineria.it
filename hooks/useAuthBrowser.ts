@@ -1,21 +1,11 @@
 import { useState } from 'react'
 import * as WebBrowser from 'expo-web-browser'
-import CookieManager from '@react-native-cookies/cookies'
 import { useSession } from '@/Providers/SessionProvider'
 import { API } from '@/api/consts'
 
-const MARINERIA_URL = 'https://www.marineria.it'
-const COOKIE_NAME = 'MarineriaPRO'
-
-// TODO: once the backend unifies the token format, restore cookie-based auth:
-// await CookieManager.set(MARINERIA_URL, {
-//   name: COOKIE_NAME,
-//   value: auth.token,
-//   domain: 'marineria.it',
-//   path: '/',
-//   secure: true,
-//   httpOnly: false,
-// })
+// TODO: once the backend unifies the token format, restore cookie-based auth via
+// @react-native-cookies/cookies (removed — its android/build.gradle used jcenter(),
+// which breaks EAS builds on current Gradle/AGP; re-add only once that's fixed upstream).
 
 const useAuthBrowser = () => {
   const { auth } = useSession()
