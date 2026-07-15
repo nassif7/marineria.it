@@ -1,117 +1,299 @@
-import React, { FC } from 'react'
-import { useTranslation } from 'react-i18next'
+import { FC } from 'react'
+import { View, Text, Pressable, StyleSheet, TouchableOpacity } from 'react-native'
+import { ChevronRight } from 'lucide-react-native'
 import { router } from 'expo-router'
-import { useAuthBrowser } from '@/hooks'
-import { Users, MapPin, Briefcase, Search, UserCheck, Banknote, Calendar, FileText } from 'lucide-react-native'
+import { useTranslation } from 'react-i18next'
 import { TRecruiterSearch } from '@/api/types'
-import { Box, VStack, HStack, Heading, Text, Button, ButtonText, ButtonIcon, Badge, BadgeText } from '@/components/ui'
-import { SubSection, InfoRow } from '@/components/appUI'
+import { C } from '@/components/pro/tokens'
 
 interface ISearchListItemProps {
   search: TRecruiterSearch
 }
 
 const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
-  const {
-    t,
-    i18n: { language },
-  } = useTranslation(['search-screen'])
-  const { openUrl, isLoading: isUrlLoading } = useAuthBrowser()
-
+  const { t } = useTranslation(['search-screen', 'offer'])
   const viewSearch = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}`)
-  const viewCrewList = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list`)
-
-  const openSearchByLocation = () => openUrl(`https://www.marineria.it/${language}/${search.listgeourl}`)
-  const openSearchBySkill = () => openUrl(`https://www.marineria.it/${language}/${search.listurl}`)
+  const viewCrewList = (filter: 'all' | 'selected' | 'contacted' | 'residual') =>
+    router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list?filter=${filter}`)
 
   const referenceShort = search.reference.includes('_') ? search.reference.split('_')[1] : search.reference
 
-  const boardingRange =
-    search.boarding && search.duration
-      ? `${search.boarding.trim()} → ${search.duration.trim()}`
-      : (search.boarding?.trim() ?? '—')
+  const salary =
+    search.salary_From && search.salary_To
+      ? search.salary_From === search.salary_To
+        ? search.salary_From
+        : `${search.salary_From} – ${search.salary_To}`
+      : null
+
+  const facts = [
+    salary ? [t('salary', { ns: 'offer' }), salary] : null,
+    search.boarding ? [t('boarding', { ns: 'offer' }), search.boarding.trim()] : null,
+    search.contractDescription ? [t('contract-type', { ns: 'offer' }), search.contractDescription] : null,
+  ].filter(Boolean) as [string, string][]
 
   return (
-    <Box className="bg-white p-3 rounded-md">
-      <VStack space="xs">
-        <Heading size="lg" className="text-primary-600 leading-tight">
-          {search.title.trim() || '—'}
-        </Heading>
-        <HStack className="justify-between items-center border-b border-background-200 pb-2 mb-1">
-          <Text size="xs" shade={400}>
-            {`[${t('search-id')}: ${referenceShort}]`}
+    <Pressable style={si.card} onPress={viewSearch}>
+      {/* Top row: vessel chip + status */}
+      <View style={si.topRow}>
+        {search.mainPosition ? (
+          <View style={si.positionChip}>
+            <Text style={si.positionChipText}>{search.mainPosition}</Text>
+          </View>
+        ) : (
+          <View />
+        )}
+        <View style={[si.statusPill, search.offerPublished && si.statusPillUnpublished]}>
+          <View style={[si.statusDot, search.offerPublished && si.statusDotUnpublished]} />
+          <Text style={[si.statusPillText, search.offerPublished && si.statusPillTextUnpublished]}>
+            {search.offerPublished ? t('status-not-published') : t('status-published')}
           </Text>
-          <Text shade={400} size="xs">
-            {search.offerdate}
-          </Text>
-        </HStack>
-        <SubSection>
-          {search.salary_From && (
-            <InfoRow
-              icon={Banknote}
-              label={t('salary')}
-              value={
-                search.salary_From === search.salary_To
-                  ? search.salary_From
-                  : `${search.salary_From} – ${search.salary_To}`
-              }
-            />
-          )}
-          {boardingRange && <InfoRow icon={Calendar} label={t('boarding')} value={boardingRange} />}
-          {search.contractDescription && (
-            <InfoRow icon={FileText} label={t('contract-type')} value={search.contractDescription} className="mb-0" />
-          )}
-        </SubSection>
+        </View>
+      </View>
 
-        <SubSection icon={Briefcase} title={t('offer')} onPress={viewSearch}>
-          <Text size="sm" shade={700} numberOfLines={2}>
-            {search.offer.trim() || '—'}
-          </Text>
-        </SubSection>
-        <SubSection icon={Users} title={t('candidates-overview')} onPress={viewCrewList}>
-          <HStack className="items-center justify-between mt-2">
-            <Badge action="success" variant="solid" className="rounded-md bg-success-600">
-              <BadgeText className="text-white">
-                {t('candidates')}: {search.countCandidates}
-              </BadgeText>
-            </Badge>
-            <Badge action="muted" variant="outline" className="rounded-md">
-              <BadgeText>
-                {t('contacted')}: {search.countContacted}
-              </BadgeText>
-            </Badge>
-            <Badge action="muted" variant="outline" className="rounded-md">
-              <BadgeText>
-                {t('residual')}: {search.countResidual}
-              </BadgeText>
-            </Badge>
-          </HStack>
-        </SubSection>
-        <SubSection title={t('find-crew')} icon={Search}>
-          <HStack space="sm">
-            <Button
-              variant="solid"
-              action="positive"
-              onPress={openSearchBySkill}
-              className="rounded-md flex-1"
-              isDisabled={isUrlLoading}
-            >
-              <ButtonText>{t('by-skill')}</ButtonText>
-            </Button>
-            <Button
-              variant="solid"
-              action="positive"
-              onPress={openSearchByLocation}
-              className="rounded-md flex-1"
-              isDisabled={isUrlLoading}
-            >
-              <ButtonText>{t('by-location')}</ButtonText>
-            </Button>
-          </HStack>
-        </SubSection>
-      </VStack>
-    </Box>
+      {/* Title */}
+      <Text style={si.title} numberOfLines={2}>
+        {search.title?.trim() || '—'}
+      </Text>
+
+      {/* Facts grid */}
+      {facts.length > 0 && (
+        <View style={si.factsGrid}>
+          {facts.map(([label, value], i) => (
+            <View key={label} style={i === 2 ? si.factFull : si.factHalf}>
+              <Text style={si.factLabel}>{label}</Text>
+              <Text style={si.factValue}>{value}</Text>
+            </View>
+          ))}
+        </View>
+      )}
+
+      {/* Candidates funnel */}
+      <Text style={si.funnelSectionLabel}>{t('candidates-overview')}</Text>
+      <View style={si.funnel}>
+        {(() => {
+          const selected = Math.max(0, search.countCandidates - search.countContacted)
+          const contacted = search.countContacted
+          const residual = search.countResidual
+          return (
+            <>
+              <FunnelStage
+                n={selected}
+                label={t('selected')}
+                color={selected > 0 ? C.orangeText : C.ink4}
+                labelColor={selected > 0 ? C.orangeText : C.ink4}
+                onPress={() => viewCrewList('selected')}
+              />
+              <FunnelArrow />
+              <FunnelStage
+                n={contacted}
+                label={t('contacted')}
+                color={contacted > 0 ? C.green : C.ink4}
+                labelColor={contacted > 0 ? C.green : C.ink4}
+                onPress={() => viewCrewList('contacted')}
+              />
+              <FunnelArrow />
+              <FunnelStage
+                n={residual}
+                label={t('residual')}
+                color={C.ink4}
+                labelColor={C.ink4}
+                onPress={() => viewCrewList('residual')}
+              />
+            </>
+          )
+        })()}
+      </View>
+
+      {/* Footer */}
+      <View style={si.footer}>
+        <Text style={si.footerRef}>Ref · {referenceShort}</Text>
+        <View style={si.manageRow}>
+          <Text style={si.manageText}>{t('view-search')}</Text>
+          <ChevronRight size={14} color={C.green} strokeWidth={2.2} />
+        </View>
+      </View>
+    </Pressable>
   )
 }
+
+function FunnelStage({
+  n,
+  label,
+  color,
+  labelColor,
+  onPress,
+}: {
+  n: number
+  label: string
+  color: string
+  labelColor: string
+  onPress: () => void
+}) {
+  return (
+    <TouchableOpacity style={si.funnelStage} onPress={onPress} activeOpacity={0.7}>
+      <Text style={[si.funnelNum, { color }]}>{Math.max(0, n)}</Text>
+      <Text style={[si.funnelLabel, { color: labelColor }]}>{label}</Text>
+    </TouchableOpacity>
+  )
+}
+
+function FunnelArrow() {
+  return (
+    <View style={{ opacity: 0.35, flexShrink: 0 }}>
+      <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
+    </View>
+  )
+}
+
+const si = StyleSheet.create({
+  card: {
+    backgroundColor: C.card,
+    borderRadius: 16,
+    padding: 18,
+    shadowColor: '#0D1B2A',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  topRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  positionChip: {
+    backgroundColor: C.ink,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  positionChipText: {
+    color: '#FFFFFF',
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.4,
+  },
+  statusPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: '#E8F8EB',
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+    borderRadius: 10,
+  },
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: C.green,
+  },
+  statusPillText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#0F7A28',
+  },
+  statusPillUnpublished: {
+    backgroundColor: '#F2F2F2',
+  },
+  statusDotUnpublished: {
+    backgroundColor: C.ink4,
+  },
+  statusPillTextUnpublished: {
+    color: C.ink3,
+  },
+  title: {
+    fontSize: 17,
+    fontWeight: '700',
+    color: C.ink,
+    letterSpacing: -0.2,
+    lineHeight: 22,
+    marginBottom: 12,
+  },
+  factsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    rowGap: 10,
+    columnGap: 16,
+    marginBottom: 14,
+  },
+  factHalf: {
+    width: '45%',
+  },
+  factFull: {
+    width: '100%',
+  },
+  factLabel: {
+    fontSize: 11,
+    fontWeight: '500',
+    letterSpacing: 0.3,
+    color: C.ink4,
+    textTransform: 'uppercase',
+    marginBottom: 2,
+  },
+  factValue: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: C.ink,
+  },
+  funnelSectionLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: C.ink4,
+    letterSpacing: 0.4,
+    textTransform: 'uppercase',
+    marginBottom: 6,
+  },
+  funnel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    backgroundColor: C.field,
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    marginBottom: 12,
+  },
+  funnelStage: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  funnelNum: {
+    fontSize: 22,
+    fontWeight: '800',
+    letterSpacing: -0.5,
+    lineHeight: 26,
+  },
+  funnelLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    marginTop: 4,
+    letterSpacing: 0.2,
+    textTransform: 'uppercase',
+  },
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: C.hair2,
+  },
+  footerRef: {
+    fontSize: 12,
+    color: C.ink4,
+  },
+  manageRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
+  manageText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: C.green,
+  },
+})
 
 export default SearchListItem

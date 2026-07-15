@@ -1,6 +1,6 @@
 import { FC } from 'react'
-import { FlatList, RefreshControl } from 'react-native'
-import { Box, VStack, HStack, Text, Divider } from '@/components/ui'
+import { FlatList } from 'react-native'
+import { Box, VStack, HStack, Text, Divider, RefreshControl } from '@/components/ui'
 import { ChevronDown } from 'lucide-react-native'
 import {
   Select,

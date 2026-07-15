@@ -1,11 +1,12 @@
 import { Stack } from 'expo-router'
+import { C } from '@/components/pro/tokens'
 
 export default function RecruiterLayout() {
   return (
     <Stack
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor: 'rgb(30 41 59)' },
+        contentStyle: { backgroundColor: C.bg },
       }}
     >
       <Stack.Screen name="index" />

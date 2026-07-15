@@ -18,6 +18,8 @@ const NavBar: FC<NavBarProps> = ({ options, back, rightAction }) => {
   const canGoBack = back !== undefined
   const router = useRouter()
 
+  const right = rightAction ?? (options?.headerRight ? options.headerRight({}) : null)
+
   return (
     <Box className="px-2 py-2 border-b border-outline-100">
       <HStack className="items-center justify-between min-h-[40px] ">
@@ -39,7 +41,7 @@ const NavBar: FC<NavBarProps> = ({ options, back, rightAction }) => {
             {title}
           </Heading>
         )}
-        {rightAction ? <Box>{rightAction}</Box> : <Box className="w-20" />}
+        {right ? <Box>{right}</Box> : <Box className="w-20" />}
       </HStack>
     </Box>
   )

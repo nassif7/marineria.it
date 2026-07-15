@@ -4,9 +4,10 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useQuery } from '@tanstack/react-query'
 import { VStack, Text, HStack, Button, ButtonIcon, ButtonText, View, Heading } from '@/components/ui'
 import { Loading } from '@/components/ui/loading'
-import { useUser, ActiveProfile } from '@/Providers/UserProvider'
+import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { useTranslation } from 'react-i18next'
-import { getRecruiterSearchById } from '@/api'
+import { getRecruiterSearchByIdPost } from '@/api'
+// import { getRecruiterSearchById } from '@/api'
 import { ScreenContainer } from '@/components/appUI'
 import { UserCheck, MapPin } from 'lucide-react-native'
 
@@ -17,14 +18,13 @@ const CrewListEmptyComponent = () => {
     t,
     i18n: { language },
   } = useTranslation(['crew-screen'])
-  const { activeProfile } = useUser()
-
-  const { token } = activeProfile as ActiveProfile
+  const { token } = useRecruiter()
   const { openUrl, isLoading: isUrlLoading } = useAuthBrowser()
 
   const { isLoading, isSuccess, isError, isRefetching, refetch, data } = useQuery({
     queryKey: ['recruiter-search-by-id', searchId, language],
-    queryFn: () => getRecruiterSearchById(searchId as string, token, language),
+    // queryFn: () => getRecruiterSearchById(searchId as string, token, language),
+    queryFn: () => getRecruiterSearchByIdPost(searchId as string, token, language),
   })
 
   const search = isSuccess ? (data as any)?.[0] : null

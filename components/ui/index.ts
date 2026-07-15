@@ -46,6 +46,7 @@ export {
   PopoverBody,
   PopoverContent,
 } from './popover'
+export { RefreshControl } from './refresh-control'
 export { Spinner } from './spinner'
 export { Switch } from './switch'
 export { Text } from './text'

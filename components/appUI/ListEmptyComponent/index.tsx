@@ -10,10 +10,12 @@ interface EmptyListProps {
 
 export default function EmptyList({ message = 'No results found' }: EmptyListProps) {
   return (
-    <Center className="py-12">
-      <VStack space="sm" className="items-center">
-        <Icon as={InboxIcon} className="text-typography-400" size="xl" />
-        <Text className="text-typography-500 text-sm">{message}</Text>
+    <Center style={{ paddingTop: 48 }}>
+      <VStack space="lg" className="items-center px-8">
+        <Icon as={InboxIcon} className="text-typography-400" size="xl" style={{ width: 36, height: 36 }} />
+        <Text className="text-typography-500 text-base text-center" style={{ fontWeight: '500' }}>
+          {message}
+        </Text>
       </VStack>
     </Center>
   )

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Platform } from 'react-native'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
+import { CommonActions } from '@react-navigation/native'
 import { Box, HStack, VStack, Text, Pressable, Icon } from '@/components/ui'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -32,7 +33,15 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation, showLab
             })
 
             if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name, route.params)
+              // Reset the target tab's nested stack to its root before switching to it,
+              // so that cross-tab deep-link navigations don't leave stale history.
+              navigation.dispatch(
+                CommonActions.reset({
+                  ...state,
+                  index,
+                  routes: state.routes.map((r, i) => (i === index ? { name: r.name, key: r.key } : r)),
+                })
+              )
             }
           }
 

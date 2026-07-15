@@ -1,31 +1,15 @@
 import { Stack } from 'expo-router'
-import { NavBar } from '@/components/appUI'
-import { useTranslation } from 'react-i18next'
-import ContactSupport from '@/components/common/ContactSupport'
-import { supportTeam } from '@/api'
-export default function OffersLayout() {
-  const { t } = useTranslation(['screens-labels'])
+import { C } from '@/components/pro/tokens'
 
+export default function OffersLayout() {
   return (
     <Stack
       screenOptions={{
         headerShown: false,
-        header: (props) => (
-          <NavBar
-            {...props}
-            rightAction={<ContactSupport title={t('contact-support', { ns: 'common' })} supportTeam={supportTeam} />}
-          />
-        ),
-        contentStyle: { backgroundColor: 'white' },
+        contentStyle: { backgroundColor: C.bg },
       }}
     >
-      <Stack.Screen
-        name="index"
-        options={{
-          headerShown: true,
-          title: t('search-list'),
-        }}
-      />
+      <Stack.Screen name="index" />
       <Stack.Screen name="[searchId]" />
     </Stack>
   )

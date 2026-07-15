@@ -72,7 +72,8 @@
           "organization": "marineria",
           "project": "marineria-app"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true

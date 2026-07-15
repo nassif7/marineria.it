@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store'
 import { useTranslation } from 'react-i18next'
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { TUserRole, TUser } from '@/api/types'
-import { getProUserProfile, getOwnerUserProfile, setPushNotificationToken } from '@/api'
+import { getProUserProfilePost, getOwnerUserProfilePost, setPushNotificationToken } from '@/api'
 import { useSession } from '@/Providers/SessionProvider'
 import { registerForPushNotificationsAsync } from '@/hooks/useNotification'
 
@@ -15,6 +15,7 @@ export type TActiveProfile = {
 type UserContextType = {
   user?: TUser
   isLoading: boolean
+  isError: boolean
   isTogglingNotifications: boolean
   activeProfile?: TActiveProfile
   switchProfile: (targetRole: TUserRole) => Promise<void>
@@ -23,6 +24,7 @@ type UserContextType = {
 
 const UserContext = createContext<UserContextType>({
   isLoading: false,
+  isError: false,
   isTogglingNotifications: false,
   activeProfile: undefined,
   user: undefined,
@@ -41,14 +43,16 @@ const UserProvider = (props: React.PropsWithChildren) => {
 
   const { role, token } = auth
 
-  const { data: user, isLoading } = useQuery({
+  const {
+    data: user,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['user', token, role, language],
     queryFn: async () => {
-      const data = await (role === TUserRole.RECRUITER ? getOwnerUserProfile : getProUserProfile)(
-        token as string,
-        role as TUserRole,
-        language
-      )
+      const data = await (role === TUserRole.RECRUITER
+        ? getOwnerUserProfilePost(token as string, language)
+        : getProUserProfilePost(token as string, language))
 
       return Array.isArray(data) ? data?.[0] : data
     },
@@ -81,6 +85,7 @@ const UserProvider = (props: React.PropsWithChildren) => {
       value={{
         user,
         isLoading,
+        isError,
         isTogglingNotifications,
         activeProfile: token && role ? { token, role } : undefined,
         switchProfile,

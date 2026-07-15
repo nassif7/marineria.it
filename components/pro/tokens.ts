@@ -1,0 +1,15 @@
+export const C = {
+  orange: '#EE5A24',
+  orangeSoft: '#FEF1E6',
+  orangeText: '#C24A18',
+  green: '#22A93A',
+  ink: '#0D1B2A',
+  ink2: '#2A3342',
+  ink3: '#5C6878',
+  ink4: '#8A96A8',
+  hair: 'rgba(13,27,42,0.08)',
+  hair2: 'rgba(13,27,42,0.06)',
+  bg: '#F6F5F2',
+  card: '#FFFFFF',
+  field: '#F2F1ED',
+} as const
