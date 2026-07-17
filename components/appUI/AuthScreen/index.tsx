@@ -1,17 +1,18 @@
 import { LinearGradient } from 'expo-linear-gradient'
+import { BlurView } from 'expo-blur'
 import {
   Animated,
   Dimensions,
   Easing,
   Image,
   Keyboard,
-  KeyboardAvoidingView,
+  KeyboardEvent,
   Platform,
   ScrollView,
   StyleSheet,
   View,
 } from 'react-native'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const { width: SCREEN_W } = Dimensions.get('window')
@@ -23,22 +24,29 @@ const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
 }))
 
 const BRAND_NORMAL = 200
-const BRAND_KEYBOARD = 72
+const BRAND_KEYBOARD = 0
 
 const AuthScreen = ({ children }: React.PropsWithChildren) => {
   const insets = useSafeAreaInsets()
   const brandHeight = useRef(new Animated.Value(BRAND_NORMAL)).current
+  const [keyboardHeight, setKeyboardHeight] = useState(0)
+  const keyboardVisible = keyboardHeight > 0
 
   useEffect(() => {
-    const show = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow', () => {
-      Animated.timing(brandHeight, {
-        toValue: BRAND_KEYBOARD,
-        duration: 280,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: false,
-      }).start()
-    })
+    const show = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      (e: KeyboardEvent) => {
+        setKeyboardHeight(e.endCoordinates.height)
+        Animated.timing(brandHeight, {
+          toValue: BRAND_KEYBOARD,
+          duration: 280,
+          easing: Easing.out(Easing.cubic),
+          useNativeDriver: false,
+        }).start()
+      }
+    )
     const hide = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide', () => {
+      setKeyboardHeight(0)
       Animated.timing(brandHeight, {
         toValue: BRAND_NORMAL,
         duration: 250,
@@ -70,8 +78,8 @@ const AuthScreen = ({ children }: React.PropsWithChildren) => {
         />
       ))}
 
-      <KeyboardAvoidingView style={styles.kavContainer} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <Animated.View style={[styles.brandArea, { height: brandHeight, paddingTop: insets.top + 10 }]}>
+      <View style={styles.kavContainer}>
+        <Animated.View style={[styles.brandArea, { height: brandHeight, paddingTop: Math.max(insets.top - 8, 0) }]}>
           <Image
             source={require('@/assets/images/marineria_logo_transparent.png')}
             style={styles.logoImage}
@@ -79,9 +87,14 @@ const AuthScreen = ({ children }: React.PropsWithChildren) => {
           />
         </Animated.View>
 
-        <View style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, 16) }]}>
+        <View style={[styles.sheet, keyboardVisible && styles.sheetExpanded]}>
           <ScrollView
-            contentContainerStyle={styles.sheetContent}
+            style={keyboardVisible && styles.sheetExpanded}
+            contentContainerStyle={[
+              styles.sheetContent,
+              keyboardVisible && styles.sheetContentExpanded,
+              { paddingBottom: keyboardVisible ? keyboardHeight + 16 : Math.max(insets.bottom, 16) },
+            ]}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
             bounces={false}
@@ -89,7 +102,13 @@ const AuthScreen = ({ children }: React.PropsWithChildren) => {
             {children}
           </ScrollView>
         </View>
-      </KeyboardAvoidingView>
+      </View>
+
+      {keyboardVisible && (
+        <BlurView intensity={40} tint="light" style={[styles.topBlur, { height: insets.top }]} pointerEvents="none">
+          <View style={styles.topBlurTint} />
+        </BlurView>
+      )}
     </View>
   )
 }
@@ -108,25 +127,44 @@ const styles = StyleSheet.create({
   },
   brandArea: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   logoImage: {
     width: 240,
     height: 80,
   },
   sheet: {
-    borderRadius: 28,
+    borderRadius: 20,
     backgroundColor: '#ffffff',
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: -8 },
     shadowOpacity: 0.14,
     shadowRadius: 16,
     elevation: 20,
+    overflow: 'hidden',
+  },
+  sheetExpanded: {
+    flex: 1,
   },
   sheetContent: {
     paddingHorizontal: 24,
     paddingTop: 26,
     paddingBottom: 8,
+  },
+  sheetContentExpanded: {
+    flexGrow: 1,
+    justifyContent: 'flex-end',
+  },
+  topBlur: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    overflow: 'hidden',
+  },
+  topBlurTint: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.55)',
   },
 })
 
