@@ -52,18 +52,17 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
               {crew.mainPosition || '—'}
             </Text>
           </View>
+          {isContacted && (crew.firstName || crew.lastName) && (
+            <Text style={ci.nameText} numberOfLines={1}>
+              {[crew.firstName, crew.lastName].filter(Boolean).join(' ')}
+            </Text>
+          )}
           <View style={ci.infoRow}>
             <Text style={ci.infoText}>
               {[crew.passport, age ? `${age} ${t('years', { ns: 'crew' })}` : null, crew.gender]
                 .filter(Boolean)
                 .join(' · ')}
             </Text>
-            {isContacted && (
-              <View style={ci.contactedPill}>
-                <Check size={10} color={GREEN_TEXT} strokeWidth={2.8} />
-                <Text style={ci.contactedPillText}>{t('contacted', { ns: 'search-screen' })}</Text>
-              </View>
-            )}
           </View>
         </View>
       </View>
@@ -193,6 +192,12 @@ const ci = StyleSheet.create({
     color: C.ink4,
     fontVariant: ['tabular-nums'],
   },
+  nameText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: C.ink,
+    marginBottom: 4,
+  },
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -202,20 +207,6 @@ const ci = StyleSheet.create({
   infoText: {
     fontSize: 12,
     color: C.ink2,
-  },
-  contactedPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: GREEN_SOFT,
-    paddingHorizontal: 7,
-    paddingVertical: 3,
-    borderRadius: 10,
-  },
-  contactedPillText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: GREEN_TEXT,
   },
   pillsRow: {
     flexDirection: 'row',

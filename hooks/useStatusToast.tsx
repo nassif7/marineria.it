@@ -1,8 +1,11 @@
 import React from 'react'
+import { Dimensions, View } from 'react-native'
 import { useToast, Toast, ToastTitle, ToastDescription } from '@/components/ui/toast'
-import { HStack, VStack } from '@/components/ui'
 import { Pressable } from '@/components/ui/pressable'
 import { X } from 'lucide-react-native'
+
+const TOAST_MARGIN = 20
+const TOAST_WIDTH = Math.min(Dimensions.get('window').width - TOAST_MARGIN * 2, 480)
 
 type ToastEmphasis = 'success' | 'error'
 
@@ -27,7 +30,7 @@ const useStatusToast = () => {
       id: newId.toString(),
       placement: 'top',
       duration,
-      containerStyle: { marginTop: 40, marginLeft: 20, marginRight: 20, borderRadius: 8 },
+      containerStyle: { marginTop: 40, marginLeft: TOAST_MARGIN, marginRight: TOAST_MARGIN, borderRadius: 8 },
       render: ({ id }) => {
         const uniqueToastId = 'toast-' + id
         return (
@@ -35,19 +38,20 @@ const useStatusToast = () => {
             action={emphasize}
             variant="solid"
             nativeID={uniqueToastId}
-            className="p-4 gap-6 border-error-500 w-80 max-w-[443px] flex-row justify-between"
+            style={{
+              width: TOAST_WIDTH,
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              gap: 12,
+            }}
           >
-            <HStack space="md">
-              <VStack space="xs">
-                <ToastTitle className="font-semibold">{title}</ToastTitle>
-                {description && <ToastDescription size="md">{description}</ToastDescription>}
-              </VStack>
-            </HStack>
-            <HStack className="min-[450px]:gap-3 gap-1">
-              <Pressable onPress={() => toast.close(id)} hitSlop={10} style={{ padding: 2 }}>
-                <X size={18} color="#FFFFFF" strokeWidth={2.4} />
-              </Pressable>
-            </HStack>
+            <View style={{ flex: 1, gap: 2 }}>
+              <ToastTitle className="font-semibold">{title}</ToastTitle>
+              {description && <ToastDescription size="md">{description}</ToastDescription>}
+            </View>
+            <Pressable onPress={() => toast.close(id)} hitSlop={10} style={{ padding: 2, flexShrink: 0 }}>
+              <X size={18} color="#FFFFFF" strokeWidth={2.4} />
+            </Pressable>
           </Toast>
         )
       },

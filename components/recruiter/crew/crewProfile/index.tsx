@@ -1,16 +1,5 @@
 import { useState, FC, ReactNode } from 'react'
-import {
-  View,
-  Text,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Image,
-  ActionSheetIOS,
-  Platform,
-  Alert,
-  Linking,
-} from 'react-native'
+import { View, Text, Pressable, ScrollView, StyleSheet, Image, Linking } from 'react-native'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -48,6 +37,7 @@ import ContactSupport from '@/components/common/ContactSupport'
 import { PhotoSlider } from '@/components/appUI'
 import HtmlText from '@/components/pro/HtmlText'
 import ContactCrewModal from './ContactCrewModal'
+import RemoveCrewModal from './RemoveCrewModal'
 import { TCrewExperience, TCrewReference } from '@/api/types'
 
 const GREEN_SOFT = '#E8F8EB'
@@ -495,6 +485,7 @@ const ContactInfoRow: FC<{ icon: FC<any>; label: string; value: string; onPress:
 
 const CrewProfile = () => {
   const [contactModalVisible, setContactModalVisible] = useState(false)
+  const [removeModalVisible, setRemoveModalVisible] = useState(false)
   const [photoSliderVisible, setPhotoSliderVisible] = useState(false)
   const [photoSliderIndex, setPhotoSliderIndex] = useState(0)
   const {
@@ -528,8 +519,14 @@ const CrewProfile = () => {
         duration: 8000,
       })
     },
-    onError: () => {
-      showToast({ emphasize: 'error', title: 'Error', description: t('contact-crew-error', { ns: 'crew-screen' }) })
+    onError: (error: unknown) => {
+      console.log('handleContactCrew error', error)
+      const message = error instanceof ApiError && error.title !== 'unknown-error' ? error.title : null
+      showToast({
+        emphasize: 'error',
+        title: 'Error',
+        description: message ?? t('contact-crew-error', { ns: 'crew-screen' }),
+      })
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['recruiter-crew-cv', searchId, crewId] })
@@ -540,21 +537,28 @@ const CrewProfile = () => {
 
   const { mutate: handleRemoveCrew, isPending: isPendingRemove } = useMutation({
     mutationFn: () => removeCrew(token, crewId as string, searchId as string, language),
-    onSuccess: () => {
+    onSuccess: async () => {
       showToast({
         emphasize: 'success',
         title: t('success', { ns: 'common' }),
         description: t('remove-crew-success', { ns: 'crew-screen' }),
         duration: 8000,
       })
-    },
-    onError: () => {
-      showToast({ emphasize: 'error', title: 'Error', description: t('remove-crew-error', { ns: 'crew-screen' }) })
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['recruiter-crew-cv', searchId, crewId] })
-      queryClient.invalidateQueries({ queryKey: ['recruiter-crew-list-post', searchId] })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['recruiter-crew-cv', searchId, crewId] }),
+        queryClient.invalidateQueries({ queryKey: ['recruiter-crew-list-post', searchId] }),
+      ])
+      setRemoveModalVisible(false)
       router.back()
+    },
+    onError: (error: unknown) => {
+      console.log('handleRemoveCrew error', error)
+      const message = error instanceof ApiError && error.title !== 'unknown-error' ? error.title : null
+      showToast({
+        emphasize: 'error',
+        title: 'Error',
+        description: message ?? t('remove-crew-error', { ns: 'crew-screen' }),
+      })
     },
   })
 
@@ -567,23 +571,7 @@ const CrewProfile = () => {
     Linking.openURL(url).catch(() => {})
   }
 
-  const handleRemovePress = () => {
-    const removeLabel = t('remove-crew', { ns: 'crew-screen' })
-    const cancelLabel = t('cancel', { ns: 'common' })
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions(
-        { options: [cancelLabel, removeLabel], cancelButtonIndex: 0, destructiveButtonIndex: 1 },
-        (i) => {
-          if (i === 1) handleRemoveCrew()
-        }
-      )
-    } else {
-      Alert.alert('', '', [
-        { text: removeLabel, style: 'destructive', onPress: () => handleRemoveCrew() },
-        { text: cancelLabel, style: 'cancel' },
-      ])
-    }
-  }
+  const handleRemovePress = () => setRemoveModalVisible(true)
 
   if (isLoading) {
     return (
@@ -624,6 +612,37 @@ const CrewProfile = () => {
   }
 
   if (!crew) return null
+
+  if (!crew.iduser) {
+    return (
+      <View style={{ flex: 1, backgroundColor: C.bg }}>
+        <Stack.Screen options={{ headerShown: false }} />
+        <View style={cp.navRow}>
+          <Pressable style={cp.iconBtn} onPress={() => router.back()}>
+            <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
+          </Pressable>
+          <ContactSupport
+            title={t('contact-support', { ns: 'settings-screen' })}
+            supportTeam={supportTeam}
+            renderTrigger={({ onPress }) => (
+              <Pressable style={cp.iconBtn} onPress={onPress}>
+                <Headphones size={18} color={C.ink2} strokeWidth={1.8} />
+              </Pressable>
+            )}
+          />
+        </View>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32, gap: 16 }}>
+          <AlertCircle size={40} color={C.ink4} strokeWidth={1.6} />
+          <Text style={{ fontSize: 16, fontWeight: '700', color: C.ink, textAlign: 'center' }}>
+            {t('profile-not-available', { ns: 'crew-screen' })}
+          </Text>
+          <Text style={{ fontSize: 14, color: C.ink3, textAlign: 'center', lineHeight: 20 }}>
+            {t('profile-not-available-description', { ns: 'crew-screen' })}
+          </Text>
+        </View>
+      </View>
+    )
+  }
 
   const isContacted = parseServerBool(crew.contacted)
   const photoUrl = crew.userPhoto ? getPhotoUrl(crew.userPhoto) : null
@@ -978,6 +997,12 @@ const CrewProfile = () => {
         onClose={() => setContactModalVisible(false)}
         onConfirm={handleContactCrew}
         isSubmitting={isPending}
+      />
+      <RemoveCrewModal
+        visible={removeModalVisible}
+        onClose={() => setRemoveModalVisible(false)}
+        onConfirm={handleRemoveCrew}
+        isSubmitting={isPendingRemove}
       />
       <PhotoSlider
         visible={photoSliderVisible}
