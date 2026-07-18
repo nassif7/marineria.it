@@ -1,9 +1,10 @@
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useSession } from '@/Providers/SessionProvider'
 import { getCrewUserProfilePost, setPushNotificationToken } from '@/api'
-import { TCrewUser, TNotification } from '@/api/types'
+import { ApiError } from '@/api/utils'
+import { TCrewUser, TNotification, TUserRole } from '@/api/types'
 import { registerForPushNotificationsAsync } from '@/hooks/useNotification'
 import { useSavedOffers } from '@/hooks/useSavedOffers'
 import { useNotifications } from '@/hooks/useNotifications'
@@ -42,7 +43,7 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
   const {
     i18n: { language },
   } = useTranslation()
-  const { auth } = useSession()
+  const { auth, signOut } = useSession()
   const token = auth.token ?? ''
   const queryClient = useQueryClient()
   const { savedIds: savedOfferIds, isSaved: isSavedOffer, toggleSaved: toggleSavedOffer } = useSavedOffers()
@@ -51,12 +52,24 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
     data: crew,
     isLoading: crewLoading,
     isRefetching: crewRefetching,
+    isSuccess: crewLoaded,
+    isError: crewErrored,
+    error: crewError,
     refetch: refetchCrew,
   } = useQuery({
     queryKey: ['crew-profile', token, language],
     queryFn: () => getCrewUserProfilePost(token, language),
     enabled: !!token,
   })
+
+  // A stale/revoked token either fails outright (401) or, for this endpoint, responds
+  // 200 with an empty/blank payload — detect both and bounce back to sign-in.
+  useEffect(() => {
+    if (!token) return
+    const invalidToken =
+      (crewLoaded && !crew?.iduser) || (crewErrored && crewError instanceof ApiError && crewError.status === 401)
+    if (invalidToken) signOut(TUserRole.CREW)
+  }, [token, crewLoaded, crew?.iduser, crewErrored, crewError, signOut])
 
   const { data: notifications = [], isRefetching: notifRefetching, refetch: refetchNotif } = useNotifications(token)
 

@@ -113,7 +113,13 @@ const RecruiterProfile: FC = () => {
 
   const handleSelectNotification = (notification: TNotification) => {
     setNotificationsVisible(false)
-    if (notification.idoffer) goToRecruiter(notification.idoffer, 'crew-list')
+    if (!notification.idoffer) return
+    if (notification.iduser) {
+      setFromHome()
+      router.push(`/(tabs)/recruiter/search/${notification.idoffer}/crew/${notification.iduser}` as any)
+    } else {
+      goToRecruiter(notification.idoffer, 'crew-list')
+    }
   }
 
   const waNumber = user?.whatsapp?.replace(/^https?:\/\/wa\.me\//, '') ?? ''
@@ -198,7 +204,7 @@ const RecruiterProfile: FC = () => {
               <Text style={s.bannerTitle}>
                 {t('recruiter-profile.notifications-count', { count: realNotifications.length })}
               </Text>
-              {realNotifications[0].title ? <Text style={s.bannerSub}>{realNotifications[0].title}</Text> : null}
+              <Text style={s.bannerSub}>{t('recruiter-profile.notification-activity')}</Text>
             </View>
             <ChevronRight size={18} color="#fff" strokeWidth={2.4} />
           </Pressable>
@@ -212,7 +218,7 @@ const RecruiterProfile: FC = () => {
               key={search.idoffer}
               icon="briefcase"
               title={search.mainPosition || search.title || `Ref · ${search.reference}`}
-              sub={`${search.countCandidates} crew · ${search.countContacted} contattati`}
+              sub={`${search.countCandidates} crew · ${search.countContacted} ${t('contacted', { ns: 'search-screen' })}`}
               accent
               last={i === searches.length - 1}
               onPress={() => goToRecruiter(search.idoffer, 'detail')}

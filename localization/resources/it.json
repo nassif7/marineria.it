@@ -43,6 +43,8 @@
     "recruiter-label": "Recruiter",
     "or": "oppure",
     "sign-in-with-password-short": "Hai una password? Accedi",
+    "otp-tab": "Codice monouso",
+    "password-tab": "Password",
     "password": "Password"
   },
   "home-screen": {
@@ -68,6 +70,7 @@
       "no-notifications": "Nessuna notifica",
       "notifications-count_one": "{{count}} notifica",
       "notifications-count_other": "{{count}} notifiche",
+      "notification-activity": "Equipaggio contattato",
       "section-activity": "Le tue attività",
       "action-searches": "Le tue ricerche",
       "action-searches-sub": "{{count}} attive",
@@ -118,6 +121,7 @@
       "no-notifications": "Nessuna notifica",
       "notifications-count_one": "{{count}} notifica",
       "notifications-count_other": "{{count}} notifiche",
+      "notification-activity": "Candidatura accettata",
       "notifications-title": "Notifiche",
       "registered-on": "Iscritta il {{date}}",
       "last-access": "Ultimo accesso {{date}}"
@@ -227,7 +231,10 @@
     "no-certificate-of-competence": "Senza Certificato di competenza",
     "contact-crew": "Contatta questa persona",
     "already-contacted": "Già contattato",
+    "profile-not-available": "Questo profilo non è più disponibile",
+    "profile-not-available-description": "Il profilo di questo candidato è stato rimosso o non è più pubblicato e non può essere visualizzato.",
     "remove-crew": "rimuovi dalla lista ",
+    "remove-crew-confirm": "Sei sicuro di voler rimuovere questo candidato dalla tua lista di equipaggio? Questa azione non può essere annullata.",
     "unlock-contact-information": "Leggi informazioni personali e contatti",
     "receive-cv": "Ottieni questo CV via Email in formato PDF",
     "send-job-offer": "Invia la tua offerta di lavoro",

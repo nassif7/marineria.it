@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { Modal, View, Text, Pressable, ScrollView, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
-import { X, Bell, ChevronRight, Info } from 'lucide-react-native'
+import { X, ChevronRight, Info } from 'lucide-react-native'
 import { TNotification } from '@/api/types'
 import { C } from '@/components/pro/tokens'
 
@@ -13,18 +13,32 @@ interface RecruiterNotificationsModalProps {
   onSelect: (notification: TNotification) => void
 }
 
+// Titles arrive like "Position  Master (CoC) for private M/Y 27M italian Flag [70000_10718]" —
+// strip the leading "Position" and surface the reference (the part after the underscore) separately.
+const parseNotification = (notification: TNotification) => {
+  const refMatch = notification.title?.match(/\[(\d+)_(\d+)\]/)
+  const reference = refMatch ? refMatch[2] : null
+  const cleanTitle = (notification.title ?? '')
+    .replace(/\[\d+_\d+\]/, '')
+    .replace(/^position\s+/i, '')
+    .trim()
+  const name = notification.message?.split('\n')[1]?.trim()
+  return { cleanTitle, reference, name }
+}
+
 const NotificationRow: FC<{ notification: TNotification; onNavigate: () => void }> = ({ notification, onNavigate }) => {
-  const isNavigable = !!notification.idoffer
+  const { t } = useTranslation(['search-screen'])
+  const isNavigable = !!notification.idoffer && !!notification.iduser
   const Row = isNavigable ? Pressable : View
+  const { cleanTitle, reference, name } = parseNotification(notification)
+  const subtitle = [reference ? `Ref · ${reference}` : null, name].filter(Boolean).join(' · ')
+
   return (
     <Row style={nm.row} onPress={isNavigable ? onNavigate : undefined}>
-      <View style={nm.rowIcon}>
-        <Bell size={16} color={C.orange} strokeWidth={1.8} />
-      </View>
       <View style={{ flex: 1, minWidth: 0 }}>
-        {notification.category ? <Text style={nm.rowCategory}>{notification.category}</Text> : null}
-        {notification.title ? <Text style={nm.rowTitle}>{notification.title}</Text> : null}
-        {notification.message ? <Text style={nm.rowMessage}>{notification.message}</Text> : null}
+        <Text style={nm.rowLabel}>{t('contacted', { ns: 'search-screen' })}</Text>
+        {cleanTitle ? <Text style={nm.rowTitle}>{cleanTitle}</Text> : null}
+        {subtitle ? <Text style={nm.rowMessage}>{subtitle}</Text> : null}
       </View>
       {isNavigable && <ChevronRight size={16} color={C.ink4} strokeWidth={2} />}
     </Row>
@@ -123,25 +137,15 @@ const nm = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     gap: 12,
     padding: 14,
     paddingHorizontal: 16,
   },
-  rowIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 10,
-    backgroundColor: C.orangeSoft,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-    marginTop: 1,
-  },
-  rowCategory: {
+  rowLabel: {
     fontSize: 10,
     fontWeight: '700',
-    color: C.ink4,
+    color: C.orangeText,
     textTransform: 'uppercase',
     letterSpacing: 0.4,
     marginBottom: 2,

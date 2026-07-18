@@ -43,6 +43,8 @@
     "recruiter-label": "Recruiter",
     "or": "or",
     "sign-in-with-password-short": "Have a password? Sign in",
+    "otp-tab": "One-time code",
+    "password-tab": "Password",
     "password": "Password"
   },
   "home-screen": {
@@ -68,6 +70,7 @@
       "no-notifications": "No notifications",
       "notifications-count_one": "{{count}} notification",
       "notifications-count_other": "{{count}} notifications",
+      "notification-activity": "Crew contacted",
       "section-activity": "Your activity",
       "action-searches": "Your searches",
       "action-searches-sub": "{{count}} active",
@@ -118,6 +121,7 @@
       "no-notifications": "No notifications",
       "notifications-count_one": "{{count}} notification",
       "notifications-count_other": "{{count}} notifications",
+      "notification-activity": "Application accepted",
       "notifications-title": "Notifications",
       "registered-on": "Registered on {{date}}",
       "last-access": "Last access {{date}}"
@@ -227,7 +231,10 @@
     "no-certificate-of-competence": "No Certificate of Competence",
     "contact-crew": "Contact this candidate",
     "already-contacted": "Already contacted",
+    "profile-not-available": "This profile is no longer available",
+    "profile-not-available-description": "This candidate's profile has been unpublished or removed and can no longer be viewed.",
     "remove-crew": "Remove from crew list",
+    "remove-crew-confirm": "Are you sure you want to remove this candidate from your crew list? This action cannot be undone.",
     "unlock-contact-information": "Unlock contact information",
     "receive-cv": "Get his CV via email in PDF format",
     "send-job-offer": "Send your job offer",
