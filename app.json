@@ -9,9 +9,9 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#4aafc4"
+      "image": "./assets/images/marineria_logo_transparent.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#EE5A24"
     },
     "ios": {
       "supportsTablet": true,
@@ -39,9 +39,9 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#FFF5F0",
-          "image": "./assets/images/splash-bg.png",
-          "resizeMode": "cover"
+          "backgroundColor": "#EE5A24",
+          "image": "./assets/images/marineria_logo_transparent.png",
+          "resizeMode": "contain"
         }
       ],
       "expo-router",

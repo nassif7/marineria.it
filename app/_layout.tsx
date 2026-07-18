@@ -14,6 +14,7 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { ThemeUIProvider } from '@/components/ui/gluestack-ui-provider'
 import SessionProvider, { useSession } from '@/Providers/SessionProvider'
 import { MarineriaSplash } from '@/components/appUI'
+import { C } from '@/components/pro/tokens'
 
 Sentry.init({
   dsn: 'https://aa4ffeeb3c4c16a769f69b6847aa0d27@o4511235462201344.ingest.de.sentry.io/4511235474325584',
@@ -39,7 +40,7 @@ export default Sentry.wrap(function RootLayout() {
   useEffect(() => {
     const loadAssets = async () => {
       await Asset.loadAsync([
-        require('@/assets/images/splash-bg.png'),
+        require('@/assets/images/marineria_logo.png'),
         require('@/assets/images/marineria_logo_transparent.png'),
       ])
       // Set state first so our animated splash is mounted before native splash disappears
@@ -49,7 +50,7 @@ export default Sentry.wrap(function RootLayout() {
     loadAssets()
   }, [])
 
-  if (!assetsLoaded) return <View style={{ flex: 1, backgroundColor: '#FFF5F0' }} />
+  if (!assetsLoaded) return <View style={{ flex: 1, backgroundColor: C.bg }} />
 
   return (
     <ThemeUIProvider mode="light">
