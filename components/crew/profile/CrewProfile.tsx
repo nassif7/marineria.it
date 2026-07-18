@@ -299,7 +299,7 @@ const CrewProfile: FC = () => {
                 ) : (
                   <>
                     <Text style={s.notifTitle}>{t('crew-profile.notifications-count', { count: real.length })}</Text>
-                    {real[0].title ? <Text style={s.notifMessage}>{real[0].title}</Text> : null}
+                    <Text style={s.notifMessage}>{t('crew-profile.notification-activity')}</Text>
                   </>
                 )}
               </View>

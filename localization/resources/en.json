@@ -70,6 +70,7 @@
       "no-notifications": "No notifications",
       "notifications-count_one": "{{count}} notification",
       "notifications-count_other": "{{count}} notifications",
+      "notification-activity": "Crew contacted",
       "section-activity": "Your activity",
       "action-searches": "Your searches",
       "action-searches-sub": "{{count}} active",
@@ -120,6 +121,7 @@
       "no-notifications": "No notifications",
       "notifications-count_one": "{{count}} notification",
       "notifications-count_other": "{{count}} notifications",
+      "notification-activity": "Application accepted",
       "notifications-title": "Notifications",
       "registered-on": "Registered on {{date}}",
       "last-access": "Last access {{date}}"

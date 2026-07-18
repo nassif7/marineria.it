@@ -70,6 +70,7 @@
       "no-notifications": "Nessuna notifica",
       "notifications-count_one": "{{count}} notifica",
       "notifications-count_other": "{{count}} notifiche",
+      "notification-activity": "Equipaggio contattato",
       "section-activity": "Le tue attività",
       "action-searches": "Le tue ricerche",
       "action-searches-sub": "{{count}} attive",
@@ -120,6 +121,7 @@
       "no-notifications": "Nessuna notifica",
       "notifications-count_one": "{{count}} notifica",
       "notifications-count_other": "{{count}} notifiche",
+      "notification-activity": "Candidatura accettata",
       "notifications-title": "Notifiche",
       "registered-on": "Iscritta il {{date}}",
       "last-access": "Ultimo accesso {{date}}"
