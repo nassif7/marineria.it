@@ -117,9 +117,12 @@ const RecruiterProfile: FC = () => {
     if (notification.iduser) {
       setFromHome()
       // Seed the crew list into this search's stack first — deep-linking straight to the crew
-      // detail skips it, leaving back()/the tab icon with nothing sane to return to.
+      // detail skips it, leaving back()/the tab icon with nothing sane to return to. The second
+      // push has to wait a frame so the first one actually commits before we stack on top of it.
       router.push(`/(tabs)/recruiter/search/${notification.idoffer}/crew/list` as any)
-      router.push(`/(tabs)/recruiter/search/${notification.idoffer}/crew/${notification.iduser}` as any)
+      requestAnimationFrame(() =>
+        router.push(`/(tabs)/recruiter/search/${notification.idoffer}/crew/${notification.iduser}` as any)
+      )
     } else {
       goToRecruiter(notification.idoffer, 'crew-list')
     }

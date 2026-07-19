@@ -114,9 +114,11 @@ const NotificationsModal: FC<NotificationsModalProps> = ({ visible, onClose }) =
     onClose()
     // Deep-linking straight into /pro/offers/[id] from outside the "pro" tab skips the list
     // screen in that tab's history, leaving back()/the tab icon with nothing sane to return to —
-    // seed the list first so the tab's stack is properly [list, detail].
+    // seed the list first so the tab's stack is properly [list, detail]. The second push has to
+    // wait a frame: firing both in the same tick means the tab switch from the first push hasn't
+    // committed yet, so the second one doesn't stack on top of it correctly.
     router.push('/pro/offers')
-    router.push(`/pro/offers/${notification.idoffer}`)
+    requestAnimationFrame(() => router.push(`/pro/offers/${notification.idoffer}`))
   }
 
   return (
