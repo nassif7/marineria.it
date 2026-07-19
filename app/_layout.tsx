@@ -3,7 +3,7 @@ import '@/localization'
 import * as Sentry from '@sentry/react-native'
 import { useEffect, useState } from 'react'
 import { View } from 'react-native'
-import { Slot } from 'expo-router'
+import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import * as SecureStore from 'expo-secure-store'
 import * as SplashScreen from 'expo-splash-screen'
@@ -13,6 +13,9 @@ import { useTranslation } from 'react-i18next'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { ThemeUIProvider } from '@/components/ui/gluestack-ui-provider'
 import SessionProvider, { useSession } from '@/Providers/SessionProvider'
+import RecruiterProvider from '@/Providers/RecruiterProvider'
+import CrewProvider from '@/Providers/CrewProvider'
+import { TUserRole } from '@/api/types'
 import { MarineriaSplash } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
 
@@ -58,7 +61,13 @@ export default Sentry.wrap(function RootLayout() {
         <SafeAreaProvider>
           <SessionProvider>
             <StatusBar />
-            <Slot screenOptions={{ headerShown: false }} />
+            <RoleProviders>
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="(auth)" />
+                <Stack.Screen name="(tabs)" />
+                <Stack.Screen name="(modals)" options={{ presentation: 'fullScreenModal' }} />
+              </Stack>
+            </RoleProviders>
             <SplashOverlay />
           </SessionProvider>
         </SafeAreaProvider>
@@ -66,6 +75,20 @@ export default Sentry.wrap(function RootLayout() {
     </ThemeUIProvider>
   )
 })
+
+// Mounted above the root Stack (not just inside (tabs)) so root-level routes like the
+// (modals)/offer screen also have access to the crew/recruiter token and profile data.
+function RoleProviders({ children }: React.PropsWithChildren) {
+  const {
+    auth: { role },
+  } = useSession()
+
+  if (role === TUserRole.RECRUITER) {
+    return <RecruiterProvider>{children}</RecruiterProvider>
+  }
+
+  return <CrewProvider>{children}</CrewProvider>
+}
 
 // Separate component so it can access SessionProvider's context
 function SplashOverlay() {

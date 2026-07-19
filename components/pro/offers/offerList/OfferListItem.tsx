@@ -25,7 +25,7 @@ function MatchChip({ matching, label }: { matching: boolean; label: string }) {
 function AppliedBadge({ label }: { label: string }) {
   return (
     <View style={cs.appliedChip}>
-      <Send size={11} color={C.orange} strokeWidth={2.4} />
+      <Send size={11} color={MATCH_TEXT} strokeWidth={2.4} />
       <Text style={cs.appliedText}>{label}</Text>
     </View>
   )
@@ -69,14 +69,19 @@ const OfferListItem: FC<Props> = ({ offer, hideStatus = false, onViewOffer }) =>
           </View>
         ) : null}
         <View style={{ flex: 1 }} />
-        {!hideStatus && (
-          <MatchChip
-            matching={offer.offerApplicable}
-            label={
-              offer.offerApplicable ? t('matching', { ns: 'offer-screen' }) : t('not-matching', { ns: 'offer-screen' })
-            }
-          />
-        )}
+        {!hideStatus &&
+          (offer.alreadyApplied ? (
+            <AppliedBadge label={t('already-applied', { ns: 'offer-screen' })} />
+          ) : (
+            <MatchChip
+              matching={offer.offerApplicable}
+              label={
+                offer.offerApplicable
+                  ? t('matching', { ns: 'offer-screen' })
+                  : t('not-matching', { ns: 'offer-screen' })
+              }
+            />
+          ))}
       </View>
 
       <Text style={cs.title} numberOfLines={3}>
@@ -100,7 +105,6 @@ const OfferListItem: FC<Props> = ({ offer, hideStatus = false, onViewOffer }) =>
           <Text style={cs.ref}>
             {t('job-reference', { ns: 'offer' })} · {ref}
           </Text>
-          {offer.alreadyApplied && <AppliedBadge label={t('already-applied', { ns: 'offer-screen' })} />}
         </View>
         <View style={cs.detailsLink}>
           <Text style={cs.detailsText}>{t('details', { ns: 'offer-screen' })}</Text>
@@ -151,12 +155,12 @@ const cs = StyleSheet.create({
     paddingRight: 9,
     paddingVertical: 4,
     borderRadius: 10,
-    backgroundColor: C.orangeSoft,
+    backgroundColor: MATCH_BG,
   },
   appliedText: {
     fontSize: 12,
     fontWeight: '600',
-    color: C.orangeText,
+    color: MATCH_TEXT,
   },
   matchChip: {
     flexDirection: 'row',

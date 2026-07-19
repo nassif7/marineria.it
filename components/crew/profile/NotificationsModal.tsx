@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Modal, View, Text, Pressable, ScrollView, StyleSheet, Linking, GestureResponderEvent } from 'react-native'
+import { View, Text, Pressable, ScrollView, StyleSheet, Linking, GestureResponderEvent } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
@@ -9,11 +9,6 @@ import { useCrew } from '@/Providers/CrewProvider'
 import { getProOfferByIdPost } from '@/api'
 import { TNotification } from '@/api/types'
 import { C } from '@/components/pro/tokens'
-
-interface NotificationsModalProps {
-  visible: boolean
-  onClose: () => void
-}
 
 type ParsedContact = { name?: string; email?: string; phone?: string; whatsapp?: string }
 
@@ -53,7 +48,10 @@ const ContactAction: FC<{ icon: FC<any>; onPress: () => void }> = ({ icon: Icon,
   </Pressable>
 )
 
-const NotificationRow: FC<{ notification: TNotification; onNavigate: () => void }> = ({ notification, onNavigate }) => {
+const NotificationRow: FC<{ notification: TNotification; onNavigate: (contact: ParsedContact | null) => void }> = ({
+  notification,
+  onNavigate,
+}) => {
   const {
     i18n: { language },
   } = useTranslation()
@@ -72,7 +70,7 @@ const NotificationRow: FC<{ notification: TNotification; onNavigate: () => void 
   const reference = offer?.reference?.split('_')[1] || offer?.reference
 
   return (
-    <Row style={nm.row} onPress={isNavigable ? onNavigate : undefined}>
+    <Row style={nm.row} onPress={isNavigable ? () => onNavigate(contact) : undefined}>
       <View style={{ flex: 1, minWidth: 0 }}>
         {notification.title ? <Text style={nm.rowLabel}>{notification.title}</Text> : null}
         {offerTitle ? <Text style={nm.rowTitle}>{offerTitle}</Text> : null}
@@ -102,7 +100,7 @@ const NotificationRow: FC<{ notification: TNotification; onNavigate: () => void 
   )
 }
 
-const NotificationsModal: FC<NotificationsModalProps> = ({ visible, onClose }) => {
+const NotificationsModal: FC = () => {
   const { t } = useTranslation('home-screen')
   const { top, bottom } = useSafeAreaInsets()
   const { notifications } = useCrew()
@@ -110,49 +108,49 @@ const NotificationsModal: FC<NotificationsModalProps> = ({ visible, onClose }) =
 
   const real = notifications.filter((n) => n.title || n.message)
 
-  const handleNavigate = (notification: TNotification) => {
-    onClose()
-    // Deep-linking straight into /pro/offers/[id] from outside the "pro" tab skips the list
-    // screen in that tab's history, leaving back()/the tab icon with nothing sane to return to —
-    // seed the list first so the tab's stack is properly [list, detail]. The second push has to
-    // wait a frame: firing both in the same tick means the tab switch from the first push hasn't
-    // committed yet, so the second one doesn't stack on top of it correctly.
-    router.push('/pro/offers')
-    requestAnimationFrame(() => router.push(`/pro/offers/${notification.idoffer}`))
+  const handleNavigate = (notification: TNotification, contact: ParsedContact | null) => {
+    router.push({
+      pathname: '/offer/[offerId]',
+      params: {
+        offerId: String(notification.idoffer),
+        ...(contact?.name && { recruiterName: contact.name }),
+        ...(contact?.email && { recruiterEmail: contact.email }),
+        ...(contact?.phone && { recruiterPhone: contact.phone }),
+        ...(contact?.whatsapp && { recruiterWhatsapp: contact.whatsapp }),
+      },
+    })
   }
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <View style={[nm.container, { paddingTop: top }]}>
-        <View style={nm.header}>
-          <Text style={nm.headerTitle}>{t('crew-profile.notifications-title')}</Text>
-          <Pressable style={nm.closeBtn} onPress={onClose}>
-            <X size={16} color={C.ink2} strokeWidth={2.5} />
-          </Pressable>
-        </View>
-
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={{ paddingBottom: bottom + 24 }}
-          showsVerticalScrollIndicator={false}
-        >
-          {real.length === 0 ? (
-            <View style={nm.emptyState}>
-              <Info size={14} color={C.ink3} strokeWidth={1.8} />
-              <Text style={nm.emptyStateText}>{t('crew-profile.no-notifications')}</Text>
-            </View>
-          ) : (
-            <View style={nm.card}>
-              {real.map((n, i) => (
-                <View key={`${n.idoffer}-${i}`} style={i > 0 && nm.rowBorder}>
-                  <NotificationRow notification={n} onNavigate={() => handleNavigate(n)} />
-                </View>
-              ))}
-            </View>
-          )}
-        </ScrollView>
+    <View style={[nm.container, { paddingTop: top }]}>
+      <View style={nm.header}>
+        <Text style={nm.headerTitle}>{t('crew-profile.notifications-title')}</Text>
+        <Pressable style={nm.closeBtn} onPress={() => router.back()}>
+          <X size={16} color={C.ink2} strokeWidth={2.5} />
+        </Pressable>
       </View>
-    </Modal>
+
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingBottom: bottom + 24 }}
+        showsVerticalScrollIndicator={false}
+      >
+        {real.length === 0 ? (
+          <View style={nm.emptyState}>
+            <Info size={14} color={C.ink3} strokeWidth={1.8} />
+            <Text style={nm.emptyStateText}>{t('crew-profile.no-notifications')}</Text>
+          </View>
+        ) : (
+          <View style={nm.card}>
+            {real.map((n, i) => (
+              <View key={`${n.idoffer}-${i}`} style={i > 0 && nm.rowBorder}>
+                <NotificationRow notification={n} onNavigate={(contact) => handleNavigate(n, contact)} />
+              </View>
+            ))}
+          </View>
+        )}
+      </ScrollView>
+    </View>
   )
 }
 

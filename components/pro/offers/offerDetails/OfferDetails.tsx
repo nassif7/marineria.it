@@ -2,8 +2,19 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, Pressable, StyleSheet, Share, ActivityIndicator } from 'react-native'
 import { Stack, useRouter } from 'expo-router'
 import { useLocalSearchParams } from 'expo-router'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { ChevronLeft, Bookmark, Share2, Anchor, CheckCircle, FileText } from 'lucide-react-native'
+import {
+  ChevronLeft,
+  X,
+  Bookmark,
+  Share2,
+  Anchor,
+  CheckCircle,
+  FileText,
+  MessageCircle,
+  Search,
+} from 'lucide-react-native'
 import { getProOfferById, getProOfferByIdPost, applyToOffer, getWhyCanNotApplyPost } from '@/api'
 import { ApiError, parseServerBool } from '@/api/utils'
 import { useCrew } from '@/Providers/CrewProvider'
@@ -15,6 +26,7 @@ import { C } from '@/components/pro/tokens'
 import HtmlText from '@/components/pro/HtmlText'
 import NotApplicableModal from './NotApplicableModal'
 import ApplyModal from './ApplyModal'
+import ContactRecruiterModal from './ContactRecruiterModal'
 
 const MATCH_BG = '#E8F5EE'
 const MATCH_TEXT = '#1B7F4E'
@@ -46,7 +58,12 @@ function DetailSection({ title, icon: Icon, children }: { title: string; icon: a
 
 // ─── Screen ───────────────────────────────────────────────────
 
-export default function OfferDetailsScreen() {
+interface Props {
+  isModal?: boolean
+}
+
+export default function OfferDetailsScreen({ isModal }: Props) {
+  const insets = useSafeAreaInsets()
   const queryClient = useQueryClient()
   const router = useRouter()
   const {
@@ -55,13 +72,21 @@ export default function OfferDetailsScreen() {
   } = useTranslation(['offer-screen', 'offer', 'common'])
   const { showToast } = useStatusToast()
 
-  const { offerId } = useLocalSearchParams<{ offerId: string }>()
+  const { offerId, recruiterName, recruiterEmail, recruiterPhone, recruiterWhatsapp } = useLocalSearchParams<{
+    offerId: string
+    recruiterName?: string
+    recruiterEmail?: string
+    recruiterPhone?: string
+    recruiterWhatsapp?: string
+  }>()
+  const hasRecruiterContact = !!(recruiterEmail || recruiterPhone || recruiterWhatsapp)
   const { token, crew: user } = useCrew()
   const isCvPublished = parseServerBool(user?.published)
   const { isSaved: checkSaved, toggleSaved } = useSavedOffers()
   const isSaved = offerId ? checkSaved(offerId) : false
   const [showNotApplicable, setShowNotApplicable] = useState(false)
   const [showApply, setShowApply] = useState(false)
+  const [showContactRecruiter, setShowContactRecruiter] = useState(false)
   const [pendingReasons, setPendingReasons] = useState(false)
 
   // const { data: whyCanNotApplyReasons, isFetching: isFetchingReasons } = useQuery({
@@ -180,28 +205,38 @@ export default function OfferDetailsScreen() {
       <Stack.Screen options={{ headerShown: false }} />
 
       {/* ── Sticky header ── */}
-      <View style={ds.stickyHeader}>
-        {/* Back · Ref · Bookmark */}
-        <View style={ds.navRow}>
-          <Pressable style={ds.iconBtn} onPress={() => router.back()}>
-            <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
-          </Pressable>
-          <Text style={ds.refText}>
-            {t('job-reference', { ns: 'offer' })} · {ref}
-          </Text>
-          {SHOW_SAVE_OFFER ? (
-            <Pressable onPress={() => toggleSaved(offerId)}>
-              <Bookmark
-                size={20}
-                color={isSaved ? C.orange : C.ink2}
-                strokeWidth={1.8}
-                fill={isSaved ? C.orange : 'none'}
-              />
+      <View style={[ds.stickyHeader, isModal && { paddingTop: insets.top + 10 }]}>
+        {isModal ? (
+          <View style={ds.modalHeaderRow}>
+            <Text style={ds.modalHeaderTitle}>
+              {t('job-reference', { ns: 'offer' })} · {ref}
+            </Text>
+            <Pressable style={ds.modalCloseBtn} onPress={() => router.back()}>
+              <X size={16} color={C.ink2} strokeWidth={2.5} />
             </Pressable>
-          ) : (
-            <View style={{ width: 20 }} />
-          )}
-        </View>
+          </View>
+        ) : (
+          <View style={ds.navRow}>
+            <Pressable style={ds.iconBtn} onPress={() => router.back()}>
+              <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
+            </Pressable>
+            <Text style={ds.refText}>
+              {t('job-reference', { ns: 'offer' })} · {ref}
+            </Text>
+            {SHOW_SAVE_OFFER ? (
+              <Pressable onPress={() => toggleSaved(offerId)}>
+                <Bookmark
+                  size={20}
+                  color={isSaved ? C.orange : C.ink2}
+                  strokeWidth={1.8}
+                  fill={isSaved ? C.orange : 'none'}
+                />
+              </Pressable>
+            ) : (
+              <View style={{ width: 20 }} />
+            )}
+          </View>
+        )}
 
         {/* Chips */}
         <View style={ds.chipRow}>
@@ -210,12 +245,17 @@ export default function OfferDetailsScreen() {
               <Text style={ds.posChipText}>{offer.mainPosition}</Text>
             </View>
           ) : null}
-          <MatchChip
-            matching={offer?.offerApplicable ?? false}
-            label={
-              offer?.offerApplicable ? t('matching', { ns: 'offer-screen' }) : t('not-matching', { ns: 'offer-screen' })
-            }
-          />
+          <View style={{ flex: 1 }} />
+          {alreadyApplied ? (
+            <View style={[ds.matchChip, { backgroundColor: MATCH_BG }]}>
+              <Text style={[ds.matchText, { color: MATCH_TEXT }]}>{t('already-applied', { ns: 'offer-screen' })}</Text>
+            </View>
+          ) : (
+            <MatchChip
+              matching={isMatching}
+              label={isMatching ? t('matching', { ns: 'offer-screen' }) : t('not-matching', { ns: 'offer-screen' })}
+            />
+          )}
         </View>
 
         {/* Title */}
@@ -263,32 +303,57 @@ export default function OfferDetailsScreen() {
       </ScrollView>
 
       {/* ── Fixed action bar ── */}
-      <View style={ds.actionBar}>
-        {SHOW_SAVE_OFFER && (
-          <Pressable style={[ds.secondaryBtn, isSaved && ds.secondaryBtnSaved]} onPress={() => toggleSaved(offerId)}>
-            <Bookmark
-              size={20}
-              color={isSaved ? C.orange : C.ink2}
-              strokeWidth={1.8}
-              fill={isSaved ? C.orange : 'none'}
-            />
+      <View style={[ds.actionBar, isModal && { paddingBottom: insets.bottom + 12 }]}>
+        <View style={ds.actionRow}>
+          {isModal && hasRecruiterContact ? (
+            <>
+              <Pressable style={ds.secondaryBtn} onPress={handleShare}>
+                <Share2 size={20} color={C.ink2} strokeWidth={1.8} />
+              </Pressable>
+              <Pressable style={ds.applyBtn} onPress={() => setShowContactRecruiter(true)}>
+                <MessageCircle size={18} color="#FFFFFF" strokeWidth={2} />
+                <Text style={ds.applyBtnText}>{t('contact-recruiter', { ns: 'offer-screen' })}</Text>
+              </Pressable>
+            </>
+          ) : (
+            <>
+              {SHOW_SAVE_OFFER && (
+                <Pressable
+                  style={[ds.secondaryBtn, isSaved && ds.secondaryBtnSaved]}
+                  onPress={() => toggleSaved(offerId)}
+                >
+                  <Bookmark
+                    size={20}
+                    color={isSaved ? C.orange : C.ink2}
+                    strokeWidth={1.8}
+                    fill={isSaved ? C.orange : 'none'}
+                  />
+                </Pressable>
+              )}
+              <Pressable style={ds.secondaryBtn} onPress={handleShare}>
+                <Share2 size={20} color={C.ink2} strokeWidth={1.8} />
+              </Pressable>
+              <Pressable
+                style={[
+                  ds.applyBtn,
+                  !isMatching && !alreadyApplied && ds.applyBtnSecondary,
+                  alreadyApplied && ds.applyBtnDisabled,
+                ]}
+                onPress={pendingReasons || alreadyApplied ? undefined : handleApply}
+                disabled={pendingReasons || alreadyApplied}
+              >
+                {pendingReasons && <ActivityIndicator color="#FFFFFF" style={ds.btnSpinner} />}
+                <Text style={[ds.applyBtnText, !isMatching && ds.applyBtnTextSecondary]}>{applyLabel}</Text>
+              </Pressable>
+            </>
+          )}
+        </View>
+        {isModal && hasRecruiterContact && (
+          <Pressable style={ds.matchingLink} onPress={() => router.dismissTo('/(tabs)/pro/offers')}>
+            <Search size={13} color={C.orangeText} strokeWidth={2.2} />
+            <Text style={ds.matchingLinkText}>{t('check-matching-offers', { ns: 'offer-screen' })}</Text>
           </Pressable>
         )}
-        <Pressable style={ds.secondaryBtn} onPress={handleShare}>
-          <Share2 size={20} color={C.ink2} strokeWidth={1.8} />
-        </Pressable>
-        <Pressable
-          style={[
-            ds.applyBtn,
-            !isMatching && !alreadyApplied && ds.applyBtnSecondary,
-            alreadyApplied && ds.applyBtnDisabled,
-          ]}
-          onPress={pendingReasons || alreadyApplied ? undefined : handleApply}
-          disabled={pendingReasons || alreadyApplied}
-        >
-          {pendingReasons && <ActivityIndicator color="#FFFFFF" style={ds.btnSpinner} />}
-          <Text style={[ds.applyBtnText, !isMatching && ds.applyBtnTextSecondary]}>{applyLabel}</Text>
-        </Pressable>
       </View>
 
       <NotApplicableModal
@@ -301,6 +366,14 @@ export default function OfferDetailsScreen() {
         onClose={() => setShowApply(false)}
         onConfirm={handleConfirmApply}
         isSubmitting={isPending}
+      />
+      <ContactRecruiterModal
+        visible={showContactRecruiter}
+        onClose={() => setShowContactRecruiter(false)}
+        name={recruiterName}
+        email={recruiterEmail}
+        phone={recruiterPhone}
+        whatsapp={recruiterWhatsapp}
       />
     </View>
   )
@@ -320,6 +393,27 @@ const ds = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 14,
+  },
+  modalHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 14,
+  },
+  modalHeaderTitle: {
+    flex: 1,
+    fontSize: 17,
+    fontWeight: '700',
+    color: C.ink,
+    letterSpacing: -0.2,
+  },
+  modalCloseBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: C.hair2,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   iconBtn: {
     width: 36,
@@ -438,8 +532,23 @@ const ds = StyleSheet.create({
     paddingHorizontal: 14,
     paddingTop: 10,
     paddingBottom: 12,
+    gap: 8,
+  },
+  actionRow: {
     flexDirection: 'row',
     gap: 8,
+  },
+  matchingLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 6,
+  },
+  matchingLinkText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: C.orangeText,
   },
   secondaryBtn: {
     width: 48,

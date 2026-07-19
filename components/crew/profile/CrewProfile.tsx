@@ -1,5 +1,6 @@
 import { FC, useMemo, useState } from 'react'
 import { View, Text, Pressable, ScrollView, StyleSheet, Image } from 'react-native'
+import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { Edit2, ChevronRight, Check, AlertTriangle, Users, FileText, Calendar, Bell } from 'lucide-react-native'
 import { useCrew } from '@/Providers/CrewProvider'
@@ -10,7 +11,6 @@ import { C } from '@/components/pro/tokens'
 import { Loading, RefreshControl } from '@/components/ui'
 import { useManualRefresh } from '@/hooks'
 import PublicPreviewModal from './PublicPreviewModal'
-import NotificationsModal from './NotificationsModal'
 
 const GREEN_SOFT = '#E8F8EB'
 const GREEN_TEXT = '#0F7A28'
@@ -159,10 +159,10 @@ const ActionRow: FC<{
 
 const CrewProfile: FC = () => {
   const { t } = useTranslation('home-screen')
+  const router = useRouter()
   const { crew, notifications, isLoading, refetch } = useCrew()
   const { refreshing, onRefresh } = useManualRefresh(refetch)
   const [previewVisible, setPreviewVisible] = useState(false)
-  const [notificationsVisible, setNotificationsVisible] = useState(false)
 
   const age = crew?.yearofBirth ? getAgeByYear(crew.yearofBirth) : null
   const photoUrl = crew?.userPhoto ? getPhotoUrl(crew.userPhoto) : null
@@ -204,7 +204,7 @@ const CrewProfile: FC = () => {
     <View style={{ flex: 1, backgroundColor: C.bg }}>
       {/* Top bar */}
       <View style={s.topBar}>
-        <Pressable style={s.iconBtn} onPress={() => setNotificationsVisible(true)}>
+        <Pressable style={s.iconBtn} onPress={() => router.push('/notifications')}>
           <Bell size={18} color={C.ink2} strokeWidth={1.8} />
           {hasNotifications && <View style={s.notifDot} />}
         </Pressable>
@@ -289,7 +289,7 @@ const CrewProfile: FC = () => {
           const hasNotifs = real.length > 0
           const Banner = hasNotifs ? Pressable : View
           return (
-            <Banner style={s.notifBanner} onPress={hasNotifs ? () => setNotificationsVisible(true) : undefined}>
+            <Banner style={s.notifBanner} onPress={hasNotifs ? () => router.push('/notifications') : undefined}>
               <View style={s.notifIcon}>
                 <Bell size={18} color="#fff" strokeWidth={2} />
               </View>
@@ -380,7 +380,6 @@ const CrewProfile: FC = () => {
       </ScrollView>
 
       <PublicPreviewModal visible={previewVisible} onClose={() => setPreviewVisible(false)} />
-      <NotificationsModal visible={notificationsVisible} onClose={() => setNotificationsVisible(false)} />
     </View>
   )
 }

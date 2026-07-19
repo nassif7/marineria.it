@@ -4,8 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { HomeIcon, Briefcase, Users, Settings } from 'lucide-react-native'
 import '@/localization'
 import { TUserRole } from '@/api/types'
-import RecruiterProvider from '@/Providers/RecruiterProvider'
-import CrewProvider from '@/Providers/CrewProvider'
 import { useSession } from '@/Providers/SessionProvider'
 import { Text, View } from '@/components/ui'
 import { TabBar } from '@/components/appUI'
@@ -89,11 +87,7 @@ const AppLayout = () => {
     </Tabs>
   )
 
-  if (role === TUserRole.RECRUITER) {
-    return <RecruiterProvider>{tabs}</RecruiterProvider>
-  }
-
-  return <CrewProvider>{tabs}</CrewProvider>
+  return tabs
 }
 
 export default AppLayout
