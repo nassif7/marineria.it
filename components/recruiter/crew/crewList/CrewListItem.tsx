@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
+import { parseServerBool } from '@/api/utils'
 import { C } from '@/components/pro/tokens'
 
 interface ICrewListItem {
@@ -28,7 +29,7 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
   const hasSeamansBook = getSeamansBook(crew)
   const { hasCertificateOfCompetence } = getCertificateOfCompetence(crew)
   const age = crew.birthYear ? getAgeByYear(crew.birthYear) : null
-  const isContacted = !!crew.contacted
+  const isContacted = parseServerBool(crew.contacted)
 
   const handlePress = () => router.push(`/recruiter/search/${searchId}/crew/${crew.userId}`)
 
@@ -51,6 +52,12 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
             <Text style={ci.roleText} numberOfLines={1}>
               {crew.mainPosition || '—'}
             </Text>
+            {isContacted && (
+              <View style={ci.contactedChip}>
+                <Check size={11} color={GREEN_TEXT} strokeWidth={2.8} />
+                <Text style={ci.contactedChipText}>{t('contacted-badge', { ns: 'crew-screen' })}</Text>
+              </View>
+            )}
           </View>
           {isContacted && (crew.firstName || crew.lastName) && (
             <Text style={ci.nameText} numberOfLines={1}>
@@ -185,6 +192,22 @@ const ci = StyleSheet.create({
     fontWeight: '700',
     color: C.orangeText,
     letterSpacing: -0.2,
+  },
+  contactedChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingLeft: 7,
+    paddingRight: 9,
+    paddingVertical: 3,
+    borderRadius: 10,
+    backgroundColor: GREEN_SOFT,
+    flexShrink: 0,
+  },
+  contactedChipText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: GREEN_TEXT,
   },
   idText: {
     fontSize: 12,
