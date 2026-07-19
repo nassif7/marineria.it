@@ -112,6 +112,10 @@ const NotificationsModal: FC<NotificationsModalProps> = ({ visible, onClose }) =
 
   const handleNavigate = (notification: TNotification) => {
     onClose()
+    // Deep-linking straight into /pro/offers/[id] from outside the "pro" tab skips the list
+    // screen in that tab's history, leaving back()/the tab icon with nothing sane to return to —
+    // seed the list first so the tab's stack is properly [list, detail].
+    router.push('/pro/offers')
     router.push(`/pro/offers/${notification.idoffer}`)
   }
 

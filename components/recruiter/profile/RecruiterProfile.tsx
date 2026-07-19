@@ -116,6 +116,9 @@ const RecruiterProfile: FC = () => {
     if (!notification.idoffer) return
     if (notification.iduser) {
       setFromHome()
+      // Seed the crew list into this search's stack first — deep-linking straight to the crew
+      // detail skips it, leaving back()/the tab icon with nothing sane to return to.
+      router.push(`/(tabs)/recruiter/search/${notification.idoffer}/crew/list` as any)
       router.push(`/(tabs)/recruiter/search/${notification.idoffer}/crew/${notification.iduser}` as any)
     } else {
       goToRecruiter(notification.idoffer, 'crew-list')

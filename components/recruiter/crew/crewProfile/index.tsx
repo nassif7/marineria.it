@@ -520,7 +520,6 @@ const CrewProfile = () => {
       })
     },
     onError: (error: unknown) => {
-      console.log('handleContactCrew error', error)
       const message = error instanceof ApiError && error.title !== 'unknown-error' ? error.title : null
       showToast({
         emphasize: 'error',
@@ -552,7 +551,6 @@ const CrewProfile = () => {
       router.back()
     },
     onError: (error: unknown) => {
-      console.log('handleRemoveCrew error', error)
       const message = error instanceof ApiError && error.title !== 'unknown-error' ? error.title : null
       showToast({
         emphasize: 'error',

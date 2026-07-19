@@ -95,20 +95,11 @@ export const contactCrew = async (
   const languageCode = getLanguageCode(language)
   const url = `${BASE_URL}/api/Owneruser/ContactPro/${offerId}/${crewId}`
   const body = { userToken: ownerToken, language: languageCode }
-  console.log('contactCrew params', { ownerToken, crewId, offerId, language })
-  console.log('contactCrew url', url, 'body', body)
-  try {
-    const response = await apiFetchText(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify(body),
-    })
-    console.log('contactCrew response', response)
-    return response
-  } catch (error) {
-    console.log('contactCrew error', error)
-    throw error
-  }
+  return apiFetchText(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify(body),
+  })
 }
 
 export const removeCrew = async (

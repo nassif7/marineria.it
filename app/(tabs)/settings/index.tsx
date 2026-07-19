@@ -207,8 +207,6 @@ const Settings = () => {
           <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
         </Pressable>
       </View>
-
-      <Text style={s.version}>{t('version', { version: '2.4.1' })}</Text>
     </ScrollView>
   )
 }
@@ -297,13 +295,6 @@ const s = StyleSheet.create({
     fontSize: 12,
     color: C.ink3,
     marginTop: 1,
-  },
-  version: {
-    textAlign: 'center',
-    fontSize: 11,
-    color: C.ink4,
-    letterSpacing: 0.2,
-    marginTop: 20,
   },
 })
 

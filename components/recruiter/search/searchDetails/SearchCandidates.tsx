@@ -19,8 +19,8 @@ const SearchCandidates: React.FC<SearchCandidatesProps> = ({ search }) => {
   } = useTranslation(['search-screen'])
   const { openUrl, isLoading: isUrlLoading } = useAuthBrowser()
 
-  const openSearchByLocation = () => openUrl(`https://www.marineria.it/${language}/${search.listgeourl}`)
-  const openSearchBySkill = () => openUrl(`https://www.marineria.it/${language}/${search.listurl}`)
+  const openSearchByLocation = () => openUrl(`https://test.marineria.it/${language}/${search.listgeourl}`)
+  const openSearchBySkill = () => openUrl(`https://test.marineria.it/${language}/${search.listurl}`)
 
   const viewCrewList = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list`)
 
@@ -53,7 +53,7 @@ const SearchCandidates: React.FC<SearchCandidatesProps> = ({ search }) => {
               variant="solid"
               action="positive"
               onPress={openSearchBySkill}
-              className="rounded-md  flex-1"
+              className="flex-1 rounded-md"
               isDisabled={isUrlLoading}
             >
               <ButtonText>{t('by-skill')}</ButtonText>
@@ -62,7 +62,7 @@ const SearchCandidates: React.FC<SearchCandidatesProps> = ({ search }) => {
               variant="solid"
               action="positive"
               onPress={openSearchByLocation}
-              className="rounded-md flex-1"
+              className="flex-1 rounded-md"
               isDisabled={isUrlLoading}
             >
               <ButtonText>{t('by-location')}</ButtonText>

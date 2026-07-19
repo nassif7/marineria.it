@@ -20,9 +20,7 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply, canApply = 
         message: `Check out this job offer: ${offer.offer}\n\nSalary: ${offer.salary_From} - ${offer.salary_To}\nRef: ${offer.reference}`,
         title: offer.offer,
       })
-    } catch (error) {
-      console.error(error)
-    }
+    } catch {}
   }
 
   const getApplyButtonConfig = () => {

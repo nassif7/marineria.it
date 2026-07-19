@@ -117,7 +117,6 @@ const useNotification = () => {
 
     // Notification received while app is in foreground
     const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
-      console.log('notification received', notification)
       setNotification(notification)
     })
 
