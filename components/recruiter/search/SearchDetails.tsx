@@ -51,8 +51,9 @@ export default function SearchDetails() {
   const viewCrewList = (filter?: 'all' | 'selected' | 'contacted' | 'residual') =>
     router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list${filter ? `?filter=${filter}` : ''}`)
 
-  const openBySkill = () => openUrl(`https://www.marineria.it/${language}/${search.listurl}`)
-  const openByLocation = () => openUrl(`https://www.marineria.it/${language}/${search.listgeourl}`)
+  // TODO: point back to www.marineria.it before release
+  const openBySkill = () => openUrl(`https://test.marineria.it/${language}/${search.listurl}`)
+  const openByLocation = () => openUrl(`https://test.marineria.it/${language}/${search.listgeourl}`)
   const openMap = () =>
     hasCoords && Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${search.latArm},${search.lngArm}`)
 

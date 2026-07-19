@@ -28,8 +28,9 @@ const CrewListEmptyComponent = () => {
   })
 
   const search = isSuccess ? (data as any)?.[0] : null
-  const openSearchByLocation = () => openUrl(`https://www.marineria.it/${language}/${search.listgeourl}`)
-  const openSearchBySkill = () => openUrl(`https://www.marineria.it/${language}/${search.listurl}`)
+  // TODO: point back to www.marineria.it before release
+  const openSearchByLocation = () => openUrl(`https://test.marineria.it/${language}/${search.listgeourl}`)
+  const openSearchBySkill = () => openUrl(`https://test.marineria.it/${language}/${search.listurl}`)
 
   return (
     <View className={`h-full flex-1 px-2 pt-20`}>
