@@ -2,7 +2,7 @@ import '@/global.css'
 import '@/localization'
 import * as Sentry from '@sentry/react-native'
 import { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { View, AppState, AppStateStatus, Platform } from 'react-native'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import * as SecureStore from 'expo-secure-store'
@@ -10,7 +10,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import { Asset } from 'expo-asset'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import { QueryClientProvider, QueryClient, focusManager } from '@tanstack/react-query'
 import { ThemeUIProvider } from '@/components/ui/gluestack-ui-provider'
 import SessionProvider, { useSession } from '@/Providers/SessionProvider'
 import RecruiterProvider from '@/Providers/RecruiterProvider'
@@ -51,6 +51,18 @@ export default Sentry.wrap(function RootLayout() {
       requestAnimationFrame(() => SplashScreen.hideAsync())
     }
     loadAssets()
+  }, [])
+
+  // Wires React Query's focus tracking to the app going foreground/background — with this,
+  // every query's default refetchOnWindowFocus behavior fires when the app is brought back,
+  // so cached data is revalidated app-wide without per-screen code.
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (status: AppStateStatus) => {
+      if (Platform.OS !== 'web') {
+        focusManager.setFocused(status === 'active')
+      }
+    })
+    return () => subscription.remove()
   }, [])
 
   if (!assetsLoaded) return <View style={{ flex: 1, backgroundColor: C.bg }} />

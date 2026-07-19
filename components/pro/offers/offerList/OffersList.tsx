@@ -1,6 +1,6 @@
-import { FC, useState } from 'react'
+import { FC, useCallback, useState } from 'react'
 import { View, Text, ScrollView, Pressable, StyleSheet } from 'react-native'
-import { Stack } from 'expo-router'
+import { Stack, useFocusEffect } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { getAllOffersPost, getOffersForApplyPost } from '@/api'
@@ -58,6 +58,15 @@ const JobOfferList: FC = () => {
   const isError = isErrorAll || isErrorMatching
   const refetch = () => Promise.all([refetchAll(), refetchMatching()])
   const { refreshing, onRefresh } = useManualRefresh(refetch)
+
+  // Refetch every time this screen gains focus (not just on first mount) so the list
+  // is never stale after applying/saving elsewhere and navigating back to it.
+  useFocusEffect(
+    useCallback(() => {
+      refetchAll()
+      refetchMatching()
+    }, [refetchAll, refetchMatching])
+  )
 
   const allOffers = allOffersData ?? []
   const matchingOffers = (matchingOffersData ?? []).filter((o) => !o.alreadyApplied)
