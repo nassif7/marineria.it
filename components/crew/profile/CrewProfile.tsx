@@ -184,7 +184,6 @@ const CrewProfile: FC = () => {
     [crew]
   )
   const { pct, missing } = useMemo(() => (crew ? calcCompletion(crew as any) : { pct: 0, missing: 0 }), [crew])
-  const hasNotifications = notifications.some((n) => n.title || n.message)
 
   const isAvailable = !!(
     crew?.availability &&
@@ -202,14 +201,6 @@ const CrewProfile: FC = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: C.bg }}>
-      {/* Top bar */}
-      <View style={s.topBar}>
-        <Pressable style={s.iconBtn} onPress={() => router.push('/notifications')}>
-          <Bell size={18} color={C.ink2} strokeWidth={1.8} />
-          {hasNotifications && <View style={s.notifDot} />}
-        </Pressable>
-      </View>
-
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={s.scrollContent}
@@ -385,35 +376,7 @@ const CrewProfile: FC = () => {
 }
 
 const s = StyleSheet.create({
-  topBar: {
-    paddingHorizontal: 18,
-    paddingTop: 12,
-    paddingBottom: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  iconBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: C.field,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-  },
-  notifDot: {
-    position: 'absolute',
-    top: 7,
-    right: 7,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: C.orange,
-    borderWidth: 1.5,
-    borderColor: C.field,
-  },
-  scrollContent: { paddingBottom: 32 },
+  scrollContent: { paddingTop: 16, paddingBottom: 32 },
   rowCard: {
     marginHorizontal: 16,
     backgroundColor: C.card,

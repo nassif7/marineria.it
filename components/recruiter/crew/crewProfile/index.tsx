@@ -1,5 +1,6 @@
 import { useState, FC, ReactNode } from 'react'
 import { View, Text, Pressable, ScrollView, StyleSheet, Image, Linking } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -22,6 +23,7 @@ import {
   AlertCircle,
   Headphones,
   Send,
+  X,
 } from 'lucide-react-native'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { useStatusToast, useManualRefresh } from '@/hooks'
@@ -37,6 +39,7 @@ import ContactSupport from '@/components/common/ContactSupport'
 import { PhotoSlider } from '@/components/appUI'
 import HtmlText from '@/components/pro/HtmlText'
 import ContactCrewModal from './ContactCrewModal'
+import ContactCrewInfoModal from './ContactCrewInfoModal'
 import RemoveCrewModal from './RemoveCrewModal'
 import { TCrewExperience, TCrewReference } from '@/api/types'
 
@@ -61,6 +64,14 @@ const cp = StyleSheet.create({
     height: 36,
     borderRadius: 99,
     backgroundColor: C.field,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  closeBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: C.hair2,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -483,8 +494,46 @@ const ContactInfoRow: FC<{ icon: FC<any>; label: string; value: string; onPress:
   </Pressable>
 )
 
-const CrewProfile = () => {
+const CrewNavBar: FC<{ isModal?: boolean; onBack: () => void; title?: string }> = ({ isModal, onBack, title }) => {
+  const { t } = useTranslation(['settings-screen'])
+  const insets = useSafeAreaInsets()
+
+  const contactSupportBtn = (
+    <ContactSupport
+      title={t('contact-support', { ns: 'settings-screen' })}
+      supportTeam={supportTeam}
+      renderTrigger={({ onPress }) => (
+        <Pressable style={cp.iconBtn} onPress={onPress}>
+          <Headphones size={18} color={C.ink2} strokeWidth={1.8} />
+        </Pressable>
+      )}
+    />
+  )
+
+  // Back navigation always sits on the left; a modal's close (X) always sits on the right —
+  // so contact support swaps sides depending on which one this bar is showing.
+  const backBtn = (
+    <Pressable style={isModal ? cp.closeBtn : cp.iconBtn} onPress={onBack}>
+      {isModal ? (
+        <X size={16} color={C.ink2} strokeWidth={2.5} />
+      ) : (
+        <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
+      )}
+    </Pressable>
+  )
+
+  return (
+    <View style={[cp.navRow, isModal && { paddingTop: insets.top + 10 }]}>
+      {isModal ? contactSupportBtn : backBtn}
+      {title ? <Text style={cp.navTitle}>{title}</Text> : null}
+      {isModal ? backBtn : contactSupportBtn}
+    </View>
+  )
+}
+
+const CrewProfile: FC<{ isModal?: boolean }> = ({ isModal }) => {
   const [contactModalVisible, setContactModalVisible] = useState(false)
+  const [contactInfoVisible, setContactInfoVisible] = useState(false)
   const [removeModalVisible, setRemoveModalVisible] = useState(false)
   const [photoSliderVisible, setPhotoSliderVisible] = useState(false)
   const [photoSliderIndex, setPhotoSliderIndex] = useState(0)
@@ -585,20 +634,7 @@ const CrewProfile = () => {
     return (
       <View style={{ flex: 1, backgroundColor: C.bg }}>
         <Stack.Screen options={{ headerShown: false }} />
-        <View style={cp.navRow}>
-          <Pressable style={cp.iconBtn} onPress={() => router.back()}>
-            <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
-          </Pressable>
-          <ContactSupport
-            title={t('contact-support', { ns: 'settings-screen' })}
-            supportTeam={supportTeam}
-            renderTrigger={({ onPress }) => (
-              <Pressable style={cp.iconBtn} onPress={onPress}>
-                <Headphones size={18} color={C.ink2} strokeWidth={1.8} />
-              </Pressable>
-            )}
-          />
-        </View>
+        <CrewNavBar isModal={isModal} onBack={() => router.back()} />
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32, gap: 16 }}>
           <AlertCircle size={40} color="#EF4444" strokeWidth={1.6} />
           <Text style={{ fontSize: 16, fontWeight: '600', color: '#EF4444', textAlign: 'center' }}>
@@ -615,20 +651,7 @@ const CrewProfile = () => {
     return (
       <View style={{ flex: 1, backgroundColor: C.bg }}>
         <Stack.Screen options={{ headerShown: false }} />
-        <View style={cp.navRow}>
-          <Pressable style={cp.iconBtn} onPress={() => router.back()}>
-            <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
-          </Pressable>
-          <ContactSupport
-            title={t('contact-support', { ns: 'settings-screen' })}
-            supportTeam={supportTeam}
-            renderTrigger={({ onPress }) => (
-              <Pressable style={cp.iconBtn} onPress={onPress}>
-                <Headphones size={18} color={C.ink2} strokeWidth={1.8} />
-              </Pressable>
-            )}
-          />
-        </View>
+        <CrewNavBar isModal={isModal} onBack={() => router.back()} />
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32, gap: 16 }}>
           <AlertCircle size={40} color={C.ink4} strokeWidth={1.6} />
           <Text style={{ fontSize: 16, fontWeight: '700', color: C.ink, textAlign: 'center' }}>
@@ -697,26 +720,19 @@ const CrewProfile = () => {
     },
   ].filter((entry): entry is typeof entry & { value: string } => !!entry.value)
 
+  const contactModalEntries = contactEntries.map((entry) => ({
+    icon: entry.icon,
+    label: entry.label,
+    value: entry.value,
+    onPress: () => handleOpenContact(entry.href(entry.value)),
+  }))
+
   return (
     <View style={{ flex: 1, backgroundColor: C.bg }}>
       <Stack.Screen options={{ headerShown: false }} />
 
       {/* Nav bar */}
-      <View style={cp.navRow}>
-        <Pressable style={cp.iconBtn} onPress={() => router.back()}>
-          <ChevronLeft size={18} color={C.ink2} strokeWidth={2.2} />
-        </Pressable>
-        <Text style={cp.navTitle}>CV #{crew.iduser}</Text>
-        <ContactSupport
-          title={t('contact-support', { ns: 'settings-screen' })}
-          supportTeam={supportTeam}
-          renderTrigger={({ onPress }) => (
-            <Pressable style={cp.iconBtn} onPress={onPress}>
-              <Headphones size={18} color={C.ink2} strokeWidth={1.8} />
-            </Pressable>
-          )}
-        />
-      </View>
+      <CrewNavBar isModal={isModal} onBack={() => router.back()} title={`CV #${crew.iduser}`} />
 
       <ScrollView
         style={{ flex: 1 }}
@@ -979,12 +995,12 @@ const CrewProfile = () => {
           <Trash2 size={18} color="#DC2626" strokeWidth={1.8} />
         </Pressable>
         <Pressable
-          style={[cp.contactBtn, (isActionLoading || isContacted) && { opacity: 0.6 }]}
-          onPress={() => setContactModalVisible(true)}
-          disabled={isActionLoading || isContacted}
+          style={[cp.contactBtn, isActionLoading && { opacity: 0.6 }]}
+          onPress={() => (isContacted ? setContactInfoVisible(true) : setContactModalVisible(true))}
+          disabled={isActionLoading}
         >
           <Text style={cp.contactBtnText}>
-            {isContacted ? t('already-contacted', { ns: 'crew-screen' }) : t('contact-crew')}
+            {isContacted ? t('contact-crew') : t('get-contact', { ns: 'crew-screen' })}
           </Text>
         </Pressable>
       </View>
@@ -995,6 +1011,12 @@ const CrewProfile = () => {
         onClose={() => setContactModalVisible(false)}
         onConfirm={handleContactCrew}
         isSubmitting={isPending}
+      />
+      <ContactCrewInfoModal
+        visible={contactInfoVisible}
+        onClose={() => setContactInfoVisible(false)}
+        name={isContacted ? `${crew.name ?? ''} ${crew.surname ?? ''}`.trim() : undefined}
+        entries={contactModalEntries}
       />
       <RemoveCrewModal
         visible={removeModalVisible}

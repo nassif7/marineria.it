@@ -1,17 +1,15 @@
-import { FC, useCallback, useState } from 'react'
+import { FC, useCallback } from 'react'
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { setFromHome } from '@/utils/fromHomeNav'
 import { Bell, Headphones, ChevronRight, Briefcase, Users, Globe, Mail, Phone } from 'lucide-react-native'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
-import { TNotification } from '@/api/types'
 import { supportTeam } from '@/api'
 import { C } from '@/components/pro/tokens'
 import { Loading, RefreshControl } from '@/components/ui'
 import { useManualRefresh } from '@/hooks'
 import ContactSupport from '@/components/common/ContactSupport'
-import RecruiterNotificationsModal from './RecruiterNotificationsModal'
 
 const MONTHS = [
   'January',
@@ -38,14 +36,15 @@ const formatDate = (raw: string): string => {
 // ── Sub-components ──────────────────────────────────────────
 
 const ActionRow: FC<{
-  icon: 'briefcase' | 'users' | 'globe'
+  icon: 'briefcase' | 'users' | 'globe' | 'headphones'
   title: string
   sub?: string
   accent?: boolean
   last?: boolean
   onPress?: () => void
 }> = ({ icon, title, sub, accent, last, onPress }) => {
-  const IconComp = icon === 'briefcase' ? Briefcase : icon === 'users' ? Users : Globe
+  const IconComp =
+    icon === 'briefcase' ? Briefcase : icon === 'users' ? Users : icon === 'headphones' ? Headphones : Globe
   return (
     <Pressable style={[s.actionRow, last && s.actionRowLast]} onPress={onPress}>
       <View style={[s.actionIcon, accent && s.actionIconAccent]}>
@@ -94,7 +93,6 @@ const RecruiterProfile: FC = () => {
   const router = useRouter()
   const { recruiter: user, searches, notifications, isLoading, refetch } = useRecruiter()
   const { refreshing, onRefresh } = useManualRefresh(refetch)
-  const [notificationsVisible, setNotificationsVisible] = useState(false)
 
   const goToRecruiter = useCallback(
     (searchId: number, target: 'detail' | 'crew-list') => {
@@ -111,23 +109,6 @@ const RecruiterProfile: FC = () => {
   const realNotifications = notifications.filter((n) => n.title || n.message)
   const hasNotifications = realNotifications.length > 0
 
-  const handleSelectNotification = (notification: TNotification) => {
-    setNotificationsVisible(false)
-    if (!notification.idoffer) return
-    if (notification.iduser) {
-      setFromHome()
-      // Seed the crew list into this search's stack first — deep-linking straight to the crew
-      // detail skips it, leaving back()/the tab icon with nothing sane to return to. The second
-      // push has to wait a frame so the first one actually commits before we stack on top of it.
-      router.push(`/(tabs)/recruiter/search/${notification.idoffer}/crew/list` as any)
-      requestAnimationFrame(() =>
-        router.push(`/(tabs)/recruiter/search/${notification.idoffer}/crew/${notification.iduser}` as any)
-      )
-    } else {
-      goToRecruiter(notification.idoffer, 'crew-list')
-    }
-  }
-
   const waNumber = user?.whatsapp?.replace(/^https?:\/\/wa\.me\//, '') ?? ''
   const isSameAsWa = !!user?.cellular && !!waNumber && user.cellular === waNumber
 
@@ -143,23 +124,6 @@ const RecruiterProfile: FC = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: C.bg }}>
-      {/* Top bar */}
-      <View style={s.topBar}>
-        <Pressable style={s.iconBtn} onPress={() => setNotificationsVisible(true)}>
-          <Bell size={18} color={C.ink2} strokeWidth={1.8} />
-          {hasNotifications && <View style={s.notifDot} />}
-        </Pressable>
-        <ContactSupport
-          title={t('contact-support', { ns: 'settings-screen' })}
-          supportTeam={supportTeam}
-          renderTrigger={({ onPress }) => (
-            <Pressable style={s.iconBtn} onPress={onPress}>
-              <Headphones size={18} color={C.ink2} strokeWidth={1.8} />
-            </Pressable>
-          )}
-        />
-      </View>
-
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={s.scrollContent}
@@ -201,20 +165,32 @@ const RecruiterProfile: FC = () => {
         </View>
 
         {/* Notifications banner */}
-        {hasNotifications && (
-          <Pressable style={s.banner} onPress={() => setNotificationsVisible(true)}>
-            <View style={s.bannerIcon}>
-              <Bell size={20} color="#fff" strokeWidth={2} />
-            </View>
-            <View style={{ flex: 1, minWidth: 0 }}>
-              <Text style={s.bannerTitle}>
-                {t('recruiter-profile.notifications-count', { count: realNotifications.length })}
-              </Text>
-              <Text style={s.bannerSub}>{t('recruiter-profile.notification-activity')}</Text>
-            </View>
-            <ChevronRight size={18} color="#fff" strokeWidth={2.4} />
-          </Pressable>
-        )}
+        {(() => {
+          const Banner = hasNotifications ? Pressable : View
+          return (
+            <Banner
+              style={[s.banner, !hasNotifications && s.bannerEmpty]}
+              onPress={hasNotifications ? () => router.push('/notifications') : undefined}
+            >
+              <View style={[s.bannerIcon, !hasNotifications && s.bannerIconEmpty]}>
+                <Bell size={20} color={hasNotifications ? '#fff' : C.ink3} strokeWidth={2} />
+              </View>
+              <View style={{ flex: 1, minWidth: 0 }}>
+                {hasNotifications ? (
+                  <>
+                    <Text style={s.bannerTitle}>
+                      {t('recruiter-profile.notifications-count', { count: realNotifications.length })}
+                    </Text>
+                    <Text style={s.bannerSub}>{t('recruiter-profile.notification-activity')}</Text>
+                  </>
+                ) : (
+                  <Text style={[s.bannerTitle, s.bannerTitleEmpty]}>{t('recruiter-profile.no-notifications')}</Text>
+                )}
+              </View>
+              {hasNotifications && <ChevronRight size={18} color="#fff" strokeWidth={2.4} />}
+            </Banner>
+          )
+        })()}
 
         {/* Searches list */}
         <Text style={s.sectionEyebrow}>{t('recruiter-profile.section-activity')}</Text>
@@ -230,6 +206,23 @@ const RecruiterProfile: FC = () => {
               onPress={() => goToRecruiter(search.idoffer, 'detail')}
             />
           ))}
+        </View>
+
+        {/* Support */}
+        <Text style={s.sectionEyebrow}>{t('recruiter-profile.section-support')}</Text>
+        <View style={s.rowCard}>
+          <ContactSupport
+            title={t('contact-support', { ns: 'settings-screen' })}
+            supportTeam={supportTeam}
+            renderTrigger={({ onPress }) => (
+              <ActionRow
+                icon="headphones"
+                title={t('contact-support', { ns: 'settings-screen' })}
+                onPress={onPress}
+                last
+              />
+            )}
+          />
         </View>
 
         {/* Contacts */}
@@ -258,53 +251,13 @@ const RecruiterProfile: FC = () => {
           </Text>
         ) : null}
       </ScrollView>
-
-      <RecruiterNotificationsModal
-        visible={notificationsVisible}
-        onClose={() => setNotificationsVisible(false)}
-        notifications={notifications}
-        onSelect={handleSelectNotification}
-      />
     </View>
   )
 }
 
 const s = StyleSheet.create({
-  topBar: {
-    paddingHorizontal: 18,
-    paddingTop: 12,
-    paddingBottom: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  topBarTitle: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: C.ink,
-    letterSpacing: -0.4,
-  },
-  iconBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: C.field,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-  },
-  notifDot: {
-    position: 'absolute',
-    top: 7,
-    right: 7,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: C.orange,
-    borderWidth: 1.5,
-    borderColor: C.field,
-  },
   scrollContent: {
+    paddingTop: 16,
     paddingBottom: 32,
   },
   rowCard: {
@@ -445,6 +398,17 @@ const s = StyleSheet.create({
     fontSize: 12,
     color: 'rgba(255,255,255,0.92)',
     marginTop: 1,
+  },
+  bannerEmpty: {
+    backgroundColor: C.field,
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+  bannerIconEmpty: {
+    backgroundColor: C.card,
+  },
+  bannerTitleEmpty: {
+    color: C.ink3,
   },
   sectionEyebrow: {
     fontSize: 12,

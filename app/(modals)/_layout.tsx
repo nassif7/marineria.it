@@ -5,6 +5,7 @@ export default function ModalsLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="notifications" />
       <Stack.Screen name="offer/[offerId]" />
+      <Stack.Screen name="cv/[crewId]" />
     </Stack>
   )
 }
