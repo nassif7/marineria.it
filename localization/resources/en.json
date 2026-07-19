@@ -163,8 +163,10 @@
     "offers-count": "{{count}} offers",
     "filter-all": "All",
     "filter-matching": "Matching",
+    "filter-applied": "Applied",
     "filter-saved": "Saved",
     "no-saved-offers": "You haven't saved any offers yet",
+    "no-applied-offers": "You haven't applied to any offers yet",
     "why-cant-apply": "Can't apply, why?"
   },
   "search-screen": {

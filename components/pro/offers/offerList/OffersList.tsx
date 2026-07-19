@@ -11,7 +11,7 @@ import { ErrorMessage, EmptyList } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
 import OfferListItem from './OfferListItem'
 
-type FilterKey = 'all' | 'matching' | 'saved'
+type FilterKey = 'all' | 'matching' | 'applied' | 'saved'
 
 const JobOfferList: FC = () => {
   const {
@@ -22,6 +22,7 @@ const JobOfferList: FC = () => {
   const FILTERS: { key: FilterKey; label: string }[] = [
     { key: 'all', label: t('filter-all', { ns: 'offer-screen' }) },
     { key: 'matching', label: t('filter-matching', { ns: 'offer-screen' }) },
+    { key: 'applied', label: t('filter-applied', { ns: 'offer-screen' }) },
     { key: 'saved', label: t('filter-saved', { ns: 'offer-screen' }) },
   ]
   const { token } = useCrew()
@@ -59,13 +60,22 @@ const JobOfferList: FC = () => {
   const { refreshing, onRefresh } = useManualRefresh(refetch)
 
   const allOffers = allOffersData ?? []
-  const matchingOffers = matchingOffersData ?? []
+  const matchingOffers = (matchingOffersData ?? []).filter((o) => !o.alreadyApplied)
   const savedOffers = allOffers.filter((o) => savedIds.includes(String(o.idoffer)))
-  const data = filter === 'all' ? allOffers : filter === 'matching' ? matchingOffers : savedOffers
+  const appliedOffers = allOffers.filter((o) => o.alreadyApplied)
+  const data =
+    filter === 'all'
+      ? allOffers
+      : filter === 'matching'
+        ? matchingOffers
+        : filter === 'applied'
+          ? appliedOffers
+          : savedOffers
 
   const counts: Record<FilterKey, number> = {
     all: allOffers.length,
     matching: matchingOffers.length,
+    applied: appliedOffers.length,
     saved: savedOffers.length,
   }
 
@@ -116,7 +126,12 @@ const JobOfferList: FC = () => {
           {/* Card list */}
           <View style={ls.list}>
             {data.length === 0 ? (
-              <EmptyList message={t(filter === 'saved' ? 'no-saved-offers' : 'no-offers', { ns: 'offer-screen' })} />
+              <EmptyList
+                message={t(
+                  filter === 'saved' ? 'no-saved-offers' : filter === 'applied' ? 'no-applied-offers' : 'no-offers',
+                  { ns: 'offer-screen' }
+                )}
+              />
             ) : (
               data.map((offer) => <OfferListItem key={offer.reference} offer={offer} />)
             )}

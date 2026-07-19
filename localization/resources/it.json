@@ -163,8 +163,10 @@
     "offers-count": "{{count}} offerte",
     "filter-all": "Tutte",
     "filter-matching": "Matching",
+    "filter-applied": "Candidature",
     "filter-saved": "Salvati",
     "no-saved-offers": "Non hai ancora salvato nessuna offerta",
+    "no-applied-offers": "Non ti sei ancora candidato a nessuna offerta",
     "why-cant-apply": "Non posso candidarmi, perché?"
   },
   "search-screen": {
