@@ -46,7 +46,7 @@ const CrewList: FC = () => {
   })
   const { refreshing, onRefresh } = useManualRefresh(refetch)
 
-  const allCrew = data ?? []
+  const allCrew = (data ?? []).filter((c) => c.published)
   const referenceShort = search?.reference?.includes('_') ? search.reference.split('_')[1] : search?.reference
   const residual = search?.countResidual ?? Math.max(0, 30 - allCrew.length)
 

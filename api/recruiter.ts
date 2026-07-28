@@ -2,6 +2,15 @@ import { API, BASE_URL } from './consts'
 import { TRecruiterSearch } from './types'
 import { TCrew, TCrewSimple } from './types/crew'
 import { apiFetchJson, apiFetchText, getLanguageCode } from './utils'
+import {
+  USE_FAKE_DATA,
+  fakeGetRecruiterActiveSearches,
+  fakeGetRecruiterSearchById,
+  fakeGetCrewList,
+  fakeGetCrewCv,
+  fakeContactCrew,
+  fakeRemoveCrew,
+} from './fakeData'
 
 export const getRecruiterActiveSearches = async (ownerToken: string, language: string): Promise<TRecruiterSearch[]> => {
   const languageCode = getLanguageCode(language)
@@ -13,12 +22,15 @@ export const getRecruiterActiveSearchesPost = async (
   ownerToken: string,
   language: string
 ): Promise<TRecruiterSearch[]> => {
+  console.log(ownerToken)
+  if (USE_FAKE_DATA) return fakeGetRecruiterActiveSearches()
   const languageCode = getLanguageCode(language)
   const data = await apiFetchJson<{ items: TRecruiterSearch[] }>(API.OWNER_OFFERS, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
     body: JSON.stringify({ userToken: ownerToken, language: languageCode }),
   })
+
   return data.items
 }
 
@@ -37,6 +49,7 @@ export const getRecruiterSearchByIdPost = async (
   ownerToken: string,
   language?: string
 ): Promise<TRecruiterSearch[]> => {
+  if (USE_FAKE_DATA) return fakeGetRecruiterSearchById(searchId)
   const languageCode = getLanguageCode(language)
   const url = `${API.OWNER_OFFERS}/${searchId}`
   const data = await apiFetchJson<{ items: TRecruiterSearch[] }>(url, {
@@ -58,13 +71,17 @@ export const getCrewListPost = async (
   ownerToken: string,
   language: string
 ): Promise<TCrewSimple[]> => {
+  if (USE_FAKE_DATA) return fakeGetCrewList(offerId)
   const languageCode = getLanguageCode(language)
-  const data = await apiFetchJson<{ items: TCrewSimple[] }>(`${API.CREW_LIST}/${offerId}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json; charset=utf-8' },
-    body: JSON.stringify({ userToken: ownerToken, language: languageCode }),
-  })
-  return data.items
+  const data = await apiFetchJson<{ items: (Omit<TCrewSimple, 'published'> & { Published: boolean })[] }>(
+    `${API.CREW_LIST}/${offerId}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({ userToken: ownerToken, language: languageCode }),
+    }
+  )
+  return data.items.map(({ Published, ...item }) => ({ ...item, published: Published }))
 }
 
 export const getCrewCV = async (ownerToken: string, crewId: string, language?: string): Promise<TCrew[]> => {
@@ -74,6 +91,7 @@ export const getCrewCV = async (ownerToken: string, crewId: string, language?: s
 }
 
 export const getCrewCvPost = async (crewId: string, ownerToken: string, language?: string): Promise<TCrew> => {
+  if (USE_FAKE_DATA) return fakeGetCrewCv(crewId)
   const languageCode = getLanguageCode(language)
   const url = `${BASE_URL}/api/Owneruser/CvUser/${crewId}`
   const body = { userToken: ownerToken, language: languageCode }
@@ -92,6 +110,7 @@ export const contactCrew = async (
   offerId: string | number,
   language?: string
 ): Promise<string> => {
+  if (USE_FAKE_DATA) return fakeContactCrew(crewId, offerId)
   const languageCode = getLanguageCode(language)
   const url = `${BASE_URL}/api/Owneruser/ContactPro/${offerId}/${crewId}`
   const body = { userToken: ownerToken, language: languageCode }
@@ -108,6 +127,7 @@ export const removeCrew = async (
   offerId: string | number,
   language?: string
 ): Promise<string> => {
+  if (USE_FAKE_DATA) return fakeRemoveCrew(crewId, offerId)
   const languageCode = getLanguageCode(language)
   const url = `${BASE_URL}/api/Owneruser/RejectPRO/${offerId}/${crewId}`
   return apiFetchText(url, {

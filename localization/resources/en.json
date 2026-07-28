@@ -388,6 +388,7 @@
     "it": "Italiano",
     "success": "Success",
     "unknown-error": "Something went wrong, please try again later!",
-    "contact-support": "Contact support"
+    "contact-support": "Contact support",
+    "offer-no-longer-online": "This offer is no longer online"
   }
 }

@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { View, Text, Pressable, ScrollView, StyleSheet, Linking, GestureResponderEvent } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
@@ -9,6 +9,7 @@ import { useCrew } from '@/Providers/CrewProvider'
 import { getProOfferByIdPost } from '@/api'
 import { TNotification } from '@/api/types'
 import { C } from '@/components/pro/tokens'
+import OfferOfflineModal from '@/components/common/OfferOfflineModal'
 
 type ParsedContact = { name?: string; email?: string; phone?: string; whatsapp?: string }
 
@@ -48,29 +49,35 @@ const ContactAction: FC<{ icon: FC<any>; onPress: () => void }> = ({ icon: Icon,
   </Pressable>
 )
 
-const NotificationRow: FC<{ notification: TNotification; onNavigate: (contact: ParsedContact | null) => void }> = ({
-  notification,
-  onNavigate,
-}) => {
+const NotificationRow: FC<{
+  notification: TNotification
+  onNavigate: (contact: ParsedContact | null) => void
+  onOfferGone: () => void
+}> = ({ notification, onNavigate, onOfferGone }) => {
   const {
     i18n: { language },
   } = useTranslation()
-  const { token } = useCrew()
-  const isNavigable = !!notification.idoffer
-  const Row = isNavigable ? Pressable : View
+  const { token, markNotificationAsRead } = useCrew()
+  const hasOffer = !!notification.idoffer
   const contact = parseContactMessage(notification.message)
 
   const { data: offer } = useQuery({
     queryKey: ['offer', String(notification.idoffer), language],
     queryFn: () => getProOfferByIdPost(String(notification.idoffer), token, language),
-    enabled: !!notification.idoffer && !!token,
+    enabled: hasOffer && !!token,
     select: (data) => data?.[0],
   })
   const offerTitle = offer?.offer?.trim() || offer?.title
   const reference = offer?.reference?.split('_')[1] || offer?.reference
 
+  const handlePress = () => {
+    markNotificationAsRead(notification)
+    return hasOffer ? onNavigate(contact) : onOfferGone()
+  }
+
   return (
-    <Row style={nm.row} onPress={isNavigable ? () => onNavigate(contact) : undefined}>
+    <Pressable style={nm.row} onPress={handlePress}>
+      {!notification.isread && <View style={nm.unreadDot} />}
       <View style={{ flex: 1, minWidth: 0 }}>
         {notification.title ? <Text style={nm.rowLabel}>{notification.title}</Text> : null}
         {offerTitle ? <Text style={nm.rowTitle}>{offerTitle}</Text> : null}
@@ -95,8 +102,8 @@ const NotificationRow: FC<{ notification: TNotification; onNavigate: (contact: P
           <Text style={nm.rowMessage}>{notification.message}</Text>
         ) : null}
       </View>
-      {isNavigable && <ChevronRight size={16} color={C.ink4} strokeWidth={2} />}
-    </Row>
+      <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
+    </Pressable>
   )
 }
 
@@ -105,6 +112,7 @@ const NotificationsModal: FC = () => {
   const { top, bottom } = useSafeAreaInsets()
   const { notifications } = useCrew()
   const router = useRouter()
+  const [offerGoneVisible, setOfferGoneVisible] = useState(false)
 
   const real = notifications.filter((n) => n.title || n.message)
 
@@ -144,12 +152,18 @@ const NotificationsModal: FC = () => {
           <View style={nm.card}>
             {real.map((n, i) => (
               <View key={`${n.idoffer}-${i}`} style={i > 0 && nm.rowBorder}>
-                <NotificationRow notification={n} onNavigate={(contact) => handleNavigate(n, contact)} />
+                <NotificationRow
+                  notification={n}
+                  onNavigate={(contact) => handleNavigate(n, contact)}
+                  onOfferGone={() => setOfferGoneVisible(true)}
+                />
               </View>
             ))}
           </View>
         )}
       </ScrollView>
+
+      <OfferOfflineModal visible={offerGoneVisible} onClose={() => setOfferGoneVisible(false)} />
     </View>
   )
 }
@@ -204,6 +218,13 @@ const nm = StyleSheet.create({
     gap: 12,
     padding: 14,
     paddingHorizontal: 16,
+  },
+  unreadDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: C.orange,
+    marginTop: 5,
   },
   rowLabel: {
     fontSize: 10,

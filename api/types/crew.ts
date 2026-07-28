@@ -87,6 +87,7 @@ export type TCrew = {
 
 export type TCrewSimple = {
   contacted: boolean
+  published: boolean
   userId: number
   autoCandidate: boolean
   selected: boolean

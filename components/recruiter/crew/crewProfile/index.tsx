@@ -940,7 +940,7 @@ const CrewProfile: FC<{ isModal?: boolean }> = ({ isModal }) => {
                 const parse = (d: string) => new Date(d?.split('/').reverse().join('-') ?? '').getTime()
                 return parse(b.toDate) - parse(a.toDate)
               })
-              .map((e, i) => <ExperienceItem key={e.idesperienza} exp={e} index={i} />)
+              .map((e, i) => <ExperienceItem key={`${e.idesperienza}-${i}`} exp={e} index={i} />)
           )}
         </SectionCard>
 

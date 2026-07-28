@@ -2,7 +2,8 @@ export const BASE_URL = 'https://www.comunicazione.it'
 
 const PHOTOS_BASE_URL = process.env.EXPO_PUBLIC_PHOTOS_BASE_URL ?? 'https://test.marineria.it'
 
-export const getPhotoUrl = (filename: string) => `${PHOTOS_BASE_URL}/PROFoto/${filename}.jpg`
+export const getPhotoUrl = (filename: string) =>
+  /^https?:\/\//.test(filename) ? filename : `${PHOTOS_BASE_URL}/PROFoto/${filename}.jpg`
 
 export const API = {
   LOGIN: `${BASE_URL}/api/login`,

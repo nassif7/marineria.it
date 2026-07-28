@@ -4,6 +4,8 @@ export type TNotification = {
   message: string
   idoffer: number
   iduser: number
+  id: number
+  isread: number
   link: string
 }
 

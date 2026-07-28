@@ -4,6 +4,7 @@ import { TUser } from '@/api/types/user'
 import { TRecruiterUser } from '@/api/types/recruiterUser'
 import { TCrewUser } from '@/api/types/crewUser'
 import { apiFetchJson, apiFetchText, getLanguageCode } from './utils'
+import { USE_FAKE_DATA, maskRecruiterIdentity, maskCrewIdentity } from './fakeData'
 
 export const getProUserProfile = async (token: string, role: TUserRole, language: string): Promise<TUser[]> => {
   const userRole = role == TUserRole.RECRUITER ? 'Owneruser' : 'Prouser'
@@ -53,7 +54,7 @@ export const getRecruiterUserProfilePost = async (token: string, language: strin
     body: JSON.stringify({ userToken: token, language: languageCode }),
   })
   const u = raw?.items ?? (Array.isArray(raw) ? raw[0] : raw)
-  return {
+  const profile: TRecruiterUser = {
     iduser: u.idUtente ?? u.iduser ?? 0,
     name: u.name ?? '',
     surname: u.surname ?? '',
@@ -74,6 +75,7 @@ export const getRecruiterUserProfilePost = async (token: string, language: strin
     lastAccessDate: u.last_access_date ?? u.lastAccessDate ?? '',
     registrationDate: u.registration_date ?? u.registrationDate ?? '',
   }
+  return USE_FAKE_DATA ? maskRecruiterIdentity(profile) : profile
 }
 
 export const getCrewUserProfilePost = async (token: string, language: string): Promise<TCrewUser> => {
@@ -87,13 +89,14 @@ export const getCrewUserProfilePost = async (token: string, language: string): P
   const items = raw?.items
   const u = items ? (Array.isArray(items) ? items[0] : items) : ((Array.isArray(raw) ? raw[0] : raw) ?? {})
 
-  return {
+  const profile = {
     ...u,
     published: u.publisched ?? u.published ?? '',
     lastAccessDate: u.lastAccessDate ?? u.last_access_date ?? '',
     registraton_date: u.registraton_date ?? u.registration_date ?? u.registrationDate ?? '',
     registrationDate: u.registraton_date ?? u.registration_date ?? u.registrationDate ?? '',
   } as TCrewUser
+  return USE_FAKE_DATA ? maskCrewIdentity(profile) : profile
 }
 
 export const setPushNotificationToken = async (token: string, pushToken: string): Promise<void> => {

@@ -66,7 +66,7 @@ const ExperiencesSection: FC<{ crew: TCrew }> = ({ crew }) => {
       ) : (
         <SubSection>
           {sorted.map((exp, i) => (
-            <ExperienceItem key={exp.idesperienza} exp={exp} index={i} />
+            <ExperienceItem key={`${exp.idesperienza}-${i}`} exp={exp} index={i} />
           ))}
         </SubSection>
       )}

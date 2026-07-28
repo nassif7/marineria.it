@@ -1,6 +1,16 @@
 import { API } from './consts'
 import { TOffer, TNotification, TCrew } from './types'
-import { apiFetchJson, getLanguageCode } from './utils'
+import { apiFetchJson, apiFetchText, getLanguageCode } from './utils'
+import {
+  USE_FAKE_DATA,
+  fakeGetAllOffers,
+  fakeGetOffersForApply,
+  fakeGetOfferById,
+  fakeApplyToOffer,
+  fakeGetWhyCanNotApply,
+  fakeGetNotifications,
+  fakeSetNotificationRead,
+} from './fakeData'
 
 export const getProOffers = async (proToken: string, allOffers?: boolean, language?: string): Promise<TOffer[]> => {
   const languageCode = getLanguageCode(language)
@@ -9,6 +19,7 @@ export const getProOffers = async (proToken: string, allOffers?: boolean, langua
 }
 
 export const getProOfferByIdPost = async (offerId: string, token: string, language: string): Promise<TOffer[]> => {
+  if (USE_FAKE_DATA) return fakeGetOfferById(offerId)
   const languageCode = getLanguageCode(language)
   const data = await apiFetchJson<{ items: TOffer[] }>(API.PRO_OFFERS + `/SingleOffer/${offerId}`, {
     method: 'POST',
@@ -25,6 +36,7 @@ export const getProOfferById = async (offerId: string, proToken: string, languag
 }
 
 export const applyToOffer = async (proToken: string, offerId: number, language: string): Promise<any> => {
+  if (USE_FAKE_DATA) return fakeApplyToOffer(offerId)
   const languageCode = getLanguageCode(language)
   return apiFetchJson(API.PRO_OFFERS + `/Apply/${offerId}`, {
     method: 'POST',
@@ -34,6 +46,7 @@ export const applyToOffer = async (proToken: string, offerId: number, language: 
 }
 
 export const getAllOffersPost = async (token: string, language?: string): Promise<TOffer[]> => {
+  if (USE_FAKE_DATA) return fakeGetAllOffers()
   const languageCode = getLanguageCode(language)
   const data = await apiFetchJson<{ items: TOffer[] }>(API.PRO_OFFERS + '/AllOffers', {
     method: 'POST',
@@ -44,6 +57,7 @@ export const getAllOffersPost = async (token: string, language?: string): Promis
 }
 
 export const getOffersForApplyPost = async (token: string, language?: string): Promise<TOffer[]> => {
+  if (USE_FAKE_DATA) return fakeGetOffersForApply()
   const languageCode = getLanguageCode(language)
   const data = await apiFetchJson<{ items: TOffer[] }>(API.PRO_OFFERS + '/OffersForApply', {
     method: 'POST',
@@ -66,6 +80,7 @@ export const getWhyCanNotApply = async (offerId: number, proToken: string, langu
 }
 
 export const getWhyCanNotApplyPost = async (offerId: number, proToken: string, language: string): Promise<string[]> => {
+  if (USE_FAKE_DATA) return fakeGetWhyCanNotApply()
   const languageCode = getLanguageCode(language)
   const data = await apiFetchJson<WhyCanNotApplyResponse>(API.WHY_CANT_APPLY + `/${offerId}`, {
     method: 'POST',
@@ -81,7 +96,11 @@ export const getCrewPublicCv = async (userId: number | string, language?: string
   return data.items
 }
 
-export const getCrewNotifications = async (token: string): Promise<TNotification[]> => {
+export const getCrewNotifications = async (
+  token: string,
+  role: 'crew' | 'recruiter' = 'crew'
+): Promise<TNotification[]> => {
+  if (USE_FAKE_DATA) return fakeGetNotifications(role)
   try {
     const data = await apiFetchJson<TNotification[] | TNotification>(`${API.NOTIFICATION}/GetNotifications`, {
       method: 'POST',
@@ -92,4 +111,13 @@ export const getCrewNotifications = async (token: string): Promise<TNotification
   } catch {
     return []
   }
+}
+
+export const setNotificationRead = async (notificationId: number, token: string): Promise<void> => {
+  if (USE_FAKE_DATA) return fakeSetNotificationRead(notificationId)
+  await apiFetchText(`${API.NOTIFICATION}/setNotificationRead?notificationId=${notificationId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({ token }),
+  })
 }

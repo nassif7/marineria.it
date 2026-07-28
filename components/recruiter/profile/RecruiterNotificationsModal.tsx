@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
@@ -7,6 +7,7 @@ import { X, ChevronRight, Info } from 'lucide-react-native'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { TNotification } from '@/api/types'
 import { C } from '@/components/pro/tokens'
+import OfferOfflineModal from '@/components/common/OfferOfflineModal'
 
 // Titles arrive like "Position  Master (CoC) for private M/Y 27M italian Flag [70000_10718]" —
 // strip the leading "Position" and surface the reference (the part after the underscore) separately.
@@ -21,21 +22,34 @@ const parseNotification = (notification: TNotification) => {
   return { cleanTitle, reference, name }
 }
 
-const NotificationRow: FC<{ notification: TNotification; onNavigate: () => void }> = ({ notification, onNavigate }) => {
+const NotificationRow: FC<{ notification: TNotification; onNavigate: () => void; onOfferGone: () => void }> = ({
+  notification,
+  onNavigate,
+  onOfferGone,
+}) => {
   const { t } = useTranslation(['search-screen'])
-  const isNavigable = !!notification.idoffer && !!notification.iduser
-  const Row = isNavigable ? Pressable : View
+  const { markNotificationAsRead } = useRecruiter()
+  const hasOffer = !!notification.idoffer
+  const canNavigate = hasOffer && !!notification.iduser
+  const isActionable = !hasOffer || canNavigate
+  const Row = isActionable ? Pressable : View
   const { cleanTitle, reference, name } = parseNotification(notification)
   const subtitle = [reference ? `Ref · ${reference}` : null, name].filter(Boolean).join(' · ')
 
+  const handlePress = () => {
+    markNotificationAsRead(notification)
+    return !hasOffer ? onOfferGone() : canNavigate ? onNavigate() : undefined
+  }
+
   return (
-    <Row style={nm.row} onPress={isNavigable ? onNavigate : undefined}>
+    <Row style={nm.row} onPress={isActionable ? handlePress : undefined}>
+      {!notification.isread && <View style={nm.unreadDot} />}
       <View style={{ flex: 1, minWidth: 0 }}>
         <Text style={nm.rowLabel}>{t('contacted', { ns: 'search-screen' })}</Text>
         {cleanTitle ? <Text style={nm.rowTitle}>{cleanTitle}</Text> : null}
         {subtitle ? <Text style={nm.rowMessage}>{subtitle}</Text> : null}
       </View>
-      {isNavigable && <ChevronRight size={16} color={C.ink4} strokeWidth={2} />}
+      {isActionable && <ChevronRight size={16} color={C.ink4} strokeWidth={2} />}
     </Row>
   )
 }
@@ -45,6 +59,7 @@ const RecruiterNotificationsModal: FC = () => {
   const { top, bottom } = useSafeAreaInsets()
   const { notifications } = useRecruiter()
   const router = useRouter()
+  const [offerGoneVisible, setOfferGoneVisible] = useState(false)
 
   const real = notifications.filter((n) => n.title || n.message)
 
@@ -81,12 +96,18 @@ const RecruiterNotificationsModal: FC = () => {
           <View style={nm.card}>
             {real.map((n, i) => (
               <View key={`${n.idoffer}-${i}`} style={i > 0 && nm.rowBorder}>
-                <NotificationRow notification={n} onNavigate={() => handleNavigate(n)} />
+                <NotificationRow
+                  notification={n}
+                  onNavigate={() => handleNavigate(n)}
+                  onOfferGone={() => setOfferGoneVisible(true)}
+                />
               </View>
             ))}
           </View>
         )}
       </ScrollView>
+
+      <OfferOfflineModal visible={offerGoneVisible} onClose={() => setOfferGoneVisible(false)} showContactSupport />
     </View>
   )
 }
@@ -141,6 +162,12 @@ const nm = StyleSheet.create({
     gap: 12,
     padding: 14,
     paddingHorizontal: 16,
+  },
+  unreadDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: C.orange,
   },
   rowLabel: {
     fontSize: 10,
