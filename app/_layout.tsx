@@ -13,8 +13,8 @@ import { useTranslation } from 'react-i18next'
 import { QueryClientProvider, QueryClient, focusManager } from '@tanstack/react-query'
 import { ThemeUIProvider } from '@/components/ui/gluestack-ui-provider'
 import SessionProvider, { useSession } from '@/Providers/SessionProvider'
-import RecruiterProvider from '@/Providers/RecruiterProvider'
-import CrewProvider from '@/Providers/CrewProvider'
+import RecruiterProvider, { useRecruiter } from '@/Providers/RecruiterProvider'
+import CrewProvider, { useCrew } from '@/Providers/CrewProvider'
 import { TUserRole } from '@/api/types'
 import { MarineriaSplash } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
@@ -79,8 +79,8 @@ export default Sentry.wrap(function RootLayout() {
                 <Stack.Screen name="(tabs)" />
                 <Stack.Screen name="(modals)" options={{ presentation: 'fullScreenModal' }} />
               </Stack>
+              <SplashOverlay />
             </RoleProviders>
-            <SplashOverlay />
           </SessionProvider>
         </SafeAreaProvider>
       </QueryClientProvider>
@@ -102,9 +102,17 @@ function RoleProviders({ children }: React.PropsWithChildren) {
   return <CrewProvider>{children}</CrewProvider>
 }
 
-// Separate component so it can access SessionProvider's context
+// Separate component so it can access SessionProvider's context. Mounted inside
+// RoleProviders so it can also read the crew/recruiter profile query state — this keeps
+// the splash up until the stored token has been confirmed to belong to a real user,
+// instead of fading out early and briefly exposing a blank/loading tabs screen.
 function SplashOverlay() {
-  const { isLoading } = useSession()
+  const {
+    isLoading,
+    auth: { token, role },
+  } = useSession()
+  const { isSuccess: crewLoaded, isError: crewErrored } = useCrew()
+  const { isSuccess: recruiterLoaded, isError: recruiterErrored } = useRecruiter()
   const [minDelayDone, setMinDelayDone] = useState(false)
 
   useEffect(() => {
@@ -112,5 +120,8 @@ function SplashOverlay() {
     return () => clearTimeout(timer)
   }, [])
 
-  return <MarineriaSplash isLoading={isLoading || !minDelayDone} />
+  const profileChecked =
+    !token || (role === TUserRole.CREW ? crewLoaded || crewErrored : recruiterLoaded || recruiterErrored)
+
+  return <MarineriaSplash isLoading={isLoading || !minDelayDone || !profileChecked} />
 }

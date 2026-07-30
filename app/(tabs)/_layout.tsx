@@ -5,6 +5,8 @@ import { HomeIcon, Briefcase, Users, Settings } from 'lucide-react-native'
 import '@/localization'
 import { TUserRole } from '@/api/types'
 import { useSession } from '@/Providers/SessionProvider'
+import { useCrew } from '@/Providers/CrewProvider'
+import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { Text, View } from '@/components/ui'
 import { TabBar } from '@/components/appUI'
 
@@ -13,6 +15,8 @@ const AppLayout = () => {
   const { auth, isLoading, isGuest } = useSession()
   const { token, role } = auth
   const insets = useSafeAreaInsets()
+  const { crew, isSuccess: crewLoaded, isError: crewErrored } = useCrew()
+  const { recruiter, isSuccess: recruiterLoaded, isError: recruiterErrored } = useRecruiter()
 
   if (isLoading) {
     return <Text>Loading...</Text>
@@ -20,6 +24,24 @@ const AppLayout = () => {
 
   if (!token && !isGuest) {
     return <Redirect href="/sign-in" />
+  }
+
+  if (token) {
+    const isCrew = role === TUserRole.CREW
+    const profileChecked = isCrew ? crewLoaded || crewErrored : recruiterLoaded || recruiterErrored
+    const profileUser = isCrew ? crew : recruiter
+
+    // A stored token can be stale/revoked — don't show the home screen until the
+    // profile fetch confirms it belongs to a real user (has an iduser), not just
+    // that a token exists in storage. The branded splash (app/_layout.tsx) stays
+    // visible for this same condition, so this is covered, not a bare blank screen.
+    if (!profileChecked) {
+      return null
+    }
+
+    if (!profileUser?.iduser) {
+      return <Redirect href="/sign-in" />
+    }
   }
 
   const proSceneStyle = {

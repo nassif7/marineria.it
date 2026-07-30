@@ -15,6 +15,8 @@ type TCrewContext = {
   notifications: TNotification[]
   markNotificationAsRead: (notification: TNotification) => void
   isLoading: boolean
+  isSuccess: boolean
+  isError: boolean
   isRefetching: boolean
   isTogglingNotifications: boolean
   refetch: () => Promise<unknown>
@@ -30,6 +32,8 @@ const CrewContext = createContext<TCrewContext>({
   notifications: [],
   markNotificationAsRead: () => {},
   isLoading: false,
+  isSuccess: false,
+  isError: false,
   isRefetching: false,
   isTogglingNotifications: false,
   refetch: () => Promise.resolve(),
@@ -80,6 +84,9 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
     markAsRead: markNotificationAsRead,
   } = useNotifications(token, 'crew')
 
+  console.log('crew user', crew)
+  console.log('crew notifications', notifications)
+
   const { mutate: togglePushNotifications, isPending: isTogglingNotifications } = useMutation({
     mutationFn: async () => {
       if (crew?.pushNotificationToken) {
@@ -100,6 +107,8 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
         notifications,
         markNotificationAsRead,
         isLoading: crewLoading,
+        isSuccess: crewLoaded,
+        isError: crewErrored,
         isRefetching: crewRefetching || notifRefetching,
         isTogglingNotifications,
         refetch: () => Promise.all([refetchCrew(), refetchNotif()]),

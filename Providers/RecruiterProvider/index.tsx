@@ -15,6 +15,8 @@ type TRecruiterContext = {
   notifications: TNotification[]
   markNotificationAsRead: (notification: TNotification) => void
   isLoading: boolean
+  isSuccess: boolean
+  isError: boolean
   isRefetching: boolean
   isTogglingNotifications: boolean
   refetch: () => Promise<unknown>
@@ -28,6 +30,8 @@ const RecruiterContext = createContext<TRecruiterContext>({
   notifications: [],
   markNotificationAsRead: () => {},
   isLoading: false,
+  isSuccess: false,
+  isError: false,
   isRefetching: false,
   isTogglingNotifications: false,
   refetch: () => Promise.resolve(),
@@ -86,6 +90,9 @@ const RecruiterProvider = ({ children }: React.PropsWithChildren) => {
     markAsRead: markNotificationAsRead,
   } = useNotifications(token, 'recruiter')
 
+  console.log('recruiter user', recruiter)
+  console.log('recruiter notifications', notifications)
+
   const { mutate: togglePushNotifications, isPending: isTogglingNotifications } = useMutation({
     mutationFn: async () => {
       if (recruiter?.pushNotificationToken) {
@@ -107,6 +114,8 @@ const RecruiterProvider = ({ children }: React.PropsWithChildren) => {
         notifications,
         markNotificationAsRead,
         isLoading: recruiterLoading || searchesLoading,
+        isSuccess: recruiterLoaded,
+        isError: recruiterErrored,
         isRefetching: recruiterRefetching || searchesRefetching || notifRefetching,
         isTogglingNotifications,
         refetch: () => Promise.all([refetchRecruiter(), refetchSearches(), refetchNotif()]),
