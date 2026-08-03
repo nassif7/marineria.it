@@ -7,6 +7,7 @@ import { ApiError } from '@/api/utils'
 import { TRecruiterUser, TRecruiterSearch, TNotification, TUserRole } from '@/api/types'
 import { registerForPushNotificationsAsync } from '@/hooks/useNotification'
 import { useNotifications } from '@/hooks/useNotifications'
+import { getLocalPushToken, setLocalPushToken, clearLocalPushToken } from '@/hooks/usePushTokenSync'
 
 type TRecruiterContext = {
   token: string
@@ -93,13 +94,31 @@ const RecruiterProvider = ({ children }: React.PropsWithChildren) => {
   console.log('recruiter user', recruiter)
   console.log('recruiter notifications', notifications)
 
+  // The BE keeps a single pushNotificationToken per account, so logging in on another
+  // device overwrites it. Reconcile against what this device last set on login/refresh
+  // so it reclaims its slot instead of silently going deaf.
+  useEffect(() => {
+    if (!recruiterLoaded || !token) return
+    getLocalPushToken(TUserRole.RECRUITER).then((localToken) => {
+      if (localToken && localToken !== recruiter?.pushNotificationToken) {
+        setPushNotificationToken(token, localToken).then(() =>
+          queryClient.invalidateQueries({ queryKey: ['recruiter-profile', token] })
+        )
+      }
+    })
+  }, [recruiterLoaded, recruiter?.pushNotificationToken, token, queryClient])
+
   const { mutate: togglePushNotifications, isPending: isTogglingNotifications } = useMutation({
     mutationFn: async () => {
       if (recruiter?.pushNotificationToken) {
         await setPushNotificationToken(token, '')
+        await clearLocalPushToken(TUserRole.RECRUITER)
       } else {
         const pushToken = await registerForPushNotificationsAsync()
-        if (pushToken) await setPushNotificationToken(token, pushToken)
+        if (pushToken) {
+          await setPushNotificationToken(token, pushToken)
+          await setLocalPushToken(TUserRole.RECRUITER, pushToken)
+        }
       }
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['recruiter-profile', token] }),

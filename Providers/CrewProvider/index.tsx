@@ -8,6 +8,7 @@ import { TCrewUser, TNotification, TUserRole } from '@/api/types'
 import { registerForPushNotificationsAsync } from '@/hooks/useNotification'
 import { useSavedOffers } from '@/hooks/useSavedOffers'
 import { useNotifications } from '@/hooks/useNotifications'
+import { getLocalPushToken, setLocalPushToken, clearLocalPushToken } from '@/hooks/usePushTokenSync'
 
 type TCrewContext = {
   token: string
@@ -87,13 +88,31 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
   console.log('crew user', crew)
   console.log('crew notifications', notifications)
 
+  // The BE keeps a single pushNotificationToken per account, so logging in on another
+  // device overwrites it. Reconcile against what this device last set on login/refresh
+  // so it reclaims its slot instead of silently going deaf.
+  useEffect(() => {
+    if (!crewLoaded || !token) return
+    getLocalPushToken(TUserRole.CREW).then((localToken) => {
+      if (localToken && localToken !== crew?.pushNotificationToken) {
+        setPushNotificationToken(token, localToken).then(() =>
+          queryClient.invalidateQueries({ queryKey: ['crew-profile', token] })
+        )
+      }
+    })
+  }, [crewLoaded, crew?.pushNotificationToken, token, queryClient])
+
   const { mutate: togglePushNotifications, isPending: isTogglingNotifications } = useMutation({
     mutationFn: async () => {
       if (crew?.pushNotificationToken) {
         await setPushNotificationToken(token, '')
+        await clearLocalPushToken(TUserRole.CREW)
       } else {
         const pushToken = await registerForPushNotificationsAsync()
-        if (pushToken) await setPushNotificationToken(token, pushToken)
+        if (pushToken) {
+          await setPushNotificationToken(token, pushToken)
+          await setLocalPushToken(TUserRole.CREW, pushToken)
+        }
       }
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['crew-profile', token] }),
