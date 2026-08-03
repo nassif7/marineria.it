@@ -85,9 +85,6 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
     markAsRead: markNotificationAsRead,
   } = useNotifications(token, 'crew')
 
-  console.log('crew user', crew)
-  console.log('crew notifications', notifications)
-
   // The BE keeps a single pushNotificationToken per account, so logging in on another
   // device overwrites it. Reconcile against what this device last set on login/refresh
   // so it reclaims its slot instead of silently going deaf.

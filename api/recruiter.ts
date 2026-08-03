@@ -22,7 +22,6 @@ export const getRecruiterActiveSearchesPost = async (
   ownerToken: string,
   language: string
 ): Promise<TRecruiterSearch[]> => {
-  console.log(ownerToken)
   if (USE_FAKE_DATA) return fakeGetRecruiterActiveSearches()
   const languageCode = getLanguageCode(language)
   const data = await apiFetchJson<{ items: TRecruiterSearch[] }>(API.OWNER_OFFERS, {
