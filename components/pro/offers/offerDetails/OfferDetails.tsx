@@ -16,6 +16,7 @@ import {
   Search,
 } from 'lucide-react-native'
 import { getProOfferById, getProOfferByIdPost, applyToOffer, getWhyCanNotApplyPost } from '@/api'
+import { getOfferShareUrl } from '@/api/consts'
 import { ApiError, parseServerBool } from '@/api/utils'
 import { useCrew } from '@/Providers/CrewProvider'
 import { useTranslation } from 'react-i18next'
@@ -130,9 +131,14 @@ export default function OfferDetailsScreen({ isModal }: Props) {
   const handleShare = async () => {
     if (!offer) return
     try {
+      const url = getOfferShareUrl(offer.idoffer, language)
+      const shareRef = offer.reference?.split('_')[1] || offer.reference
+      const intro = t('share-message-intro', { ns: 'offer' })
+      const refLabel = t('job-reference', { ns: 'offer' })
       await Share.share({
-        message: `${offer.offer}\n\nRef: ${offer.reference}`,
+        message: `${intro}\n\n${offer.offer}\n\n${refLabel} · ${shareRef}\n\n${url}`,
         title: offer.offer,
+        url,
       })
     } catch {}
   }

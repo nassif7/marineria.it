@@ -5,6 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { ChevronLeft, Share2, Send, Anchor, CheckCircle, FileText } from 'lucide-react-native'
 import { TOffer } from '@/api/types'
+import { getOfferShareUrl } from '@/api/consts'
 import { ErrorMessage } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
 import HtmlText from '@/components/pro/HtmlText'
@@ -58,9 +59,13 @@ const PublicOfferDetail = () => {
 
   const handleShare = async () => {
     try {
+      const url = getOfferShareUrl(offer.idoffer, language)
+      const intro = t('share-message-intro', { ns: 'offer' })
+      const refLabel = t('job-reference', { ns: 'offer' })
       await Share.share({
-        message: `${offer.offer}\n\nRef: ${offer.reference}`,
+        message: `${intro}\n\n${offer.offer}\n\n${refLabel} · ${ref}\n\n${url}`,
         title: offer.offer,
+        url,
       })
     } catch {}
   }
