@@ -1,7 +1,7 @@
 import * as SecureStore from 'expo-secure-store'
 import { TUserRole } from '@/api/types'
 
-const storageKey = (role: TUserRole) => `pushToken:${role}`
+const storageKey = (role: TUserRole) => `pushToken_${role}`
 
 export const getLocalPushToken = (role: TUserRole) => SecureStore.getItemAsync(storageKey(role))
 
