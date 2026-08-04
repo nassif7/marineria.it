@@ -3,7 +3,7 @@ import { router } from 'expo-router'
 import { useMutation } from '@tanstack/react-query'
 import { View, Pressable, StyleSheet, TextInput, Text as RNText, ActivityIndicator } from 'react-native'
 import * as WebBrowser from 'expo-web-browser'
-import { Mail, Anchor, Users, Eye, EyeOff, ArrowRight } from 'lucide-react-native'
+import { Mail, Anchor, Users, Eye, EyeOff, ArrowRight, Lock } from 'lucide-react-native'
 import { useAuthErrorToast } from '@/hooks/useAuthErrorToast'
 import { AuthScreen } from '@/components/appUI'
 import {
@@ -119,11 +119,13 @@ const SignIn = () => {
           </RNText>
 
           {/* Method switch */}
+          <RNText style={styles.methodLabel}>{t('choose-method')}</RNText>
           <View style={styles.methodTrack}>
             <Pressable
               style={[styles.methodTab, method === 'otp' && styles.methodTabActive]}
               onPress={() => switchMethod('otp')}
             >
+              <Mail size={15} color={method === 'otp' ? C.orange : C.ink4} strokeWidth={2} />
               <RNText style={[styles.methodTabText, method === 'otp' && styles.methodTabTextActive]}>
                 {t('otp-tab')}
               </RNText>
@@ -132,6 +134,7 @@ const SignIn = () => {
               style={[styles.methodTab, method === 'password' && styles.methodTabActive]}
               onPress={() => switchMethod('password')}
             >
+              <Lock size={15} color={method === 'password' ? C.orange : C.ink4} strokeWidth={2} />
               <RNText style={[styles.methodTabText, method === 'password' && styles.methodTabTextActive]}>
                 {t('password-tab')}
               </RNText>
@@ -314,6 +317,14 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     lineHeight: 19,
   },
+  methodLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: C.ink4,
+    letterSpacing: 0.4,
+    textTransform: 'uppercase',
+    marginBottom: 8,
+  },
   methodTrack: {
     flexDirection: 'row',
     backgroundColor: C.field,
@@ -326,8 +337,10 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 38,
     borderRadius: 9,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 6,
   },
   methodTabActive: {
     backgroundColor: '#FFFFFF',
