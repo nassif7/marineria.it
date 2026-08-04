@@ -108,6 +108,8 @@ const RecruiterProfile: FC = () => {
 
   const realNotifications = notifications.filter((n) => n.title || n.message)
   const hasNotifications = realNotifications.length > 0
+  const unreadNotificationsCount = realNotifications.filter((n) => !n.isread).length
+  const hasUnreadNotifications = unreadNotificationsCount > 0
 
   const waNumber = user?.whatsapp?.replace(/^https?:\/\/wa\.me\//, '') ?? ''
   const isSameAsWa = !!user?.cellular && !!waNumber && user.cellular === waNumber
@@ -169,25 +171,31 @@ const RecruiterProfile: FC = () => {
           const Banner = hasNotifications ? Pressable : View
           return (
             <Banner
-              style={[s.banner, !hasNotifications && s.bannerEmpty]}
+              style={[s.banner, !hasUnreadNotifications && s.bannerEmpty]}
               onPress={hasNotifications ? () => router.push('/notifications') : undefined}
             >
-              <View style={[s.bannerIcon, !hasNotifications && s.bannerIconEmpty]}>
-                <Bell size={20} color={hasNotifications ? '#fff' : C.ink3} strokeWidth={2} />
+              <View style={[s.bannerIcon, !hasUnreadNotifications && s.bannerIconEmpty]}>
+                <Bell size={20} color={hasUnreadNotifications ? '#fff' : C.ink3} strokeWidth={2} />
               </View>
               <View style={{ flex: 1, minWidth: 0 }}>
-                {hasNotifications ? (
+                {hasUnreadNotifications ? (
                   <>
                     <Text style={s.bannerTitle}>
-                      {t('recruiter-profile.notifications-count', { count: realNotifications.length })}
+                      {t('recruiter-profile.notifications-new-count', { count: unreadNotificationsCount })}
                     </Text>
                     <Text style={s.bannerSub}>{t('recruiter-profile.notification-activity')}</Text>
                   </>
+                ) : hasNotifications ? (
+                  <Text style={[s.bannerTitle, s.bannerTitleEmpty]}>
+                    {t('recruiter-profile.notifications-count', { count: realNotifications.length })}
+                  </Text>
                 ) : (
                   <Text style={[s.bannerTitle, s.bannerTitleEmpty]}>{t('recruiter-profile.no-notifications')}</Text>
                 )}
               </View>
-              {hasNotifications && <ChevronRight size={18} color="#fff" strokeWidth={2.4} />}
+              {hasNotifications && (
+                <ChevronRight size={18} color={hasUnreadNotifications ? '#fff' : C.ink3} strokeWidth={2.4} />
+              )}
             </Banner>
           )
         })()}

@@ -5,9 +5,12 @@ import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { X, ChevronRight, Info, Mail, Phone, MessageCircle } from 'lucide-react-native'
+import { useSession } from '@/Providers/SessionProvider'
 import { useCrew } from '@/Providers/CrewProvider'
+import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { getProOfferByIdPost } from '@/api'
-import { TNotification } from '@/api/types'
+import { TNotification, TUserRole } from '@/api/types'
+import { navigateToOfferFromNotification, navigateToCrewFromNotification } from '@/hooks/useNotifications'
 import { C } from '@/components/pro/tokens'
 import OfferOfflineModal from '@/components/common/OfferOfflineModal'
 
@@ -34,6 +37,19 @@ const parseContactMessage = (message?: string): ParsedContact | null => {
   }
 }
 
+// Recruiter titles arrive like "Position  Master (CoC) for private M/Y 27M italian Flag [70000_10718]" —
+// strip the leading "Position" and surface the reference (the part after the underscore) separately.
+const parseNotificationTitle = (notification: TNotification) => {
+  const refMatch = notification.title?.match(/\[(\d+)_(\d+)\]/)
+  const reference = refMatch ? refMatch[2] : null
+  const cleanTitle = (notification.title ?? '')
+    .replace(/\[\d+_\d+\]/, '')
+    .replace(/^position\s+/i, '')
+    .trim()
+  const name = notification.message?.split('\n')[1]?.trim()
+  return { cleanTitle, reference, name }
+}
+
 const openUrl = (url: string) => Linking.openURL(url).catch(() => {})
 
 const ContactAction: FC<{ icon: FC<any>; onPress: () => void }> = ({ icon: Icon, onPress }) => (
@@ -49,11 +65,11 @@ const ContactAction: FC<{ icon: FC<any>; onPress: () => void }> = ({ icon: Icon,
   </Pressable>
 )
 
-const NotificationRow: FC<{
-  notification: TNotification
-  onNavigate: (contact: ParsedContact | null) => void
-  onOfferGone: () => void
-}> = ({ notification, onNavigate, onOfferGone }) => {
+// Crew side: notification is a recruiter reaching out — show their contact info.
+const CrewNotificationRow: FC<{ notification: TNotification; onOfferGone: () => void }> = ({
+  notification,
+  onOfferGone,
+}) => {
   const {
     i18n: { language },
   } = useTranslation()
@@ -72,7 +88,7 @@ const NotificationRow: FC<{
 
   const handlePress = () => {
     markNotificationAsRead(notification)
-    return hasOffer ? onNavigate(contact) : onOfferGone()
+    return hasOffer ? navigateToOfferFromNotification(notification, contact) : onOfferGone()
   }
 
   return (
@@ -107,32 +123,61 @@ const NotificationRow: FC<{
   )
 }
 
+// Recruiter side: notification is a crew member applying — show who/what, route to their CV.
+const RecruiterNotificationRow: FC<{ notification: TNotification; onOfferGone: () => void }> = ({
+  notification,
+  onOfferGone,
+}) => {
+  const { t } = useTranslation(['search-screen'])
+  const { markNotificationAsRead } = useRecruiter()
+  const hasOffer = !!notification.idoffer
+  const canNavigate = hasOffer && !!notification.iduser
+  const isActionable = !hasOffer || canNavigate
+  const Row = isActionable ? Pressable : View
+  const { cleanTitle, reference, name } = parseNotificationTitle(notification)
+  const subtitle = [reference ? `Ref · ${reference}` : null, name].filter(Boolean).join(' · ')
+
+  const handlePress = () => {
+    markNotificationAsRead(notification)
+    return !hasOffer ? onOfferGone() : canNavigate ? navigateToCrewFromNotification(notification) : undefined
+  }
+
+  return (
+    <Row style={nm.row} onPress={isActionable ? handlePress : undefined}>
+      {!notification.isread && <View style={nm.unreadDot} />}
+      <View style={{ flex: 1, minWidth: 0 }}>
+        <Text style={nm.rowLabel}>{t('contacted', { ns: 'search-screen' })}</Text>
+        {cleanTitle ? <Text style={nm.rowTitle}>{cleanTitle}</Text> : null}
+        {subtitle ? <Text style={nm.rowMessage}>{subtitle}</Text> : null}
+      </View>
+      {isActionable && <ChevronRight size={16} color={C.ink4} strokeWidth={2} />}
+    </Row>
+  )
+}
+
 const NotificationsModal: FC = () => {
   const { t } = useTranslation('home-screen')
   const { top, bottom } = useSafeAreaInsets()
-  const { notifications } = useCrew()
   const router = useRouter()
   const [offerGoneVisible, setOfferGoneVisible] = useState(false)
 
-  const real = notifications.filter((n) => n.title || n.message)
+  const {
+    auth: { role },
+  } = useSession()
+  const isRecruiter = role === TUserRole.RECRUITER
 
-  const handleNavigate = (notification: TNotification, contact: ParsedContact | null) => {
-    router.push({
-      pathname: '/offer/[offerId]',
-      params: {
-        offerId: String(notification.idoffer),
-        ...(contact?.name && { recruiterName: contact.name }),
-        ...(contact?.email && { recruiterEmail: contact.email }),
-        ...(contact?.phone && { recruiterPhone: contact.phone }),
-        ...(contact?.whatsapp && { recruiterWhatsapp: contact.whatsapp }),
-      },
-    })
-  }
+  const { notifications: crewNotifications } = useCrew()
+  const { notifications: recruiterNotifications } = useRecruiter()
+  const notifications = isRecruiter ? recruiterNotifications : crewNotifications
+
+  const real = notifications.filter((n) => n.title || n.message)
 
   return (
     <View style={[nm.container, { paddingTop: top }]}>
       <View style={nm.header}>
-        <Text style={nm.headerTitle}>{t('crew-profile.notifications-title')}</Text>
+        <Text style={nm.headerTitle}>
+          {isRecruiter ? t('recruiter-profile.notifications-title') : t('crew-profile.notifications-title')}
+        </Text>
         <Pressable style={nm.closeBtn} onPress={() => router.back()}>
           <X size={16} color={C.ink2} strokeWidth={2.5} />
         </Pressable>
@@ -146,24 +191,30 @@ const NotificationsModal: FC = () => {
         {real.length === 0 ? (
           <View style={nm.emptyState}>
             <Info size={14} color={C.ink3} strokeWidth={1.8} />
-            <Text style={nm.emptyStateText}>{t('crew-profile.no-notifications')}</Text>
+            <Text style={nm.emptyStateText}>
+              {isRecruiter ? t('recruiter-profile.no-notifications') : t('crew-profile.no-notifications')}
+            </Text>
           </View>
         ) : (
           <View style={nm.card}>
             {real.map((n, i) => (
               <View key={`${n.idoffer}-${i}`} style={i > 0 && nm.rowBorder}>
-                <NotificationRow
-                  notification={n}
-                  onNavigate={(contact) => handleNavigate(n, contact)}
-                  onOfferGone={() => setOfferGoneVisible(true)}
-                />
+                {isRecruiter ? (
+                  <RecruiterNotificationRow notification={n} onOfferGone={() => setOfferGoneVisible(true)} />
+                ) : (
+                  <CrewNotificationRow notification={n} onOfferGone={() => setOfferGoneVisible(true)} />
+                )}
               </View>
             ))}
           </View>
         )}
       </ScrollView>
 
-      <OfferOfflineModal visible={offerGoneVisible} onClose={() => setOfferGoneVisible(false)} />
+      <OfferOfflineModal
+        visible={offerGoneVisible}
+        onClose={() => setOfferGoneVisible(false)}
+        showContactSupport={isRecruiter}
+      />
     </View>
   )
 }

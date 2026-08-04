@@ -18,6 +18,7 @@ import CrewProvider, { useCrew } from '@/Providers/CrewProvider'
 import { TUserRole } from '@/api/types'
 import { MarineriaSplash } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
+import usePushNotification from '@/hooks/usePushNotification'
 
 Sentry.init({
   dsn: 'https://aa4ffeeb3c4c16a769f69b6847aa0d27@o4511235462201344.ingest.de.sentry.io/4511235474325584',
@@ -31,6 +32,10 @@ export default Sentry.wrap(function RootLayout() {
   const [queryClient] = useState(() => new QueryClient())
   const { i18n } = useTranslation()
   const [assetsLoaded, setAssetsLoaded] = useState(false)
+
+  // Mounts the OS push-notification listeners app-wide, so tapping a push (or receiving
+  // one in the foreground) is actually wired up — previously this hook was never mounted.
+  usePushNotification()
 
   useEffect(() => {
     const loadLanguage = async () => {

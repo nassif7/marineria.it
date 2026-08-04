@@ -3,7 +3,7 @@ import * as Notifications from 'expo-notifications'
 import * as Device from 'expo-device'
 import Constants from 'expo-constants'
 import { Platform } from 'react-native'
-import { router } from 'expo-router'
+import { handlePushNotification } from './useNotifications'
 
 // Configure how notifications are handled when app is in foreground
 Notifications.setNotificationHandler({
@@ -78,32 +78,7 @@ export async function registerForPushNotificationsAsync() {
   return pushToken
 }
 
-// Helper function to handle notification navigation
-const handleNotificationNavigation = (notificationData: any) => {
-  if (!notificationData) return
-
-  const { type, offerId, cvId } = notificationData
-
-  switch (type) {
-    case 'cv_profile':
-      if (offerId && cvId) {
-        router.push(`/recruiter/search/${offerId}/crew/${cvId}`)
-      }
-      break
-
-    case 'job_offer':
-      if (offerId) {
-        router.push(`/pro/offers/${offerId}`)
-      }
-      break
-
-    default:
-      router.push('/(tabs)')
-      break
-  }
-}
-
-const useNotification = () => {
+const usePushNotification = () => {
   const [expoPushToken, setExpoPushToken] = useState('')
   const [channels, setChannels] = useState<Notifications.NotificationChannel[]>([])
   const [notification, setNotification] = useState<Notifications.Notification | undefined>(undefined)
@@ -122,7 +97,7 @@ const useNotification = () => {
 
     const responseListener = Notifications.addNotificationResponseReceivedListener((response) => {
       const data = response.notification.request.content.data
-      handleNotificationNavigation(data)
+      handlePushNotification(data)
     })
 
     return () => {
@@ -134,4 +109,4 @@ const useNotification = () => {
   return { expoPushToken, channels, notification, schedulePushNotification, setExpoPushToken }
 }
 
-export default useNotification
+export default usePushNotification

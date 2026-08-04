@@ -5,7 +5,7 @@ import { useSession } from '@/Providers/SessionProvider'
 import { getRecruiterUserProfilePost, getRecruiterActiveSearchesPost, setPushNotificationToken } from '@/api'
 import { ApiError } from '@/api/utils'
 import { TRecruiterUser, TRecruiterSearch, TNotification, TUserRole } from '@/api/types'
-import { registerForPushNotificationsAsync } from '@/hooks/useNotification'
+import { registerForPushNotificationsAsync } from '@/hooks/usePushNotification'
 import { useNotifications } from '@/hooks/useNotifications'
 import { getLocalPushToken, setLocalPushToken, clearLocalPushToken } from '@/hooks/usePushTokenSync'
 

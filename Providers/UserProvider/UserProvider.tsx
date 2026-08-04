@@ -5,7 +5,7 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { TUserRole, TUser } from '@/api/types'
 import { getProUserProfilePost, getOwnerUserProfilePost, setPushNotificationToken } from '@/api'
 import { useSession } from '@/Providers/SessionProvider'
-import { registerForPushNotificationsAsync } from '@/hooks/useNotification'
+import { registerForPushNotificationsAsync } from '@/hooks/usePushNotification'
 
 export type TActiveProfile = {
   role: TUserRole

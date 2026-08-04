@@ -1,17 +1,5 @@
-import NotificationsModal from '@/components/crew/profile/NotificationsModal'
-import RecruiterNotificationsModal from '@/components/recruiter/profile/RecruiterNotificationsModal'
-import { useSession } from '@/Providers/SessionProvider'
-import { TUserRole } from '@/api/types'
+import NotificationsModal from '@/components/common/NotificationsModal'
 
-const NotificationsScreen = () => {
-  const {
-    auth: { role },
-  } = useSession()
-
-  if (role === TUserRole.RECRUITER) {
-    return <RecruiterNotificationsModal />
-  }
-  return <NotificationsModal />
-}
+const NotificationsScreen = () => <NotificationsModal />
 
 export default NotificationsScreen
