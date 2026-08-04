@@ -632,7 +632,7 @@ export const maskCrewIdentity = (user: TCrewUser): TCrewUser => ({
 // ── Public API of this module ────────────────────────────────
 
 export const fakeGetNotifications = (role: 'crew' | 'recruiter') =>
-  simulateNetwork(role === 'recruiter' ? [...recruiterNotifications] : [...crewNotifications])
+  simulateNetwork({ notifications: role === 'recruiter' ? [...recruiterNotifications] : [...crewNotifications] })
 
 export const fakeSetNotificationRead = (notificationId: number) => {
   const found = [...crewNotifications, ...recruiterNotifications].find((n) => n.id === notificationId)

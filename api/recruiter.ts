@@ -72,15 +72,12 @@ export const getCrewListPost = async (
 ): Promise<TCrewSimple[]> => {
   if (USE_FAKE_DATA) return fakeGetCrewList(offerId)
   const languageCode = getLanguageCode(language)
-  const data = await apiFetchJson<{ items: (Omit<TCrewSimple, 'published'> & { Published: boolean })[] }>(
-    `${API.CREW_LIST}/${offerId}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify({ userToken: ownerToken, language: languageCode }),
-    }
-  )
-  return data.items.map(({ Published, ...item }) => ({ ...item, published: Published }))
+  const data = await apiFetchJson<{ items: TCrewSimple[] }>(`${API.CREW_LIST}/${offerId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({ userToken: ownerToken, language: languageCode }),
+  })
+  return data.items
 }
 
 export const getCrewCV = async (ownerToken: string, crewId: string, language?: string): Promise<TCrew[]> => {

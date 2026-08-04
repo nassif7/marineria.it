@@ -1,6 +1,6 @@
 import { API } from './consts'
-import { TOffer, TNotification, TCrew } from './types'
-import { apiFetchJson, apiFetchText, getLanguageCode } from './utils'
+import { TOffer, TCrew } from './types'
+import { apiFetchJson, getLanguageCode } from './utils'
 import {
   USE_FAKE_DATA,
   fakeGetAllOffers,
@@ -8,8 +8,6 @@ import {
   fakeGetOfferById,
   fakeApplyToOffer,
   fakeGetWhyCanNotApply,
-  fakeGetNotifications,
-  fakeSetNotificationRead,
 } from './fakeData'
 
 export const getProOffers = async (proToken: string, allOffers?: boolean, language?: string): Promise<TOffer[]> => {
@@ -94,30 +92,4 @@ export const getCrewPublicCv = async (userId: number | string, language?: string
   const languageCode = getLanguageCode(language)
   const data = await apiFetchJson<{ items: TCrew }>(`${API.PROUSER_CV}/${userId}?language=${languageCode}`)
   return data.items
-}
-
-export const getCrewNotifications = async (
-  token: string,
-  role: 'crew' | 'recruiter' = 'crew'
-): Promise<TNotification[]> => {
-  if (USE_FAKE_DATA) return fakeGetNotifications(role)
-  try {
-    const data = await apiFetchJson<TNotification[] | TNotification>(`${API.NOTIFICATION}/GetNotifications`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify({ token }),
-    })
-    return Array.isArray(data) ? data : data ? [data] : []
-  } catch {
-    return []
-  }
-}
-
-export const setNotificationRead = async (notificationId: number, token: string): Promise<void> => {
-  if (USE_FAKE_DATA) return fakeSetNotificationRead(notificationId)
-  await apiFetchText(`${API.NOTIFICATION}/setNotificationRead?notificationId=${notificationId}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json; charset=utf-8' },
-    body: JSON.stringify({ token }),
-  })
 }

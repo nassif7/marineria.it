@@ -1,6 +1,8 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { getCrewNotifications, setNotificationRead } from '@/api/pro'
+import { getNotifications, setNotificationRead } from '@/api/profile'
 import { TNotification } from '@/api/types'
+
+type TNotificationsResponse = { notifications: TNotification[] }
 
 // Unread notifications always come first; within each group, most recent (highest id) first.
 const sortNotifications = (list: TNotification[]) =>
@@ -12,16 +14,16 @@ export function useNotifications(token: string, role: 'crew' | 'recruiter' = 'cr
 
   const query = useQuery({
     queryKey,
-    queryFn: () => getCrewNotifications(token, role),
+    queryFn: () => getNotifications(token, role),
     enabled: !!token,
-    select: sortNotifications,
+    select: (data: TNotificationsResponse) => sortNotifications(data.notifications ?? []),
   })
 
   const markAsRead = (notification: TNotification) => {
     if (notification.isread) return
-    queryClient.setQueryData<TNotification[]>(queryKey, (prev = []) =>
-      prev.map((n) => (n.id === notification.id ? { ...n, isread: 1 } : n))
-    )
+    queryClient.setQueryData<TNotificationsResponse>(queryKey, (prev) => ({
+      notifications: (prev?.notifications ?? []).map((n) => (n.id === notification.id ? { ...n, isread: 1 } : n)),
+    }))
     setNotificationRead(notification.id, token).catch(() => {})
   }
 

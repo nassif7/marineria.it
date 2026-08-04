@@ -2,9 +2,15 @@ import { API } from './consts'
 import { TUserRole } from '@/api/types/auth'
 import { TUser } from '@/api/types/user'
 import { TRecruiterUser } from '@/api/types/recruiterUser'
-import { TCrewUser } from '@/api/types/crewUser'
+import { TCrewUser, TNotification } from '@/api/types/crewUser'
 import { apiFetchJson, apiFetchText, getLanguageCode } from './utils'
-import { USE_FAKE_DATA, maskRecruiterIdentity, maskCrewIdentity } from './fakeData'
+import {
+  USE_FAKE_DATA,
+  maskRecruiterIdentity,
+  maskCrewIdentity,
+  fakeGetNotifications,
+  fakeSetNotificationRead,
+} from './fakeData'
 
 export const getProUserProfile = async (token: string, role: TUserRole, language: string): Promise<TUser[]> => {
   const userRole = role == TUserRole.RECRUITER ? 'Owneruser' : 'Prouser'
@@ -109,5 +115,31 @@ export const setPushNotificationToken = async (token: string, pushToken: string)
       'Content-Type': 'application/json; charset=utf-8',
     },
     body,
+  })
+}
+
+// Shared between crew and recruiter — the token alone scopes which account's notifications come back.
+export const getNotifications = async (
+  token: string,
+  role: 'crew' | 'recruiter' = 'crew'
+): Promise<{ notifications: TNotification[] }> => {
+  if (USE_FAKE_DATA) return fakeGetNotifications(role)
+  try {
+    return await apiFetchJson<{ notifications: TNotification[] }>(`${API.NOTIFICATION}/GetNotifications`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({ token }),
+    })
+  } catch {
+    return { notifications: [] }
+  }
+}
+
+export const setNotificationRead = async (notificationId: number, token: string): Promise<void> => {
+  if (USE_FAKE_DATA) return fakeSetNotificationRead(notificationId)
+  await apiFetchText(`${API.NOTIFICATION}/setNotificationRead?notificationId=${notificationId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({ token }),
   })
 }
