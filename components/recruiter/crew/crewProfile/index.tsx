@@ -552,7 +552,7 @@ const CrewProfile: FC<{ isModal?: boolean }> = ({ isModal }) => {
     queryKey: ['recruiter-crew-cv', searchId, crewId, language],
     // queryFn: () => getCrewCV(token, crewId as string),
     queryFn: () => {
-      return getCrewCvPost(crewId as string, token, language)
+      return getCrewCvPost(crewId as string, searchId as string, token, language)
     },
   })
   const crew = isSuccess ? data : null
