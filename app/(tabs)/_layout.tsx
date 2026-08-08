@@ -1,7 +1,7 @@
-import { Redirect, Tabs } from 'expo-router'
+import { Redirect, Tabs, router } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
-import { HomeIcon, Briefcase, Users, Settings } from 'lucide-react-native'
+import { HomeIcon, Briefcase, Users, Settings, Bell } from 'lucide-react-native'
 import '@/localization'
 import { TUserRole } from '@/api/types'
 import { useSession } from '@/Providers/SessionProvider'
@@ -95,6 +95,22 @@ const AppLayout = () => {
           sceneStyle: proSceneStyle,
           title: t('offers'),
           tabBarIcon: Briefcase,
+        }}
+      />
+      <Tabs.Screen
+        name="notifications-tab"
+        redirect={isGuest}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault()
+            router.push('/notifications')
+          },
+        }}
+        options={{
+          sceneStyle: proSceneStyle,
+          headerShown: false,
+          title: t('notifications'),
+          tabBarIcon: Bell,
         }}
       />
       <Tabs.Screen
