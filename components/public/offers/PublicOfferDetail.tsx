@@ -10,6 +10,7 @@ import { ErrorMessage } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
 import HtmlText from '@/components/pro/HtmlText'
 import LoginToApplyModal from './LoginToApplyModal'
+import { getLocalizedOfferTitle } from '@/utils/offerUtils'
 
 function DetailSection({ title, icon: Icon, children }: { title: string; icon: any; children: React.ReactNode }) {
   return (
@@ -57,14 +58,16 @@ const PublicOfferDetail = () => {
     [t('posted', { ns: 'offer' }), offer.offerdate],
   ]
 
+  const offerTitle = getLocalizedOfferTitle(offer, language)
+
   const handleShare = async () => {
     try {
       const url = getOfferShareUrl(offer.idoffer, language)
       const intro = t('share-message-intro', { ns: 'offer' })
       const refLabel = t('job-reference', { ns: 'offer' })
       await Share.share({
-        message: `${intro}\n\n${offer.offer}\n\n${refLabel} · ${ref}\n\n${url}`,
-        title: offer.offer,
+        message: `${intro}\n\n${offerTitle}\n\n${refLabel} · ${ref}\n\n${url}`,
+        title: offerTitle,
         url,
       })
     } catch {}
@@ -94,7 +97,7 @@ const PublicOfferDetail = () => {
           </View>
         ) : null}
 
-        <Text style={ds.headerTitle}>{offer.offer?.trim() || offer.title}</Text>
+        <Text style={ds.headerTitle}>{offerTitle}</Text>
       </View>
 
       {/* ── Scrollable body ── */}
@@ -128,9 +131,9 @@ const PublicOfferDetail = () => {
             <HtmlText style={ds.sectionBody}>{offer.requirements}</HtmlText>
           </DetailSection>
         )}
-        {(offer.descriptionOffer || offer.offer) && (
+        {(offer.descriptionOffer || offerTitle) && (
           <DetailSection title={t('description', { ns: 'offer' })} icon={FileText}>
-            <HtmlText style={ds.sectionBody}>{offer.descriptionOffer || offer.offer}</HtmlText>
+            <HtmlText style={ds.sectionBody}>{offer.descriptionOffer || offerTitle}</HtmlText>
           </DetailSection>
         )}
       </ScrollView>

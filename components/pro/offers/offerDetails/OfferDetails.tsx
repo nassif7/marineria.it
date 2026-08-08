@@ -25,6 +25,7 @@ import { Loading } from '@/components/ui'
 import { ErrorMessage, ScreenContainer } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
 import HtmlText from '@/components/pro/HtmlText'
+import { getLocalizedOfferTitle } from '@/utils/offerUtils'
 import NotApplicableModal from './NotApplicableModal'
 import ApplyModal from './ApplyModal'
 import ContactRecruiterModal from './ContactRecruiterModal'
@@ -119,6 +120,7 @@ export default function OfferDetailsScreen({ isModal }: Props) {
   })
 
   const offer = isSuccess ? data?.[0] : null
+  const offerTitle = offer ? getLocalizedOfferTitle(offer, language) : undefined
 
   const handleApply = () => {
     if (!offer?.offerApplicable) {
@@ -136,8 +138,8 @@ export default function OfferDetailsScreen({ isModal }: Props) {
       const intro = t('share-message-intro', { ns: 'offer' })
       const refLabel = t('job-reference', { ns: 'offer' })
       await Share.share({
-        message: `${intro}\n\n${offer.offer}\n\n${refLabel} · ${shareRef}\n\n${url}`,
-        title: offer.offer,
+        message: `${intro}\n\n${offerTitle}\n\n${refLabel} · ${shareRef}\n\n${url}`,
+        title: offerTitle,
         url,
       })
     } catch {}
@@ -265,7 +267,7 @@ export default function OfferDetailsScreen({ isModal }: Props) {
         </View>
 
         {/* Title */}
-        <Text style={ds.headerTitle}>{offer?.offer?.trim() || offer?.title}</Text>
+        <Text style={ds.headerTitle}>{offerTitle}</Text>
       </View>
 
       {/* ── Scrollable body ── */}
@@ -301,9 +303,9 @@ export default function OfferDetailsScreen({ isModal }: Props) {
             <HtmlText style={ds.sectionBody}>{offer.requirements}</HtmlText>
           </DetailSection>
         )}
-        {(offer?.descriptionOffer || offer?.offer) && (
+        {(offer?.descriptionOffer || offerTitle) && (
           <DetailSection title={t('description', { ns: 'offer' })} icon={FileText}>
-            <HtmlText style={ds.sectionBody}>{offer?.descriptionOffer || offer?.offer}</HtmlText>
+            <HtmlText style={ds.sectionBody}>{offer?.descriptionOffer || offerTitle || ''}</HtmlText>
           </DetailSection>
         )}
       </ScrollView>

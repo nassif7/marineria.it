@@ -6,6 +6,7 @@ import { VStack, Button, ButtonText, ButtonIcon } from '@/components/ui'
 import { Send, Share2, AlertCircle, CheckCircle } from 'lucide-react-native'
 import { TOffer } from '@/api/types'
 import { Section } from '@/components/appUI'
+import { getLocalizedOfferTitle } from '@/utils/offerUtils'
 interface OfferActionsProps {
   offer: TOffer
   onApply: () => void
@@ -13,12 +14,16 @@ interface OfferActionsProps {
 }
 
 const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply, canApply = true }) => {
-  const { t } = useTranslation()
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation()
   const handleShare = async () => {
     try {
+      const offerTitle = getLocalizedOfferTitle(offer, language)
       await Share.share({
-        message: `Check out this job offer: ${offer.offer}\n\nSalary: ${offer.salary_From} - ${offer.salary_To}\nRef: ${offer.reference}`,
-        title: offer.offer,
+        message: `Check out this job offer: ${offerTitle}\n\nSalary: ${offer.salary_From} - ${offer.salary_To}\nRef: ${offer.reference}`,
+        title: offerTitle,
       })
     } catch {}
   }

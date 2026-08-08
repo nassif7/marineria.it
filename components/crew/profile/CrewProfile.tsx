@@ -286,30 +286,20 @@ const CrewProfile: FC = () => {
           const isActionable = real.length > 0
           const Banner = isActionable ? Pressable : View
           return (
-            <Banner
-              style={[s.notifBanner, !hasUnread && s.notifBannerEmpty]}
-              onPress={isActionable ? () => router.push('/notifications') : undefined}
-            >
-              <View style={[s.notifIcon, !hasUnread && s.notifIconEmpty]}>
-                <Bell size={18} color={hasUnread ? '#fff' : C.ink3} strokeWidth={2} />
+            <Banner style={s.notifBanner} onPress={isActionable ? () => router.push('/notifications') : undefined}>
+              <View style={s.notifIcon}>
+                <Bell size={18} color="#fff" strokeWidth={2} />
               </View>
               <View style={{ flex: 1, minWidth: 0 }}>
                 {hasUnread ? (
-                  <>
-                    <Text style={s.notifTitle}>
-                      {t('crew-profile.notifications-new-count', { count: unreadCount })}
-                    </Text>
-                    <Text style={s.notifMessage}>{t('crew-profile.notification-activity')}</Text>
-                  </>
+                  <Text style={s.notifTitle}>{t('crew-profile.notifications-new')}</Text>
                 ) : real.length > 0 ? (
-                  <Text style={[s.notifTitle, s.notifTitleEmpty]}>
-                    {t('crew-profile.notifications-count', { count: real.length })}
-                  </Text>
+                  <Text style={s.notifTitle}>{t('crew-profile.notifications-count', { count: real.length })}</Text>
                 ) : (
-                  <Text style={[s.notifTitle, s.notifTitleEmpty]}>{t('crew-profile.no-notifications')}</Text>
+                  <Text style={s.notifTitle}>{t('crew-profile.no-notifications')}</Text>
                 )}
               </View>
-              {isActionable && <ChevronRight size={18} color={hasUnread ? '#fff' : C.ink3} strokeWidth={2.4} />}
+              {isActionable && <ChevronRight size={18} color="#fff" strokeWidth={2.4} />}
             </Banner>
           )
         })()}
@@ -567,22 +557,6 @@ const s = StyleSheet.create({
     fontWeight: '700',
     color: '#fff',
     letterSpacing: 0.1,
-  },
-  notifMessage: {
-    fontSize: 12,
-    color: 'rgba(255,255,255,0.92)',
-    marginTop: 1,
-  },
-  notifBannerEmpty: {
-    backgroundColor: C.field,
-    shadowOpacity: 0,
-    elevation: 0,
-  },
-  notifIconEmpty: {
-    backgroundColor: C.card,
-  },
-  notifTitleEmpty: {
-    color: C.ink3,
   },
 })
 

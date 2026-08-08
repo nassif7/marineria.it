@@ -170,32 +170,22 @@ const RecruiterProfile: FC = () => {
         {(() => {
           const Banner = hasNotifications ? Pressable : View
           return (
-            <Banner
-              style={[s.banner, !hasUnreadNotifications && s.bannerEmpty]}
-              onPress={hasNotifications ? () => router.push('/notifications') : undefined}
-            >
-              <View style={[s.bannerIcon, !hasUnreadNotifications && s.bannerIconEmpty]}>
-                <Bell size={20} color={hasUnreadNotifications ? '#fff' : C.ink3} strokeWidth={2} />
+            <Banner style={s.banner} onPress={hasNotifications ? () => router.push('/notifications') : undefined}>
+              <View style={s.bannerIcon}>
+                <Bell size={20} color="#fff" strokeWidth={2} />
               </View>
               <View style={{ flex: 1, minWidth: 0 }}>
                 {hasUnreadNotifications ? (
-                  <>
-                    <Text style={s.bannerTitle}>
-                      {t('recruiter-profile.notifications-new-count', { count: unreadNotificationsCount })}
-                    </Text>
-                    <Text style={s.bannerSub}>{t('recruiter-profile.notification-activity')}</Text>
-                  </>
+                  <Text style={s.bannerTitle}>{t('recruiter-profile.notifications-new')}</Text>
                 ) : hasNotifications ? (
-                  <Text style={[s.bannerTitle, s.bannerTitleEmpty]}>
+                  <Text style={s.bannerTitle}>
                     {t('recruiter-profile.notifications-count', { count: realNotifications.length })}
                   </Text>
                 ) : (
-                  <Text style={[s.bannerTitle, s.bannerTitleEmpty]}>{t('recruiter-profile.no-notifications')}</Text>
+                  <Text style={s.bannerTitle}>{t('recruiter-profile.no-notifications')}</Text>
                 )}
               </View>
-              {hasNotifications && (
-                <ChevronRight size={18} color={hasUnreadNotifications ? '#fff' : C.ink3} strokeWidth={2.4} />
-              )}
+              {hasNotifications && <ChevronRight size={18} color="#fff" strokeWidth={2.4} />}
             </Banner>
           )
         })()}
@@ -401,22 +391,6 @@ const s = StyleSheet.create({
     fontWeight: '700',
     color: '#fff',
     letterSpacing: 0.1,
-  },
-  bannerSub: {
-    fontSize: 12,
-    color: 'rgba(255,255,255,0.92)',
-    marginTop: 1,
-  },
-  bannerEmpty: {
-    backgroundColor: C.field,
-    shadowOpacity: 0,
-    elevation: 0,
-  },
-  bannerIconEmpty: {
-    backgroundColor: C.card,
-  },
-  bannerTitleEmpty: {
-    color: C.ink3,
   },
   sectionEyebrow: {
     fontSize: 12,

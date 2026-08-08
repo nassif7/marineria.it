@@ -8,11 +8,12 @@ import { X, ChevronRight, Info, Mail, Phone, MessageCircle } from 'lucide-react-
 import { useSession } from '@/Providers/SessionProvider'
 import { useCrew } from '@/Providers/CrewProvider'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
-import { getProOfferByIdPost } from '@/api'
+import { getProOfferByIdPost, getRecruiterSearchByIdPost } from '@/api'
 import { TNotification, TUserRole } from '@/api/types'
 import { navigateToOfferFromNotification, navigateToCrewFromNotification } from '@/hooks/useNotifications'
 import { C } from '@/components/pro/tokens'
 import OfferOfflineModal from '@/components/common/OfferOfflineModal'
+import { getLocalizedOfferTitle } from '@/utils/offerUtils'
 
 type ParsedContact = { name?: string; email?: string; phone?: string; whatsapp?: string }
 
@@ -46,7 +47,10 @@ const parseNotificationTitle = (notification: TNotification) => {
     .replace(/\[\d+_\d+\]/, '')
     .replace(/^position\s+/i, '')
     .trim()
-  const name = notification.message?.split('\n')[1]?.trim()
+  const name = notification.message
+    ?.split('\n')[1]
+    ?.trim()
+    .replace(/^for\s+/i, '')
   return { cleanTitle, reference, name }
 }
 
@@ -71,6 +75,7 @@ const CrewNotificationRow: FC<{ notification: TNotification; onOfferGone: () => 
   onOfferGone,
 }) => {
   const {
+    t,
     i18n: { language },
   } = useTranslation()
   const { token, markNotificationAsRead } = useCrew()
@@ -83,7 +88,7 @@ const CrewNotificationRow: FC<{ notification: TNotification; onOfferGone: () => 
     enabled: hasOffer && !!token,
     select: (data) => data?.[0],
   })
-  const offerTitle = offer?.offer?.trim() || offer?.title
+  const offerTitle = offer ? getLocalizedOfferTitle(offer, language) : undefined
   const reference = offer?.reference?.split('_')[1] || offer?.reference
 
   const handlePress = () => {
@@ -95,7 +100,7 @@ const CrewNotificationRow: FC<{ notification: TNotification; onOfferGone: () => 
     <Pressable style={nm.row} onPress={handlePress}>
       {!notification.isread && <View style={nm.unreadDot} />}
       <View style={{ flex: 1, minWidth: 0 }}>
-        {notification.title ? <Text style={nm.rowLabel}>{notification.title}</Text> : null}
+        <Text style={nm.rowLabel}>{t('crew-profile.notification-activity')}</Text>
         {offerTitle ? <Text style={nm.rowTitle}>{offerTitle}</Text> : null}
         {reference ? <Text style={nm.rowRef}>Ref · {reference}</Text> : null}
         {contact ? (
@@ -128,13 +133,27 @@ const RecruiterNotificationRow: FC<{ notification: TNotification; onOfferGone: (
   notification,
   onOfferGone,
 }) => {
-  const { t } = useTranslation(['search-screen'])
-  const { markNotificationAsRead } = useRecruiter()
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation('home-screen')
+  const { token, markNotificationAsRead } = useRecruiter()
   const hasOffer = !!notification.idoffer
   const canNavigate = hasOffer && !!notification.iduser
   const isActionable = !hasOffer || canNavigate
   const Row = isActionable ? Pressable : View
-  const { cleanTitle, reference, name } = parseNotificationTitle(notification)
+  const { reference: parsedReference, name } = parseNotificationTitle(notification)
+
+  // The raw notification title/message is frozen in whichever language it was created
+  // in — re-fetch the search itself so the title reflects the app's current language.
+  const { data: search } = useQuery({
+    queryKey: ['search', String(notification.idoffer), language],
+    queryFn: () => getRecruiterSearchByIdPost(String(notification.idoffer), token, language),
+    enabled: hasOffer && !!token,
+    select: (data) => data?.[0],
+  })
+  const title = search?.title?.trim()
+  const reference = search?.reference?.split('_')[1] || search?.reference || parsedReference
   const subtitle = [reference ? `Ref · ${reference}` : null, name].filter(Boolean).join(' · ')
 
   const handlePress = () => {
@@ -146,8 +165,8 @@ const RecruiterNotificationRow: FC<{ notification: TNotification; onOfferGone: (
     <Row style={nm.row} onPress={isActionable ? handlePress : undefined}>
       {!notification.isread && <View style={nm.unreadDot} />}
       <View style={{ flex: 1, minWidth: 0 }}>
-        <Text style={nm.rowLabel}>{t('contacted', { ns: 'search-screen' })}</Text>
-        {cleanTitle ? <Text style={nm.rowTitle}>{cleanTitle}</Text> : null}
+        <Text style={nm.rowLabel}>{t('recruiter-profile.notification-new-application')}</Text>
+        {title ? <Text style={nm.rowTitle}>{title}</Text> : null}
         {subtitle ? <Text style={nm.rowMessage}>{subtitle}</Text> : null}
       </View>
       {isActionable && <ChevronRight size={16} color={C.ink4} strokeWidth={2} />}

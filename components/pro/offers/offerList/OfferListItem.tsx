@@ -5,6 +5,7 @@ import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { TOffer } from '@/api/types'
 import { C } from '@/components/pro/tokens'
+import { getLocalizedOfferTitle } from '@/utils/offerUtils'
 
 const MATCH_BG = '#E8F5EE'
 const MATCH_TEXT = '#1B7F4E'
@@ -47,7 +48,10 @@ interface Props {
 }
 
 const OfferListItem: FC<Props> = ({ offer, hideStatus = false, onViewOffer }) => {
-  const { t } = useTranslation(['offer-screen', 'offer'])
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(['offer-screen', 'offer'])
   const salary = [offer.salary_From, offer.salary_To].filter(Boolean).join(' – ') || '—'
   const imbarco = [offer.boarding, offer.duration].filter(Boolean).join(' · ')
   const ref = offer.reference?.split('_')[1] || offer.reference
@@ -85,7 +89,7 @@ const OfferListItem: FC<Props> = ({ offer, hideStatus = false, onViewOffer }) =>
       </View>
 
       <Text style={cs.title} numberOfLines={3}>
-        {offer.offer?.trim() || offer.title}
+        {getLocalizedOfferTitle(offer, language)}
       </Text>
 
       <View style={cs.gridRow}>
