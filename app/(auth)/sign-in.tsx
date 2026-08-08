@@ -19,6 +19,7 @@ import {
   Text,
 } from '@/components/ui'
 import { checkEmail } from '@/api/auth'
+import { consumePendingNotificationRedirect } from '@/hooks/useNotifications'
 import { useSession } from '@/Providers/SessionProvider/SessionProvider'
 import { useTranslation } from 'react-i18next'
 import { C } from '@/components/pro/tokens'
@@ -57,15 +58,24 @@ const SignIn = () => {
     mutationFn: async (codeArg: string) => {
       await loginWithCode(email, codeArg)
     },
-    onSuccess: () => router.replace('/'),
+    onSuccess: () => afterSignIn(),
     onError: () => showErrorToast(),
   })
 
   const { mutate: passwordLoginMutate, isPending: isPasswordLoggingIn } = useMutation({
     mutationFn: ({ email: e, password: p }: { email: string; password: string }) => signIn(e, p),
-    onSuccess: () => router.replace('/'),
+    onSuccess: () => afterSignIn(),
     onError: () => showErrorToast(),
   })
+
+  // If this sign-in was triggered by tapping a push notification for an account the user
+  // wasn't logged into on this device, land on the notifications list instead of home so
+  // they can still reach it — the specific deep link isn't reliably reconstructable here.
+  const afterSignIn = async () => {
+    const openNotifications = await consumePendingNotificationRedirect()
+    router.replace('/')
+    if (openNotifications) router.push('/notifications')
+  }
 
   const prevCodeRef = useRef('')
 

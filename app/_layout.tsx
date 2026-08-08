@@ -33,10 +33,6 @@ export default Sentry.wrap(function RootLayout() {
   const { i18n } = useTranslation()
   const [assetsLoaded, setAssetsLoaded] = useState(false)
 
-  // Mounts the OS push-notification listeners app-wide, so tapping a push (or receiving
-  // one in the foreground) is actually wired up — previously this hook was never mounted.
-  usePushNotification()
-
   useEffect(() => {
     const loadLanguage = async () => {
       const savedLanguage = await SecureStore.getItemAsync('language')
@@ -78,6 +74,7 @@ export default Sentry.wrap(function RootLayout() {
         <SafeAreaProvider>
           <SessionProvider>
             <StatusBar />
+            <PushNotificationBridge />
             <RoleProviders>
               <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="(auth)" />
@@ -92,6 +89,14 @@ export default Sentry.wrap(function RootLayout() {
     </ThemeUIProvider>
   )
 })
+
+// Mounted inside SessionProvider (not at the RootLayout level) so its tap handler can read
+// the active role/tokens and call switchAuth — needed because both accounts on a device
+// share one OS push token, so a notification can arrive for whichever role isn't active.
+function PushNotificationBridge() {
+  usePushNotification()
+  return null
+}
 
 // Mounted above the root Stack (not just inside (tabs)) so root-level routes like the
 // (modals)/offer screen also have access to the crew/recruiter token and profile data.

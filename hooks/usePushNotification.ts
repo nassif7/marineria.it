@@ -3,6 +3,7 @@ import * as Notifications from 'expo-notifications'
 import * as Device from 'expo-device'
 import Constants from 'expo-constants'
 import { Platform } from 'react-native'
+import { useSession } from '@/Providers/SessionProvider'
 import { handlePushNotification } from './useNotifications'
 
 // Configure how notifications are handled when app is in foreground
@@ -82,6 +83,7 @@ const usePushNotification = () => {
   const [expoPushToken, setExpoPushToken] = useState('')
   const [channels, setChannels] = useState<Notifications.NotificationChannel[]>([])
   const [notification, setNotification] = useState<Notifications.Notification | undefined>(undefined)
+  const { auth, storedAuthTokens, switchAuth } = useSession()
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((pushToken) => pushToken && setExpoPushToken(pushToken))
@@ -95,16 +97,20 @@ const usePushNotification = () => {
       setNotification(notification)
     })
 
+    return () => notificationListener.remove()
+  }, [])
+
+  // Re-subscribed whenever the active role/tokens change, so a tapped push is always
+  // resolved (and possibly switched) against the account state that's current right now,
+  // not whatever was active when the listener was first attached.
+  useEffect(() => {
     const responseListener = Notifications.addNotificationResponseReceivedListener((response) => {
       const data = response.notification.request.content.data
-      handlePushNotification(data)
+      handlePushNotification(data, { activeRole: auth.role, storedAuthTokens, switchAuth })
     })
 
-    return () => {
-      notificationListener.remove()
-      responseListener.remove()
-    }
-  }, [])
+    return () => responseListener.remove()
+  }, [auth.role, storedAuthTokens, switchAuth])
 
   return { expoPushToken, channels, notification, schedulePushNotification, setExpoPushToken }
 }

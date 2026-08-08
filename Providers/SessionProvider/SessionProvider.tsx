@@ -7,7 +7,7 @@ type SessionContextType = {
   signIn: (userName: string, password: string) => Promise<void>
   loginWithCode: (username: string, code: string) => Promise<void>
   signOut: (role: TUserRole) => void
-  switchAuth: (role: TUserRole) => void
+  switchAuth: (role: TUserRole) => Promise<void>
   continueAsGuest: () => void
   auth: { role: TUserRole | null; token: string | null }
   storedAuthTokens: TUserAuth
@@ -19,7 +19,7 @@ const SessionContext = createContext<SessionContextType>({
   signIn: async () => {},
   loginWithCode: async () => {},
   signOut: () => null,
-  switchAuth: () => null,
+  switchAuth: async () => {},
   continueAsGuest: () => null,
   auth: { role: null, token: null },
   storedAuthTokens: { [TUserRole.CREW]: null, [TUserRole.RECRUITER]: null },
