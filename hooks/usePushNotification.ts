@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import * as Notifications from 'expo-notifications'
 import * as Device from 'expo-device'
 import Constants from 'expo-constants'
-import { Platform } from 'react-native'
+import { Platform, Alert, Linking } from 'react-native'
 import { useSession } from '@/Providers/SessionProvider'
 import { handlePushNotification } from './useNotifications'
 
@@ -35,7 +35,12 @@ export async function schedulePushNotification() {
   })
 }
 
-export async function registerForPushNotificationsAsync() {
+// `silent` suppresses user-facing alerts — used by the app-launch auto-registration
+// effect below, which runs on every mount regardless of whether the user has ever
+// opted in and shouldn't nag them; the explicit "enable notifications" toggles pass
+// silent: false (the default) so a denied permission is actionable.
+export async function registerForPushNotificationsAsync(options: { silent?: boolean } = {}) {
+  const { silent = false } = options
   let pushToken
 
   if (Platform.OS === 'android') {
@@ -48,14 +53,31 @@ export async function registerForPushNotificationsAsync() {
   }
 
   if (Device.isDevice) {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync()
-    let finalStatus = existingStatus
-    if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync()
-      finalStatus = status
+    const existing = await Notifications.getPermissionsAsync()
+    let finalStatus = existing.status
+    let canAskAgain = existing.canAskAgain
+    if (existing.status !== 'granted' && existing.canAskAgain) {
+      const requested = await Notifications.requestPermissionsAsync()
+      finalStatus = requested.status
+      canAskAgain = requested.canAskAgain
     }
     if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!')
+      // Once denied, iOS/Android won't show the system prompt again — the only way
+      // back is the OS Settings screen, so send the user there instead of re-asking.
+      if (!silent) {
+        if (!canAskAgain) {
+          Alert.alert(
+            'Notifications are disabled',
+            'Enable notifications for Marineria in your device Settings to turn this on.',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { text: 'Open Settings', onPress: () => Linking.openSettings() },
+            ]
+          )
+        } else {
+          Alert.alert('Failed to get push token for push notification!')
+        }
+      }
       return
     }
 
@@ -69,11 +91,11 @@ export async function registerForPushNotificationsAsync() {
           projectId,
         })
       ).data
-    } catch (e) {
-      pushToken = `${e}`
+    } catch {
+      pushToken = undefined
     }
-  } else {
-    alert('Must use physical device for Push Notifications')
+  } else if (!silent) {
+    Alert.alert('Must use physical device for Push Notifications')
   }
 
   return pushToken
@@ -86,7 +108,7 @@ const usePushNotification = () => {
   const { auth, storedAuthTokens, switchAuth } = useSession()
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((pushToken) => pushToken && setExpoPushToken(pushToken))
+    registerForPushNotificationsAsync({ silent: true }).then((pushToken) => pushToken && setExpoPushToken(pushToken))
 
     if (Platform.OS === 'android') {
       Notifications.getNotificationChannelsAsync().then((value) => setChannels(value ?? []))
