@@ -76,7 +76,7 @@
       "notifications-new-count_other": "{{count}} new notifications",
       "notifications-new": "New notifications",
       "notification-activity": "Contact shared",
-      "notification-new-application": "New application",
+      "notification-new-application": "New application for",
       "section-activity": "Your activity",
       "action-searches": "Your searches",
       "action-searches-sub": "{{count}} active",
@@ -94,6 +94,7 @@
     },
     "crew-profile": {
       "title": "Your profile",
+      "job-offer-from": "Job Offer from: {{name}}",
       "available": "Available",
       "available-from": "Available from {{date}}",
       "not-available": "Not available",

@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useMemo, useState } from 'react'
 import { View, Text, Pressable, ScrollView, StyleSheet, Image } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
@@ -160,13 +160,9 @@ const ActionRow: FC<{
 const CrewProfile: FC = () => {
   const { t } = useTranslation('home-screen')
   const router = useRouter()
-  const { crew, notifications, isLoading, refetch, token } = useCrew()
+  const { crew, notifications, isLoading, refetch } = useCrew()
   const { refreshing, onRefresh } = useManualRefresh(refetch)
   const [previewVisible, setPreviewVisible] = useState(false)
-
-  useEffect(() => {
-    console.log('[DEBUG CrewProfile] token', token)
-  }, [token])
 
   const age = crew?.yearofBirth ? getAgeByYear(crew.yearofBirth) : null
   const photoUrl = crew?.userPhoto ? getPhotoUrl(crew.userPhoto) : null

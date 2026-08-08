@@ -90,6 +90,7 @@ const CrewNotificationRow: FC<{ notification: TNotification; onOfferGone: () => 
   })
   const offerTitle = offer ? getLocalizedOfferTitle(offer, language) : undefined
   const reference = offer?.reference?.split('_')[1] || offer?.reference
+  const title = contact?.name ? t('crew-profile.job-offer-from', { name: contact.name }) : offerTitle
 
   const handlePress = () => {
     markNotificationAsRead(notification)
@@ -101,24 +102,22 @@ const CrewNotificationRow: FC<{ notification: TNotification; onOfferGone: () => 
       {!notification.isread && <View style={nm.unreadDot} />}
       <View style={{ flex: 1, minWidth: 0 }}>
         <Text style={nm.rowLabel}>{t('crew-profile.notification-activity')}</Text>
-        {offerTitle ? <Text style={nm.rowTitle}>{offerTitle}</Text> : null}
+        {title ? <Text style={nm.rowTitle}>{title}</Text> : null}
+        {offerTitle && contact?.name ? <Text style={nm.rowMessage}>{offerTitle}</Text> : null}
         {reference ? <Text style={nm.rowRef}>Ref · {reference}</Text> : null}
         {contact ? (
-          <>
-            {contact.name ? <Text style={nm.rowMessage}>{contact.name}</Text> : null}
-            <View style={nm.contactRow}>
-              {contact.email ? <ContactAction icon={Mail} onPress={() => openUrl(`mailto:${contact.email}`)} /> : null}
-              {contact.phone ? (
-                <ContactAction icon={Phone} onPress={() => openUrl(`tel:${contact.phone!.replace(/\s/g, '')}`)} />
-              ) : null}
-              {contact.whatsapp ? (
-                <ContactAction
-                  icon={MessageCircle}
-                  onPress={() => openUrl(`https://wa.me/${contact.whatsapp!.replace(/\D/g, '')}`)}
-                />
-              ) : null}
-            </View>
-          </>
+          <View style={nm.contactRow}>
+            {contact.email ? <ContactAction icon={Mail} onPress={() => openUrl(`mailto:${contact.email}`)} /> : null}
+            {contact.phone ? (
+              <ContactAction icon={Phone} onPress={() => openUrl(`tel:${contact.phone!.replace(/\s/g, '')}`)} />
+            ) : null}
+            {contact.whatsapp ? (
+              <ContactAction
+                icon={MessageCircle}
+                onPress={() => openUrl(`https://wa.me/${contact.whatsapp!.replace(/\D/g, '')}`)}
+              />
+            ) : null}
+          </View>
         ) : !offerTitle && notification.message ? (
           <Text style={nm.rowMessage}>{notification.message}</Text>
         ) : null}
@@ -154,7 +153,7 @@ const RecruiterNotificationRow: FC<{ notification: TNotification; onOfferGone: (
   })
   const title = search?.title?.trim()
   const reference = search?.reference?.split('_')[1] || search?.reference || parsedReference
-  const subtitle = [reference ? `Ref · ${reference}` : null, name].filter(Boolean).join(' · ')
+  const subtitle = [name].filter(Boolean).join(' · ')
 
   const handlePress = () => {
     markNotificationAsRead(notification)
@@ -166,7 +165,7 @@ const RecruiterNotificationRow: FC<{ notification: TNotification; onOfferGone: (
       {!notification.isread && <View style={nm.unreadDot} />}
       <View style={{ flex: 1, minWidth: 0 }}>
         <Text style={nm.rowLabel}>{t('recruiter-profile.notification-new-application')}</Text>
-        {title ? <Text style={nm.rowTitle}>{title}</Text> : null}
+        {/* {subtitle ? <Text style={nm.rowTitle}>{subtitle}</Text> : null} */}
         {subtitle ? <Text style={nm.rowMessage}>{subtitle}</Text> : null}
       </View>
       {isActionable && <ChevronRight size={16} color={C.ink4} strokeWidth={2} />}
@@ -308,6 +307,9 @@ const nm = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: C.ink,
+  },
+  rowTitleOrange: {
+    color: C.orangeText,
   },
   rowRef: {
     fontSize: 11,

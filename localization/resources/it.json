@@ -76,7 +76,7 @@
       "notifications-new-count_other": "{{count}} nuove notifiche",
       "notifications-new": "Nuove notifiche",
       "notification-activity": "Contatto attivato",
-      "notification-new-application": "Nuova candidatura",
+      "notification-new-application": "Nuova candidatura per",
       "section-activity": "Le tue attività",
       "action-searches": "Le tue ricerche",
       "action-searches-sub": "{{count}} attive",
@@ -94,6 +94,7 @@
     },
     "crew-profile": {
       "title": "Il tuo profilo",
+      "job-offer-from": "Offerta di lavoro da: {{name}}",
       "available": "Disponibile",
       "available-from": "Disponibile dal {{date}}",
       "not-available": "Non disponibile",
