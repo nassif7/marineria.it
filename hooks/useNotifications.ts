@@ -7,9 +7,9 @@ import { TNotification, TUserRole, TUserAuth } from '@/api/types'
 type TNotificationsResponse = { notifications: TNotification[] }
 type TParsedContact = { name?: string; email?: string; phone?: string; whatsapp?: string }
 
-// Unread notifications always come first; within each group, most recent (highest id) first.
+// Most recently created first, regardless of read state.
 const sortNotifications = (list: TNotification[]) =>
-  [...list].sort((a, b) => (a.isread !== b.isread ? a.isread - b.isread : b.id - a.id))
+  [...list].sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
 
 const PENDING_REDIRECT_KEY = 'pendingNotificationRedirect'
 

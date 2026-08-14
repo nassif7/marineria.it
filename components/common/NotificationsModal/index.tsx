@@ -14,6 +14,7 @@ import { navigateToOfferFromNotification, navigateToCrewFromNotification } from 
 import { C } from '@/components/pro/tokens'
 import OfferOfflineModal from '@/components/common/OfferOfflineModal'
 import { getLocalizedOfferTitle } from '@/utils/offerUtils'
+import { getRelativeTime } from '@/utils/dateUtils'
 
 type ParsedContact = { name?: string; email?: string; phone?: string; whatsapp?: string }
 
@@ -104,7 +105,13 @@ const CrewNotificationRow: FC<{ notification: TNotification; onOfferGone: () => 
         <Text style={nm.rowLabel}>{t('crew-profile.notification-activity')}</Text>
         {title ? <Text style={nm.rowTitle}>{title}</Text> : null}
         {offerTitle && contact?.name ? <Text style={nm.rowMessage}>{offerTitle}</Text> : null}
-        {reference ? <Text style={nm.rowRef}>Ref · {reference}</Text> : null}
+        {(reference || notification.created) && (
+          <Text style={nm.rowRef}>
+            {[reference && `Ref · ${reference}`, notification.created && getRelativeTime(notification.created, t)]
+              .filter(Boolean)
+              .join(' · ')}
+          </Text>
+        )}
         {contact ? (
           <View style={nm.contactRow}>
             {contact.email ? <ContactAction icon={Mail} onPress={() => openUrl(`mailto:${contact.email}`)} /> : null}
@@ -165,8 +172,8 @@ const RecruiterNotificationRow: FC<{ notification: TNotification; onOfferGone: (
       {!notification.isread && <View style={nm.unreadDot} />}
       <View style={{ flex: 1, minWidth: 0 }}>
         <Text style={nm.rowLabel}>{t('recruiter-profile.notification-new-application')}</Text>
-        {/* {subtitle ? <Text style={nm.rowTitle}>{subtitle}</Text> : null} */}
         {subtitle ? <Text style={nm.rowMessage}>{subtitle}</Text> : null}
+        {notification.created && <Text style={nm.rowRef}>{getRelativeTime(notification.created, t)}</Text>}
       </View>
       {isActionable && <ChevronRight size={16} color={C.ink4} strokeWidth={2} />}
     </Row>
@@ -189,13 +196,18 @@ const NotificationsModal: FC = () => {
   const notifications = isRecruiter ? recruiterNotifications : crewNotifications
 
   const real = notifications.filter((n) => n.title || n.message)
+  const unreadCount = real.filter((n) => !n.isread).length
+  const ns = isRecruiter ? 'recruiter-profile' : 'crew-profile'
 
   return (
     <View style={[nm.container, { paddingTop: top }]}>
       <View style={nm.header}>
-        <Text style={nm.headerTitle}>
-          {isRecruiter ? t('recruiter-profile.notifications-title') : t('crew-profile.notifications-title')}
-        </Text>
+        <View style={{ flex: 1 }}>
+          <Text style={nm.headerTitle}>{t(`${ns}.notifications-title`)}</Text>
+          {unreadCount > 0 && (
+            <Text style={nm.headerSubtitle}>{t(`${ns}.notifications-new-count`, { count: unreadCount })}</Text>
+          )}
+        </View>
         <Pressable style={nm.closeBtn} onPress={() => router.back()}>
           <X size={16} color={C.ink2} strokeWidth={2.5} />
         </Pressable>
@@ -252,11 +264,16 @@ const nm = StyleSheet.create({
     borderBottomColor: C.hair,
   },
   headerTitle: {
-    flex: 1,
     fontSize: 17,
     fontWeight: '700',
     color: C.ink,
     letterSpacing: -0.2,
+  },
+  headerSubtitle: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: C.orangeText,
+    marginTop: 2,
   },
   closeBtn: {
     width: 32,
@@ -307,9 +324,6 @@ const nm = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: C.ink,
-  },
-  rowTitleOrange: {
-    color: C.orangeText,
   },
   rowRef: {
     fontSize: 11,

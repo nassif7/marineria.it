@@ -381,6 +381,13 @@
     "no-technical-skills": "No technical skills"
   },
   "common": {
+    "just-now": "Just now",
+    "minutes-ago_one": "{{count}} minute ago",
+    "minutes-ago_other": "{{count}} minutes ago",
+    "hours-ago_one": "{{count}} hour ago",
+    "hours-ago_other": "{{count}} hours ago",
+    "days-ago_one": "{{count}} day ago",
+    "days-ago_other": "{{count}} days ago",
     "back": "Back",
     "edit": "Edit",
     "delete": "Delete",

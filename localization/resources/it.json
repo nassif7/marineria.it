@@ -382,6 +382,13 @@
     "no-technical-skills": "Senza competenze tecniche"
   },
   "common": {
+    "just-now": "Proprio ora",
+    "minutes-ago_one": "{{count}} minuto fa",
+    "minutes-ago_other": "{{count}} minuti fa",
+    "hours-ago_one": "{{count}} ora fa",
+    "hours-ago_other": "{{count}} ore fa",
+    "days-ago_one": "{{count}} giorno fa",
+    "days-ago_other": "{{count}} giorni fa",
     "back": "Indietro",
     "edit": "Modifica",
     "delete": "Elimina",

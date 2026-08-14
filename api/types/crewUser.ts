@@ -7,6 +7,7 @@ export type TNotification = {
   id: number
   isread: number
   link: string
+  created: string
 }
 
 export type TCrewUser = {

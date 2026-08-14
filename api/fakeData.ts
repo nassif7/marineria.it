@@ -533,6 +533,8 @@ const offers: TOffer[] = Array.from({ length: OFFER_COUNT }, (_, i) => {
 const buildContactMessage = (name: string, city: string, email: string, phone: string) =>
   `Contact\n${name}\n${city}\n${email}\nTel: ${phone}\nWhatsApp: ${phone}`
 
+const minutesAgo = (n: number) => new Date(Date.now() - n * 60_000).toISOString()
+
 const crewNotifications: TNotification[] = offers
   .filter((o) => o.alreadyApplied)
   .slice(0, 4)
@@ -552,6 +554,7 @@ const crewNotifications: TNotification[] = offers
       id: i + 1,
       isread: i < 2 ? 1 : 0,
       link: '',
+      created: [minutesAgo(60 * 24 * 3), minutesAgo(60 * 24), minutesAgo(120), minutesAgo(15)][i],
     }
   })
   .concat({
@@ -568,6 +571,7 @@ const crewNotifications: TNotification[] = offers
     id: 9001,
     isread: 0,
     link: '',
+    created: minutesAgo(5),
   })
 
 const recruiterNotifications: TNotification[] = searches
@@ -584,6 +588,7 @@ const recruiterNotifications: TNotification[] = searches
     id: i + 1,
     isread: i < 2 ? 1 : 0,
     link: '',
+    created: [minutesAgo(60 * 24 * 4), minutesAgo(60 * 24 * 2), minutesAgo(180), minutesAgo(20)][i],
   }))
   .concat({
     category: 'candidate-contacted',
@@ -598,6 +603,7 @@ const recruiterNotifications: TNotification[] = searches
     iduser: rand(1000, 9999),
     id: 9002,
     isread: 0,
+    created: minutesAgo(8),
     link: '',
   })
 

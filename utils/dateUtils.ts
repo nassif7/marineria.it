@@ -1,3 +1,20 @@
+type TFunction = (key: string, options?: Record<string, unknown>) => string
+
+// "5 minutes ago" / "3 hours ago" / "2 days ago" — deliberately simple, no calendar-aware
+// edge cases (weeks, months); notifications older than that just show the largest unit.
+export const getRelativeTime = (dateString: string, t: TFunction): string => {
+  const diffMinutes = Math.floor((Date.now() - new Date(dateString).getTime()) / 60_000)
+
+  if (diffMinutes < 1) return t('just-now', { ns: 'common' })
+  if (diffMinutes < 60) return t('minutes-ago', { ns: 'common', count: diffMinutes })
+
+  const diffHours = Math.floor(diffMinutes / 60)
+  if (diffHours < 24) return t('hours-ago', { ns: 'common', count: diffHours })
+
+  const diffDays = Math.floor(diffHours / 24)
+  return t('days-ago', { ns: 'common', count: diffDays })
+}
+
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString)
   const yyyy = date.getFullYear()
