@@ -1,8 +1,8 @@
 export const BASE_URL = 'https://www.comunicazione.it'
 
-const PHOTOS_BASE_URL = process.env.EXPO_PUBLIC_PHOTOS_BASE_URL ?? 'https://test.marineria.it'
+const PHOTOS_BASE_URL = process.env.EXPO_PUBLIC_PHOTOS_BASE_URL ?? 'https://www.marineria.it'
 // TODO: point back to www.marineria.it before release
-const WEB_URL = 'https://test.marineria.it'
+const WEB_URL = 'https://wwww.marineria.it'
 
 export const getPhotoUrl = (filename: string) =>
   /^https?:\/\//.test(filename) ? filename : `${PHOTOS_BASE_URL}/PROFoto/${filename}.jpg`

@@ -6,13 +6,17 @@ import { SectionHeader, Section, SubSection } from '@/components/appUI'
 import { TRecruiterSearch } from '@/api/types'
 import { Linking } from 'react-native'
 import { isDateString } from '@/utils'
+import { formatSalary } from '@/utils/formatters'
 
 interface SearchContractProps {
   search: TRecruiterSearch
 }
 
 const SearchContract: React.FC<SearchContractProps> = ({ search }) => {
-  const { t } = useTranslation()
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation()
   const hasCoords = search.latArm !== 0 && search.lngArm !== 0
   const hasLocation = (search.positionArm && search.positionArm !== 'NA') || hasCoords
 
@@ -35,7 +39,7 @@ const SearchContract: React.FC<SearchContractProps> = ({ search }) => {
         <HStack space="xs">
           <SubSection className="flex-1" title={t('salary')} icon={Euro}>
             <Text size="sm" semiBold shade={800}>
-              {search.salary_From} - {search.salary_To}
+              {formatSalary(search.salary_From, search.salary_To, language)}
             </Text>
           </SubSection>
 

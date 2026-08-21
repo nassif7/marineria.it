@@ -8,6 +8,7 @@ import {
   fakeGetOfferById,
   fakeApplyToOffer,
   fakeGetWhyCanNotApply,
+  fakeGetCrewPublicCv,
 } from './fakeData'
 
 export const getProOffers = async (proToken: string, allOffers?: boolean, language?: string): Promise<TOffer[]> => {
@@ -17,7 +18,7 @@ export const getProOffers = async (proToken: string, allOffers?: boolean, langua
 }
 
 export const getProOfferByIdPost = async (offerId: string, token: string, language: string): Promise<TOffer[]> => {
-  if (USE_FAKE_DATA) return fakeGetOfferById(offerId)
+  if (USE_FAKE_DATA) return fakeGetOfferById(offerId, language)
   const languageCode = getLanguageCode(language)
   const data = await apiFetchJson<{ items: TOffer[] }>(API.PRO_OFFERS + `/SingleOffer/${offerId}`, {
     method: 'POST',
@@ -44,7 +45,7 @@ export const applyToOffer = async (proToken: string, offerId: number, language: 
 }
 
 export const getAllOffersPost = async (token: string, language?: string): Promise<TOffer[]> => {
-  if (USE_FAKE_DATA) return fakeGetAllOffers()
+  if (USE_FAKE_DATA) return fakeGetAllOffers(language)
   const languageCode = getLanguageCode(language)
   const data = await apiFetchJson<{ items: TOffer[] }>(API.PRO_OFFERS + '/AllOffers', {
     method: 'POST',
@@ -55,7 +56,7 @@ export const getAllOffersPost = async (token: string, language?: string): Promis
 }
 
 export const getOffersForApplyPost = async (token: string, language?: string): Promise<TOffer[]> => {
-  if (USE_FAKE_DATA) return fakeGetOffersForApply()
+  if (USE_FAKE_DATA) return fakeGetOffersForApply(language)
   const languageCode = getLanguageCode(language)
   const data = await apiFetchJson<{ items: TOffer[] }>(API.PRO_OFFERS + '/OffersForApply', {
     method: 'POST',
@@ -89,6 +90,7 @@ export const getWhyCanNotApplyPost = async (offerId: number, proToken: string, l
 }
 
 export const getCrewPublicCv = async (userId: number | string, language?: string): Promise<TCrew> => {
+  if (USE_FAKE_DATA) return fakeGetCrewPublicCv(language)
   const languageCode = getLanguageCode(language)
   const data = await apiFetchJson<{ items: TCrew }>(`${API.PROUSER_CV}/${userId}?language=${languageCode}`)
   return data.items

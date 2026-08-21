@@ -29,8 +29,8 @@ const CrewListEmptyComponent = () => {
 
   const search = isSuccess ? (data as any)?.[0] : null
   // TODO: point back to www.marineria.it before release
-  const openSearchByLocation = () => openUrl(`https://test.marineria.it/${language}/${search.listgeourl}`)
-  const openSearchBySkill = () => openUrl(`https://test.marineria.it/${language}/${search.listurl}`)
+  const openSearchByLocation = () => openUrl(`https://www.marineria.it/${language}/${search.listgeourl}`)
+  const openSearchBySkill = () => openUrl(`https://www.marineria.it/${language}/${search.listurl}`)
 
   return (
     <View className={`h-full flex-1 px-2 pt-20`}>
@@ -41,7 +41,7 @@ const CrewListEmptyComponent = () => {
           variant="solid"
           action="positive"
           onPress={openSearchBySkill}
-          className="rounded-md w-full"
+          className="w-full rounded-md"
           size="md"
           isDisabled={isUrlLoading}
         >
@@ -54,7 +54,7 @@ const CrewListEmptyComponent = () => {
           variant="solid"
           action="positive"
           onPress={openSearchByLocation}
-          className="rounded-md w-full"
+          className="w-full rounded-md"
           size="md"
           isDisabled={isUrlLoading}
         >

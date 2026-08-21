@@ -5,25 +5,24 @@ import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { TRecruiterSearch } from '@/api/types'
 import { C } from '@/components/pro/tokens'
+import { formatSalary } from '@/utils/formatters'
 
 interface ISearchListItemProps {
   search: TRecruiterSearch
 }
 
 const SearchListItem: FC<ISearchListItemProps> = ({ search }) => {
-  const { t } = useTranslation(['search-screen', 'offer'])
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(['search-screen', 'offer'])
   const viewSearch = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}`)
   const viewCrewList = (filter: 'all' | 'selected' | 'contacted' | 'residual') =>
     router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list?filter=${filter}`)
 
   const referenceShort = search.reference.includes('_') ? search.reference.split('_')[1] : search.reference
 
-  const salary =
-    search.salary_From && search.salary_To
-      ? search.salary_From === search.salary_To
-        ? search.salary_From
-        : `${search.salary_From} – ${search.salary_To}`
-      : null
+  const salary = formatSalary(search.salary_From, search.salary_To, language) || null
 
   const facts = [
     salary ? [t('salary', { ns: 'offer' }), salary] : null,

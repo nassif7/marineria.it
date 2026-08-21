@@ -6,10 +6,11 @@ import { TCrewUser, TNotification } from '@/api/types/crewUser'
 import { apiFetchJson, apiFetchText, getLanguageCode } from './utils'
 import {
   USE_FAKE_DATA,
-  maskRecruiterIdentity,
-  maskCrewIdentity,
   fakeGetNotifications,
   fakeSetNotificationRead,
+  fakeGetRecruiterUserProfile,
+  fakeGetCrewUserProfile,
+  fakeSetPushNotificationToken,
 } from './fakeData'
 
 export const getProUserProfile = async (token: string, role: TUserRole, language: string): Promise<TUser[]> => {
@@ -52,6 +53,7 @@ export const getOwnerUserProfilePost = async (token: string, language: string): 
 }
 
 export const getRecruiterUserProfilePost = async (token: string, language: string): Promise<TRecruiterUser> => {
+  if (USE_FAKE_DATA) return fakeGetRecruiterUserProfile()
   const languageCode = getLanguageCode(language)
   const url = `${API.PROFILE}/Owneruser/Owner`
   const raw = await apiFetchJson<any>(url, {
@@ -81,10 +83,11 @@ export const getRecruiterUserProfilePost = async (token: string, language: strin
     lastAccessDate: u.last_access_date ?? u.lastAccessDate ?? '',
     registrationDate: u.registration_date ?? u.registrationDate ?? '',
   }
-  return USE_FAKE_DATA ? maskRecruiterIdentity(profile) : profile
+  return profile
 }
 
 export const getCrewUserProfilePost = async (token: string, language: string): Promise<TCrewUser> => {
+  if (USE_FAKE_DATA) return fakeGetCrewUserProfile(language)
   const languageCode = getLanguageCode(language)
   const url = `${API.PROFILE}/Prouser`
   const raw = await apiFetchJson<any>(url, {
@@ -102,10 +105,11 @@ export const getCrewUserProfilePost = async (token: string, language: string): P
     registraton_date: u.registraton_date ?? u.registration_date ?? u.registrationDate ?? '',
     registrationDate: u.registraton_date ?? u.registration_date ?? u.registrationDate ?? '',
   } as TCrewUser
-  return USE_FAKE_DATA ? maskCrewIdentity(profile) : profile
+  return profile
 }
 
 export const setPushNotificationToken = async (token: string, pushToken: string): Promise<void> => {
+  if (USE_FAKE_DATA) return fakeSetPushNotificationToken()
   const url = `${API.NOTIFICATION}/SetPushNotificationToken`
   const body = JSON.stringify({ token, pushToken })
 

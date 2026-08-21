@@ -14,6 +14,7 @@ import { C } from '@/components/pro/tokens'
 import HtmlText from '@/components/pro/HtmlText'
 import { supportTeam } from '@/api'
 import ContactSupport from '@/components/common/ContactSupport'
+import { formatSalary } from '@/utils/formatters'
 
 const isVal = (s?: string | null): s is string => !!s && s.trim() !== '' && s.trim().toUpperCase() !== 'NA'
 
@@ -33,12 +34,7 @@ export default function SearchDetails() {
   if (isError) return <ErrorMessage />
   if (!isSuccess || !search) return null
 
-  const salary =
-    search.salary_From && search.salary_To
-      ? search.salary_From === search.salary_To
-        ? search.salary_From
-        : `${search.salary_From} – ${search.salary_To}`
-      : null
+  const salary = formatSalary(search.salary_From, search.salary_To, language) || null
 
   const selected = Math.max(0, search.countCandidates - search.countContacted)
   const hasCoords = search.latArm !== 0 && search.lngArm !== 0
@@ -52,8 +48,8 @@ export default function SearchDetails() {
     router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list${filter ? `?filter=${filter}` : ''}`)
 
   // TODO: point back to www.marineria.it before release
-  const openBySkill = () => openUrl(`https://test.marineria.it/${language}/${search.listurl}`)
-  const openByLocation = () => openUrl(`https://test.marineria.it/${language}/${search.listgeourl}`)
+  const openBySkill = () => openUrl(`https://www.marineria.it/${language}/${search.listurl}`)
+  const openByLocation = () => openUrl(`https://www.marineria.it/${language}/${search.listgeourl}`)
   const openMap = () =>
     hasCoords && Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${search.latArm},${search.lngArm}`)
 

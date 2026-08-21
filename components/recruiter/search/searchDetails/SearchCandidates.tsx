@@ -19,8 +19,8 @@ const SearchCandidates: React.FC<SearchCandidatesProps> = ({ search }) => {
   } = useTranslation(['search-screen'])
   const { openUrl, isLoading: isUrlLoading } = useAuthBrowser()
 
-  const openSearchByLocation = () => openUrl(`https://test.marineria.it/${language}/${search.listgeourl}`)
-  const openSearchBySkill = () => openUrl(`https://test.marineria.it/${language}/${search.listurl}`)
+  const openSearchByLocation = () => openUrl(`https://www.marineria.it/${language}/${search.listgeourl}`)
+  const openSearchBySkill = () => openUrl(`https://www.marineria.it/${language}/${search.listurl}`)
 
   const viewCrewList = () => router.push(`/(tabs)/recruiter/search/${search.idoffer}/crew/list`)
 

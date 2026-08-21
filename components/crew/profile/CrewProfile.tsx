@@ -288,7 +288,7 @@ const CrewProfile: FC = () => {
               </View>
               <View style={{ flex: 1, minWidth: 0 }}>
                 {hasUnread ? (
-                  <Text style={s.notifTitle}>{t('crew-profile.notifications-new')}</Text>
+                  <Text style={s.notifTitle}>{t('crew-profile.notifications-new-count', { count: unreadCount })}</Text>
                 ) : real.length > 0 ? (
                   <Text style={s.notifTitle}>{t('crew-profile.notifications-count', { count: real.length })}</Text>
                 ) : (

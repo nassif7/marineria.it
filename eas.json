@@ -11,7 +11,7 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_PHOTOS_BASE_URL": "https://test.marineria.it"
+        "EXPO_PUBLIC_PHOTOS_BASE_URL": "https://www.marineria.it"
       }
     },
     "production": {

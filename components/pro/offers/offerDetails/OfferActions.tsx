@@ -7,6 +7,7 @@ import { Send, Share2, AlertCircle, CheckCircle } from 'lucide-react-native'
 import { TOffer } from '@/api/types'
 import { Section } from '@/components/appUI'
 import { getLocalizedOfferTitle } from '@/utils/offerUtils'
+import { formatSalary } from '@/utils/formatters'
 interface OfferActionsProps {
   offer: TOffer
   onApply: () => void
@@ -21,8 +22,9 @@ const OfferActions: React.FC<OfferActionsProps> = ({ offer, onApply, canApply = 
   const handleShare = async () => {
     try {
       const offerTitle = getLocalizedOfferTitle(offer, language)
+      const salary = formatSalary(offer.salary_From, offer.salary_To, language)
       await Share.share({
-        message: `Check out this job offer: ${offerTitle}\n\nSalary: ${offer.salary_From} - ${offer.salary_To}\nRef: ${offer.reference}`,
+        message: `Check out this job offer: ${offerTitle}\n\nSalary: ${salary}\nRef: ${offer.reference}`,
         title: offerTitle,
       })
     } catch {}

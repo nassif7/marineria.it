@@ -22,7 +22,7 @@ export const getRecruiterActiveSearchesPost = async (
   ownerToken: string,
   language: string
 ): Promise<TRecruiterSearch[]> => {
-  if (USE_FAKE_DATA) return fakeGetRecruiterActiveSearches()
+  if (USE_FAKE_DATA) return fakeGetRecruiterActiveSearches(language)
   const languageCode = getLanguageCode(language)
   const data = await apiFetchJson<{ items: TRecruiterSearch[] }>(API.OWNER_OFFERS, {
     method: 'POST',
@@ -48,7 +48,7 @@ export const getRecruiterSearchByIdPost = async (
   ownerToken: string,
   language?: string
 ): Promise<TRecruiterSearch[]> => {
-  if (USE_FAKE_DATA) return fakeGetRecruiterSearchById(searchId)
+  if (USE_FAKE_DATA) return fakeGetRecruiterSearchById(searchId, language)
   const languageCode = getLanguageCode(language)
   const url = `${API.OWNER_OFFERS}/${searchId}`
   const data = await apiFetchJson<{ items: TRecruiterSearch[] }>(url, {
@@ -60,6 +60,7 @@ export const getRecruiterSearchByIdPost = async (
 }
 
 export const getCrewList = async (offerId: string, ownerToken: string, language: string): Promise<TCrewSimple[]> => {
+  if (USE_FAKE_DATA) return fakeGetCrewList(offerId, language)
   const languageCode = getLanguageCode(language)
   const url = API.CREW_LIST + `/${ownerToken}/${offerId}?language=${languageCode}`
   return apiFetchJson<TCrewSimple[]>(url)
@@ -70,7 +71,7 @@ export const getCrewListPost = async (
   ownerToken: string,
   language: string
 ): Promise<TCrewSimple[]> => {
-  if (USE_FAKE_DATA) return fakeGetCrewList(offerId)
+  if (USE_FAKE_DATA) return fakeGetCrewList(offerId, language)
   const languageCode = getLanguageCode(language)
   const data = await apiFetchJson<{ items: TCrewSimple[] }>(`${API.CREW_LIST}/${offerId}`, {
     method: 'POST',
@@ -92,7 +93,7 @@ export const getCrewCvPost = async (
   ownerToken: string,
   language?: string
 ): Promise<TCrew> => {
-  if (USE_FAKE_DATA) return fakeGetCrewCv(crewId)
+  if (USE_FAKE_DATA) return fakeGetCrewCv(crewId, language)
   const languageCode = getLanguageCode(language)
   const url = `${BASE_URL}/api/Owneruser/CvUser/${offerId}/${crewId}`
   const body = { userToken: ownerToken, language: languageCode }

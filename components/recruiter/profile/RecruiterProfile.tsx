@@ -1,11 +1,12 @@
 import { FC, useCallback } from 'react'
-import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native'
+import { View, Text, Image, Pressable, ScrollView, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { setFromHome } from '@/utils/fromHomeNav'
 import { Bell, Headphones, ChevronRight, Briefcase, Users, Globe, Mail, Phone } from 'lucide-react-native'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { supportTeam } from '@/api'
+import { USE_FAKE_DATA, FAKE_RECRUITER_PHOTO_URL } from '@/api/fakeData'
 import { C } from '@/components/pro/tokens'
 import { Loading, RefreshControl } from '@/components/ui'
 import { useManualRefresh } from '@/hooks'
@@ -136,7 +137,11 @@ const RecruiterProfile: FC = () => {
         <View style={s.rowCard}>
           <View style={s.identityRow}>
             <View style={s.avatar}>
-              <Text style={s.avatarInitials}>{initials}</Text>
+              {USE_FAKE_DATA ? (
+                <Image source={{ uri: FAKE_RECRUITER_PHOTO_URL }} style={s.avatarPhoto} />
+              ) : (
+                <Text style={s.avatarInitials}>{initials}</Text>
+              )}
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
               <Text style={s.name}>
@@ -176,7 +181,9 @@ const RecruiterProfile: FC = () => {
               </View>
               <View style={{ flex: 1, minWidth: 0 }}>
                 {hasUnreadNotifications ? (
-                  <Text style={s.bannerTitle}>{t('recruiter-profile.notifications-new')}</Text>
+                  <Text style={s.bannerTitle}>
+                    {t('recruiter-profile.notifications-new-count', { count: unreadNotificationsCount })}
+                  </Text>
                 ) : hasNotifications ? (
                   <Text style={s.bannerTitle}>
                     {t('recruiter-profile.notifications-count', { count: realNotifications.length })}
@@ -284,6 +291,11 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
+    overflow: 'hidden',
+  },
+  avatarPhoto: {
+    width: '100%',
+    height: '100%',
   },
   avatarInitials: {
     fontSize: 22,
