@@ -1,6 +1,11 @@
 const formatCurrency = (value: string, language?: string): string => {
+  if (!value) return ''
+  // The API sometimes sends amounts already formatted with the euro sign (e.g. "€ 3.500") —
+  // trust that formatting as-is instead of trying to reparse it.
+  if (value.includes('€')) return value
+
   const num = Number(value)
-  if (!value || Number.isNaN(num)) return ''
+  if (Number.isNaN(num)) return ''
   try {
     return new Intl.NumberFormat(language === 'it' ? 'it-IT' : 'en-US', {
       style: 'currency',

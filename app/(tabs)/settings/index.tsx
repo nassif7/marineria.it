@@ -14,12 +14,15 @@ import {
   Star,
   LogOut,
   ChevronRight,
+  Trash2,
 } from 'lucide-react-native'
 import { router } from 'expo-router'
 import { TUserRole } from '@/api/types'
 import { TLocales } from '@/localization'
 import { useSession } from '@/Providers/SessionProvider'
-import { useProfile } from '@/hooks'
+import { useCrew } from '@/Providers/CrewProvider'
+import { useRecruiter } from '@/Providers/RecruiterProvider'
+import { useProfile, useAuthBrowser } from '@/hooks'
 import { supportTeam } from '@/api'
 import { C } from '@/components/pro/tokens'
 import SwitchLanguage from '@/components/common/SwitchLanguage'
@@ -38,10 +41,19 @@ const Settings = () => {
     isGuest,
   } = useSession()
   const { pushNotificationToken, togglePushNotifications, isTogglingNotifications } = useProfile()
+  const { crew } = useCrew()
+  const { recruiter } = useRecruiter()
+  const { openUrl, isLoading: isDeleteUrlLoading } = useAuthBrowser()
   const isRecruiter = role === TUserRole.RECRUITER
 
   const privacyPolicyUrl =
     language === TLocales.IT ? 'https://www.marineria.it/it/contacts.aspx' : 'https://www.marineria.it/En/Contacts.aspx'
+
+  const handleDeleteData = () => {
+    const idutente = isRecruiter ? recruiter?.iduser : crew?.iduser
+    const path = isRecruiter ? 'rec/panel.aspx' : 'Pro/SuspDel.aspx'
+    openUrl(`https://www.marineria.it/${language}/${path}?idutente=${idutente}`)
+  }
 
   const languageOptions = [
     { label: t('en', { ns: 'common' }), value: TLocales.EN },
@@ -199,13 +211,24 @@ const Settings = () => {
             )}
           />
         )}
-        <Pressable style={s.row}>
+        <Pressable style={[s.row, !isGuest && s.rowBorder]}>
           <View style={[s.rowIcon, s.rowIconAccent]}>
             <Star size={18} color={C.orange} strokeWidth={1.8} />
           </View>
           <Text style={[s.rowTitle, s.rowFlex]}>{t('leave-feedback')}</Text>
           <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
         </Pressable>
+
+        {/* Delete your data */}
+        {!isGuest && (
+          <Pressable style={s.row} onPress={handleDeleteData} disabled={isDeleteUrlLoading}>
+            <View style={[s.rowIcon, s.rowIconDanger]}>
+              <Trash2 size={18} color="#DC2626" strokeWidth={1.8} />
+            </View>
+            <Text style={[s.rowTitle, s.rowTitleDanger, s.rowFlex]}>{t('delete-your-data')}</Text>
+            <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
+          </Pressable>
+        )}
       </View>
     </ScrollView>
   )

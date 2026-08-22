@@ -25,7 +25,7 @@ import { Loading } from '@/components/ui'
 import { ErrorMessage, ScreenContainer } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
 import HtmlText from '@/components/pro/HtmlText'
-import { getLocalizedOfferTitle } from '@/utils/offerUtils'
+import { getLocalizedOfferTitle, getOfferBoardingDisplay } from '@/utils/offerUtils'
 import { formatSalary } from '@/utils/formatters'
 import NotApplicableModal from './NotApplicableModal'
 import ApplyModal from './ApplyModal'
@@ -190,7 +190,7 @@ export default function OfferDetailsScreen({ isModal }: Props) {
 
   const salary = formatSalary(offer?.salary_From ?? '', offer?.salary_To ?? '', language) || '—'
   const ref = offer?.reference?.split('_')[1] || offer?.reference
-  const imbarco = [offer?.date_start_boarding, offer?.date_end_boarding].filter(Boolean).join(' – ')
+  const imbarco = offer ? getOfferBoardingDisplay(offer) : ''
 
   const facts: [string, string | undefined][] = [
     [t('salary-per-month', { ns: 'offer' }), salary],

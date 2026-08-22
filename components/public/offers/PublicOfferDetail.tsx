@@ -10,7 +10,7 @@ import { ErrorMessage } from '@/components/appUI'
 import { C } from '@/components/pro/tokens'
 import HtmlText from '@/components/pro/HtmlText'
 import LoginToApplyModal from './LoginToApplyModal'
-import { getLocalizedOfferTitle } from '@/utils/offerUtils'
+import { getLocalizedOfferTitle, getOfferBoardingDisplay } from '@/utils/offerUtils'
 import { formatSalary } from '@/utils/formatters'
 
 function DetailSection({ title, icon: Icon, children }: { title: string; icon: any; children: React.ReactNode }) {
@@ -49,7 +49,7 @@ const PublicOfferDetail = () => {
 
   const salary = formatSalary(offer.salary_From, offer.salary_To, language) || '—'
   const ref = offer.reference?.split('_')[1] || offer.reference
-  const imbarco = [offer.date_start_boarding, offer.date_end_boarding].filter(Boolean).join(' – ')
+  const imbarco = getOfferBoardingDisplay(offer)
 
   const facts: [string, string | undefined][] = [
     [t('salary-per-month', { ns: 'offer' }), salary],

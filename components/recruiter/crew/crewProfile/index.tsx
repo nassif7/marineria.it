@@ -452,7 +452,7 @@ const ReferenceItem: FC<{ ref: TCrewReference; index: number; isContacted: boole
               <Text style={cp.refDetailText}>{ref.email}</Text>
             </View>
           ) : null}
-          {ref.notes ? <Text style={cp.refNotes}>{ref.notes}</Text> : null}
+          {ref.notes ? <HtmlText style={cp.refNotes}>{ref.notes}</HtmlText> : null}
         </View>
       )}
     </Pressable>
@@ -957,7 +957,7 @@ const CrewProfile: FC<{ isModal?: boolean }> = ({ isModal }) => {
               .map(({ label, value }) => (
                 <View key={label} style={{ marginBottom: 12 }}>
                   <Text style={cp.fieldLabel}>{label}</Text>
-                  <Text style={cp.fieldValue}>{value}</Text>
+                  <HtmlText style={cp.fieldValue}>{value ?? ''}</HtmlText>
                 </View>
               ))}
           </SectionCard>

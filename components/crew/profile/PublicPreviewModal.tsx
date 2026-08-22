@@ -98,7 +98,7 @@ const ReferenceItem: FC<{ ref: TCrewReference; index: number }> = ({ ref, index 
         <View style={pv.accordionBody}>
           {ref.telephone ? <Text style={pv.refMeta}>📞 {ref.telephone}</Text> : null}
           {ref.email ? <Text style={pv.refMeta}>✉ {ref.email}</Text> : null}
-          {ref.notes ? <Text style={[pv.refMeta, { marginTop: 4 }]}>{ref.notes}</Text> : null}
+          {ref.notes ? <HtmlText style={[pv.refMeta, { marginTop: 4 }]}>{ref.notes}</HtmlText> : null}
         </View>
       )}
     </Pressable>
@@ -392,7 +392,7 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
                   .map(({ label, value }) => (
                     <View key={label} style={{ marginBottom: 12 }}>
                       <Text style={pv.fieldLabel}>{label}</Text>
-                      <Text style={pv.fieldValue}>{value}</Text>
+                      <HtmlText style={pv.fieldValue}>{value ?? ''}</HtmlText>
                     </View>
                   ))}
               </SectionCard>

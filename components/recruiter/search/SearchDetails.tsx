@@ -139,7 +139,7 @@ export default function SearchDetails() {
           {isVal(search.requirements) && (
             <>
               <SectionLabel top>{t('requirements', { ns: 'offer' })}</SectionLabel>
-              <Text style={sd.bodyText}>{search.requirements}</Text>
+              <HtmlText style={sd.bodyText}>{search.requirements}</HtmlText>
             </>
           )}
 

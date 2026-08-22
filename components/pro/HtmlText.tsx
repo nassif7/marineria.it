@@ -1,12 +1,18 @@
 import React from 'react'
-import { Text, TextStyle } from 'react-native'
+import { Text, TextStyle, StyleProp } from 'react-native'
 
 interface Props {
   children: string
-  style?: TextStyle
+  style?: StyleProp<TextStyle>
 }
 
 const TAG_RE = /(<b>|<\/b>|<em>|<\/em>|<br\s*\/?>)/gi
+
+// The backend embeds these tags directly in otherwise-plain-text fields (offer descriptions,
+// crew skills/notes, etc). Any field that can carry them must render through HtmlText instead
+// of a plain <Text>, or the tags leak into the UI as literal text — use this to check a field
+// before deciding, or just to confirm a render site actually needs the switch.
+export const hasHtmlMarkup = (value?: string | null): boolean => !!value && /<\/?(b|em|br)\b[^>]*>/i.test(value)
 
 export default function HtmlText({ children, style }: Props) {
   const parts = children.split(TAG_RE)

@@ -5,7 +5,7 @@ import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { TOffer } from '@/api/types'
 import { C } from '@/components/pro/tokens'
-import { getLocalizedOfferTitle } from '@/utils/offerUtils'
+import { getLocalizedOfferTitle, getOfferBoardingDisplay } from '@/utils/offerUtils'
 import { formatSalary } from '@/utils/formatters'
 
 const MATCH_BG = '#E8F5EE'
@@ -54,7 +54,7 @@ const OfferListItem: FC<Props> = ({ offer, hideStatus = false, onViewOffer }) =>
     i18n: { language },
   } = useTranslation(['offer-screen', 'offer'])
   const salary = formatSalary(offer.salary_From, offer.salary_To, language)
-  const imbarco = [offer.date_start_boarding, offer.date_end_boarding].filter(Boolean).join(' – ')
+  const imbarco = getOfferBoardingDisplay(offer)
   const ref = offer.reference?.split('_')[1] || offer.reference
 
   const handlePress = () => {
