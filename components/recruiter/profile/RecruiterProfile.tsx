@@ -115,7 +115,9 @@ const RecruiterProfile: FC = () => {
   const waNumber = user?.whatsapp?.replace(/^https?:\/\/wa\.me\//, '') ?? ''
   const isSameAsWa = !!user?.cellular && !!waNumber && user.cellular === waNumber
 
-  const initials = user ? `${user.name?.[0] ?? ''}${user.surname?.[0] ?? ''}`.toUpperCase() : '?'
+  const displayName =
+    [user?.name, user?.surname].filter(Boolean).join(' ') || (user?.iduser ? `ID · ${user.iduser}` : '')
+  const initials = user ? `${user.name?.[0] ?? ''}${user.surname?.[0] ?? ''}`.toUpperCase() || '#' : '?'
 
   if (isLoading) {
     return (
@@ -144,9 +146,7 @@ const RecruiterProfile: FC = () => {
               )}
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
-              <Text style={s.name}>
-                {user?.name} {user?.surname}
-              </Text>
+              <Text style={s.name}>{displayName}</Text>
               {user?.company ? (
                 <Text style={s.company} numberOfLines={1}>
                   {user.company}
@@ -166,7 +166,7 @@ const RecruiterProfile: FC = () => {
                   {user.address}
                 </Text>
               ) : null}
-              {user?.iduser ? <Text style={s.idMeta}>ID · {user.iduser}</Text> : null}
+              {user?.iduser && (user?.name || user?.surname) ? <Text style={s.idMeta}>ID · {user.iduser}</Text> : null}
             </View>
           </View>
         </View>

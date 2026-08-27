@@ -164,6 +164,8 @@ const CrewProfile: FC = () => {
   const { refreshing, onRefresh } = useManualRefresh(refetch)
   const [previewVisible, setPreviewVisible] = useState(false)
 
+  const displayName =
+    [crew?.name, crew?.surname].filter(Boolean).join(' ') || (crew?.iduser ? `ID · ${crew.iduser}` : '')
   const age = crew?.yearofBirth ? getAgeByYear(crew.yearofBirth) : null
   const photoUrl = crew?.userPhoto ? getPhotoUrl(crew.userPhoto) : null
   const { hasCertificateOfCompetence } = useMemo(
@@ -223,9 +225,7 @@ const CrewProfile: FC = () => {
             <View style={{ flex: 1, minWidth: 0 }}>
               {/* Name + availability badge in the same row — exactly like the design */}
               <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 6 }}>
-                <Text style={[s.name, { flex: 1 }]}>
-                  {crew?.name || 'John'} {crew?.surname || 'Doe'}
-                </Text>
+                <Text style={[s.name, { flex: 1 }]}>{displayName}</Text>
                 <View style={[s.availPill, { backgroundColor: isAvailable ? GREEN_SOFT : C.field, flexShrink: 0 }]}>
                   {isAvailable && <View style={[s.availDot, { backgroundColor: GREEN_TEXT }]} />}
                   <Text style={[s.availText, { color: isAvailable ? GREEN_TEXT : C.ink3 }]}>{availabilityLabel}</Text>

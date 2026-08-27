@@ -1,7 +1,7 @@
 import React from 'react'
 import * as SecureStore from 'expo-secure-store'
 import * as WebBrowser from 'expo-web-browser'
-import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, Pressable, Linking } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import {
   Globe,
@@ -30,6 +30,8 @@ import NotificationsToggle from '@/components/common/NotificationsToggle'
 import SwitchUser from '@/components/common/SwitchUser'
 import ContactSupport from '@/components/common/ContactSupport'
 
+const APP_STORE_URL = 'https://apps.apple.com/de/app/marineria/id6759051944'
+
 const Settings = () => {
   const {
     i18n: { language, changeLanguage },
@@ -48,6 +50,8 @@ const Settings = () => {
 
   const privacyPolicyUrl =
     language === TLocales.IT ? 'https://www.marineria.it/it/contacts.aspx' : 'https://www.marineria.it/En/Contacts.aspx'
+
+  const handleLeaveFeedback = () => Linking.openURL(APP_STORE_URL).catch(() => {})
 
   const handleDeleteData = () => {
     const idutente = isRecruiter ? recruiter?.iduser : crew?.iduser
@@ -211,7 +215,7 @@ const Settings = () => {
             )}
           />
         )}
-        <Pressable style={[s.row, !isGuest && s.rowBorder]}>
+        <Pressable style={[s.row, !isGuest && s.rowBorder]} onPress={handleLeaveFeedback}>
           <View style={[s.rowIcon, s.rowIconAccent]}>
             <Star size={18} color={C.orange} strokeWidth={1.8} />
           </View>
