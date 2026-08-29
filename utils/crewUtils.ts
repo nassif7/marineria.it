@@ -18,8 +18,11 @@ export const getCertificateOfCompetence = (crew: TCrew | TCrewSimple) => {
   }
 }
 
+// crew.seamansBook is always populated with a fixed label — "Seamans Book" (EN) or "Libretto di
+// Navigazione" (IT) — depending on the request's language, not an empty string when absent.
+const SEAMANS_BOOK_VALUES = ['Seamans Book', 'Libretto di Navigazione']
 export const getSeamansBook = (crew: TCrew | TCrewSimple) => {
-  return crew.seamansBook === 'Seamans Book'
+  return SEAMANS_BOOK_VALUES.includes(crew.seamansBook)
 }
 
 // crew.courses is one free-text string ending in a count like "(4 courses)" / "(4 corsi)",
