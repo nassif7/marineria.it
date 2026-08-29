@@ -6,7 +6,7 @@ import { TCrewSimple } from '@/api/types'
 import { useTranslation } from 'react-i18next'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
-import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
+import { getCertificateOfCompetence, getSeamansBook, getCoursesCount } from '@/utils/crewUtils'
 import { parseServerBool } from '@/api/utils'
 import { C } from '@/components/pro/tokens'
 
@@ -98,7 +98,7 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
         {crew.courses ? (
           <View style={[ci.pill, ci.pillNeutral]}>
             <Text style={[ci.pillText, { color: C.ink2 }]}>
-              {t('courses-count', { count: crew.courses.split(',').length })}
+              {t('courses-count', { count: getCoursesCount(crew.courses) })}
             </Text>
           </View>
         ) : (

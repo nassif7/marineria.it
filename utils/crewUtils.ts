@@ -21,3 +21,24 @@ export const getCertificateOfCompetence = (crew: TCrew | TCrewSimple) => {
 export const getSeamansBook = (crew: TCrew | TCrewSimple) => {
   return crew.seamansBook === 'Seamans Book'
 }
+
+// crew.courses is one free-text string ending in a count like "(4 courses)" / "(4 corsi)",
+// not a comma-separated list — pull the count from that suffix instead of splitting on commas.
+export const getCoursesCount = (courses?: string | null): number => {
+  if (!courses) return 0
+  const match = courses.match(/\((\d+)\s*(?:courses?|cors[oi])\)/i)
+  if (match) return parseInt(match[1], 10)
+  return courses
+    .split(',')
+    .map((c) => c.trim())
+    .filter(Boolean).length
+}
+
+// crew.availability is free text (e.g. "Not available at the moment" / "Non disponibile al momento"),
+// so a plain "available"/"disponibil" substring match wrongly flags the negative case too.
+export const isCrewAvailable = (availability?: string | null): boolean => {
+  if (!availability) return false
+  const value = availability.toLowerCase()
+  if (value.includes('not available') || value.includes('non disponibil')) return false
+  return value.includes('available') || value.includes('disponibil')
+}

@@ -21,7 +21,7 @@ import { getPhotoUrl } from '@/api/consts'
 import { ApiError } from '@/api/utils'
 import { TCrewExperience, TCrewReference } from '@/api/types'
 import { getAgeByYear } from '@/utils/dateUtils'
-import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
+import { getCertificateOfCompetence, getSeamansBook, getCoursesCount } from '@/utils/crewUtils'
 import { Loading, RefreshControl } from '@/components/ui'
 import { C } from '@/components/pro/tokens'
 import HtmlText from '@/components/pro/HtmlText'
@@ -265,7 +265,7 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
                 {coursesList.length > 0 ? (
                   <View style={[pv.pill, pv.pillNeutral]}>
                     <Text style={[pv.pillText, { color: C.ink2 }]}>
-                      {t('courses-count', { ns: 'crew-screen', count: coursesList.length })}
+                      {t('courses-count', { ns: 'crew-screen', count: getCoursesCount(crew.courses) })}
                     </Text>
                   </View>
                 ) : (

@@ -1,7 +1,7 @@
 import React from 'react'
 import * as SecureStore from 'expo-secure-store'
 import * as WebBrowser from 'expo-web-browser'
-import { View, Text, ScrollView, StyleSheet, Pressable, Linking } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, Pressable, Linking, Platform } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import {
   Globe,
@@ -31,6 +31,7 @@ import SwitchUser from '@/components/common/SwitchUser'
 import ContactSupport from '@/components/common/ContactSupport'
 
 const APP_STORE_URL = 'https://apps.apple.com/de/app/marineria/id6759051944'
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=marineria.it'
 
 const Settings = () => {
   const {
@@ -51,7 +52,8 @@ const Settings = () => {
   const privacyPolicyUrl =
     language === TLocales.IT ? 'https://www.marineria.it/it/contacts.aspx' : 'https://www.marineria.it/En/Contacts.aspx'
 
-  const handleLeaveFeedback = () => Linking.openURL(APP_STORE_URL).catch(() => {})
+  const handleLeaveFeedback = () =>
+    Linking.openURL(Platform.OS === 'android' ? PLAY_STORE_URL : APP_STORE_URL).catch(() => {})
 
   const handleDeleteData = () => {
     const idutente = isRecruiter ? recruiter?.iduser : crew?.iduser

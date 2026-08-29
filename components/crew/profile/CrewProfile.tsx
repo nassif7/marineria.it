@@ -6,7 +6,7 @@ import { Edit2, ChevronRight, Check, AlertTriangle, Users, FileText, Calendar, B
 import { useCrew } from '@/Providers/CrewProvider'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
-import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
+import { getCertificateOfCompetence, getSeamansBook, getCoursesCount, isCrewAvailable } from '@/utils/crewUtils'
 import { C } from '@/components/pro/tokens'
 import { Loading, RefreshControl } from '@/components/ui'
 import { useManualRefresh } from '@/hooks'
@@ -173,24 +173,14 @@ const CrewProfile: FC = () => {
     [crew]
   )
   const hasSeamansBook = crew ? getSeamansBook(crew as any) : false
-  const coursesList = useMemo(
-    () =>
-      crew?.courses
-        ?.split(',')
-        .map((c) => c.trim())
-        .filter(Boolean) ?? [],
-    [crew?.courses]
-  )
+  const coursesCount = useMemo(() => getCoursesCount(crew?.courses), [crew?.courses])
   const languages = useMemo(
     () => [crew?.language1, crew?.language2, crew?.language3, crew?.language4].filter(Boolean),
     [crew]
   )
   const { pct, missing } = useMemo(() => (crew ? calcCompletion(crew as any) : { pct: 0, missing: 0 }), [crew])
 
-  const isAvailable = !!(
-    crew?.availability &&
-    (crew.availability.toLowerCase().includes('disponibil') || crew.availability.toLowerCase().includes('available'))
-  )
+  const isAvailable = isCrewAvailable(crew?.availability)
   const availabilityLabel = isAvailable ? t('crew-profile.available') : t('crew-profile.not-available')
 
   if (isLoading) {
@@ -314,9 +304,7 @@ const CrewProfile: FC = () => {
             ) : (
               <Chip tone="warn" icon={AlertTriangle} label={t('crew-profile.no-coc')} />
             )}
-            {coursesList.length > 0 && (
-              <Chip tone="orange" label={t('crew-profile.courses', { count: coursesList.length })} />
-            )}
+            {coursesCount > 0 && <Chip tone="orange" label={t('crew-profile.courses', { count: coursesCount })} />}
             {languages.length > 0 && (
               <Chip tone="neutral" label={t('crew-profile.languages', { count: languages.length })} />
             )}
@@ -342,7 +330,7 @@ const CrewProfile: FC = () => {
           <ActionRow
             icon={FileText}
             title={t('crew-profile.action-docs')}
-            sub={t('crew-profile.action-docs-sub', { count: coursesList.length })}
+            sub={t('crew-profile.action-docs-sub', { count: coursesCount })}
             disabled
           />
           <ActionRow

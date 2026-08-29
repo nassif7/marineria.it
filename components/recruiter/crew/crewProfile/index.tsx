@@ -31,7 +31,7 @@ import { useStatusToast, useManualRefresh } from '@/hooks'
 import { getCrewCvPost, contactCrew, removeCrew, supportTeam } from '@/api'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
-import { getCertificateOfCompetence, getSeamansBook } from '@/utils/crewUtils'
+import { getCertificateOfCompetence, getSeamansBook, getCoursesCount } from '@/utils/crewUtils'
 import { Loading, RefreshControl } from '@/components/ui'
 import { ApiError, parseServerBool } from '@/api/utils'
 import { C } from '@/components/pro/tokens'
@@ -819,7 +819,7 @@ const CrewProfile: FC<{ isModal?: boolean }> = ({ isModal }) => {
             {coursesList.length > 0 ? (
               <View style={[cp.pill, cp.pillNeutral]}>
                 <Text style={[cp.pillText, { color: C.ink2 }]}>
-                  {t('courses-count', { count: coursesList.length })}
+                  {t('courses-count', { count: getCoursesCount(crew.courses) })}
                 </Text>
               </View>
             ) : (
