@@ -12,14 +12,21 @@ interface TabBarProps extends BottomTabBarProps {
 const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation, showLabel }) => {
   const insets = useSafeAreaInsets()
 
+  // insets.bottom > 0 means the device already reserves space for system UI
+  // (iOS home indicator, Android nav bar/gesture pill), which provides its own
+  // visual separation — only add a manual buffer when there's no such reservation.
+  const iosBottomPadding = insets.bottom > 0 ? 8 : 12
+  const androidBottomPadding = insets.bottom > 12 ? insets.bottom - 12 : 8
+  const bottomPadding = Platform.OS === 'ios' ? iosBottomPadding : androidBottomPadding
+
   return (
     <Box
       className="bg-white"
       style={{
-        paddingBottom: Platform.OS === 'ios' ? (insets.bottom > 0 ? 8 : 12) : 8,
+        paddingBottom: bottomPadding,
       }}
     >
-      <HStack className="justify-around items-center">
+      <HStack className="items-center justify-around">
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key]
           const isFocused = state.index === index
@@ -60,7 +67,7 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation, showLab
               accessibilityLabel={options.tabBarAccessibilityLabel}
               onPress={onPress}
               onLongPress={onLongPress}
-              className="flex-1 items-center justify-center py-3"
+              className="items-center justify-center flex-1 py-3"
             >
               <VStack className="items-center gap-1">
                 {options.tabBarIcon && (
