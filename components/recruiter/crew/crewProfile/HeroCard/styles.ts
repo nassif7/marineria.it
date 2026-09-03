@@ -1,0 +1,82 @@
+import { StyleSheet } from 'react-native'
+import { C } from '@/components/pro/tokens'
+
+export const styles = StyleSheet.create({
+  card: {
+    marginHorizontal: 16,
+    marginTop: 14,
+    padding: 18,
+    backgroundColor: C.card,
+    borderRadius: 18,
+    shadowColor: '#0D1B2A',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  avatar: {
+    width: 84,
+    height: 84,
+    borderRadius: 16,
+    backgroundColor: C.field,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    flexShrink: 0,
+  },
+  avatarImg: {
+    width: '100%',
+    height: '100%',
+  },
+  avatarInitials: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: C.ink3,
+    letterSpacing: -0.5,
+  },
+  photoBadge: {
+    position: 'absolute',
+    right: -4,
+    bottom: -4,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+    borderRadius: 10,
+    backgroundColor: C.orange,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  photoBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#FFF',
+  },
+  heroRole: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: C.orangeText,
+    letterSpacing: -0.2,
+  },
+  heroId: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: C.ink4,
+    fontVariant: ['tabular-nums'],
+    marginTop: 2,
+  },
+  heroName: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: C.ink,
+    marginTop: 6,
+  },
+  heroMeta: {
+    fontSize: 12,
+    color: C.ink2,
+    marginTop: 8,
+    lineHeight: 16,
+  },
+})
