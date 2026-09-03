@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import { GREEN_SOFT, WARN_BG, WARN_BORDER, ORANGE_BG } from './colors'
 
 export const pillStyles = StyleSheet.create({

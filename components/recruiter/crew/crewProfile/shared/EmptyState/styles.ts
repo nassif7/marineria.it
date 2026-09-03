@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 export const styles = StyleSheet.create({
   emptyState: {

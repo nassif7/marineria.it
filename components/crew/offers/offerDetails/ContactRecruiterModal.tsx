@@ -3,7 +3,7 @@ import { Modal, View, Text, Pressable, Linking, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { X, Mail, Phone, MessageCircle } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 interface IContactRecruiterModal {
   visible: boolean

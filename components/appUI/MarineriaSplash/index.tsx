@@ -1,7 +1,7 @@
 import { useEffect, useRef, useMemo } from 'react'
 import { View, Image, Animated, ActivityIndicator, StyleSheet, Text } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 const LOGO_BADGE_W = 200
 const LOGO_BADGE_H = 90

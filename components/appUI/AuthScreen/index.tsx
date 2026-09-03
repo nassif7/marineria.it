@@ -14,7 +14,7 @@ import {
 } from 'react-native'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 const LOGO_BADGE_W = 200
 const LOGO_BADGE_H = 90

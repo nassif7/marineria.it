@@ -4,7 +4,7 @@ import { ChevronRight, CheckCircle, AlertCircle, Send } from 'lucide-react-nativ
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { TOffer } from '@/api/types'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import { getLocalizedOfferTitle, getOfferBoardingDisplay } from '@/utils/offerUtils'
 import { formatSalary } from '@/utils/formatters'
 

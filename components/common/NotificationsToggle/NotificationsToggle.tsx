@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef } from 'react'
 import { Pressable, Animated, ActivityIndicator, View, StyleSheet } from 'react-native'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 interface INotificationsToggleProps {
   enabled: boolean

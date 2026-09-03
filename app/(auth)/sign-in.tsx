@@ -22,7 +22,7 @@ import { checkEmail } from '@/api/auth'
 import { consumePendingNotificationRedirect } from '@/hooks/useNotifications'
 import { useSession } from '@/Providers/SessionProvider/SessionProvider'
 import { useTranslation } from 'react-i18next'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 

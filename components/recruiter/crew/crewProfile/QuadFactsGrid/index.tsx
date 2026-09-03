@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { View, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Calendar, Briefcase, Euro, Clock } from 'lucide-react-native'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import { styles } from './styles'
 
 const QuadFactsGrid: FC<{

@@ -8,7 +8,7 @@ import { useCrew } from '@/Providers/CrewProvider'
 import { useSavedOffers, useManualRefresh } from '@/hooks'
 import { Loading, RefreshControl } from '@/components/ui'
 import { ErrorMessage, EmptyList } from '@/components/appUI'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import OfferListItem from './OfferListItem'
 
 type FilterKey = 'all' | 'matching' | 'applied' | 'saved'

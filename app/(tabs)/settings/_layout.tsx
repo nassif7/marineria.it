@@ -1,7 +1,7 @@
 import React from 'react'
 import { Stack } from 'expo-router'
 import { NavBar } from '@/components/appUI'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 function _layout() {
   return (

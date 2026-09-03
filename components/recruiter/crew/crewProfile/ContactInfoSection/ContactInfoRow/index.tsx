@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { View, Text, Pressable } from 'react-native'
 import { ChevronRight } from 'lucide-react-native'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import { styles } from './styles'
 
 const ContactInfoRow: FC<{ icon: FC<any>; label: string; value: string; onPress: () => void; last?: boolean }> = ({

@@ -22,7 +22,7 @@ import {
   VStack,
 } from '@/components/ui'
 import { ScreenContainer, ErrorMessage } from '@/components/appUI'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import RecruiterProfile from '@/components/recruiter/profile/RecruiterProfile'
 import CrewProfile from '@/components/crew/profile/CrewProfile'
 

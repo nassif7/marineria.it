@@ -3,7 +3,7 @@ import { Modal, View, Text, Pressable, ScrollView, StyleSheet, ActivityIndicator
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { X, Send, UserRound } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import PublicPreviewModal from '@/components/crew/profile/PublicPreviewModal'
 
 interface ApplyModalProps {

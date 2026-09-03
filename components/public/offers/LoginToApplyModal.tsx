@@ -5,7 +5,7 @@ import * as WebBrowser from 'expo-web-browser'
 import { router } from 'expo-router'
 import { X, LogIn } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 interface LoginToApplyModalProps {
   visible: boolean

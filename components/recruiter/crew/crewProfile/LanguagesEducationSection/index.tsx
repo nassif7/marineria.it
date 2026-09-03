@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { View, Text } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import SectionCard from '../shared/SectionCard'
 import FieldRow from '../shared/FieldRow'
 import { styles as fieldRowStyles } from '../shared/FieldRow/styles'

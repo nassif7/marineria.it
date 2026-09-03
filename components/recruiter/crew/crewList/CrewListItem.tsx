@@ -8,7 +8,7 @@ import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook, getCoursesCount } from '@/utils/crewUtils'
 import { parseServerBool } from '@/api/utils'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 interface ICrewListItem {
   crew: TCrewSimple

@@ -1,8 +1,8 @@
 import { FC, useState } from 'react'
 import { View, Text, Pressable } from 'react-native'
 import { ChevronDown, ChevronUp, Phone, Mail } from 'lucide-react-native'
-import { C } from '@/components/pro/tokens'
-import HtmlText from '@/components/pro/HtmlText'
+import { C } from '@/components/appUI/tokens'
+import { HtmlText } from '@/components/appUI'
 import { TCrewReference } from '@/api/types'
 import { styles } from './styles'
 

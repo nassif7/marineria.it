@@ -7,7 +7,7 @@ import { Bell, Headphones, ChevronRight, Briefcase, Users, Globe, Mail, Phone } 
 import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { supportTeam } from '@/api'
 import { USE_FAKE_DATA, FAKE_RECRUITER_PHOTO_URL } from '@/api/fakeData'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import { Loading, RefreshControl } from '@/components/ui'
 import { useManualRefresh } from '@/hooks'
 import ContactSupport from '@/components/common/ContactSupport'

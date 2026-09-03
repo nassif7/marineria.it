@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { View, Text } from 'react-native'
 import { Info } from 'lucide-react-native'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import { styles } from './styles'
 
 const EmptyState: FC<{ text: string }> = ({ text }) => (

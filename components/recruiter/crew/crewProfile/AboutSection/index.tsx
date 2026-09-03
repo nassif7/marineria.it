@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import HtmlText from '@/components/pro/HtmlText'
+import { HtmlText } from '@/components/appUI'
 import SectionCard from '../shared/SectionCard'
 import { styles } from './styles'
 

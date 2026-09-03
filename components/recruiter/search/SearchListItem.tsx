@@ -4,7 +4,7 @@ import { ChevronRight } from 'lucide-react-native'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { TRecruiterSearch } from '@/api/types'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import { formatSalary } from '@/utils/formatters'
 
 interface ISearchListItemProps {

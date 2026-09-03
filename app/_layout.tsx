@@ -17,7 +17,7 @@ import RecruiterProvider, { useRecruiter } from '@/Providers/RecruiterProvider'
 import CrewProvider, { useCrew } from '@/Providers/CrewProvider'
 import { TUserRole } from '@/api/types'
 import { MarineriaSplash } from '@/components/appUI'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import usePushNotification from '@/hooks/usePushNotification'
 
 Sentry.init({

@@ -6,9 +6,9 @@ import { getPublicOffers } from '@/api'
 import { TOffer } from '@/api/types'
 import { Loading, RefreshControl } from '@/components/ui'
 import { ErrorMessage, EmptyList } from '@/components/appUI'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import { useManualRefresh } from '@/hooks'
-import OfferListItem from '@/components/pro/offers/offerList/OfferListItem'
+import OfferListItem from '@/components/crew/offers/offerList/OfferListItem'
 
 const JobsScreen = () => {
   const {
