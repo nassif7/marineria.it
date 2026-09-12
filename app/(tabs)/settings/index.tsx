@@ -148,8 +148,8 @@ const Settings = () => {
               onPress={() =>
                 WebBrowser.openBrowserAsync(
                   language === TLocales.IT
-                    ? 'https://www.marineria.it/it/ChangePassword.aspx'
-                    : 'https://www.marineria.it/En/ChangePassword.aspx'
+                    ? 'https://www.marineria.it/it/Modify_PSW.aspx'
+                    : 'https://www.marineria.it/En/Modify_PSW.aspx'
                 )
               }
             >
