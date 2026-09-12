@@ -179,7 +179,7 @@ const CrewProfile: FC = () => {
   const hasSeamansBook = crew ? getSeamansBook(crew as any) : false
   const coursesCount = useMemo(() => getCoursesCount(crew?.courses), [crew?.courses])
   const languages = useMemo(
-    () => [crew?.language1, crew?.language2, crew?.language3, crew?.language4].filter(Boolean),
+    () => [crew?.language1, crew?.language2, crew?.language3, crew?.language4].filter((l): l is string => !!l),
     [crew]
   )
   const { pct, missing } = useMemo(() => (crew ? calcCompletion(crew as any) : { pct: 0, missing: 0 }), [crew])
@@ -311,11 +311,22 @@ const CrewProfile: FC = () => {
               <Chip tone="warn" icon={AlertTriangle} label={t('crew-profile.no-coc')} />
             )}
             {coursesCount > 0 && <Chip tone="orange" label={t('crew-profile.courses', { count: coursesCount })} />}
-            {languages.length > 0 && (
-              <Chip tone="neutral" label={t('crew-profile.languages', { count: languages.length })} />
-            )}
           </View>
         </View>
+
+        {/* Languages */}
+        {languages.length > 0 && (
+          <>
+            <Text style={s.eyebrow}>{t('crew-profile.section-languages')}</Text>
+            <View style={s.rowCard}>
+              <View style={s.chipsRow}>
+                {languages.map((lang, i) => (
+                  <Chip key={i} tone="neutral" label={lang} />
+                ))}
+              </View>
+            </View>
+          </>
+        )}
 
         {/* Profile actions */}
         <Text style={s.eyebrow}>{t('crew-profile.section-profile')}</Text>

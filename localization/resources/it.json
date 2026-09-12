@@ -115,7 +115,7 @@
       "coc-valid": "CoC valido",
       "no-coc": "Senza CoC",
       "courses": "{{count}} corsi STCW",
-      "languages": "{{count}} lingue",
+      "section-languages": "Lingue",
       "section-profile": "Profilo",
       "action-edit": "Modifica profilo",
       "action-edit-sub": "Completa i {{count}} campi mancanti",

@@ -12,6 +12,7 @@ import PublicPreviewModal from '../PublicPreviewModal'
 import IdentityCard from './IdentityCard'
 import NotificationsBanner from './NotificationsBanner'
 import QualificationsSection from './QualificationsSection'
+import LanguagesSection from './LanguagesSection'
 import ProfileActionsSection from './ProfileActionsSection'
 import FooterMeta from './FooterMeta'
 import { calcCompletion } from './helpers'
@@ -45,7 +46,7 @@ const CrewProfile: FC = () => {
   const hasSeamansBook = crew ? getSeamansBook(crew as any) : false
   const coursesCount = useMemo(() => getCoursesCount(crew?.courses), [crew?.courses])
   const languages = useMemo(
-    () => [crew?.language1, crew?.language2, crew?.language3, crew?.language4].filter(Boolean),
+    () => [crew?.language1, crew?.language2, crew?.language3, crew?.language4].filter((l): l is string => !!l),
     [crew]
   )
   const { pct, missing } = useMemo(() => (crew ? calcCompletion(crew as any) : { pct: 0, missing: 0 }), [crew])
@@ -89,8 +90,10 @@ const CrewProfile: FC = () => {
           hasSeamansBook={hasSeamansBook}
           hasCertificateOfCompetence={hasCertificateOfCompetence}
           coursesCount={coursesCount}
-          languagesCount={languages.length}
         />
+
+        {/* Languages */}
+        <LanguagesSection languages={languages} />
 
         {/* Profile actions */}
         <ProfileActionsSection

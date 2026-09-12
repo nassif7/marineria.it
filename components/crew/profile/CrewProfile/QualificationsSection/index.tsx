@@ -11,8 +11,7 @@ const QualificationsSection: FC<{
   hasSeamansBook: boolean
   hasCertificateOfCompetence: boolean
   coursesCount: number
-  languagesCount: number
-}> = ({ hasSeamansBook, hasCertificateOfCompetence, coursesCount, languagesCount }) => {
+}> = ({ hasSeamansBook, hasCertificateOfCompetence, coursesCount }) => {
   const { t } = useTranslation('home-screen')
 
   return (
@@ -31,7 +30,6 @@ const QualificationsSection: FC<{
             <Chip tone="warn" icon={AlertTriangle} label={t('crew-profile.no-coc')} />
           )}
           {coursesCount > 0 && <Chip tone="orange" label={t('crew-profile.courses', { count: coursesCount })} />}
-          {languagesCount > 0 && <Chip tone="neutral" label={t('crew-profile.languages', { count: languagesCount })} />}
         </View>
       </Card>
     </>
