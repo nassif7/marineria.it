@@ -19,7 +19,8 @@
       "buildNumber": "1",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      }
+      },
+      "associatedDomains": ["applinks:www.marineria.it"]
     },
     "android": {
       "adaptiveIcon": {
@@ -28,7 +29,21 @@
       },
       "permissions": ["android.permission.USE_BIOMETRIC", "android.permission.USE_FINGERPRINT"],
       "package": "marineria.it",
-      "versionCode": 1
+      "versionCode": 1,
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "www.marineria.it",
+              "pathPrefix": "/share/offer"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "bundler": "metro",

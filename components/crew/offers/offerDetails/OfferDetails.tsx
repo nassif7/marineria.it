@@ -133,7 +133,7 @@ export default function OfferDetailsScreen({ isModal }: Props) {
   const handleShare = async () => {
     if (!offer) return
     try {
-      const url = getOfferShareUrl(offer.idoffer, language)
+      const url = getOfferShareUrl(offer.idoffer)
       const shareRef = offer.reference?.split('_')[1] || offer.reference
       const intro = t('share-message-intro', { ns: 'offer' })
       const refLabel = t('job-reference', { ns: 'offer' })
