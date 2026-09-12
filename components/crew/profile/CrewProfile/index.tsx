@@ -102,7 +102,12 @@ const CrewProfile: FC = () => {
           dateAvailability={crew?.dateAvailability}
           availabilityLabel={availabilityLabel}
           onPreviewPress={() => setPreviewVisible(true)}
-          onEditPress={() => openUrl(`https://www.marineria.it/${language}/pro/panel.aspx`)}
+          onEditPress={async () => {
+            // The browser only tells us it closed, not whether anything changed — refetch
+            // unconditionally so any edits made on the web page show up immediately.
+            await openUrl(`https://www.marineria.it/${language}/pro/panel.aspx`)
+            refetch()
+          }}
         />
 
         {/* Footer meta */}

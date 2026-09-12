@@ -342,7 +342,12 @@ const CrewProfile: FC = () => {
             title={t('crew-profile.action-edit')}
             sub={missing > 0 ? t('crew-profile.action-edit-sub', { count: missing }) : undefined}
             accent
-            onPress={() => openUrl(`https://www.marineria.it/${language}/pro/panel.aspx`)}
+            onPress={async () => {
+              // The browser only tells us it closed, not whether anything changed — refetch
+              // unconditionally so any edits made on the web page show up immediately.
+              await openUrl(`https://www.marineria.it/${language}/pro/panel.aspx`)
+              refetch()
+            }}
           />
           <ActionRow
             icon={FileText}
