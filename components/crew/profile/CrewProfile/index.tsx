@@ -7,7 +7,7 @@ import { getAgeByYear } from '@/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook, getCoursesCount, isCrewAvailable } from '@/utils/crewUtils'
 import { C } from '@/components/appUI/tokens'
 import { Loading, RefreshControl } from '@/components/ui'
-import { useManualRefresh } from '@/hooks'
+import { useManualRefresh, useAuthBrowser } from '@/hooks'
 import PublicPreviewModal from '../PublicPreviewModal'
 import IdentityCard from './IdentityCard'
 import NotificationsBanner from './NotificationsBanner'
@@ -17,9 +17,13 @@ import FooterMeta from './FooterMeta'
 import { calcCompletion } from './helpers'
 
 const CrewProfile: FC = () => {
-  const { t } = useTranslation('home-screen')
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation('home-screen')
   const { crew, notifications, isLoading, refetch } = useCrew()
   const { refreshing, onRefresh } = useManualRefresh(refetch)
+  const { openUrl } = useAuthBrowser()
   const [previewVisible, setPreviewVisible] = useState(false)
 
   const displayName =
@@ -95,6 +99,7 @@ const CrewProfile: FC = () => {
           dateAvailability={crew?.dateAvailability}
           availabilityLabel={availabilityLabel}
           onPreviewPress={() => setPreviewVisible(true)}
+          onEditPress={() => openUrl(`https://www.marineria.it/${language}/pro/panel.aspx`)}
         />
 
         {/* Footer meta */}

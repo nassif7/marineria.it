@@ -11,7 +11,8 @@ const ProfileActionsSection: FC<{
   dateAvailability?: string
   availabilityLabel: string
   onPreviewPress: () => void
-}> = ({ missing, coursesCount, dateAvailability, availabilityLabel, onPreviewPress }) => {
+  onEditPress: () => void
+}> = ({ missing, coursesCount, dateAvailability, availabilityLabel, onPreviewPress, onEditPress }) => {
   const { t } = useTranslation('home-screen')
 
   return (
@@ -27,9 +28,9 @@ const ProfileActionsSection: FC<{
         <ActionRow
           icon={Edit2}
           title={t('crew-profile.action-edit')}
-          sub={t('crew-profile.action-edit-sub', { count: missing })}
+          sub={missing > 0 ? t('crew-profile.action-edit-sub', { count: missing }) : undefined}
           accent
-          disabled
+          onPress={onEditPress}
         />
         <ActionRow
           icon={FileText}

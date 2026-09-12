@@ -9,7 +9,9 @@ const CompletionMeter: FC<{ pct: number; missing: number }> = ({ pct, missing })
     <View style={styles.meterRow}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 }}>
         <Text style={styles.meterLabel}>{t('crew-profile.completion', { pct })}</Text>
-        <Text style={styles.meterMissing}>{t('crew-profile.missing-fields', { count: missing })}</Text>
+        {missing > 0 ? (
+          <Text style={styles.meterMissing}>{t('crew-profile.missing-fields', { count: missing })}</Text>
+        ) : null}
       </View>
       <View style={styles.meterTrack}>
         <View style={[styles.meterFill, { width: `${pct}%` as any }]} />

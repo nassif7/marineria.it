@@ -9,7 +9,7 @@ import { getAgeByYear } from '@/utils/dateUtils'
 import { getCertificateOfCompetence, getSeamansBook, getCoursesCount, isCrewAvailable } from '@/utils/crewUtils'
 import { C } from '@/components/appUI/tokens'
 import { Loading, RefreshControl } from '@/components/ui'
-import { useManualRefresh } from '@/hooks'
+import { useManualRefresh, useAuthBrowser } from '@/hooks'
 import PublicPreviewModal from './PublicPreviewModal'
 
 const GREEN_SOFT = '#E8F8EB'
@@ -158,10 +158,14 @@ const ActionRow: FC<{
 // ── Main screen ─────────────────────────────────────────────
 
 const CrewProfile: FC = () => {
-  const { t } = useTranslation('home-screen')
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation('home-screen')
   const router = useRouter()
   const { crew, notifications, isLoading, refetch } = useCrew()
   const { refreshing, onRefresh } = useManualRefresh(refetch)
+  const { openUrl } = useAuthBrowser()
   const [previewVisible, setPreviewVisible] = useState(false)
 
   const displayName =
@@ -238,7 +242,9 @@ const CrewProfile: FC = () => {
           <View style={s.meterRow}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 }}>
               <Text style={s.meterLabel}>{t('crew-profile.completion', { pct })}</Text>
-              <Text style={s.meterMissing}>{t('crew-profile.missing-fields', { count: missing })}</Text>
+              {missing > 0 ? (
+                <Text style={s.meterMissing}>{t('crew-profile.missing-fields', { count: missing })}</Text>
+              ) : null}
             </View>
             <View style={s.meterTrack}>
               <View style={[s.meterFill, { width: `${pct}%` as any }]} />
@@ -323,9 +329,9 @@ const CrewProfile: FC = () => {
           <ActionRow
             icon={Edit2}
             title={t('crew-profile.action-edit')}
-            sub={t('crew-profile.action-edit-sub', { count: missing })}
+            sub={missing > 0 ? t('crew-profile.action-edit-sub', { count: missing }) : undefined}
             accent
-            disabled
+            onPress={() => openUrl(`https://www.marineria.it/${language}/pro/panel.aspx`)}
           />
           <ActionRow
             icon={FileText}
