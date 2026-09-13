@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, Pressable, StyleSheet, Share } from 'react-native'
+import { View, Text, ScrollView, Pressable, StyleSheet, Share, Platform } from 'react-native'
 import { Stack, useRouter, useLocalSearchParams } from 'expo-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -77,8 +77,12 @@ const PublicOfferDetail = () => {
       const url = getOfferShareUrl(offer.idoffer)
       const intro = t('share-message-intro', { ns: 'offer' })
       const refLabel = t('job-reference', { ns: 'offer' })
+      const text = `${intro}\n\n${offerTitle}\n\n${refLabel} · ${ref}`
       await Share.share({
-        message: `${intro}\n\n${offerTitle}\n\n${refLabel} · ${ref}\n\n${url}`,
+        // iOS treats `message` and `url` as separate share items and concatenates them, so
+        // the link would show up twice if it's also baked into the text. Android's Share API
+        // ignores `url` entirely, so the link has to stay in the message there to be shared at all.
+        message: Platform.OS === 'android' ? `${text}\n\n${url}` : text,
         title: offerTitle,
         url,
       })

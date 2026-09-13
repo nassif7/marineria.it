@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView, Pressable, StyleSheet, Share, ActivityIndicator } from 'react-native'
+import { View, Text, ScrollView, Pressable, StyleSheet, Share, ActivityIndicator, Platform } from 'react-native'
 import { Stack, useRouter } from 'expo-router'
 import { useLocalSearchParams } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -137,8 +137,12 @@ export default function OfferDetailsScreen({ isModal }: Props) {
       const shareRef = offer.reference?.split('_')[1] || offer.reference
       const intro = t('share-message-intro', { ns: 'offer' })
       const refLabel = t('job-reference', { ns: 'offer' })
+      const text = `${intro}\n\n${offerTitle}\n\n${refLabel} · ${shareRef}`
       await Share.share({
-        message: `${intro}\n\n${offerTitle}\n\n${refLabel} · ${shareRef}\n\n${url}`,
+        // iOS treats `message` and `url` as separate share items and concatenates them, so
+        // the link would show up twice if it's also baked into the text. Android's Share API
+        // ignores `url` entirely, so the link has to stay in the message there to be shared at all.
+        message: Platform.OS === 'android' ? `${text}\n\n${url}` : text,
         title: offerTitle,
         url,
       })
