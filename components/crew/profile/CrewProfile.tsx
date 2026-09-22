@@ -1,8 +1,10 @@
 import { FC, useMemo, useState } from 'react'
-import { View, Text, Pressable, ScrollView, StyleSheet, Image } from 'react-native'
+import { View, Text, Pressable, ScrollView, StyleSheet, Image, Platform, Modal } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { Edit2, ChevronRight, Check, AlertTriangle, Users, FileText, Calendar, Bell } from 'lucide-react-native'
+import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
+import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import { useCrew } from '@/Providers/CrewProvider'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
@@ -37,6 +39,22 @@ const formatDate = (raw: string): string => {
   const d = new Date(raw)
   if (isNaN(d.getTime())) return raw
   return `${String(d.getDate()).padStart(2, '0')} ${MONTHS_EN[d.getMonth()]} ${d.getFullYear()}`
+}
+
+// crew.dateAvailability comes as dd/mm/yyyy, which `new Date()` would misparse as mm/dd/yyyy.
+const parseDDMMYYYY = (raw?: string): Date | null => {
+  if (!raw) return null
+  const match = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+  if (!match) return null
+  const [, dd, mm, yyyy] = match
+  const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd))
+  return isNaN(d.getTime()) ? null : d
+}
+
+const tomorrow = (): Date => {
+  const d = new Date()
+  d.setDate(d.getDate() + 1)
+  return d
 }
 
 // ── Experience parser ──────────────────────────────────────
@@ -186,6 +204,34 @@ const CrewProfile: FC = () => {
 
   const isAvailable = isCrewAvailable(crew?.availability)
   const availabilityLabel = isAvailable ? t('crew-profile.available') : t('crew-profile.not-available')
+  // UI-only for now — not yet wired to the availability endpoint.
+  const [availableDraft, setAvailableDraft] = useState(isAvailable)
+  const [availableFromDraft, setAvailableFromDraft] = useState(
+    () => parseDDMMYYYY(crew?.dateAvailability) ?? tomorrow()
+  )
+  const [iosPickerVisible, setIosPickerVisible] = useState(false)
+
+  const openAndroidAvailableFromPicker = () => {
+    DateTimePickerAndroid.open({
+      value: availableFromDraft,
+      mode: 'date',
+      minimumDate: new Date(),
+      onChange: (_, date) => {
+        if (date) {
+          setAvailableFromDraft(date)
+          setAvailableDraft(true)
+        }
+      },
+    })
+  }
+
+  const openAvailableFromPicker = () => {
+    if (Platform.OS === 'android') {
+      openAndroidAvailableFromPicker()
+    } else {
+      setIosPickerVisible(true)
+    }
+  }
 
   if (isLoading) {
     return (
@@ -217,14 +263,7 @@ const CrewProfile: FC = () => {
 
             {/* Identity */}
             <View style={{ flex: 1, minWidth: 0 }}>
-              {/* Name + availability badge in the same row — exactly like the design */}
-              <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 6 }}>
-                <Text style={[s.name, { flex: 1 }]}>{displayName}</Text>
-                <View style={[s.availPill, { backgroundColor: isAvailable ? GREEN_SOFT : C.field, flexShrink: 0 }]}>
-                  {isAvailable && <View style={[s.availDot, { backgroundColor: GREEN_TEXT }]} />}
-                  <Text style={[s.availText, { color: isAvailable ? GREEN_TEXT : C.ink3 }]}>{availabilityLabel}</Text>
-                </View>
-              </View>
+              <Text style={s.name}>{displayName}</Text>
 
               {/* Role */}
               {crew?.mainPosition ? <Text style={s.role}>{crew.mainPosition}</Text> : null}
@@ -237,6 +276,69 @@ const CrewProfile: FC = () => {
               </Text>
             </View>
           </View>
+
+          {/* Availability toggle — turning it on opens the date picker first, turning it off is immediate */}
+          <View style={s.availRow}>
+            <View style={[s.actionIcon, availableDraft && s.actionIconGreen]}>
+              {availableDraft ? (
+                <Check size={18} color={GREEN_TEXT} strokeWidth={2.4} />
+              ) : (
+                <Calendar size={18} color={C.ink2} strokeWidth={1.8} />
+              )}
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text style={s.actionTitle}>
+                {availableDraft ? t('crew-profile.available') : t('crew-profile.not-available')}
+              </Text>
+              {availableDraft ? (
+                <Pressable style={s.availEditRow} onPress={openAvailableFromPicker}>
+                  <Text style={s.availFromGreen}>
+                    {t('crew-profile.action-availability-sub', { date: formatDate(availableFromDraft.toISOString()) })}
+                  </Text>
+                  <Edit2 size={12} color={GREEN_TEXT} strokeWidth={2} />
+                </Pressable>
+              ) : (
+                <Text style={s.actionSub}>{t('crew-profile.availability-toggle-sub')}</Text>
+              )}
+            </View>
+            <ToggleSwitch
+              enabled={availableDraft}
+              isPending={false}
+              activeColor={GREEN_TEXT}
+              onToggle={() => (availableDraft ? setAvailableDraft(false) : openAvailableFromPicker())}
+            />
+          </View>
+
+          {Platform.OS === 'ios' && (
+            <Modal
+              visible={iosPickerVisible}
+              transparent
+              animationType="slide"
+              onRequestClose={() => setIosPickerVisible(false)}
+            >
+              <Pressable style={s.sheetBackdrop} onPress={() => setIosPickerVisible(false)}>
+                <Pressable style={s.sheetCard} onPress={(e) => e.stopPropagation()}>
+                  <View style={s.sheetHeader}>
+                    <Pressable
+                      onPress={() => {
+                        setIosPickerVisible(false)
+                        setAvailableDraft(true)
+                      }}
+                    >
+                      <Text style={s.sheetDoneText}>{t('confirm', { ns: 'common' })}</Text>
+                    </Pressable>
+                  </View>
+                  <DateTimePicker
+                    value={availableFromDraft}
+                    mode="date"
+                    display="spinner"
+                    minimumDate={new Date()}
+                    onChange={(_, date) => date && setAvailableFromDraft(date)}
+                  />
+                </Pressable>
+              </Pressable>
+            </Modal>
+          )}
 
           {/* Completion meter */}
           <View style={s.meterRow}>
@@ -415,22 +517,37 @@ const s = StyleSheet.create({
   name: { fontSize: 18, fontWeight: '800', color: C.ink, letterSpacing: -0.3, flex: 1, marginRight: 8 },
   role: { fontSize: 14, fontWeight: '700', color: C.orangeText, marginTop: 3, letterSpacing: -0.1 },
   meta: { fontSize: 12, color: C.ink3, marginTop: 6, lineHeight: 16 },
-  availInline: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: C.ink3,
-  },
-  availPill: {
+  availRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 10,
-    flexShrink: 0,
+    gap: 14,
+    paddingHorizontal: 18,
+    paddingTop: 16,
+    paddingBottom: 16,
+    borderTopWidth: 1,
+    borderTopColor: C.hair2,
   },
-  availDot: { width: 6, height: 6, borderRadius: 99 },
-  availText: { fontSize: 11, fontWeight: '600' },
+  sheetBackdrop: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(13,27,42,0.35)',
+  },
+  sheetCard: {
+    backgroundColor: C.card,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingBottom: 24,
+  },
+  sheetHeader: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: C.hair2,
+  },
+  sheetDoneText: { fontSize: 16, fontWeight: '700', color: C.orange },
   meterRow: { paddingHorizontal: 18, paddingBottom: 14 },
   meterLabel: { fontSize: 12, fontWeight: '600', color: C.ink3 },
   meterMissing: { fontSize: 12, fontWeight: '600', color: C.orangeText },
@@ -515,8 +632,11 @@ const s = StyleSheet.create({
     flexShrink: 0,
   },
   actionIconAccent: { backgroundColor: C.orangeSoft },
+  actionIconGreen: { backgroundColor: GREEN_SOFT },
   actionTitle: { fontSize: 15, fontWeight: '600', color: C.ink, letterSpacing: -0.1 },
   actionSub: { fontSize: 12, color: C.ink3, marginTop: 1 },
+  availEditRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 1, alignSelf: 'flex-start' },
+  availFromGreen: { fontSize: 12, fontWeight: '600', color: GREEN_TEXT },
   comingSoonBadge: {
     flexShrink: 0,
     paddingHorizontal: 8,

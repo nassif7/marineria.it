@@ -2,10 +2,11 @@ import { FC, useEffect, useRef } from 'react'
 import { Pressable, Animated, ActivityIndicator, View, StyleSheet } from 'react-native'
 import { C } from '@/components/appUI/tokens'
 
-interface INotificationsToggleProps {
+interface IToggleSwitchProps {
   enabled: boolean
   isPending: boolean
-  handleSetPushNotification: () => void
+  onToggle: () => void
+  activeColor?: string
 }
 
 const TRACK_WIDTH = 44
@@ -13,7 +14,7 @@ const TRACK_HEIGHT = 24
 const THUMB_SIZE = 18
 const PADDING = 3
 
-const NotificationsToggle: FC<INotificationsToggleProps> = ({ enabled, isPending, handleSetPushNotification }) => {
+const ToggleSwitch: FC<IToggleSwitchProps> = ({ enabled, isPending, onToggle, activeColor = C.orange }) => {
   const anim = useRef(new Animated.Value(enabled ? 1 : 0)).current
 
   useEffect(() => {
@@ -28,8 +29,8 @@ const NotificationsToggle: FC<INotificationsToggleProps> = ({ enabled, isPending
   return (
     <View style={{ position: 'relative' }}>
       <Pressable
-        style={[nt.track, enabled && nt.trackOn]}
-        onPress={handleSetPushNotification}
+        style={[nt.track, enabled && { backgroundColor: activeColor }]}
+        onPress={onToggle}
         disabled={isPending}
         accessibilityRole="switch"
         accessibilityState={{ checked: enabled, disabled: isPending }}
@@ -53,9 +54,6 @@ const nt = StyleSheet.create({
     backgroundColor: C.hair2,
     padding: PADDING,
     justifyContent: 'center',
-  },
-  trackOn: {
-    backgroundColor: C.orange,
   },
   thumb: {
     width: THUMB_SIZE,
@@ -81,4 +79,4 @@ const nt = StyleSheet.create({
   },
 })
 
-export default NotificationsToggle
+export default ToggleSwitch

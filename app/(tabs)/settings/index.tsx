@@ -26,7 +26,7 @@ import { useProfile, useAuthBrowser } from '@/hooks'
 import { supportTeam } from '@/api'
 import { C } from '@/components/appUI/tokens'
 import SwitchLanguage from '@/components/common/SwitchLanguage'
-import NotificationsToggle from '@/components/common/NotificationsToggle'
+import ToggleSwitch from '@/components/common/ToggleSwitch'
 import SwitchUser from '@/components/common/SwitchUser'
 import ContactSupport from '@/components/common/ContactSupport'
 
@@ -104,9 +104,9 @@ const Settings = () => {
               <Text style={s.rowTitle}>{t('push-notifications')}</Text>
               <Text style={s.rowSub}>{t('push-notifications-sub')}</Text>
             </View>
-            <NotificationsToggle
+            <ToggleSwitch
               enabled={!!pushNotificationToken}
-              handleSetPushNotification={togglePushNotifications}
+              onToggle={togglePushNotifications}
               isPending={isTogglingNotifications}
             />
           </View>

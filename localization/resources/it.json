@@ -98,6 +98,7 @@
       "available": "Disponibile",
       "available-from": "Disponibile dal {{date}}",
       "not-available": "Non disponibile",
+      "availability-toggle-sub": "Attiva per farti trovare dai recruiter",
       "completion": "Profilo completo al {{pct}}%",
       "missing-fields": "{{count}} campi mancanti",
       "stat-views": "Visualizzazioni",
