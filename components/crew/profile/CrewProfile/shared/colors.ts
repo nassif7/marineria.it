@@ -1,0 +1,5 @@
+export const GREEN_SOFT = '#E8F8EB'
+export const GREEN_TEXT = '#0F7A28'
+export const WARN_BG = '#FFF7ED'
+export const WARN_TEXT = '#C2600A'
+export const WARN_BORDER = '#FDDCB5'

@@ -23,7 +23,7 @@ import { TUserRole } from '@/api/types'
 import { useSession } from '@/Providers/SessionProvider'
 import { useAuthErrorToast } from '@/hooks/useAuthErrorToast'
 import { checkEmail } from '@/api/auth'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 

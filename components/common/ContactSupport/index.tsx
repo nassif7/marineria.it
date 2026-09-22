@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import { X, Headphones, Mail, Phone, MessageCircle, Send } from 'lucide-react-native'
 import { TSupportTeam } from '@/api'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 type IContactSupportProps = {
   title: string

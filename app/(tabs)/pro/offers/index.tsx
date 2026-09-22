@@ -1,5 +1,5 @@
 import React from 'react'
-import { OffersList } from '@/components/pro/offers'
+import { OffersList } from '@/components/crew/offers'
 
 const JobOffersScreen = () => {
   return <OffersList />

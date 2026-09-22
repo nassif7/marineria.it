@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router'
 import { NavBar } from '@/components/appUI'
 import { useTranslation } from 'react-i18next'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 export default function JobsLayout() {
   const { t } = useTranslation('screens-labels')

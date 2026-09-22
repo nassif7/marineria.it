@@ -24,9 +24,9 @@ import { useCrew } from '@/Providers/CrewProvider'
 import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { useProfile, useAuthBrowser } from '@/hooks'
 import { supportTeam } from '@/api'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import SwitchLanguage from '@/components/common/SwitchLanguage'
-import NotificationsToggle from '@/components/common/NotificationsToggle'
+import ToggleSwitch from '@/components/common/ToggleSwitch'
 import SwitchUser from '@/components/common/SwitchUser'
 import ContactSupport from '@/components/common/ContactSupport'
 
@@ -104,9 +104,9 @@ const Settings = () => {
               <Text style={s.rowTitle}>{t('push-notifications')}</Text>
               <Text style={s.rowSub}>{t('push-notifications-sub')}</Text>
             </View>
-            <NotificationsToggle
+            <ToggleSwitch
               enabled={!!pushNotificationToken}
-              handleSetPushNotification={togglePushNotifications}
+              onToggle={togglePushNotifications}
               isPending={isTogglingNotifications}
             />
           </View>
@@ -148,8 +148,8 @@ const Settings = () => {
               onPress={() =>
                 WebBrowser.openBrowserAsync(
                   language === TLocales.IT
-                    ? 'https://www.marineria.it/it/ChangePassword.aspx'
-                    : 'https://www.marineria.it/En/ChangePassword.aspx'
+                    ? 'https://www.marineria.it/it/Modify_PSW.aspx'
+                    : 'https://www.marineria.it/En/Modify_PSW.aspx'
                 )
               }
             >

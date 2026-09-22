@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { Pressable, Text, StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { TLocales } from '@/localization'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 interface ISwitchLanguageProps {
   language: TLocales

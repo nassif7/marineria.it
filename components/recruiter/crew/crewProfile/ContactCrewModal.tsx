@@ -6,7 +6,7 @@ import { TCrew } from '@/api/types'
 import { useTranslation } from 'react-i18next'
 import { getPhotoUrl } from '@/api/consts'
 import { useRecruiterSearch } from '@/Providers/RecruiterSearchProvider'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import ContactModalUnpaid from './ContactModalUnpaid'
 import { useAuthBrowser } from '@/hooks'
 

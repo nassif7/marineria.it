@@ -1,4 +1,4 @@
-import { OfferDetails } from '@/components/pro/offers'
+import { OfferDetails } from '@/components/crew/offers'
 
 const OfferScreen = () => {
   return <OfferDetails />

@@ -3,9 +3,9 @@ import { Modal, View, Text, Pressable, ScrollView, StyleSheet } from 'react-nati
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import * as WebBrowser from 'expo-web-browser'
 import { router } from 'expo-router'
-import { X, LogIn } from 'lucide-react-native'
+import { X, LogIn, Anchor, Users } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 interface LoginToApplyModalProps {
   visible: boolean
@@ -43,18 +43,26 @@ const LoginToApplyModal: React.FC<LoginToApplyModalProps> = ({ visible, onClose 
             <Text style={ms.loginBtnText}>{t('login', { ns: 'settings-screen' })}</Text>
           </Pressable>
 
-          <View style={ms.registerRow}>
+          <View style={ms.chipRow}>
             <Pressable
-              style={ms.registerLink}
+              style={ms.chip}
               onPress={() => WebBrowser.openBrowserAsync('https://www.marineria.it/En/Pro/Reg.aspx')}
             >
-              <Text style={ms.registerLinkText}>{t('register-as-crew', { ns: 'login-screen' })}</Text>
+              <Text style={ms.chipLabel}>{t('register-as', { ns: 'login-screen' })}</Text>
+              <View style={ms.chipRoleRow}>
+                <Anchor size={12} color={C.orange} strokeWidth={2.2} />
+                <Text style={ms.chipRoleText}>{t('crew-label', { ns: 'login-screen' })}</Text>
+              </View>
             </Pressable>
             <Pressable
-              style={ms.registerLink}
+              style={ms.chip}
               onPress={() => WebBrowser.openBrowserAsync('https://www.marineria.it/En/Rec/Reg.aspx')}
             >
-              <Text style={ms.registerLinkText}>{t('register-as-recruiter', { ns: 'login-screen' })}</Text>
+              <Text style={ms.chipLabel}>{t('register-as', { ns: 'login-screen' })}</Text>
+              <View style={ms.chipRoleRow}>
+                <Users size={12} color={C.orange} strokeWidth={2.2} />
+                <Text style={ms.chipRoleText}>{t('recruiter-label', { ns: 'login-screen' })}</Text>
+              </View>
             </Pressable>
           </View>
         </ScrollView>
@@ -117,20 +125,38 @@ const ms = StyleSheet.create({
     fontWeight: '700',
     color: '#FFFFFF',
   },
-  registerRow: {
+  chipRow: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 24,
+    gap: 10,
     marginTop: 20,
   },
-  registerLink: {
-    paddingVertical: 8,
+  chip: {
+    flex: 1,
+    height: 44,
+    borderWidth: 1.5,
+    borderColor: C.orange,
+    borderRadius: 12,
+    backgroundColor: C.orangeSoft,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 1,
   },
-  registerLinkText: {
+  chipLabel: {
+    fontSize: 9,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+    color: C.orangeText,
+    textTransform: 'uppercase',
+  },
+  chipRoleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  chipRoleText: {
     fontSize: 13,
     fontWeight: '700',
-    color: C.ink3,
-    textDecorationLine: 'underline',
+    color: C.orangeText,
   },
 })
 

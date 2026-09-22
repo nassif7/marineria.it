@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, Pressable, StyleSheet, Share } from 'react-native'
+import { View, Text, ScrollView, Pressable, StyleSheet, Share, Platform } from 'react-native'
 import { Stack, useRouter, useLocalSearchParams } from 'expo-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { ChevronLeft, Share2, Send, Anchor, CheckCircle, FileText } from 'lucide-react-native'
 import { TOffer } from '@/api/types'
+import { getPublicOffers } from '@/api'
 import { getOfferShareUrl } from '@/api/consts'
-import { ErrorMessage } from '@/components/appUI'
-import { C } from '@/components/pro/tokens'
-import HtmlText from '@/components/pro/HtmlText'
+import { ErrorMessage, HtmlText } from '@/components/appUI'
+import { Loading } from '@/components/ui'
+import { C } from '@/components/appUI/tokens'
 import LoginToApplyModal from './LoginToApplyModal'
 import { getLocalizedOfferTitle, getOfferBoardingDisplay } from '@/utils/offerUtils'
 import { formatSalary } from '@/utils/formatters'
@@ -36,13 +37,23 @@ const PublicOfferDetail = () => {
   } = useTranslation(['offer-screen', 'offer'])
 
   const offers = queryClient.getQueryData<TOffer[]>(['public-offers', language])
-  const offer = offers?.find((o) => String(o.idoffer) === offerId)
+  const cachedOffer = offers?.find((o) => String(o.idoffer) === offerId)
+
+  // Landing here straight from a shared link (e.g. cold app start) means the jobs list was
+  // never fetched, so the cache above is empty — fetch this one offer directly in that case.
+  const { data: fetchedOffers, isLoading: isFetchingOffer } = useQuery({
+    queryKey: ['public-offer', offerId, language],
+    queryFn: () => getPublicOffers(language, Number(offerId)),
+    enabled: !cachedOffer && !!offerId,
+  })
+
+  const offer = cachedOffer ?? fetchedOffers?.[0]
 
   if (!offer) {
     return (
       <View style={{ flex: 1, backgroundColor: C.bg }}>
         <Stack.Screen options={{ headerShown: false }} />
-        <ErrorMessage />
+        {isFetchingOffer ? <Loading /> : <ErrorMessage />}
       </View>
     )
   }
@@ -63,11 +74,15 @@ const PublicOfferDetail = () => {
 
   const handleShare = async () => {
     try {
-      const url = getOfferShareUrl(offer.idoffer, language)
+      const url = getOfferShareUrl(offer.idoffer)
       const intro = t('share-message-intro', { ns: 'offer' })
       const refLabel = t('job-reference', { ns: 'offer' })
+      const text = `${intro}\n\n${offerTitle}\n\n${refLabel} · ${ref}`
       await Share.share({
-        message: `${intro}\n\n${offerTitle}\n\n${refLabel} · ${ref}\n\n${url}`,
+        // iOS treats `message` and `url` as separate share items and concatenates them, so
+        // the link would show up twice if it's also baked into the text. Android's Share API
+        // ignores `url` entirely, so the link has to stay in the message there to be shared at all.
+        message: Platform.OS === 'android' ? `${text}\n\n${url}` : text,
         title: offerTitle,
         url,
       })

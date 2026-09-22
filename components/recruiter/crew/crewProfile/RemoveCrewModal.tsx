@@ -3,7 +3,7 @@ import { Modal, View, Text, Pressable, ActivityIndicator, StyleSheet } from 'rea
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { AlertTriangle, Trash2 } from 'lucide-react-native'
 import { useTranslation } from 'react-i18next'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 
 interface IRemoveCrewModal {
   visible: boolean

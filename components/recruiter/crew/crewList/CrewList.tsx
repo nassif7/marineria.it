@@ -11,7 +11,7 @@ import { useRecruiter } from '@/Providers/RecruiterProvider'
 import { useRecruiterSearch } from '@/Providers/RecruiterSearchProvider'
 import { Loading, RefreshControl } from '@/components/ui'
 import { ErrorMessage, EmptyList } from '@/components/appUI'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import { useManualRefresh } from '@/hooks'
 import ContactSupport from '@/components/common/ContactSupport'
 import CrewListItem from './CrewListItem'
@@ -46,7 +46,7 @@ const CrewList: FC = () => {
   })
   const { refreshing, onRefresh } = useManualRefresh(refetch)
 
-  const allCrew = (data ?? []).filter((c) => c.published)
+  const allCrew = data ?? []
   const referenceShort = search?.reference?.includes('_') ? search.reference.split('_')[1] : search?.reference
   const residual = search?.countResidual ?? Math.max(0, 30 - allCrew.length)
 

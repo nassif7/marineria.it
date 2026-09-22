@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router'
-import { C } from '@/components/pro/tokens'
+import { C } from '@/components/appUI/tokens'
 import SearchProvider from '@/Providers/RecruiterSearchProvider'
 
 export default function OfferDetailLayout() {
