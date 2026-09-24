@@ -21,7 +21,7 @@ import { getPhotoUrl } from '@/api/consts'
 import { ApiError } from '@/api/utils'
 import { TCrewExperience, TCrewReference } from '@/api/types'
 import { getAgeByYear } from '@/utils/dateUtils'
-import { getCertificateOfCompetence, getSeamansBook, getCoursesCount } from '@/utils/crewUtils'
+import { getCertificateOfCompetence, getSeamansBook, getCoursesCount, getAvailableFromDate } from '@/utils/crewUtils'
 import { Loading, RefreshControl } from '@/components/ui'
 import { C } from '@/components/appUI/tokens'
 import { HtmlText } from '@/components/appUI'
@@ -146,6 +146,7 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
     ? [crew.userPhoto, crew.namephotoA, crew.namephotoB, crew.namephotoC].filter(Boolean).length
     : 0
   const age = crew?.yearofBirth ? getAgeByYear(crew.yearofBirth) : null
+  const availableFromDate = getAvailableFromDate(crew?.dateAvailability, language)
   const { hasCertificateOfCompetence } = crew ? getCertificateOfCompetence(crew) : { hasCertificateOfCompetence: false }
   const hasSeamansBook = crew ? getSeamansBook(crew) : false
   const initials = ((crew?.name?.[0] ?? '') + (crew?.surname?.[0] ?? '')).toUpperCase() || '?'
@@ -283,7 +284,11 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
             <View style={pv.quadGrid}>
               {(
                 [
-                  { Icon: Calendar, label: t('available-from', { ns: 'crew' }), value: crew.dateAvailability },
+                  {
+                    Icon: Calendar,
+                    label: t('available-from', { ns: 'crew' }),
+                    value: availableFromDate ?? t('not-available', { ns: 'crew' }),
+                  },
                   { Icon: Briefcase, label: t('experience', { ns: 'crew' }), value: crew.calculatedExperience },
                   { Icon: Euro, label: t('salary', { ns: 'offer' }), value: crew.salary },
                   { Icon: Clock, label: t('last-seen', { ns: 'crew' }), value: crew.lastAccessDate },

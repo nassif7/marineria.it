@@ -8,7 +8,14 @@ import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import { useCrew } from '@/Providers/CrewProvider'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
-import { getCertificateOfCompetence, getSeamansBook, getCoursesCount, isCrewAvailable } from '@/utils/crewUtils'
+import {
+  getCertificateOfCompetence,
+  getSeamansBook,
+  getCoursesCount,
+  getAvailableFromDate,
+  parseCrewAvailabilityDate,
+  formatCrewDate,
+} from '@/utils/crewUtils'
 import { C } from '@/components/appUI/tokens'
 import { Loading, RefreshControl } from '@/components/ui'
 import { useManualRefresh, useAuthBrowser } from '@/hooks'
@@ -39,16 +46,6 @@ const formatDate = (raw: string): string => {
   const d = new Date(raw)
   if (isNaN(d.getTime())) return raw
   return `${String(d.getDate()).padStart(2, '0')} ${MONTHS_EN[d.getMonth()]} ${d.getFullYear()}`
-}
-
-// crew.dateAvailability comes as dd/mm/yyyy, which `new Date()` would misparse as mm/dd/yyyy.
-const parseDDMMYYYY = (raw?: string): Date | null => {
-  if (!raw) return null
-  const match = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
-  if (!match) return null
-  const [, dd, mm, yyyy] = match
-  const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd))
-  return isNaN(d.getTime()) ? null : d
 }
 
 const tomorrow = (): Date => {
@@ -202,13 +199,19 @@ const CrewProfile: FC = () => {
   )
   const { pct, missing } = useMemo(() => (crew ? calcCompletion(crew as any) : { pct: 0, missing: 0 }), [crew])
 
-  const isAvailable = isCrewAvailable(crew?.availability)
+  // dateAvailability is the single source of truth for availability: null/unset, unparseable, or
+  // a past date (including the backend's DateTime.MinValue placeholder) all mean "not available".
+  const availableFromDate = getAvailableFromDate(crew?.dateAvailability, language)
+  const isAvailable = !!availableFromDate
   const availabilityLabel = isAvailable ? t('crew-profile.available') : t('crew-profile.not-available')
   // UI-only for now — not yet wired to the availability endpoint.
   const [availableDraft, setAvailableDraft] = useState(isAvailable)
-  const [availableFromDraft, setAvailableFromDraft] = useState(
-    () => parseDDMMYYYY(crew?.dateAvailability) ?? tomorrow()
-  )
+  const [availableFromDraft, setAvailableFromDraft] = useState(() => {
+    const parsed = parseCrewAvailabilityDate(crew?.dateAvailability)
+    const todayStart = new Date()
+    todayStart.setHours(0, 0, 0, 0)
+    return parsed && parsed.getTime() >= todayStart.getTime() ? parsed : tomorrow()
+  })
   const [iosPickerVisible, setIosPickerVisible] = useState(false)
   const [iosPickerDraft, setIosPickerDraft] = useState(availableFromDraft)
 
@@ -295,7 +298,7 @@ const CrewProfile: FC = () => {
               {availableDraft ? (
                 <Pressable style={s.availEditRow} onPress={openAvailableFromPicker}>
                   <Text style={s.availFromGreen}>
-                    {t('crew-profile.action-availability-sub', { date: formatDate(availableFromDraft.toISOString()) })}
+                    {t('crew-profile.action-availability-sub', { date: formatCrewDate(availableFromDraft, language) })}
                   </Text>
                   <Edit2 size={12} color={GREEN_TEXT} strokeWidth={2} />
                 </Pressable>
@@ -467,8 +470,8 @@ const CrewProfile: FC = () => {
             icon={Calendar}
             title={t('crew-profile.action-availability')}
             sub={
-              crew?.dateAvailability
-                ? t('crew-profile.action-availability-sub', { date: crew.dateAvailability })
+              availableFromDate
+                ? t('crew-profile.action-availability-sub', { date: availableFromDate })
                 : availabilityLabel
             }
             disabled

@@ -334,6 +334,7 @@
   "crew": {
     "availability": "Availability",
     "available-from": "Available from",
+    "not-available": "Not available",
     "last-seen": "Last seen",
     "in-team-with": "In team with",
     "offers-received": "Offers received",

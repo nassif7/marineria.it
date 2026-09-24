@@ -45,3 +45,84 @@ export const isCrewAvailable = (availability?: string | null): boolean => {
   if (value.includes('not available') || value.includes('non disponibil')) return false
   return value.includes('available') || value.includes('disponibil')
 }
+
+const MONTHS_EN = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+]
+
+const MONTHS_IT = [
+  'gennaio',
+  'febbraio',
+  'marzo',
+  'aprile',
+  'maggio',
+  'giugno',
+  'luglio',
+  'agosto',
+  'settembre',
+  'ottobre',
+  'novembre',
+  'dicembre',
+]
+
+// crew.dateAvailability comes from the backend pre-formatted as "dd MonthName yyyy", in either
+// English or Italian depending on the request's language (e.g. "01 January 0001" for an unset
+// value — that's .NET's DateTime.MinValue). It's occasionally also "dd/mm/yyyy" in fake/dev data.
+// `new Date(raw)` alone misparses all of these, so try each explicitly.
+export const parseCrewAvailabilityDate = (raw?: string | null): Date | null => {
+  if (!raw) return null
+  const trimmed = raw.trim()
+
+  const monthNameMatch = trimmed.match(/^(\d{1,2})\s+([A-Za-zàèéìòù]+)\s+(\d{1,4})$/)
+  if (monthNameMatch) {
+    const [, dd, monthName, yyyy] = monthNameMatch
+    const monthNameLower = monthName.toLowerCase()
+    const monthIndex = MONTHS_EN.findIndex((m) => m.toLowerCase() === monthNameLower)
+    const monthIndexIt = MONTHS_IT.findIndex((m) => m === monthNameLower)
+    const resolvedMonthIndex = monthIndex !== -1 ? monthIndex : monthIndexIt
+    if (resolvedMonthIndex !== -1) {
+      const d = new Date(Number(yyyy), resolvedMonthIndex, Number(dd))
+      return isNaN(d.getTime()) ? null : d
+    }
+  }
+
+  const slashMatch = trimmed.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+  if (slashMatch) {
+    const [, dd, mm, yyyy] = slashMatch
+    const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd))
+    return isNaN(d.getTime()) ? null : d
+  }
+
+  const fallback = new Date(trimmed)
+  return isNaN(fallback.getTime()) ? null : fallback
+}
+
+export const formatCrewDate = (date: Date, language?: string): string => {
+  const months = language?.toLowerCase().startsWith('it') ? MONTHS_IT : MONTHS_EN
+  return `${String(date.getDate()).padStart(2, '0')} ${months[date.getMonth()]} ${date.getFullYear()}`
+}
+
+// The single source of truth for "is this crew available, and from when": returns the formatted
+// date when dateAvailability is a real date strictly in the future (or today), otherwise null —
+// including for unset (DateTime.MinValue), unparseable, or past values.
+export const getAvailableFromDate = (rawDate?: string | null, language?: string): string | null => {
+  const parsed = parseCrewAvailabilityDate(rawDate)
+  if (!parsed) return null
+
+  const todayStart = new Date()
+  todayStart.setHours(0, 0, 0, 0)
+  if (parsed.getTime() < todayStart.getTime()) return null
+
+  return formatCrewDate(parsed, language)
+}
