@@ -36,4 +36,5 @@ export const API = {
   WHY_CANT_APPLY: `${BASE_URL}/api/OffersForProuserApply/WhyCanNotApply`,
   PUBLIC_OFFERS: `${BASE_URL}/api/Offers`,
   PROUSER_CV: `${BASE_URL}/api/Prouser/Cv`,
+  AVAILABILITY: `${BASE_URL}/api/RegPro/Availability`,
 }

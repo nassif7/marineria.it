@@ -1,5 +1,5 @@
 import { FC, useMemo, useState } from 'react'
-import { View, Text, Pressable, ScrollView, StyleSheet, Image, Platform, Modal } from 'react-native'
+import { View, Text, Pressable, ScrollView, StyleSheet, Image, Platform, Modal, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { Edit2, ChevronRight, Check, AlertTriangle, Users, FileText, Calendar, Bell } from 'lucide-react-native'
@@ -14,7 +14,6 @@ import {
   getCoursesCount,
   getAvailableFromDate,
   parseCrewAvailabilityDate,
-  formatCrewDate,
 } from '@/utils/crewUtils'
 import { C } from '@/components/appUI/tokens'
 import { Loading, RefreshControl } from '@/components/ui'
@@ -52,6 +51,14 @@ const tomorrow = (): Date => {
   const d = new Date()
   d.setDate(d.getDate() + 1)
   return d
+}
+
+// The availability API expects availableFrom as yyyy-mm-dd.
+const toISODateString = (date: Date): string => {
+  const yyyy = date.getFullYear()
+  const mm = String(date.getMonth() + 1).padStart(2, '0')
+  const dd = String(date.getDate()).padStart(2, '0')
+  return `${yyyy}-${mm}-${dd}`
 }
 
 // ── Experience parser ──────────────────────────────────────
@@ -178,7 +185,7 @@ const CrewProfile: FC = () => {
     i18n: { language },
   } = useTranslation('home-screen')
   const router = useRouter()
-  const { crew, notifications, isLoading, refetch } = useCrew()
+  const { crew, notifications, isLoading, refetch, updateAvailability, isUpdatingAvailability } = useCrew()
   const { refreshing, onRefresh } = useManualRefresh(refetch)
   const { openUrl } = useAuthBrowser()
   const [previewVisible, setPreviewVisible] = useState(false)
@@ -204,27 +211,37 @@ const CrewProfile: FC = () => {
   const availableFromDate = getAvailableFromDate(crew?.dateAvailability, language)
   const isAvailable = !!availableFromDate
   const availabilityLabel = isAvailable ? t('crew-profile.available') : t('crew-profile.not-available')
-  // UI-only for now — not yet wired to the availability endpoint.
-  const [availableDraft, setAvailableDraft] = useState(isAvailable)
-  const [availableFromDraft, setAvailableFromDraft] = useState(() => {
+  const [iosPickerVisible, setIosPickerVisible] = useState(false)
+  const [iosPickerDraft, setIosPickerDraft] = useState(tomorrow)
+
+  // Seed the picker from the existing available-from date when it's still a valid future date,
+  // otherwise fall back to tomorrow.
+  const initialAvailableFromDate = (): Date => {
     const parsed = parseCrewAvailabilityDate(crew?.dateAvailability)
     const todayStart = new Date()
     todayStart.setHours(0, 0, 0, 0)
     return parsed && parsed.getTime() >= todayStart.getTime() ? parsed : tomorrow()
-  })
-  const [iosPickerVisible, setIosPickerVisible] = useState(false)
-  const [iosPickerDraft, setIosPickerDraft] = useState(availableFromDraft)
+  }
+
+  const saveAvailability = async (available: boolean, availableFrom?: Date) => {
+    const params = { available, availableFrom: availableFrom ? toISODateString(availableFrom) : undefined }
+    console.log('[CrewProfile] saveAvailability params:', params)
+    try {
+      const response = await updateAvailability(params)
+      console.log('[CrewProfile] saveAvailability response:', response)
+    } catch (error) {
+      console.log('[CrewProfile] saveAvailability error:', error)
+      Alert.alert(t('unknown-error', { ns: 'common' }))
+    }
+  }
 
   const openAndroidAvailableFromPicker = () => {
     DateTimePickerAndroid.open({
-      value: availableFromDraft,
+      value: initialAvailableFromDate(),
       mode: 'date',
       minimumDate: new Date(),
       onChange: (_, date) => {
-        if (date) {
-          setAvailableFromDraft(date)
-          setAvailableDraft(true)
-        }
+        if (date) saveAvailability(true, date)
       },
     })
   }
@@ -233,7 +250,7 @@ const CrewProfile: FC = () => {
     if (Platform.OS === 'android') {
       openAndroidAvailableFromPicker()
     } else {
-      setIosPickerDraft(availableFromDraft)
+      setIosPickerDraft(initialAvailableFromDate())
       setIosPickerVisible(true)
     }
   }
@@ -284,8 +301,8 @@ const CrewProfile: FC = () => {
 
           {/* Availability toggle — turning it on opens the date picker first, turning it off is immediate */}
           <View style={s.availRow}>
-            <View style={[s.actionIcon, availableDraft && s.actionIconGreen]}>
-              {availableDraft ? (
+            <View style={[s.actionIcon, isAvailable && s.actionIconGreen]}>
+              {isAvailable ? (
                 <Check size={18} color={GREEN_TEXT} strokeWidth={2.4} />
               ) : (
                 <Calendar size={18} color={C.ink2} strokeWidth={1.8} />
@@ -293,12 +310,12 @@ const CrewProfile: FC = () => {
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
               <Text style={s.actionTitle}>
-                {availableDraft ? t('crew-profile.available') : t('crew-profile.not-available')}
+                {isAvailable ? t('crew-profile.available') : t('crew-profile.not-available')}
               </Text>
-              {availableDraft ? (
-                <Pressable style={s.availEditRow} onPress={openAvailableFromPicker}>
+              {isAvailable ? (
+                <Pressable style={s.availEditRow} onPress={openAvailableFromPicker} disabled={isUpdatingAvailability}>
                   <Text style={s.availFromGreen}>
-                    {t('crew-profile.action-availability-sub', { date: formatCrewDate(availableFromDraft, language) })}
+                    {t('crew-profile.action-availability-sub', { date: availableFromDate })}
                   </Text>
                   <Edit2 size={12} color={GREEN_TEXT} strokeWidth={2} />
                 </Pressable>
@@ -307,10 +324,10 @@ const CrewProfile: FC = () => {
               )}
             </View>
             <ToggleSwitch
-              enabled={availableDraft}
-              isPending={false}
+              enabled={isAvailable}
+              isPending={isUpdatingAvailability}
               activeColor={GREEN_TEXT}
-              onToggle={() => (availableDraft ? setAvailableDraft(false) : openAvailableFromPicker())}
+              onToggle={() => (isAvailable ? saveAvailability(false) : openAvailableFromPicker())}
             />
           </View>
 
@@ -329,9 +346,8 @@ const CrewProfile: FC = () => {
                     </Pressable>
                     <Pressable
                       onPress={() => {
-                        setAvailableFromDraft(iosPickerDraft)
-                        setAvailableDraft(true)
                         setIosPickerVisible(false)
+                        saveAvailability(true, iosPickerDraft)
                       }}
                     >
                       <Text style={s.sheetDoneText}>{t('confirm', { ns: 'common' })}</Text>

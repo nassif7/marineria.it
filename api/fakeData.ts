@@ -989,6 +989,9 @@ export const fakeAuthenticate = (username: string): Promise<TAuthResponse> => {
   return simulateNetwork({ category, token: `fake-${category}-token` }, 250)
 }
 
+export const fakeSetAvailability = (available: boolean, availableFrom?: string) =>
+  simulateNetwork({ dateavailability: available ? (availableFrom ?? null) : null, available: available ? 1 : 0 }, 350)
+
 export const fakeGetRecruiterUserProfile = () => simulateNetwork(maskRecruiterIdentity(fakeRecruiterProfileBase))
 
 export const fakeGetCrewUserProfile = (language?: string) =>

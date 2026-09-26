@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useSession } from '@/Providers/SessionProvider'
-import { getCrewUserProfilePost, setPushNotificationToken } from '@/api'
+import { getCrewUserProfilePost, setPushNotificationToken, setCrewAvailability, TAvailabilityResponse } from '@/api'
 import { ApiError } from '@/api/utils'
 import { TCrewUser, TNotification, TUserRole } from '@/api/types'
 import { registerForPushNotificationsAsync } from '@/hooks/usePushNotification'
@@ -22,6 +22,8 @@ type TCrewContext = {
   isTogglingNotifications: boolean
   refetch: () => Promise<unknown>
   togglePushNotifications: () => void
+  updateAvailability: (args: { available: boolean; availableFrom?: string }) => Promise<TAvailabilityResponse>
+  isUpdatingAvailability: boolean
   savedOfferIds: string[]
   isSavedOffer: (id: string | number) => boolean
   toggleSavedOffer: (id: string | number) => void
@@ -39,6 +41,8 @@ const CrewContext = createContext<TCrewContext>({
   isTogglingNotifications: false,
   refetch: () => Promise.resolve(),
   togglePushNotifications: () => {},
+  updateAvailability: () => Promise.reject(new Error('CrewProvider not mounted')),
+  isUpdatingAvailability: false,
   savedOfferIds: [],
   isSavedOffer: () => false,
   toggleSavedOffer: () => {},
@@ -115,6 +119,22 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['crew-profile', token] }),
   })
 
+  const { mutateAsync: updateAvailability, isPending: isUpdatingAvailability } = useMutation({
+    mutationFn: ({ available, availableFrom }: { available: boolean; availableFrom?: string }) =>
+      setCrewAvailability(token, language, available, availableFrom),
+    onSuccess: (response, { available }) => {
+      // The response is authoritative — patch just this field into the cache instead of
+      // refetching the whole profile, so the rest of the screen doesn't reload/flash.
+      const responseAvailable = response.available === 1
+      if (responseAvailable !== available) {
+        console.warn('[CrewProvider] setCrewAvailability response did not match the request', { response, available })
+      }
+      queryClient.setQueryData(['crew-profile', token, language], (old: TCrewUser | undefined) =>
+        old ? { ...old, dateAvailability: response.dateavailability ?? '' } : old
+      )
+    },
+  })
+
   return (
     <CrewContext.Provider
       value={{
@@ -129,6 +149,8 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
         isTogglingNotifications,
         refetch: () => Promise.all([refetchCrew(), refetchNotif()]),
         togglePushNotifications,
+        updateAvailability,
+        isUpdatingAvailability,
         savedOfferIds,
         isSavedOffer,
         toggleSavedOffer,

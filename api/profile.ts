@@ -3,7 +3,7 @@ import { TUserRole } from '@/api/types/auth'
 import { TUser } from '@/api/types/user'
 import { TRecruiterUser } from '@/api/types/recruiterUser'
 import { TCrewUser, TNotification } from '@/api/types/crewUser'
-import { apiFetchJson, apiFetchText, getLanguageCode } from './utils'
+import { apiFetchJson, apiFetchText, getLanguageCode, ApiError } from './utils'
 import {
   USE_FAKE_DATA,
   fakeGetNotifications,
@@ -11,7 +11,15 @@ import {
   fakeGetRecruiterUserProfile,
   fakeGetCrewUserProfile,
   fakeSetPushNotificationToken,
+  fakeSetAvailability,
 } from './fakeData'
+
+// available: 0 = not available, 1 = available. dateavailability is null when not available,
+// otherwise "yyyy-mm-dd".
+export type TAvailabilityResponse = {
+  dateavailability: string | null
+  available: number
+}
 
 export const getProUserProfile = async (token: string, role: TUserRole, language: string): Promise<TUser[]> => {
   const userRole = role == TUserRole.RECRUITER ? 'Owneruser' : 'Prouser'
@@ -106,6 +114,39 @@ export const getCrewUserProfilePost = async (token: string, language: string): P
     registrationDate: u.registraton_date ?? u.registration_date ?? u.registrationDate ?? '',
   } as TCrewUser
   return profile
+}
+
+// availableFrom is sent as yyyy-mm-dd, matching this endpoint's own response format. Omitted
+// when turning availability off — there's no "from" date for "not available".
+export const setCrewAvailability = async (
+  token: string,
+  language: string,
+  available: boolean,
+  availableFrom?: string
+): Promise<TAvailabilityResponse> => {
+  if (USE_FAKE_DATA) return fakeSetAvailability(available, availableFrom)
+  const languageCode = getLanguageCode(language)
+  const availableFlag = available ? '1' : '0'
+  const url = `${API.AVAILABILITY}?available=${availableFlag}${
+    availableFrom ? `&availableFrom=${encodeURIComponent(availableFrom)}` : ''
+  }`
+  console.log('[setCrewAvailability] request:', { url, token, language: languageCode, available, availableFrom })
+  try {
+    const response = await apiFetchJson<TAvailabilityResponse>(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({ userToken: token, language: languageCode }),
+    })
+    console.log('[setCrewAvailability] response:', response)
+    return response
+  } catch (error) {
+    if (error instanceof ApiError) {
+      console.log('[setCrewAvailability] error:', { status: error.status, title: error.title })
+    } else {
+      console.log('[setCrewAvailability] error:', error)
+    }
+    throw error
+  }
 }
 
 export const setPushNotificationToken = async (token: string, pushToken: string): Promise<void> => {
