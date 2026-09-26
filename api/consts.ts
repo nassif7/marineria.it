@@ -37,4 +37,5 @@ export const API = {
   PUBLIC_OFFERS: `${BASE_URL}/api/Offers`,
   PROUSER_CV: `${BASE_URL}/api/Prouser/Cv`,
   AVAILABILITY: `${BASE_URL}/api/RegPro/Availability`,
+  GET_AVAILABILITY: `${BASE_URL}/api/RegPro/GetAvailability`,
 }

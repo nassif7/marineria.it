@@ -8,13 +8,7 @@ import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import { useCrew } from '@/Providers/CrewProvider'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
-import {
-  getCertificateOfCompetence,
-  getSeamansBook,
-  getCoursesCount,
-  getAvailableFromDate,
-  parseCrewAvailabilityDate,
-} from '@/utils/crewUtils'
+import { getCertificateOfCompetence, getSeamansBook, getCoursesCount, getCrewAvailability } from '@/utils/crewUtils'
 import { C } from '@/components/appUI/tokens'
 import { Loading, RefreshControl } from '@/components/ui'
 import { useManualRefresh, useAuthBrowser } from '@/hooks'
@@ -185,7 +179,16 @@ const CrewProfile: FC = () => {
     i18n: { language },
   } = useTranslation('home-screen')
   const router = useRouter()
-  const { crew, notifications, isLoading, refetch, updateAvailability, isUpdatingAvailability } = useCrew()
+  const {
+    crew,
+    notifications,
+    isLoading,
+    refetch,
+    availability,
+    isLoadingAvailability,
+    updateAvailability,
+    isUpdatingAvailability,
+  } = useCrew()
   const { refreshing, onRefresh } = useManualRefresh(refetch)
   const { openUrl } = useAuthBrowser()
   const [previewVisible, setPreviewVisible] = useState(false)
@@ -206,31 +209,31 @@ const CrewProfile: FC = () => {
   )
   const { pct, missing } = useMemo(() => (crew ? calcCompletion(crew as any) : { pct: 0, missing: 0 }), [crew])
 
-  // dateAvailability is the single source of truth for availability: null/unset, unparseable, or
-  // a past date (including the backend's DateTime.MinValue placeholder) all mean "not available".
-  const availableFromDate = getAvailableFromDate(crew?.dateAvailability, language)
-  const isAvailable = !!availableFromDate
-  const availabilityLabel = isAvailable ? t('crew-profile.available') : t('crew-profile.not-available')
+  // Combines the availability flag with the available-from date: available is only true when the
+  // flag says yes AND the date hasn't passed. When the flag says yes but the date has passed, the
+  // description flags that distinctly from a plain "not available". Sourced from the dedicated
+  // GetAvailability endpoint, not the main profile response — that one's availability fields
+  // have proven unreliable (stale flag, inconsistent date formats).
+  const {
+    isAvailable,
+    date: availableDate,
+    description: availabilityDescription,
+  } = getCrewAvailability(availability?.available === 1, availability?.dateavailability, language, t)
   const [iosPickerVisible, setIosPickerVisible] = useState(false)
   const [iosPickerDraft, setIosPickerDraft] = useState(tomorrow)
 
   // Seed the picker from the existing available-from date when it's still a valid future date,
   // otherwise fall back to tomorrow.
   const initialAvailableFromDate = (): Date => {
-    const parsed = parseCrewAvailabilityDate(crew?.dateAvailability)
     const todayStart = new Date()
     todayStart.setHours(0, 0, 0, 0)
-    return parsed && parsed.getTime() >= todayStart.getTime() ? parsed : tomorrow()
+    return availableDate && availableDate.getTime() >= todayStart.getTime() ? availableDate : tomorrow()
   }
 
   const saveAvailability = async (available: boolean, availableFrom?: Date) => {
-    const params = { available, availableFrom: availableFrom ? toISODateString(availableFrom) : undefined }
-    console.log('[CrewProfile] saveAvailability params:', params)
     try {
-      const response = await updateAvailability(params)
-      console.log('[CrewProfile] saveAvailability response:', response)
-    } catch (error) {
-      console.log('[CrewProfile] saveAvailability error:', error)
+      await updateAvailability({ available, availableFrom: availableFrom ? toISODateString(availableFrom) : undefined })
+    } catch {
       Alert.alert(t('unknown-error', { ns: 'common' }))
     }
   }
@@ -314,18 +317,16 @@ const CrewProfile: FC = () => {
               </Text>
               {isAvailable ? (
                 <Pressable style={s.availEditRow} onPress={openAvailableFromPicker} disabled={isUpdatingAvailability}>
-                  <Text style={s.availFromGreen}>
-                    {t('crew-profile.action-availability-sub', { date: availableFromDate })}
-                  </Text>
+                  <Text style={s.availFromGreen}>{availabilityDescription}</Text>
                   <Edit2 size={12} color={GREEN_TEXT} strokeWidth={2} />
                 </Pressable>
               ) : (
-                <Text style={s.actionSub}>{t('crew-profile.availability-toggle-sub')}</Text>
+                <Text style={s.actionSub}>{availabilityDescription}</Text>
               )}
             </View>
             <ToggleSwitch
               enabled={isAvailable}
-              isPending={isUpdatingAvailability}
+              isPending={isUpdatingAvailability || isLoadingAvailability}
               activeColor={GREEN_TEXT}
               onToggle={() => (isAvailable ? saveAvailability(false) : openAvailableFromPicker())}
             />
@@ -485,11 +486,7 @@ const CrewProfile: FC = () => {
           <ActionRow
             icon={Calendar}
             title={t('crew-profile.action-availability')}
-            sub={
-              availableFromDate
-                ? t('crew-profile.action-availability-sub', { date: availableFromDate })
-                : availabilityLabel
-            }
+            sub={availabilityDescription}
             disabled
             last
           />

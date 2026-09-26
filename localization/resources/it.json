@@ -99,6 +99,7 @@
       "available-from": "Disponibile dal {{date}}",
       "not-available": "Non disponibile",
       "availability-toggle-sub": "Attiva per farti trovare dai recruiter",
+      "availability-expired": "La tua data di disponibilità è scaduta: aggiornala per essere trovato dai recruiter",
       "completion": "Profilo completo al {{pct}}%",
       "missing-fields": "{{count}} campi mancanti",
       "stat-views": "Visualizzazioni",

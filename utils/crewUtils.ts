@@ -113,16 +113,37 @@ export const formatCrewDate = (date: Date, language?: string): string => {
   return `${String(date.getDate()).padStart(2, '0')} ${months[date.getMonth()]} ${date.getFullYear()}`
 }
 
-// The single source of truth for "is this crew available, and from when": returns the formatted
-// date when dateAvailability is a real date strictly in the future (or today), otherwise null —
-// including for unset (DateTime.MinValue), unparseable, or past values.
-export const getAvailableFromDate = (rawDate?: string | null, language?: string): string | null => {
-  const parsed = parseCrewAvailabilityDate(rawDate)
-  if (!parsed) return null
+export type TCrewAvailability = {
+  isAvailable: boolean
+  date: Date | null
+  description: string
+}
+
+type TFunction = (key: string, options?: Record<string, unknown>) => string
+
+export const getCrewAvailability = (
+  availability: boolean,
+  rawDate: string | null | undefined,
+  language: string | undefined,
+  t: TFunction
+): TCrewAvailability => {
+  const date = parseCrewAvailabilityDate(rawDate)
 
   const todayStart = new Date()
   todayStart.setHours(0, 0, 0, 0)
-  if (parsed.getTime() < todayStart.getTime()) return null
+  const isPast = !!date && date.getTime() < todayStart.getTime()
 
-  return formatCrewDate(parsed, language)
+  if (isPast) {
+    return { isAvailable: false, date, description: t('crew-profile.availability-expired', { ns: 'home-screen' }) }
+  }
+
+  if (!availability || !date) {
+    return { isAvailable: false, date, description: t('crew-profile.availability-toggle-sub', { ns: 'home-screen' }) }
+  }
+
+  return {
+    isAvailable: true,
+    date,
+    description: t('crew-profile.action-availability-sub', { ns: 'home-screen', date: formatCrewDate(date, language) }),
+  }
 }

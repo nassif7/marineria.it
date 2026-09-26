@@ -2,7 +2,13 @@ import { createContext, useContext, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useSession } from '@/Providers/SessionProvider'
-import { getCrewUserProfilePost, setPushNotificationToken, setCrewAvailability, TAvailabilityResponse } from '@/api'
+import {
+  getCrewUserProfilePost,
+  setPushNotificationToken,
+  setCrewAvailability,
+  getCrewAvailabilityData,
+  TAvailabilityResponse,
+} from '@/api'
 import { ApiError } from '@/api/utils'
 import { TCrewUser, TNotification, TUserRole } from '@/api/types'
 import { registerForPushNotificationsAsync } from '@/hooks/usePushNotification'
@@ -22,6 +28,8 @@ type TCrewContext = {
   isTogglingNotifications: boolean
   refetch: () => Promise<unknown>
   togglePushNotifications: () => void
+  availability?: TAvailabilityResponse
+  isLoadingAvailability: boolean
   updateAvailability: (args: { available: boolean; availableFrom?: string }) => Promise<TAvailabilityResponse>
   isUpdatingAvailability: boolean
   savedOfferIds: string[]
@@ -41,6 +49,8 @@ const CrewContext = createContext<TCrewContext>({
   isTogglingNotifications: false,
   refetch: () => Promise.resolve(),
   togglePushNotifications: () => {},
+  availability: undefined,
+  isLoadingAvailability: false,
   updateAvailability: () => Promise.reject(new Error('CrewProvider not mounted')),
   isUpdatingAvailability: false,
   savedOfferIds: [],
@@ -82,6 +92,15 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
     if (invalidToken) signOut(TUserRole.CREW)
   }, [token, crewLoaded, crew?.iduser, crewErrored, crewError, signOut])
 
+  // The main profile response's own availability fields have proven unreliable (stale flag,
+  // inconsistent date formats) — this dedicated endpoint is the source of truth for the
+  // availability section specifically.
+  const { data: availability, isLoading: isLoadingAvailability } = useQuery({
+    queryKey: ['crew-availability', token, language],
+    queryFn: () => getCrewAvailabilityData(token, language),
+    enabled: !!token,
+  })
+
   const {
     data: notifications = [],
     isRefetching: notifRefetching,
@@ -122,13 +141,10 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
   const { mutateAsync: updateAvailability, isPending: isUpdatingAvailability } = useMutation({
     mutationFn: ({ available, availableFrom }: { available: boolean; availableFrom?: string }) =>
       setCrewAvailability(token, language, available, availableFrom),
-    onSuccess: (response, { available }) => {
-      // The response is authoritative — patch just this field into the cache instead of
-      // refetching the whole profile, so the rest of the screen doesn't reload/flash.
-      const responseAvailable = response.available === 1
-      if (responseAvailable !== available) {
-        console.warn('[CrewProvider] setCrewAvailability response did not match the request', { response, available })
-      }
+    onSuccess: (response) => {
+      // The response is authoritative — patch it straight into the cache instead of refetching,
+      // so the rest of the screen doesn't reload/flash.
+      queryClient.setQueryData(['crew-availability', token, language], response)
       queryClient.setQueryData(['crew-profile', token, language], (old: TCrewUser | undefined) =>
         old ? { ...old, dateAvailability: response.dateavailability ?? '' } : old
       )
@@ -149,6 +165,8 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
         isTogglingNotifications,
         refetch: () => Promise.all([refetchCrew(), refetchNotif()]),
         togglePushNotifications,
+        availability,
+        isLoadingAvailability,
         updateAvailability,
         isUpdatingAvailability,
         savedOfferIds,
