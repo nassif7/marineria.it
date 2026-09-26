@@ -57,6 +57,37 @@ export async function schedulePushNotification() {
   })
 }
 
+// A single, fixed identifier — scheduling always cancels any existing one first, so there's
+// never more than one of these pending at a time regardless of how many times the crew
+// changes their availability date.
+const AVAILABILITY_REMINDER_ID = 'availability-expiry-reminder'
+
+export async function cancelAvailabilityReminder() {
+  if (!Notifications) return
+  await Notifications.cancelScheduledNotificationAsync(AVAILABILITY_REMINDER_ID).catch(() => {})
+}
+
+// Purely local — fires on this device at the given date/time regardless of whether the app is
+// open, no server involvement. `date` should be in the future; the caller is responsible for
+// working out when that is (the day after the crew's available-from date, for this feature).
+export async function scheduleAvailabilityReminder(date: Date, content: { title: string; body: string }) {
+  if (!Notifications) return
+  let permissions = await Notifications.getPermissionsAsync()
+  if (permissions.status !== 'granted' && permissions.canAskAgain) {
+    permissions = await Notifications.requestPermissionsAsync()
+  }
+  if (permissions.status !== 'granted') return
+  await cancelAvailabilityReminder()
+  await Notifications.scheduleNotificationAsync({
+    identifier: AVAILABILITY_REMINDER_ID,
+    content,
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.DATE,
+      date,
+    },
+  })
+}
+
 // `silent` suppresses user-facing alerts — used by the app-launch auto-registration
 // effect below, which runs on every mount regardless of whether the user has ever
 // opted in and shouldn't nag them; the explicit "enable notifications" toggles pass

@@ -11,10 +11,15 @@ import {
 } from '@/api'
 import { ApiError } from '@/api/utils'
 import { TCrewUser, TNotification, TUserRole } from '@/api/types'
-import { registerForPushNotificationsAsync } from '@/hooks/usePushNotification'
+import {
+  registerForPushNotificationsAsync,
+  scheduleAvailabilityReminder,
+  cancelAvailabilityReminder,
+} from '@/hooks/usePushNotification'
 import { useSavedOffers } from '@/hooks/useSavedOffers'
 import { useNotifications } from '@/hooks/useNotifications'
 import { getLocalPushToken, setLocalPushToken, clearLocalPushToken } from '@/hooks/usePushTokenSync'
+import { getCrewAvailability } from '@/utils/crewUtils'
 
 type TCrewContext = {
   token: string
@@ -62,6 +67,7 @@ export const useCrew = () => useContext(CrewContext)
 
 const CrewProvider = ({ children }: React.PropsWithChildren) => {
   const {
+    t,
     i18n: { language },
   } = useTranslation()
   const { auth, signOut } = useSession()
@@ -100,6 +106,33 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
     queryFn: () => getCrewAvailabilityData(token, language),
     enabled: !!token,
   })
+
+  // Local reminder, not server-sent: fires on this device the day after the available-from date.
+  // Lives here (not on the profile screen) so it's set up as soon as availability loads on app
+  // launch — whether or not the crew ever opens their profile screen — and reconciles whenever
+  // it changes, including a date set from the web panel or another device.
+  useEffect(() => {
+    if (!availability) return
+    const { isAvailable, date: availableDate } = getCrewAvailability(
+      availability.available === 1,
+      availability.dateavailability,
+      language,
+      t
+    )
+    if (isAvailable && availableDate) {
+      const reminderDate = new Date(availableDate)
+      reminderDate.setDate(reminderDate.getDate() + 1)
+      reminderDate.setHours(11, 0, 0, 0)
+      if (reminderDate.getTime() > Date.now()) {
+        scheduleAvailabilityReminder(reminderDate, {
+          title: t('crew-profile.availability-reminder-title', { ns: 'home-screen' }),
+          body: t('crew-profile.availability-expired', { ns: 'home-screen' }),
+        })
+        return
+      }
+    }
+    cancelAvailabilityReminder()
+  }, [availability, language, t])
 
   const {
     data: notifications = [],

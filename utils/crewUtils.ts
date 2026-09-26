@@ -117,6 +117,7 @@ export type TCrewAvailability = {
   isAvailable: boolean
   date: Date | null
   description: string
+  status: 'available' | 'expired' | 'not-available'
 }
 
 type TFunction = (key: string, options?: Record<string, unknown>) => string
@@ -134,16 +135,27 @@ export const getCrewAvailability = (
   const isPast = !!date && date.getTime() < todayStart.getTime()
 
   if (isPast) {
-    return { isAvailable: false, date, description: t('crew-profile.availability-expired', { ns: 'home-screen' }) }
+    return {
+      isAvailable: false,
+      date,
+      status: 'expired',
+      description: t('crew-profile.availability-expired', { ns: 'home-screen' }),
+    }
   }
 
   if (!availability || !date) {
-    return { isAvailable: false, date, description: t('crew-profile.availability-toggle-sub', { ns: 'home-screen' }) }
+    return {
+      isAvailable: false,
+      date,
+      status: 'not-available',
+      description: t('crew-profile.availability-toggle-sub', { ns: 'home-screen' }),
+    }
   }
 
   return {
     isAvailable: true,
     date,
+    status: 'available',
     description: t('crew-profile.action-availability-sub', { ns: 'home-screen', date: formatCrewDate(date, language) }),
   }
 }

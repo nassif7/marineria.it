@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from 'react'
+import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { View, Text, Pressable, ScrollView, StyleSheet, Image, Platform, Modal, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
@@ -189,6 +189,7 @@ const CrewProfile: FC = () => {
     updateAvailability,
     isUpdatingAvailability,
   } = useCrew()
+
   const { refreshing, onRefresh } = useManualRefresh(refetch)
   const { openUrl } = useAuthBrowser()
   const [previewVisible, setPreviewVisible] = useState(false)
@@ -218,7 +219,9 @@ const CrewProfile: FC = () => {
     isAvailable,
     date: availableDate,
     description: availabilityDescription,
+    status: availabilityStatus,
   } = getCrewAvailability(availability?.available === 1, availability?.dateavailability, language, t)
+
   const [iosPickerVisible, setIosPickerVisible] = useState(false)
   const [iosPickerDraft, setIosPickerDraft] = useState(tomorrow)
 
@@ -257,6 +260,19 @@ const CrewProfile: FC = () => {
       setIosPickerVisible(true)
     }
   }
+
+  // Once per app open: if the availability date has already expired by the time the crew
+  // lands here, prompt them to update it right away instead of waiting for them to notice.
+  const hasShownExpiredAlertRef = useRef(false)
+  useEffect(() => {
+    if (isLoadingAvailability || hasShownExpiredAlertRef.current || availabilityStatus !== 'expired') return
+    hasShownExpiredAlertRef.current = true
+    Alert.alert(t('crew-profile.availability-reminder-title'), t('crew-profile.availability-expired'), [
+      { text: t('cancel', { ns: 'common' }), style: 'cancel' },
+      { text: t('confirm', { ns: 'common' }), onPress: openAvailableFromPicker },
+    ])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoadingAvailability, availabilityStatus])
 
   if (isLoading) {
     return (

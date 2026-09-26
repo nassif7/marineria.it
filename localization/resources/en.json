@@ -100,6 +100,7 @@
       "not-available": "Not available",
       "availability-toggle-sub": "Turn on to be found by recruiters",
       "availability-expired": "Your availability date has passed: update it to be found by recruiters",
+      "availability-reminder-title": "Availability needs an update",
       "completion": "Profile {{pct}}% complete",
       "missing-fields": "{{count}} missing fields",
       "stat-views": "Views",
