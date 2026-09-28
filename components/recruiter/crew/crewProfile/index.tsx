@@ -10,7 +10,7 @@ import { useStatusToast, useManualRefresh } from '@/hooks'
 import { getCrewCvPost, contactCrew, removeCrew } from '@/api'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
-import { getCertificateOfCompetence, getSeamansBook, getCoursesCount } from '@/utils/crewUtils'
+import { getCertificateOfCompetence, getSeamansBook, getCoursesCount, getCrewPhotos } from '@/utils/crewUtils'
 import { Loading, RefreshControl } from '@/components/ui'
 import { ApiError, parseServerBool } from '@/api/utils'
 import { C } from '@/components/appUI/tokens'
@@ -167,9 +167,7 @@ const CrewProfile: FC<{ isModal?: boolean }> = ({ isModal }) => {
   const isContacted = parseServerBool(crew.contacted)
   const photoUrl = crew.userPhoto ? getPhotoUrl(crew.userPhoto) : null
   console.log('[CrewProfile] userId:', crew?.iduser, 'raw userPhoto:', crew.userPhoto, 'resolved photoUrl:', photoUrl)
-  const photos = [crew.userPhoto, crew.namephotoA, crew.namephotoB, crew.namephotoC]
-    .filter((p): p is string => !!p)
-    .map((p) => getPhotoUrl(p))
+  const photos = getCrewPhotos(crew).map((p) => getPhotoUrl(p))
   const photoCount = photos.length
   const age = crew.yearofBirth ? getAgeByYear(crew.yearofBirth) : null
   const { hasCertificateOfCompetence } = getCertificateOfCompetence(crew)

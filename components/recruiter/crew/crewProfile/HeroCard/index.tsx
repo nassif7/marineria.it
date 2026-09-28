@@ -56,7 +56,7 @@ const HeroCard: FC<{
               <Text style={styles.avatarInitials}>{initials}</Text>
             )}
           </View>
-          {photoCount > 0 && (
+          {photoCount > 1 && (
             <View style={styles.photoBadge}>
               <Text style={styles.photoBadgeText}>{photoCount}</Text>
             </View>

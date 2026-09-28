@@ -159,3 +159,26 @@ export const getCrewAvailability = (
     description: t('crew-profile.action-availability-sub', { ns: 'home-screen', date: formatCrewDate(date, language) }),
   }
 }
+
+type TCrewPhotoFields = {
+  userPhoto?: string | null
+  namephotoA?: string | null
+  namephotoB?: string | null
+  namephotoC?: string | null
+}
+
+// The backend sometimes returns the same photo in more than one field, with different casing
+// (e.g. "6645103082026160148_a" and "6645103082026160148_A") — dedupe case-insensitively,
+// ignoring the extension, and keep the first occurrence's original spelling.
+export const getCrewPhotos = (crew: TCrewPhotoFields): string[] => {
+  const seen = new Set<string>()
+  return [crew.userPhoto, crew.namephotoA, crew.namephotoB, crew.namephotoC].filter((p): p is string => {
+    const key = p
+      ?.trim()
+      .replace(/\.(jpe?g|png|gif|webp)$/i, '')
+      .toLowerCase()
+    if (!p || !key || seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+}
