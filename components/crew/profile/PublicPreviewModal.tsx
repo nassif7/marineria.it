@@ -160,7 +160,8 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
     isCrewAvailable(crew?.availability),
     crew?.dateAvailability,
     language,
-    t
+    t,
+    crew?.gender
   )
   const { hasCertificateOfCompetence } = crew ? getCertificateOfCompetence(crew) : { hasCertificateOfCompetence: false }
   const hasSeamansBook = crew ? getSeamansBook(crew) : false

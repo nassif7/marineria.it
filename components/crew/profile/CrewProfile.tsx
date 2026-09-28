@@ -8,7 +8,13 @@ import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import { useCrew } from '@/Providers/CrewProvider'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
-import { getCertificateOfCompetence, getSeamansBook, getCoursesCount, getCrewAvailability } from '@/utils/crewUtils'
+import {
+  getCertificateOfCompetence,
+  getSeamansBook,
+  getCoursesCount,
+  getCrewAvailability,
+  getGenderEnding,
+} from '@/utils/crewUtils'
 import { C } from '@/components/appUI/tokens'
 import { Loading, RefreshControl } from '@/components/ui'
 import { useManualRefresh, useAuthBrowser } from '@/hooks'
@@ -220,7 +226,7 @@ const CrewProfile: FC = () => {
     date: availableDate,
     description: availabilityDescription,
     status: availabilityStatus,
-  } = getCrewAvailability(availability?.available === 1, availability?.dateavailability, language, t)
+  } = getCrewAvailability(availability?.available === 1, availability?.dateavailability, language, t, crew?.gender)
 
   const [iosPickerVisible, setIosPickerVisible] = useState(false)
   const [iosPickerDraft, setIosPickerDraft] = useState(tomorrow)
@@ -264,13 +270,18 @@ const CrewProfile: FC = () => {
   // Once per app open: if the availability date has already expired by the time the crew
   // lands here, prompt them to update it right away instead of waiting for them to notice.
   const hasShownExpiredAlertRef = useRef(false)
+  console.log('[CrewProfile] gender:', JSON.stringify(crew?.gender), '→ ending:', getGenderEnding(crew?.gender))
   useEffect(() => {
     if (isLoadingAvailability || hasShownExpiredAlertRef.current || availabilityStatus !== 'expired') return
     hasShownExpiredAlertRef.current = true
-    Alert.alert(t('crew-profile.availability-reminder-title'), t('crew-profile.availability-expired'), [
-      { text: t('cancel', { ns: 'common' }), style: 'cancel' },
-      { text: t('confirm', { ns: 'common' }), onPress: openAvailableFromPicker },
-    ])
+    Alert.alert(
+      t('crew-profile.availability-reminder-title'),
+      t('crew-profile.availability-expired', { genderEnding: getGenderEnding(crew?.gender) }),
+      [
+        { text: t('cancel', { ns: 'common' }), style: 'cancel' },
+        { text: t('confirm', { ns: 'common' }), onPress: openAvailableFromPicker },
+      ]
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoadingAvailability, availabilityStatus])
 

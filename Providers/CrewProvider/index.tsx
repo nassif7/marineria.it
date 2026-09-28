@@ -19,7 +19,7 @@ import {
 import { useSavedOffers } from '@/hooks/useSavedOffers'
 import { useNotifications } from '@/hooks/useNotifications'
 import { getLocalPushToken, setLocalPushToken, clearLocalPushToken } from '@/hooks/usePushTokenSync'
-import { getCrewAvailability } from '@/utils/crewUtils'
+import { getCrewAvailability, getGenderEnding } from '@/utils/crewUtils'
 
 type TCrewContext = {
   token: string
@@ -117,7 +117,8 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
       availability.available === 1,
       availability.dateavailability,
       language,
-      t
+      t,
+      crew?.gender
     )
     if (isAvailable && availableDate) {
       const reminderDate = new Date(availableDate)
@@ -126,13 +127,16 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
       if (reminderDate.getTime() > Date.now()) {
         scheduleAvailabilityReminder(reminderDate, {
           title: t('crew-profile.availability-reminder-title', { ns: 'home-screen' }),
-          body: t('crew-profile.availability-expired', { ns: 'home-screen' }),
+          body: t('crew-profile.availability-expired', {
+            ns: 'home-screen',
+            genderEnding: getGenderEnding(crew?.gender),
+          }),
         })
         return
       }
     }
     cancelAvailabilityReminder()
-  }, [availability, language, t])
+  }, [availability, crew?.gender, language, t])
 
   const {
     data: notifications = [],

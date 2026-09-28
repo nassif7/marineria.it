@@ -122,11 +122,17 @@ export type TCrewAvailability = {
 
 type TFunction = (key: string, options?: Record<string, unknown>) => string
 
+// Italian word ending for gendered strings, e.g. "trovat{{genderEnding}}" → "trovata" / "trovato".
+// The backend localizes gender with the request language ("Female" in EN, "Femmina"/"F" in IT),
+// so match any female form rather than the English value only.
+export const getGenderEnding = (gender?: string | null) => (/^(f|donna)/i.test(gender?.trim() ?? '') ? 'a' : 'o')
+
 export const getCrewAvailability = (
   availability: boolean,
   rawDate: string | null | undefined,
   language: string | undefined,
-  t: TFunction
+  t: TFunction,
+  gender?: string | null
 ): TCrewAvailability => {
   const date = parseCrewAvailabilityDate(rawDate)
 
@@ -139,7 +145,7 @@ export const getCrewAvailability = (
       isAvailable: false,
       date,
       status: 'expired',
-      description: t('crew-profile.availability-expired', { ns: 'home-screen' }),
+      description: t('crew-profile.availability-expired', { ns: 'home-screen', genderEnding: getGenderEnding(gender) }),
     }
   }
 
