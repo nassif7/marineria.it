@@ -19,7 +19,7 @@ import {
 import { useSavedOffers } from '@/hooks/useSavedOffers'
 import { useNotifications } from '@/hooks/useNotifications'
 import { getLocalPushToken, setLocalPushToken, clearLocalPushToken } from '@/hooks/usePushTokenSync'
-import { getCrewAvailability, getGenderEnding } from '@/utils/crewUtils'
+import { getCrewAvailability, getGenderEnding, getAvailabilityReminderDates } from '@/utils/crewUtils'
 
 type TCrewContext = {
   token: string
@@ -107,33 +107,30 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
     enabled: !!token,
   })
 
-  // Local reminder, not server-sent: fires on this device the day after the available-from date.
-  // Lives here (not on the profile screen) so it's set up as soon as availability loads on app
-  // launch — whether or not the crew ever opens their profile screen — and reconciles whenever
-  // it changes, including a date set from the web panel or another device.
+  // Local reminders, not server-sent: 11:00 the day after the available-from date, then weekly
+  // while it stays expired (the in-app alert on the profile screen covers each app open). Lives
+  // here (not on the profile screen) so it's set up as soon as availability loads on app launch —
+  // whether or not the crew ever opens their profile screen — and reconciles whenever it changes,
+  // including a date set from the web panel or another device.
   useEffect(() => {
     if (!availability) return
-    const { isAvailable, date: availableDate } = getCrewAvailability(
+    const { status, date: availableDate } = getCrewAvailability(
       availability.available === 1,
       availability.dateavailability,
       language,
       t,
       crew?.gender
     )
-    if (isAvailable && availableDate) {
-      const reminderDate = new Date(availableDate)
-      reminderDate.setDate(reminderDate.getDate() + 1)
-      reminderDate.setHours(11, 0, 0, 0)
-      if (reminderDate.getTime() > Date.now()) {
-        scheduleAvailabilityReminder(reminderDate, {
-          title: t('crew-profile.availability-reminder-title', { ns: 'home-screen' }),
-          body: t('crew-profile.availability-expired', {
-            ns: 'home-screen',
-            genderEnding: getGenderEnding(crew?.gender),
-          }),
-        })
-        return
-      }
+    // 'not-available' means the crew switched availability off (or never set a date) — nothing to remind.
+    if (status !== 'not-available' && availableDate) {
+      scheduleAvailabilityReminder(getAvailabilityReminderDates(availableDate), {
+        title: t('crew-profile.availability-reminder-title', { ns: 'home-screen' }),
+        body: t('crew-profile.availability-expired', {
+          ns: 'home-screen',
+          genderEnding: getGenderEnding(crew?.gender),
+        }),
+      })
+      return
     }
     cancelAvailabilityReminder()
   }, [availability, crew?.gender, language, t])

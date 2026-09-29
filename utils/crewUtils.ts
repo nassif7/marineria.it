@@ -188,3 +188,21 @@ export const getCrewPhotos = (crew: TCrewPhotoFields): string[] => {
     return true
   })
 }
+
+// When to remind the crew that their availability date has expired: 11:00 the day after the date,
+// then weekly at the same time while it stays expired. Only future slots are returned — for a
+// date that expired long ago that's the next weekly slot onward, never a burst of missed ones.
+// Capped at `count` because local notifications can't repeat from a start date; the batch is
+// rescheduled every time availability loads, so an app open tops it back up.
+export const getAvailabilityReminderDates = (availableDate: Date, now = new Date(), count = 8): Date[] => {
+  const first = new Date(availableDate)
+  first.setDate(first.getDate() + 1)
+  first.setHours(11, 0, 0, 0)
+  const dates: Date[] = []
+  for (let week = 0; dates.length < count; week++) {
+    const d = new Date(first)
+    d.setDate(first.getDate() + week * 7)
+    if (d.getTime() > now.getTime()) dates.push(d)
+  }
+  return dates
+}
