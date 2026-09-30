@@ -49,7 +49,7 @@ const CrewProfile: FC = () => {
     () => [crew?.language1, crew?.language2, crew?.language3, crew?.language4].filter((l): l is string => !!l),
     [crew]
   )
-  const { pct, missing } = useMemo(() => (crew ? calcCompletion(crew as any) : { pct: 0, missing: 0 }), [crew])
+  const { missing } = useMemo(() => (crew ? calcCompletion(crew as any) : { pct: 0, missing: 0 }), [crew])
 
   const isAvailable = isCrewAvailable(crew?.availability)
   const availabilityLabel = isAvailable ? t('crew-profile.available') : t('crew-profile.not-available')
@@ -78,8 +78,6 @@ const CrewProfile: FC = () => {
           age={age}
           isAvailable={isAvailable}
           availabilityLabel={availabilityLabel}
-          pct={pct}
-          missing={missing}
         />
 
         {/* Notifications */}

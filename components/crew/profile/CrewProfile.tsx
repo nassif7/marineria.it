@@ -214,7 +214,7 @@ const CrewProfile: FC = () => {
     () => [crew?.language1, crew?.language2, crew?.language3, crew?.language4].filter((l): l is string => !!l),
     [crew]
   )
-  const { pct, missing } = useMemo(() => (crew ? calcCompletion(crew as any) : { pct: 0, missing: 0 }), [crew])
+  const { missing } = useMemo(() => (crew ? calcCompletion(crew as any) : { pct: 0, missing: 0 }), [crew])
 
   // Combines the availability flag with the available-from date: available is only true when the
   // flag says yes AND the date hasn't passed. When the flag says yes but the date has passed, the
@@ -392,19 +392,6 @@ const CrewProfile: FC = () => {
               </Pressable>
             </Modal>
           )}
-
-          {/* Completion meter */}
-          <View style={s.meterRow}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 }}>
-              <Text style={s.meterLabel}>{t('crew-profile.completion', { pct })}</Text>
-              {missing > 0 ? (
-                <Text style={s.meterMissing}>{t('crew-profile.missing-fields', { count: missing })}</Text>
-              ) : null}
-            </View>
-            <View style={s.meterTrack}>
-              <View style={[s.meterFill, { width: `${pct}%` as any }]} />
-            </View>
-          </View>
 
           {/* Stats strip */}
           <View style={s.statsStrip}>
@@ -598,23 +585,6 @@ const s = StyleSheet.create({
   },
   sheetCancelText: { fontSize: 16, fontWeight: '600', color: C.ink3 },
   sheetDoneText: { fontSize: 16, fontWeight: '700', color: C.orange },
-  meterRow: { paddingHorizontal: 18, paddingBottom: 14 },
-  meterLabel: { fontSize: 12, fontWeight: '600', color: C.ink3 },
-  meterMissing: { fontSize: 12, fontWeight: '600', color: C.orangeText },
-  meterTrack: {
-    height: 6,
-    borderRadius: 99,
-    backgroundColor: C.field,
-    overflow: 'hidden',
-  },
-  meterFill: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    borderRadius: 99,
-    backgroundColor: C.orange,
-  },
   statsStrip: {
     flexDirection: 'row',
     paddingHorizontal: 18,

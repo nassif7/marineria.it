@@ -6,7 +6,6 @@ import { C } from '@/components/appUI/tokens'
 import Card from '../shared/Card'
 import { GREEN_SOFT, GREEN_TEXT } from '../shared/colors'
 import AvatarPlaceholder from './AvatarPlaceholder'
-import CompletionMeter from './CompletionMeter'
 import StatsStrip from './StatsStrip'
 import { styles } from './styles'
 
@@ -17,9 +16,7 @@ const IdentityCard: FC<{
   age: number | null
   isAvailable: boolean
   availabilityLabel: string
-  pct: number
-  missing: number
-}> = ({ crew, photoUrl, displayName, age, isAvailable, availabilityLabel, pct, missing }) => {
+}> = ({ crew, photoUrl, displayName, age, isAvailable, availabilityLabel }) => {
   const { t } = useTranslation('home-screen')
 
   return (
@@ -56,9 +53,6 @@ const IdentityCard: FC<{
           </Text>
         </View>
       </View>
-
-      {/* Completion meter */}
-      <CompletionMeter pct={pct} missing={missing} />
 
       {/* Stats strip */}
       <StatsStrip
