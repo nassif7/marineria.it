@@ -101,6 +101,8 @@
       "availability-toggle-sub": "Attiva per farti trovare dai recruiter",
       "availability-expired": "La tua data di disponibilità è scaduta: aggiornala per essere trovat{{genderEnding}} dai recruiter",
       "availability-reminder-title": "Disponibilità da aggiornare",
+      "availability-update": "Aggiorna disponibilità",
+      "availability-set-unavailable": "Imposta come non disponibile",
       "completion": "Profilo completo al {{pct}}%",
       "missing-fields": "{{count}} campi mancanti",
       "stat-views": "Visualizzazioni",

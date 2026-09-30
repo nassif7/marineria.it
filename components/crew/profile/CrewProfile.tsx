@@ -6,6 +6,7 @@ import { Edit2, ChevronRight, Check, AlertTriangle, Users, FileText, Calendar, B
 import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
 import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import { useCrew } from '@/Providers/CrewProvider'
+import { useSession } from '@/Providers/SessionProvider'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
 import {
@@ -198,6 +199,11 @@ const CrewProfile: FC = () => {
 
   const { refreshing, onRefresh } = useManualRefresh(refetch)
   const { openUrl } = useAuthBrowser()
+  const { auth } = useSession()
+  // TODO: remove — temporary debug log
+  useEffect(() => {
+    console.log('[CrewProfile] user token:', auth.token)
+  }, [auth.token])
   const [previewVisible, setPreviewVisible] = useState(false)
 
   const displayName =
@@ -278,8 +284,12 @@ const CrewProfile: FC = () => {
       t('crew-profile.availability-reminder-title'),
       t('crew-profile.availability-expired', { genderEnding: getGenderEnding(crew?.gender) }),
       [
-        { text: t('cancel', { ns: 'common' }), style: 'cancel' },
-        { text: t('confirm', { ns: 'common' }), onPress: openAvailableFromPicker },
+        { text: t('crew-profile.availability-update'), isPreferred: true, onPress: openAvailableFromPicker },
+        {
+          text: t('crew-profile.availability-set-unavailable'),
+          style: 'destructive',
+          onPress: () => saveAvailability(false),
+        },
       ]
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
