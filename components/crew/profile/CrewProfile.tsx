@@ -1,12 +1,32 @@
 import { FC, useEffect, useMemo, useRef, useState } from 'react'
-import { View, Text, Pressable, ScrollView, StyleSheet, Image, Platform, Modal, Alert } from 'react-native'
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Image,
+  Platform,
+  Modal,
+  Alert,
+  ActivityIndicator,
+} from 'react-native'
 import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { Edit2, ChevronRight, Check, AlertTriangle, Users, FileText, Calendar, Bell } from 'lucide-react-native'
+import {
+  Edit2,
+  ChevronRight,
+  Check,
+  AlertTriangle,
+  Users,
+  FileText,
+  FileDown,
+  Calendar,
+  Bell,
+} from 'lucide-react-native'
 import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
 import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import { useCrew } from '@/Providers/CrewProvider'
-import { useSession } from '@/Providers/SessionProvider'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
 import {
@@ -18,7 +38,7 @@ import {
 } from '@/utils/crewUtils'
 import { C } from '@/components/appUI/tokens'
 import { Loading, RefreshControl } from '@/components/ui'
-import { useManualRefresh, useAuthBrowser } from '@/hooks'
+import { useManualRefresh, useAuthBrowser, useAuthDownload } from '@/hooks'
 import PublicPreviewModal from './PublicPreviewModal'
 
 const GREEN_SOFT = '#E8F8EB'
@@ -151,14 +171,15 @@ const ActionRow: FC<{
   accent?: boolean
   last?: boolean
   disabled?: boolean
+  loading?: boolean
   onPress?: () => void
-}> = ({ icon: Icon, title, sub, accent, last, disabled, onPress }) => {
+}> = ({ icon: Icon, title, sub, accent, last, disabled, loading, onPress }) => {
   const { t } = useTranslation('home-screen')
   return (
     <Pressable
       style={[s.actionRow, last && s.actionRowLast, disabled && s.actionRowDisabled]}
       onPress={onPress}
-      disabled={disabled}
+      disabled={disabled || loading}
     >
       <View style={[s.actionIcon, accent && !disabled && s.actionIconAccent]}>
         <Icon size={18} color={disabled ? C.ink4 : accent ? C.orange : C.ink2} strokeWidth={1.8} />
@@ -171,6 +192,8 @@ const ActionRow: FC<{
         <View style={s.comingSoonBadge}>
           <Text style={s.comingSoonText}>{t('crew-profile.coming-soon')}</Text>
         </View>
+      ) : loading ? (
+        <ActivityIndicator size="small" color={C.ink4} />
       ) : (
         <ChevronRight size={16} color={C.ink4} strokeWidth={2} />
       )}
@@ -199,11 +222,7 @@ const CrewProfile: FC = () => {
 
   const { refreshing, onRefresh } = useManualRefresh(refetch)
   const { openUrl } = useAuthBrowser()
-  const { auth } = useSession()
-  // TODO: remove — temporary debug log
-  useEffect(() => {
-    console.log('[CrewProfile] user token:', auth.token)
-  }, [auth.token])
+  const { downloadPdf, isLoading: isDownloadingPdf } = useAuthDownload()
   const [previewVisible, setPreviewVisible] = useState(false)
 
   const displayName =
@@ -276,7 +295,6 @@ const CrewProfile: FC = () => {
   // Once per app open: if the availability date has already expired by the time the crew
   // lands here, prompt them to update it right away instead of waiting for them to notice.
   const hasShownExpiredAlertRef = useRef(false)
-  console.log('[CrewProfile] gender:', JSON.stringify(crew?.gender), '→ ending:', getGenderEnding(crew?.gender))
   useEffect(() => {
     if (isLoadingAvailability || hasShownExpiredAlertRef.current || availabilityStatus !== 'expired') return
     hasShownExpiredAlertRef.current = true
@@ -488,6 +506,22 @@ const CrewProfile: FC = () => {
             title={t('crew-profile.action-preview')}
             sub={t('crew-profile.action-preview-sub')}
             onPress={() => setPreviewVisible(true)}
+          />
+          <ActionRow
+            icon={FileDown}
+            title={t('crew-profile.action-download-pdf')}
+            sub={t('crew-profile.action-download-pdf-sub')}
+            loading={isDownloadingPdf}
+            onPress={async () => {
+              try {
+                await downloadPdf(
+                  `https://www.marineria.it/${language}/Pro/GetCv.aspx?idutente=${crew?.iduser}`,
+                  `CV-${(displayName || String(crew?.iduser)).replace(/[^\p{L}\p{N}]+/gu, '-')}.pdf`
+                )
+              } catch {
+                Alert.alert(t('unknown-error', { ns: 'common' }))
+              }
+            }}
           />
           <ActionRow
             icon={Edit2}

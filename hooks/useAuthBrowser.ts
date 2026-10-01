@@ -7,6 +7,25 @@ import { API } from '@/api/consts'
 // @react-native-cookies/cookies (removed — its android/build.gradle used jcenter(),
 // which breaks EAS builds on current Gradle/AGP; re-add only once that's fixed upstream).
 
+// Appends a one-time tmpCode so the website logs the user in. Falls back to the bare URL
+// if there's no session or the code can't be fetched.
+export const withTmpCode = async (url: string, token?: string | null) => {
+  if (!token) return url
+  try {
+    const response = await fetch(API.GET_TMP_CODE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    })
+    if (!response.ok) return url
+    const { tmpCode } = await response.json()
+    const separator = url.includes('?') ? '&' : '?'
+    return `${url}${separator}tmpCode=${encodeURIComponent(tmpCode)}`
+  } catch {
+    return url
+  }
+}
+
 const useAuthBrowser = () => {
   const { auth } = useSession()
   const [isLoading, setIsLoading] = useState(false)
@@ -15,24 +34,7 @@ const useAuthBrowser = () => {
     if (isLoading) return
     setIsLoading(true)
     try {
-      let finalUrl = url
-      if (auth.token) {
-        try {
-          const response = await fetch(API.GET_TMP_CODE, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token: auth.token }),
-          })
-          if (response.ok) {
-            const { tmpCode } = await response.json()
-            const separator = url.includes('?') ? '&' : '?'
-            finalUrl = `${url}${separator}tmpCode=${encodeURIComponent(tmpCode)}`
-          }
-        } catch {
-          // fall back to opening without tempCode
-        }
-      }
-      await WebBrowser.openBrowserAsync(finalUrl)
+      await WebBrowser.openBrowserAsync(await withTmpCode(url, auth.token))
     } finally {
       setIsLoading(false)
     }

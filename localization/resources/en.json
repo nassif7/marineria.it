@@ -126,6 +126,8 @@
       "action-edit-sub": "Complete the {{count}} missing fields",
       "action-preview": "Public preview",
       "action-preview-sub": "See your profile as recruiters do",
+      "action-download-pdf": "Download your CV as PDF",
+      "action-download-pdf-sub": "Share with your contacts and recruiters",
       "action-docs": "Documents & courses",
       "action-docs-sub": "{{count}} courses uploaded",
       "action-availability": "Availability",

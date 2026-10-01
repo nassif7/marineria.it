@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, ReactNode } from 'react'
+import { FC, useState, ReactNode } from 'react'
 import { Modal, View, Text, Pressable, ScrollView, StyleSheet, Image } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useQuery } from '@tanstack/react-query'
@@ -148,10 +148,6 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
   })
   const { refreshing, onRefresh } = useManualRefresh(refetch)
   const crew = isSuccess ? data : null
-
-  useEffect(() => {
-    if (visible && data) console.log('[PublicPreviewModal] public profile:', JSON.stringify(data, null, 2))
-  }, [visible, data])
 
   const photoUrl = crew?.userPhoto ? getPhotoUrl(crew.userPhoto) : null
   const photoCount = crew ? getCrewPhotos(crew).length : 0

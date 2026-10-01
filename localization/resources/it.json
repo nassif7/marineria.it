@@ -126,6 +126,8 @@
       "action-edit-sub": "Completa i {{count}} campi mancanti",
       "action-preview": "Anteprima pubblica",
       "action-preview-sub": "Vedi il tuo profilo come i recruiter",
+      "action-download-pdf": "Scarica il tuo CV in PDF",
+      "action-download-pdf-sub": "Condividilo con i tuoi contatti e i recruiter",
       "action-docs": "Documenti & corsi",
       "action-docs-sub": "{{count}} corsi caricati",
       "action-availability": "Disponibilità",

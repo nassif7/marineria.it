@@ -31,14 +31,6 @@ const CrewProfile: FC = () => {
     [crew?.name, crew?.surname].filter(Boolean).join(' ') || (crew?.iduser ? `ID · ${crew.iduser}` : '')
   const age = crew?.yearofBirth ? getAgeByYear(crew.yearofBirth) : null
   const photoUrl = crew?.userPhoto ? getPhotoUrl(crew.userPhoto) : null
-  console.log(
-    '[CrewProfile/own] userId:',
-    crew?.iduser,
-    'raw userPhoto:',
-    crew?.userPhoto,
-    'resolved photoUrl:',
-    photoUrl
-  )
   const { hasCertificateOfCompetence } = useMemo(
     () => (crew ? getCertificateOfCompetence(crew as any) : { hasCertificateOfCompetence: false }),
     [crew]

@@ -166,7 +166,6 @@ const CrewProfile: FC<{ isModal?: boolean }> = ({ isModal }) => {
 
   const isContacted = parseServerBool(crew.contacted)
   const photoUrl = crew.userPhoto ? getPhotoUrl(crew.userPhoto) : null
-  console.log('[CrewProfile] userId:', crew?.iduser, 'raw userPhoto:', crew.userPhoto, 'resolved photoUrl:', photoUrl)
   const photos = getCrewPhotos(crew).map((p) => getPhotoUrl(p))
   const photoCount = photos.length
   const age = crew.yearofBirth ? getAgeByYear(crew.yearofBirth) : null
