@@ -57,9 +57,8 @@ export async function schedulePushNotification() {
   })
 }
 
-// Fixed identifier prefix ("availability-expiry-reminder-0", "-1", …). Scheduling always cancels
-// every pending one first, so there's never a stale batch left over after the crew changes their
-// availability date. The prefix also matches the old single-notification id from earlier builds.
+// Availability reminders are no longer scheduled; this prefix ("availability-expiry-reminder-0", "-1", …
+// and the older single id) is only used to cancel ones scheduled by earlier builds.
 const AVAILABILITY_REMINDER_ID = 'availability-expiry-reminder'
 
 export async function cancelAvailabilityReminder() {
@@ -69,31 +68,6 @@ export async function cancelAvailabilityReminder() {
     scheduled
       .filter((n) => n.identifier.startsWith(AVAILABILITY_REMINDER_ID))
       .map((n) => Notifications!.cancelScheduledNotificationAsync(n.identifier).catch(() => {}))
-  )
-}
-
-// Purely local — each fires on this device at its date/time regardless of whether the app is
-// open, no server involvement. `dates` should all be in the future; the caller is responsible
-// for working out when (see getAvailabilityReminderDates).
-export async function scheduleAvailabilityReminder(dates: Date[], content: { title: string; body: string }) {
-  if (!Notifications) return
-  let permissions = await Notifications.getPermissionsAsync()
-  if (permissions.status !== 'granted' && permissions.canAskAgain) {
-    permissions = await Notifications.requestPermissionsAsync()
-  }
-  if (permissions.status !== 'granted') return
-  await cancelAvailabilityReminder()
-  await Promise.all(
-    dates.map((date, i) =>
-      Notifications!.scheduleNotificationAsync({
-        identifier: `${AVAILABILITY_REMINDER_ID}-${i}`,
-        content,
-        trigger: {
-          type: Notifications!.SchedulableTriggerInputTypes.DATE,
-          date,
-        },
-      })
-    )
   )
 }
 
