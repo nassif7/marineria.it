@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useRef, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import {
   View,
   Text,
@@ -29,13 +29,7 @@ import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import { useCrew } from '@/Providers/CrewProvider'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
-import {
-  getCertificateOfCompetence,
-  getSeamansBook,
-  getCoursesCount,
-  getCrewAvailability,
-  getGenderEnding,
-} from '@/utils/crewUtils'
+import { getCertificateOfCompetence, getSeamansBook, getCoursesCount, getCrewAvailability } from '@/utils/crewUtils'
 import { C } from '@/components/appUI/tokens'
 import { Loading, RefreshControl } from '@/components/ui'
 import { useManualRefresh, useAuthBrowser, useAuthDownload } from '@/hooks'
@@ -250,7 +244,6 @@ const CrewProfile: FC = () => {
     isAvailable,
     date: availableDate,
     description: availabilityDescription,
-    status: availabilityStatus,
   } = getCrewAvailability(availability?.available === 1, availability?.dateavailability, language, t, crew?.gender)
 
   const [iosPickerVisible, setIosPickerVisible] = useState(false)
@@ -291,27 +284,6 @@ const CrewProfile: FC = () => {
       setIosPickerVisible(true)
     }
   }
-
-  // Once per app open: if the availability date has already expired by the time the crew
-  // lands here, prompt them to update it right away instead of waiting for them to notice.
-  const hasShownExpiredAlertRef = useRef(false)
-  useEffect(() => {
-    if (isLoadingAvailability || hasShownExpiredAlertRef.current || availabilityStatus !== 'expired') return
-    hasShownExpiredAlertRef.current = true
-    Alert.alert(
-      t('crew-profile.availability-reminder-title'),
-      t('crew-profile.availability-expired', { genderEnding: getGenderEnding(crew?.gender) }),
-      [
-        { text: t('crew-profile.availability-update'), isPreferred: true, onPress: openAvailableFromPicker },
-        {
-          text: t('crew-profile.availability-set-unavailable'),
-          style: 'destructive',
-          onPress: () => saveAvailability(false),
-        },
-      ]
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoadingAvailability, availabilityStatus])
 
   if (isLoading) {
     return (
