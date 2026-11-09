@@ -254,7 +254,7 @@ const CrewProfile: FC = () => {
     isAvailable,
     date: availableDate,
     description: availabilityDescription,
-  } = getCrewAvailability(availability?.available === 1, availability?.dateavailability, language, t, crew?.gender)
+  } = getCrewAvailability(crew?.boolAvailability === true, availability?.dateavailability, language, t, crew?.gender)
 
   const [iosPickerVisible, setIosPickerVisible] = useState(false)
   const [iosPickerDraft, setIosPickerDraft] = useState(tomorrow)

@@ -41,6 +41,7 @@ export type TCrew = {
   navigationBook: string
   calculatedExperience: string
   availability: string
+  boolAvailability: boolean
   dateAvailability: string
   lastAccessDate: string
   registraton_date: string
@@ -138,6 +139,7 @@ export type TCrewSimple = {
   stcw_navy_engine: string
   navigationBook: string
   availability: string
+  boolAvailability: boolean
   dateAvailability: string
   lastAccessDate: string
   coupleWith: string

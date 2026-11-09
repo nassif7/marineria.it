@@ -25,7 +25,6 @@ import {
   getCertificateOfCompetence,
   getSeamansBook,
   getCoursesCount,
-  isCrewAvailable,
   getCrewAvailability,
   formatCrewDate,
   getCrewPhotos,
@@ -155,7 +154,7 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
   const photoCount = photos.length
   const age = crew?.yearofBirth ? getAgeByYear(crew.yearofBirth) : null
   const { isAvailable: crewIsAvailable, date: crewAvailableDate } = getCrewAvailability(
-    isCrewAvailable(crew?.availability),
+    crew?.boolAvailability === true,
     crew?.dateAvailability,
     language,
     t,

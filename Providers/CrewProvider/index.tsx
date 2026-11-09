@@ -152,7 +152,9 @@ const CrewProvider = ({ children }: React.PropsWithChildren) => {
       // so the rest of the screen doesn't reload/flash.
       queryClient.setQueryData(['crew-availability', token, language], response)
       queryClient.setQueryData(['crew-profile', token, language], (old: TCrewUser | undefined) =>
-        old ? { ...old, dateAvailability: response.dateavailability ?? '' } : old
+        old
+          ? { ...old, boolAvailability: response.available === 1, dateAvailability: response.dateavailability ?? '' }
+          : old
       )
     },
   })

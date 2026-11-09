@@ -36,6 +36,7 @@ export type TCrewUser = {
   specseling: string
   calculatedExperience: string
   availability: string
+  boolAvailability: boolean
   dateAvailability: string
   lastAccessDate: string
   registrationDate: string
