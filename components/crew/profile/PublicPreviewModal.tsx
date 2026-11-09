@@ -32,7 +32,7 @@ import {
 } from '@/utils/crewUtils'
 import { Loading, RefreshControl } from '@/components/ui'
 import { C } from '@/components/appUI/tokens'
-import { HtmlText } from '@/components/appUI'
+import { HtmlText, PhotoSlider } from '@/components/appUI'
 import { useCrew } from '@/Providers/CrewProvider'
 import { useManualRefresh } from '@/hooks'
 
@@ -138,6 +138,7 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
     i18n: { language },
   } = useTranslation(['home-screen', 'crew-screen', 'crew', 'offer', 'common'])
   const { top, bottom } = useSafeAreaInsets()
+  const [photoSliderVisible, setPhotoSliderVisible] = useState(false)
   const { crew: homeCrew } = useCrew()
   const userId = homeCrew?.iduser
 
@@ -150,7 +151,8 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
   const crew = isSuccess ? data : null
 
   const photoUrl = crew?.userPhoto ? getPhotoUrl(crew.userPhoto) : null
-  const photoCount = crew ? getCrewPhotos(crew).length : 0
+  const photos = crew ? getCrewPhotos(crew).map((p) => getPhotoUrl(p)) : []
+  const photoCount = photos.length
   const age = crew?.yearofBirth ? getAgeByYear(crew.yearofBirth) : null
   const { isAvailable: crewIsAvailable, date: crewAvailableDate } = getCrewAvailability(
     isCrewAvailable(crew?.availability),
@@ -221,13 +223,13 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
             <View style={pv.card}>
               <View style={{ flexDirection: 'row', gap: 14, alignItems: 'flex-start', marginBottom: 14 }}>
                 <View style={{ position: 'relative' }}>
-                  <View style={pv.avatar}>
+                  <Pressable style={pv.avatar} disabled={!photoUrl} onPress={() => setPhotoSliderVisible(true)}>
                     {photoUrl ? (
                       <Image source={{ uri: photoUrl }} style={pv.avatarImg} />
                     ) : (
                       <Text style={pv.avatarInitials}>{initials}</Text>
                     )}
-                  </View>
+                  </Pressable>
                   {photoCount > 1 && (
                     <View style={pv.photoBadge}>
                       <Text style={pv.photoBadgeText}>{photoCount}</Text>
@@ -456,6 +458,12 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
           </ScrollView>
         )}
       </View>
+      <PhotoSlider
+        visible={photoSliderVisible}
+        photos={photos}
+        initialIndex={0}
+        onClose={() => setPhotoSliderVisible(false)}
+      />
     </Modal>
   )
 }

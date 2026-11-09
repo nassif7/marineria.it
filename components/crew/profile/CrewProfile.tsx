@@ -29,8 +29,15 @@ import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import { useCrew } from '@/Providers/CrewProvider'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
-import { getCertificateOfCompetence, getSeamansBook, getCoursesCount, getCrewAvailability } from '@/utils/crewUtils'
+import {
+  getCertificateOfCompetence,
+  getSeamansBook,
+  getCoursesCount,
+  getCrewAvailability,
+  getCrewPhotos,
+} from '@/utils/crewUtils'
 import { C } from '@/components/appUI/tokens'
+import { PhotoSlider } from '@/components/appUI'
 import { Loading, RefreshControl } from '@/components/ui'
 import { useManualRefresh, useAuthBrowser, useAuthDownload } from '@/hooks'
 import PublicPreviewModal from './PublicPreviewModal'
@@ -223,6 +230,9 @@ const CrewProfile: FC = () => {
     [crew?.name, crew?.surname].filter(Boolean).join(' ') || (crew?.iduser ? `ID · ${crew.iduser}` : '')
   const age = crew?.yearofBirth ? getAgeByYear(crew.yearofBirth) : null
   const photoUrl = crew?.userPhoto ? getPhotoUrl(crew.userPhoto) : null
+  console.log('crew profile data', JSON.stringify(crew, null, 2))
+  const photos = crew ? getCrewPhotos(crew).map((p) => getPhotoUrl(p)) : []
+  const [photoSliderVisible, setPhotoSliderVisible] = useState(false)
   const { hasCertificateOfCompetence } = useMemo(
     () => (crew ? getCertificateOfCompetence(crew as any) : { hasCertificateOfCompetence: false }),
     [crew]
@@ -305,11 +315,18 @@ const CrewProfile: FC = () => {
         <View style={s.rowCard}>
           <View style={s.identityRow}>
             {/* Avatar */}
-            <View style={{ flexShrink: 0 }}>
+            <View style={{ flexShrink: 0, position: 'relative' }}>
               {photoUrl ? (
-                <Image source={{ uri: photoUrl }} style={s.avatar} />
+                <Pressable onPress={() => setPhotoSliderVisible(true)}>
+                  <Image source={{ uri: photoUrl }} style={s.avatar} />
+                </Pressable>
               ) : (
                 <AvatarPlaceholder size={72} radius={18} />
+              )}
+              {photos.length > 1 && (
+                <View style={s.photoBadge}>
+                  <Text style={s.photoBadgeText}>{photos.length}</Text>
+                </View>
               )}
             </View>
 
@@ -535,6 +552,13 @@ const CrewProfile: FC = () => {
         ) : null}
       </ScrollView>
 
+      <PhotoSlider
+        visible={photoSliderVisible}
+        photos={photos}
+        initialIndex={0}
+        onClose={() => setPhotoSliderVisible(false)}
+      />
+
       <PublicPreviewModal visible={previewVisible} onClose={() => setPreviewVisible(false)} />
     </View>
   )
@@ -561,6 +585,22 @@ const s = StyleSheet.create({
     alignItems: 'flex-start',
   },
   avatar: { width: 72, height: 72, borderRadius: 18 },
+  photoBadge: {
+    position: 'absolute',
+    right: -4,
+    bottom: -4,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+    borderRadius: 10,
+    backgroundColor: C.orange,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  photoBadgeText: { fontSize: 11, fontWeight: '700', color: '#FFF' },
   avatarPlaceholder: {
     backgroundColor: C.orangeSoft,
     alignItems: 'center',
