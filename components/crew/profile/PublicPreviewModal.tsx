@@ -24,7 +24,7 @@ import { getAgeByYear } from '@/utils/dateUtils'
 import {
   getCertificateOfCompetence,
   getSeamansBook,
-  getCoursesCount,
+  getCrewCourses,
   getCrewAvailability,
   formatCrewDate,
   getCrewPhotos,
@@ -178,12 +178,7 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
     ? ([crew.language1, crew.language2, crew.language3, crew.language4].filter(Boolean) as string[])
     : []
 
-  const coursesList = crew?.courses
-    ? crew.courses
-        .split(',')
-        .map((c) => c.trim())
-        .filter(Boolean)
-    : []
+  const { all: coursesList, hasStcw, courses: otherCourses } = getCrewCourses(crew)
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
@@ -276,20 +271,27 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
                     <Text style={[pv.pillText, { color: WARN_TEXT }]}>{t('no-coc', { ns: 'crew-screen' })}</Text>
                   </View>
                 )}
-                {coursesList.length > 0 ? (
-                  <View style={[pv.pill, pv.pillNeutral]}>
-                    <Text style={[pv.pillText, { color: C.ink2 }]}>
-                      {t('courses-count', { ns: 'crew-screen', count: getCoursesCount(crew.courses) })}
+                {hasStcw ? (
+                  <View style={pv.pillOrange}>
+                    <Text style={[pv.pillText, { color: ORANGE_TEXT }]}>
+                      {t('basic-training', { ns: 'crew-screen' })}
                     </Text>
                   </View>
-                ) : (
+                ) : null}
+                {otherCourses.length > 0 ? (
+                  <View style={pv.pillOrange}>
+                    <Text style={[pv.pillText, { color: ORANGE_TEXT }]}>
+                      {`+ ${t('courses-count', { ns: 'crew-screen', count: otherCourses.length })}`}
+                    </Text>
+                  </View>
+                ) : !hasStcw ? (
                   <View style={[pv.pill, pv.pillWarn]}>
                     <AlertTriangle size={10} color={WARN_TEXT} strokeWidth={2.4} />
                     <Text style={[pv.pillText, { color: WARN_TEXT }]}>
                       {t('no-courses-short', { ns: 'crew-screen' })}
                     </Text>
                   </View>
-                )}
+                ) : null}
               </View>
             </View>
 
@@ -368,10 +370,11 @@ const PublicPreviewModal: FC<PublicPreviewModalProps> = ({ visible, onClose }) =
                 {coursesList.length > 0 && (
                   <>
                     <Text style={pv.fieldLabel}>{t('corses-and-certificates', { ns: 'crew-screen' })}</Text>
-                    <View style={pv.tagsRow}>
+                    <View style={{ gap: 6, marginBottom: 12 }}>
                       {coursesList.map((c, i) => (
-                        <View key={`${c}-${i}`} style={pv.pillOrange}>
-                          <Text style={[pv.pillText, { color: ORANGE_TEXT }]}>{c}</Text>
+                        <View key={`${c}-${i}`} style={{ flexDirection: 'row', gap: 8 }}>
+                          <Text style={{ fontSize: 14, lineHeight: 20, color: ORANGE_TEXT }}>•</Text>
+                          <Text style={{ flex: 1, fontSize: 14, lineHeight: 20, color: C.ink }}>{c}</Text>
                         </View>
                       ))}
                     </View>

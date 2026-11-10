@@ -35,6 +35,7 @@ import {
   getCoursesCount,
   getCrewAvailability,
   getCrewPhotos,
+  getCrewCourses,
 } from '@/utils/crewUtils'
 import { C } from '@/components/appUI/tokens'
 import { PhotoSlider } from '@/components/appUI'
@@ -230,7 +231,6 @@ const CrewProfile: FC = () => {
     [crew?.name, crew?.surname].filter(Boolean).join(' ') || (crew?.iduser ? `ID · ${crew.iduser}` : '')
   const age = crew?.yearofBirth ? getAgeByYear(crew.yearofBirth) : null
   const photoUrl = crew?.userPhoto ? getPhotoUrl(crew.userPhoto) : null
-  console.log('crew profile data', JSON.stringify(crew, null, 2))
   const photos = crew ? getCrewPhotos(crew).map((p) => getPhotoUrl(p)) : []
   const [photoSliderVisible, setPhotoSliderVisible] = useState(false)
   const { hasCertificateOfCompetence } = useMemo(
@@ -238,7 +238,8 @@ const CrewProfile: FC = () => {
     [crew]
   )
   const hasSeamansBook = crew ? getSeamansBook(crew as any) : false
-  const coursesCount = useMemo(() => getCoursesCount(crew?.courses), [crew?.courses])
+  const coursesCount = useMemo(() => getCoursesCount(crew), [crew])
+  const hasStcw = useMemo(() => getCrewCourses(crew).hasStcw, [crew])
   const languages = useMemo(
     () => [crew?.language1, crew?.language2, crew?.language3, crew?.language4].filter((l): l is string => !!l),
     [crew]
@@ -469,7 +470,10 @@ const CrewProfile: FC = () => {
             ) : (
               <Chip tone="warn" icon={AlertTriangle} label={t('crew-profile.no-coc')} />
             )}
-            {coursesCount > 0 && <Chip tone="orange" label={t('crew-profile.courses', { count: coursesCount })} />}
+            {<Chip tone="orange" label={t('crew-profile.basic-training')} />}
+            {coursesCount > 0 && (
+              <Chip tone="orange" label={`+ ${t('crew-profile.courses', { count: coursesCount })}`} />
+            )}
           </View>
         </View>
 
@@ -524,19 +528,7 @@ const CrewProfile: FC = () => {
               refetch()
             }}
           />
-          <ActionRow
-            icon={FileText}
-            title={t('crew-profile.action-docs')}
-            sub={t('crew-profile.action-docs-sub', { count: coursesCount })}
-            disabled
-          />
-          <ActionRow
-            icon={Calendar}
-            title={t('crew-profile.action-availability')}
-            sub={availabilityDescription}
-            disabled
-            last
-          />
+          <ActionRow icon={FileText} title={t('crew-profile.action-docs')} disabled last />
         </View>
 
         {/* Footer meta */}

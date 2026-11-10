@@ -44,6 +44,7 @@ export type TCrewUser = {
   seamansBook: string
   navigationBook: string
   courses: string
+  coursesList?: string[]
   qualificationCode: string
   licenseCode: string
   ita_yachts_deck: string

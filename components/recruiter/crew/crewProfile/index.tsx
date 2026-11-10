@@ -10,7 +10,13 @@ import { useStatusToast, useManualRefresh } from '@/hooks'
 import { getCrewCvPost, contactCrew, removeCrew } from '@/api'
 import { getPhotoUrl } from '@/api/consts'
 import { getAgeByYear } from '@/utils/dateUtils'
-import { getCertificateOfCompetence, getSeamansBook, getCoursesCount, getCrewPhotos } from '@/utils/crewUtils'
+import {
+  getCertificateOfCompetence,
+  getSeamansBook,
+  getCoursesCount,
+  getCrewPhotos,
+  getCrewCourses,
+} from '@/utils/crewUtils'
 import { Loading, RefreshControl } from '@/components/ui'
 import { ApiError, parseServerBool } from '@/api/utils'
 import { C } from '@/components/appUI/tokens'
@@ -186,12 +192,7 @@ const CrewProfile: FC<{ isModal?: boolean }> = ({ isModal }) => {
 
   const languages = [crew.language1, crew.language2, crew.language3, crew.language4].filter(Boolean) as string[]
 
-  const coursesList = crew.courses
-    ? crew.courses
-        .split(',')
-        .map((c) => c.trim())
-        .filter(Boolean)
-    : []
+  const { all: coursesList, hasStcw, courses: otherCourses } = getCrewCourses(crew)
 
   // The backend sometimes returns a full wa.me URL here instead of a bare number — strip it for display.
   const waNumber = crew.callWhatsapp?.replace(/^https?:\/\/wa\.me\//i, '') ?? ''
@@ -258,8 +259,9 @@ const CrewProfile: FC<{ isModal?: boolean }> = ({ isModal }) => {
           }}
           hasSeamansBook={hasSeamansBook}
           hasCertificateOfCompetence={hasCertificateOfCompetence}
-          hasCourses={coursesList.length > 0}
-          coursesCount={getCoursesCount(crew.courses)}
+          hasCourses={otherCourses.length > 0}
+          hasStcw={hasStcw}
+          coursesCount={getCoursesCount(crew)}
         />
 
         {/* Contact info — visible only when contacted */}

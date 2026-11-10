@@ -23,6 +23,7 @@ const HeroCard: FC<{
   hasCertificateOfCompetence: boolean
   hasCourses: boolean
   coursesCount: number
+  hasStcw: boolean
 }> = ({
   photoUrl,
   photoCount,
@@ -42,6 +43,7 @@ const HeroCard: FC<{
   hasCertificateOfCompetence,
   hasCourses,
   coursesCount,
+  hasStcw,
 }) => {
   const { t } = useTranslation(['crew'])
 
@@ -87,6 +89,7 @@ const HeroCard: FC<{
         hasCertificateOfCompetence={hasCertificateOfCompetence}
         hasCourses={hasCourses}
         coursesCount={coursesCount}
+        hasStcw={hasStcw}
       />
     </View>
   )

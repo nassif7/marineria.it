@@ -95,11 +95,9 @@ const CrewListItem: FC<ICrewListItem> = ({ crew }) => {
           </View>
         )}
 
-        {crew.courses ? (
+        {getCoursesCount(crew) > 0 ? (
           <View style={[ci.pill, ci.pillNeutral]}>
-            <Text style={[ci.pillText, { color: C.ink2 }]}>
-              {t('courses-count', { count: getCoursesCount(crew.courses) })}
-            </Text>
+            <Text style={[ci.pillText, { color: C.ink2 }]}>{t('courses-count', { count: getCoursesCount(crew) })}</Text>
           </View>
         ) : (
           <View style={[ci.pill, ci.pillWarn]}>

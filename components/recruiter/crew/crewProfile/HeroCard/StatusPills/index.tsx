@@ -13,7 +13,8 @@ const StatusPills: FC<{
   hasCertificateOfCompetence: boolean
   hasCourses: boolean
   coursesCount: number
-}> = ({ isContacted, hasSeamansBook, hasCertificateOfCompetence, hasCourses, coursesCount }) => {
+  hasStcw: boolean
+}> = ({ isContacted, hasSeamansBook, hasCertificateOfCompetence, hasCourses, coursesCount, hasStcw }) => {
   const { t } = useTranslation(['crew-screen', 'crew'])
 
   return (
@@ -47,12 +48,17 @@ const StatusPills: FC<{
         <View style={[pillStyles.pill, pillStyles.pillNeutral]}>
           <Text style={[pillStyles.pillText, { color: C.ink2 }]}>{t('courses-count', { count: coursesCount })}</Text>
         </View>
-      ) : (
+      ) : !hasStcw ? (
         <View style={[pillStyles.pill, pillStyles.pillWarn]}>
           <AlertTriangle size={10} color={WARN_TEXT} strokeWidth={2.4} />
           <Text style={[pillStyles.pillText, { color: WARN_TEXT }]}>{t('no-courses-short')}</Text>
         </View>
-      )}
+      ) : null}
+      {hasStcw ? (
+        <View style={[pillStyles.pill, pillStyles.pillOrange]}>
+          <Text style={[pillStyles.pillText, { color: ORANGE_TEXT }]}>{t('basic-training')}</Text>
+        </View>
+      ) : null}
     </View>
   )
 }

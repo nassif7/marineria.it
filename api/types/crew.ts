@@ -46,6 +46,7 @@ export type TCrew = {
   lastAccessDate: string
   registraton_date: string
   courses: string
+  coursesList?: string[]
   notesCourses: string
   specseling: string
   referencesNumber: number
@@ -123,6 +124,7 @@ export type TCrewSimple = {
   registration_Category: string
   registration_Year: string
   courses: string
+  coursesList?: string[]
   mainPosition: string
   specseling: string
   pos_deck: string

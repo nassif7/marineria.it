@@ -25,17 +25,31 @@ export const getSeamansBook = (crew: TCrew | TCrewSimple) => {
   return SEAMANS_BOOK_VALUES.includes(crew.seamansBook)
 }
 
-// crew.courses is one free-text string ending in a count like "(4 courses)" / "(4 corsi)",
-// not a comma-separated list — pull the count from that suffix instead of splitting on commas.
-export const getCoursesCount = (courses?: string | null): number => {
-  if (!courses) return 0
-  const match = courses.match(/\((\d+)\s*(?:courses?|cors[oi])\)/i)
-  if (match) return parseInt(match[1], 10)
-  return courses
-    .split(',')
+// The backend sends the courses as a `coursesList` array; `courses` (one comma-separated string) is only
+// a fallback for responses that don't carry it. "STCW Basic Training" is a package of its own, so it's
+// pulled out of the regular courses (and their count) and shown separately.
+const isBasicTraining = (course: string) => course.trim().toLowerCase().startsWith('stcw basic training')
+
+type TCrewCoursesSource = { coursesList?: string[] | null; courses?: string | null }
+
+// all: every item as listed; hasStcw: whether the STCW Basic Training entry is present; courses: the rest.
+export const getCrewCourses = (
+  crew?: TCrewCoursesSource | null
+): { all: string[]; hasStcw: boolean; courses: string[] } => {
+  const raw = Array.isArray(crew?.coursesList) ? crew.coursesList : (crew?.courses ?? '').split(',')
+  // Reversed for display: the backend lists the oldest first.
+  const all = raw
     .map((c) => c.trim())
-    .filter(Boolean).length
+    .filter(Boolean)
+    .reverse()
+  return {
+    all,
+    hasStcw: all.some(isBasicTraining),
+    courses: all.filter((c) => !isBasicTraining(c)),
+  }
 }
+
+export const getCoursesCount = (crew?: TCrewCoursesSource | null): number => getCrewCourses(crew).courses.length
 
 // crew.availability is free text (e.g. "Not available at the moment" / "Non disponibile al momento"),
 // so a plain "available"/"disponibil" substring match wrongly flags the negative case too.

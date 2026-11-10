@@ -36,7 +36,7 @@ const CrewProfile: FC = () => {
     [crew]
   )
   const hasSeamansBook = crew ? getSeamansBook(crew as any) : false
-  const coursesCount = useMemo(() => getCoursesCount(crew?.courses), [crew?.courses])
+  const coursesCount = useMemo(() => getCoursesCount(crew), [crew])
   const languages = useMemo(
     () => [crew?.language1, crew?.language2, crew?.language3, crew?.language4].filter((l): l is string => !!l),
     [crew]

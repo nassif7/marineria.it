@@ -35,10 +35,11 @@ const LanguagesEducationSection: FC<{
       {coursesList.length > 0 && (
         <>
           <Text style={fieldRowStyles.fieldLabel}>{t('corses-and-certificates')}</Text>
-          <View style={pillStyles.tagsRow}>
+          <View style={{ gap: 6, marginBottom: 12 }}>
             {coursesList.map((c, i) => (
-              <View key={`${c}-${i}`} style={pillStyles.pillOrange}>
-                <Text style={[pillStyles.pillText, { color: ORANGE_TEXT }]}>{c}</Text>
+              <View key={`${c}-${i}`} style={{ flexDirection: 'row', gap: 8 }}>
+                <Text style={{ fontSize: 14, lineHeight: 20, color: ORANGE_TEXT }}>•</Text>
+                <Text style={{ flex: 1, fontSize: 14, lineHeight: 20, color: C.ink }}>{c}</Text>
               </View>
             ))}
           </View>
